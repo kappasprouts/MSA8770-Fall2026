@@ -1,0 +1,21 @@
+# macOS and editor files
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Local configuration and temporary output
+.env
+.env.*
+!.env.example
+*.log
+tmp/
