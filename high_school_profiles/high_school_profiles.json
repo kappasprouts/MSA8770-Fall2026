@@ -1,0 +1,51 @@
+[
+  {
+    "school_id": "HS-001",
+    "name": "Northfield Regional High School",
+    "type": "public",
+    "ap_courses_offered": ["AP United States History", "AP Chemistry", "AP English Language and Composition", "AP Computer Science Principles", "AP Calculus AB", "AP Biology"],
+    "max_ap_courses": 5
+  },
+  {
+    "school_id": "HS-002",
+    "name": "Pacific Grove High School",
+    "type": "public",
+    "ap_courses_offered": ["AP Human Geography", "AP Macroeconomics", "AP United States Government and Politics", "AP World History", "AP Studio Art"],
+    "max_ap_courses": 4
+  },
+  {
+    "school_id": "HS-003",
+    "name": "Lakeview Central High School",
+    "type": "public",
+    "ap_courses_offered": ["AP United States History", "AP English Language and Composition", "AP Psychology", "AP World History", "AP Statistics"],
+    "max_ap_courses": 4
+  },
+  {
+    "school_id": "HS-004",
+    "name": "Cedar Hollow Academy",
+    "type": "private",
+    "ap_courses_offered": [],
+    "max_ap_courses": 0
+  },
+  {
+    "school_id": "HS-005",
+    "name": "Prairie Ridge High School",
+    "type": "public",
+    "ap_courses_offered": [],
+    "max_ap_courses": 0
+  },
+  {
+    "school_id": "HS-006",
+    "name": "Westhaven Magnet High School",
+    "type": "public",
+    "ap_courses_offered": ["AP Calculus AB", "AP Calculus BC", "AP Biology", "AP Chemistry", "AP Physics 1", "AP Computer Science Principles", "AP Statistics", "AP English Language and Composition"],
+    "max_ap_courses": 6
+  },
+  {
+    "school_id": "HS-007",
+    "name": "Harborview Academy",
+    "type": "private",
+    "ap_courses_offered": [],
+    "max_ap_courses": 0
+  }
+]
