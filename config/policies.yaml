@@ -1,0 +1,179 @@
+# Riverview State University - Admissions Policy & Manifest Validation Configuration
+# Grounded in Riverview State University Admissions Policy Handbook & Section 4 Architecture Plan
+
+schema_version: 1
+institution: "Riverview State University"
+policy_version: "1.0"
+published_on: "2026-09-29"
+
+# Trust Boundary 1: Untrusted Inbound Perimeter Constraints
+file_constraints:
+  allowed_mime_types:
+    - "application/pdf"
+    - "image/png"
+    - "image/jpeg"
+    - "image/tiff"
+  allowed_extensions:
+    - ".pdf"
+    - ".png"
+    - ".jpg"
+    - ".jpeg"
+    - ".tiff"
+  max_file_size_bytes: 15728640    # 15 MB per individual file
+  max_packet_size_bytes: 52428800  # 50 MB total per applicant packet
+  min_file_size_bytes: 1024        # 1 KB minimum (reject empty or truncated files)
+
+# Document Type Definitions
+document_types:
+  application_form:
+    title: "Application Form"
+    description: "Core CommonApp or University application profile data."
+  official_transcript:
+    title: "Official Academic Transcript"
+    description: "Official academic transcript from secondary or post-secondary institutions."
+  personal_statement:
+    title: "Personal Statement / Essay"
+    description: "Applicant personal statement or essay. Evaluated exclusively by human officers."
+    skip_ai_inference: true
+  recommendation_letter:
+    title: "Letter of Recommendation"
+    description: "Counselor or teacher recommendation letter."
+  standardized_test_score:
+    title: "Standardized Test Score Report"
+    description: "Official or self-reported SAT/ACT score report (Test-optional per POL-TEST-01)."
+  activities_and_awards:
+    title: "Activities and Awards Record"
+    description: "Extracurriculars, honors, and leadership history."
+  advanced_coursework_and_ap_scores:
+    title: "Advanced Coursework and AP Scores"
+    description: "Report of AP, IB, or dual-enrollment coursework."
+  university_supplement:
+    title: "University Supplement"
+    description: "Institution-specific questions and major selection supplement."
+  english_proficiency_evidence:
+    title: "English Proficiency Evidence"
+    description: "TOEFL, IELTS, or Duolingo evidence for non-English curriculum applicants."
+  credential_evaluation:
+    title: "International Credential Evaluation"
+    description: "Recognized third-party credential evaluation for non-U.S. transcripts."
+
+# Application Type Checklist Rules
+checklists:
+  first_year:
+    name: "First-Year Applicant Checklist"
+    policy_reference: "POL-FT-01"
+    required_documents:
+      - "application_form"
+      - "official_transcript"
+      - "personal_statement"
+      - "recommendation_letter"
+    optional_documents:
+      - "standardized_test_score"
+      - "activities_and_awards"
+      - "advanced_coursework_and_ap_scores"
+      - "university_supplement"
+    on_missing: "INCOMPLETE"
+
+  transfer:
+    name: "Transfer Applicant Checklist"
+    policy_reference: "POL-TR-01"
+    required_documents:
+      - "application_form"
+      - "official_transcript"
+      - "personal_statement"
+    optional_documents:
+      - "recommendation_letter"
+      - "activities_and_awards"
+      - "university_supplement"
+    on_missing: "INCOMPLETE"
+
+  international_first_year:
+    name: "International First-Year Applicant Checklist"
+    policy_reference: "POL-INT-01 / POL-INT-02"
+    required_documents:
+      - "application_form"
+      - "official_transcript"
+      - "personal_statement"
+      - "recommendation_letter"
+      - "english_proficiency_evidence"
+      - "credential_evaluation"
+    optional_documents:
+      - "standardized_test_score"
+      - "activities_and_awards"
+    on_missing: "INCOMPLETE"
+
+# Validation Criteria and Status Codes
+status_codes:
+  READY_FOR_REVIEW: "Automated ingestion and validation checks passed; packet queued for review."
+  INCOMPLETE: "One or more required checklist documents are missing. Route to Applicant Packet Update."
+  COUNSELOR_REVIEW: "Ambiguity, duplicate conflict, date mismatch, or waiver requires counselor intervention."
+  REPLACEMENT_REQUESTED: "A document failed OCR readability or corrupted structure. Replacement requested."
+  STOPPED: "Critical exception or security boundary violation. Automated processing halted."
+
+# Status Resolution Priority (highest precedence first)
+status_priority:
+  - "STOPPED"
+  - "COUNSELOR_REVIEW"
+  - "REPLACEMENT_REQUESTED"
+  - "INCOMPLETE"
+  - "READY_FOR_REVIEW"
+
+# Routing Destination Rules
+routing_rules:
+  on_invalid: "Human Review"
+  on_incomplete: "Applicant Packet Update"
+  on_ready: "READY_FOR_REVIEW"
+  on_counselor_flag: "Counselor Queue"
+  on_unreadable: "Replacement Request Queue"
+
+# Core Operational Policies for Automated Gate & Model Gateway
+policies:
+  - id: "POL-FT-01"
+    title: "First-Year Core Materials"
+    rule: "Official transcript, personal statement, and at least one recommendation are required. Test scores are optional."
+    system_action: "Mark INCOMPLETE if a required item is missing; route to Applicant Packet Update."
+
+  - id: "POL-TR-01"
+    title: "Transfer Core Materials"
+    rule: "Official transcripts and personal statement are required. Recommendations are optional."
+    system_action: "Mark INCOMPLETE if transcript or statement is missing."
+
+  - id: "POL-INT-01"
+    title: "English Proficiency"
+    rule: "Approved English proficiency evidence required unless documented waiver is on file."
+    system_action: "Mark INCOMPLETE if absent; route waiver requests to COUNSELOR_REVIEW."
+
+  - id: "POL-INT-02"
+    title: "International Credential Evaluation"
+    rule: "Recognized credential evaluation required for non-U.S. academic records."
+    system_action: "Mark INCOMPLETE if missing; route uncertain recognition to COUNSELOR_REVIEW."
+
+  - id: "POL-TEST-01"
+    title: "Test-Optional Review"
+    rule: "Standardized test scores (SAT/ACT) are strictly optional for completeness."
+    system_action: "Do not mark incomplete solely because test scores are absent."
+
+  - id: "POL-READ-01"
+    title: "Unreadable Attachments"
+    rule: "Documents must meet minimum OCR legibility threshold (confidence >= 60% and identifiable content)."
+    system_action: "Trigger REPLACEMENT_REQUESTED for required documents; COUNSELOR_REVIEW for optional."
+
+  - id: "POL-ID-01"
+    title: "Applicant and Document Matching"
+    rule: "All packet documents must match the target applicant ID across filenames and metadata."
+    system_action: "Route mismatched documents to COUNSELOR_REVIEW; do not merge automatically."
+
+  - id: "POL-DATE-01"
+    title: "Date Consistency"
+    rule: "Issue dates and graduation/attendance dates must be chronologically valid."
+    system_action: "Route chronological contradictions to COUNSELOR_REVIEW."
+
+  - id: "POL-ESSAY-01"
+    title: "Personal Statement Human Review"
+    rule: "The system may check whether a personal statement is present, but only an admissions officer may read and evaluate its content."
+    system_action: "Strictly exclude personal statement content from model prompts, embeddings, and automated scoring."
+
+  - id: "POL-HUMAN-01"
+    title: "Human Admissions Authority"
+    rule: "AI review findings are advisory. Authorized human admissions officers record all final admission decisions."
+    system_action: "Default status to READY_FOR_REVIEW upon successful automated processing; never emit automated admit/deny decisions."
