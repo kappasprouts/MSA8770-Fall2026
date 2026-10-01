@@ -1,0 +1,23 @@
+# Core Web & API Framework
+fastapi>=0.110.0
+uvicorn[standard]>=0.28.0
+
+# Batch Ingestion Scheduling
+apscheduler>=3.10.4
+
+# Data Modeling & Configuration
+pydantic>=2.6.0
+pyyaml>=6.0.1
+
+# Document Extraction & OCR
+pymupdf>=1.23.0
+pytesseract>=0.3.10
+pillow>=10.2.0
+
+# Relational & Object Storage
+sqlalchemy>=2.0.25
+psycopg2-binary>=2.9.9
+minio>=7.2.4
+
+# HTTP & Model Gateway Client
+requests>=2.31.0
