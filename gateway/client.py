@@ -31,10 +31,26 @@ class ModelGateway:
         self,
         base_url: Optional[str] = None,
         model_name: Optional[str] = None,
+        api_key: Optional[str] = None,
         timeout_seconds: int = 60,
     ):
-        self.base_url = base_url or os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-        self.model_name = model_name or os.getenv("OLLAMA_MODEL", "qwen2.5:14b-instruct")
+        self.base_url = (
+            base_url
+            or os.getenv("LLM_BASE_URL")
+            or os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+        )
+        self.model_name = (
+            model_name
+            or os.getenv("LLM_MODEL")
+            or os.getenv("OLLAMA_MODEL", "qwen2.5:14b-instruct")
+        )
+        self.api_key = (
+            api_key
+            or os.getenv("LLM_API_KEY")
+            or os.getenv("OPENAI_API_KEY")
+            or os.getenv("OLLAMA_API_KEY")
+            or ""
+        )
         self.timeout = timeout_seconds
         self.grounder = PolicyGrounder()
 
@@ -116,7 +132,18 @@ class ModelGateway:
         applicant_id: str,
         bypassed_docs: List[str],
     ) -> InferenceResponse:
-        endpoint = f"{self.base_url.rstrip('/')}/api/chat"
+        base = self.base_url.rstrip("/")
+        headers = {"Content-Type": "application/json"}
+        if self.api_key:
+            headers["Authorization"] = f"Bearer {self.api_key}"
+
+        if base.endswith("/v1"):
+            endpoint = f"{base}/chat/completions"
+        elif "/v1" in base:
+            endpoint = base
+        else:
+            endpoint = f"{base}/api/chat"
+
         payload = {
             "model": self.model_name,
             "messages": [
@@ -128,10 +155,13 @@ class ModelGateway:
         }
 
         try:
-            res = requests.post(endpoint, json=payload, timeout=self.timeout)
+            res = requests.post(endpoint, json=payload, headers=headers, timeout=self.timeout)
             if res.status_code == 200:
                 data = res.json()
-                raw_content = data.get("message", {}).get("content", "{}")
+                if "choices" in data and len(data["choices"]) > 0:
+                    raw_content = data["choices"][0].get("message", {}).get("content", "{}")
+                else:
+                    raw_content = data.get("message", {}).get("content", "{}")
                 try:
                     eval_summary = json.loads(raw_content)
                 except Exception:

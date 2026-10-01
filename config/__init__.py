@@ -7,6 +7,13 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 import yaml
 
+try:
+    from dotenv import load_dotenv
+    # Load .env from repository root if present
+    load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+except ImportError:
+    pass
+
 CONFIG_DIR = Path(__file__).resolve().parent
 DEFAULT_POLICIES_PATH = CONFIG_DIR / "policies.yaml"
 
