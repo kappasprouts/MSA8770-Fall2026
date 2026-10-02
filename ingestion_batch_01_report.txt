@@ -1,0 +1,110 @@
+================================================================================
+RIVERVIEW STATE UNIVERSITY ADMISSIONS PIPELINE
+COMPONENT 2 (INGESTION) & COMPONENT 3 (MANIFEST VALIDATION GATE) AUDIT REPORT
+================================================================================
+Execution Timestamp : 2026-10-02T18:32:52.133889+00:00
+Target Input Batch  : /Users/mc/MSA8770-Fall2026/batch_01
+Configuration File  : /Users/mc/MSA8770-Fall2026/config/policies.yaml
+Trust Boundary Check: Trust Boundary 1 (Inbound Perimeter Constraints)
+--------------------------------------------------------------------------------
+
+BATCH PROCESSING SUMMARY
+------------------------
+Total Applications Processed : 10
+Valid Applications (Ready)   : 8 (-> Marked ready for OCR/Parsing)
+Incomplete Applications      : 1 (-> Routed to 'Applicant Packet Update')
+Error / Corrupted Packets    : 1 (-> Routed to 'Human Review')
+
+ROUTING DISPOSITION TABLE
+--------------------------------------------------------------------------------
+Applicant ID   | Status       | Routing Destination       | Documents  | Issues / Notes                          
+---------------+--------------+---------------------------+------------+-----------------------------------------
+APP_001        | VALID        | READY_FOR_REVIEW          | 10         | All checks passed                       
+APP_002        | VALID        | READY_FOR_REVIEW          | 10         | All checks passed                       
+APP_003        | VALID        | READY_FOR_REVIEW          | 10         | All checks passed                       
+APP_004        | VALID        | READY_FOR_REVIEW          | 10         | All checks passed                       
+APP_005        | VALID        | READY_FOR_REVIEW          | 11         | All checks passed                       
+APP_006        | VALID        | READY_FOR_REVIEW          | 10         | All checks passed                       
+APP_007        | VALID        | READY_FOR_REVIEW          | 10         | All checks passed                       
+APP_008        | ERROR        | Human Review              | 10         | Errors: Document 'transcript.pdf' fai...
+APP_009        | VALID        | READY_FOR_REVIEW          | 10         | All checks passed                       
+APP_010        | INCOMPLETE   | Applicant Packet Update   | 9          | Missing docs: transcript                
+--------------------------------------------------------------------------------
+
+DETAILED APPLICANT AUDIT TRAILS
+================================================================================
+[01] APPLICANT: APP_001
+     Status              : VALID
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[02] APPLICANT: APP_002
+     Status              : VALID
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[03] APPLICANT: APP_003
+     Status              : VALID
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[04] APPLICANT: APP_004
+     Status              : VALID
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[05] APPLICANT: APP_005
+     Status              : VALID
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 11
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, exception_supporting_document.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[06] APPLICANT: APP_006
+     Status              : VALID
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[07] APPLICANT: APP_007
+     Status              : VALID
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[08] APPLICANT: APP_008
+     Status              : ERROR
+     Routing Destination : Human Review
+     Valid for Pipeline  : False
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+     Perimeter/TB1 Errors: Document 'transcript.pdf' failed legibility check: unreadable/obscured scan
+--------------------------------------------------------------------------------
+[09] APPLICANT: APP_009
+     Status              : VALID
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[10] APPLICANT: APP_010
+     Status              : INCOMPLETE
+     Routing Destination : Applicant Packet Update
+     Valid for Pipeline  : False
+     Total Documents     : 9
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, university_supplement.pdf
+     Missing Documents   : transcript
+--------------------------------------------------------------------------------
+
+END OF AUDIT LOG
+================================================================================
