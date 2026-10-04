@@ -1,6 +1,7 @@
-"""Ingestion module providing FastAPI application, pipeline runner, and APScheduler setup."""
+"""Ingestion module providing FastAPI application, batch ingestor, pipeline runner, and APScheduler setup."""
 
 from ingestion.app import app
+from ingestion.batch_ingest import BatchIngestor, IngestedApplication, IngestedDocument
 from ingestion.pipeline import BatchIngestionPipeline
 from ingestion.scheduler import (
     get_latest_batch_summary,
@@ -12,6 +13,9 @@ from ingestion.scheduler import (
 
 __all__ = [
     "app",
+    "BatchIngestor",
+    "IngestedApplication",
+    "IngestedDocument",
     "BatchIngestionPipeline",
     "init_scheduler",
     "start_scheduler",

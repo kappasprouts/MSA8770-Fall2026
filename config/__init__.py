@@ -29,31 +29,47 @@ def load_policies(path: Optional[Path] = None) -> Dict[str, Any]:
     return data or {}
 
 
-def get_file_constraints() -> Dict[str, Any]:
+def get_file_constraints(path: Optional[Path] = None) -> Dict[str, Any]:
     """Retrieve file constraints such as allowed MIME types and size limits."""
-    policies = load_policies()
+    policies = load_policies(path)
     return policies.get("file_constraints", {})
 
 
-def get_checklist(application_type: str = "first_year") -> Dict[str, Any]:
+def get_checklist(application_type: str = "first_year", path: Optional[Path] = None) -> Dict[str, Any]:
     """Retrieve document checklist rules for a specific applicant category."""
-    policies = load_policies()
+    policies = load_policies(path)
     checklists = policies.get("checklists", {})
     return checklists.get(application_type, checklists.get("first_year", {}))
 
 
-def get_status_priority() -> List[str]:
+def get_required_applicant_fields(path: Optional[Path] = None) -> List[str]:
+    """Retrieve required applicant metadata fields from CSV schema."""
+    policies = load_policies(path)
+    return policies.get("required_applicant_fields", [
+        "App_ID",
+        "First_Name",
+        "Last_Name",
+        "Date_Of_Birth",
+        "Email_Address",
+        "Name_of_HS",
+        "Intended_Major",
+        "Admission_Year",
+        "Admission_Term",
+    ])
+
+
+def get_status_priority(path: Optional[Path] = None) -> List[str]:
     """Retrieve ordered status resolution priorities."""
-    policies = load_policies()
+    policies = load_policies(path)
     return policies.get(
         "status_priority",
-        ["STOPPED", "COUNSELOR_REVIEW", "REPLACEMENT_REQUESTED", "INCOMPLETE", "READY_FOR_REVIEW"],
+        ["ERROR", "STOPPED", "COUNSELOR_REVIEW", "REPLACEMENT_REQUESTED", "INCOMPLETE", "VALID", "READY_FOR_REVIEW"],
     )
 
 
-def get_routing_rules() -> Dict[str, str]:
+def get_routing_rules(path: Optional[Path] = None) -> Dict[str, str]:
     """Retrieve routing targets for application statuses."""
-    policies = load_policies()
+    policies = load_policies(path)
     return policies.get("routing_rules", {})
 
 
@@ -63,6 +79,7 @@ __all__ = [
     "load_policies",
     "get_file_constraints",
     "get_checklist",
+    "get_required_applicant_fields",
     "get_status_priority",
     "get_routing_rules",
 ]
