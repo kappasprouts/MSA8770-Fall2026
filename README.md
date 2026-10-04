@@ -113,6 +113,30 @@ Encloses PostgreSQL, MinIO, and internal processing:
 
 ---
 
+## Ingestion & Completeness Check (Batch Ingestion)
+
+This stage performs batch linking and deterministic manifest validation against Trust Boundary 1. It explicitly halts after the completeness check without performing OCR or image rendering, leaving raw application payloads ready for the downstream multimodal Summarizing Agent.
+
+### Run Instructions
+
+Clone/checkout the branch and execute:
+
+```bash
+git checkout danny/architecture-plan
+git pull origin danny/architecture-plan
+
+# Option 1: One-click script
+./run_check.sh batch_01
+
+# Option 2: Using Make
+make check
+
+# Option 3: Direct Python CLI
+python3 run_ingestion_check.py --input-dir batch_01
+```
+
+---
+
 ## Quickstart & Local Setup
 
 ### 1. Prerequisites
