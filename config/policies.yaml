@@ -87,7 +87,9 @@ checklists:
       - "application_form"
       - "transcript"
       - "personal_statement"
-      - "recommendation_letter"
+      - "recommendation_letter_1"
+      - "recommendation_letter_2"
+    required_recommendation_letters_count: 2
     optional_documents:
       - "standardized_test_score"
       - "activities_and_awards"
@@ -117,9 +119,11 @@ checklists:
       - "application_form"
       - "transcript"
       - "personal_statement"
-      - "recommendation_letter"
+      - "recommendation_letter_1"
+      - "recommendation_letter_2"
       - "english_proficiency_evidence"
       - "credential_evaluation"
+    required_recommendation_letters_count: 2
     optional_documents:
       - "standardized_test_score"
       - "activities_and_awards"
@@ -158,8 +162,13 @@ routing_rules:
 policies:
   - id: "POL-FT-01"
     title: "First-Year Core Materials"
-    rule: "Official transcript, personal statement, and at least one recommendation are required. Test scores are optional."
+    rule: "Official transcript, personal statement, and two letters of recommendation (LOR 1 and LOR 2) are required for review handoff. Test scores are optional."
     system_action: "Mark INCOMPLETE if a required item is missing; route to Applicant Packet Update."
+
+  - id: "POL-LOR-01"
+    title: "Letters of Recommendation Requirement"
+    rule: "First-year applicants must provide exactly two letters of recommendation (recommendation_letter_1 and recommendation_letter_2). Packets with fewer than 2 recommendation letters remain INCOMPLETE."
+    system_action: "Enforce presence of 2 letters of recommendation; route to Applicant Packet Update queue if incomplete."
 
   - id: "POL-TR-01"
     title: "Transfer Core Materials"

@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Admissions Ingestion & Completeness Gate CLI Runner.
 
-Executes Component 2 (Pure Ingestion Layer) and Component 3 (Deterministic Manifest Validation Gate)
+Executes Component 2 (Two-Pass Ingestion Layer) and Component 3 (Deterministic Manifest Validation Gate)
 as specified in Architecture Section 4:
-- Ingests applicant records and documents from batch directory.
-- Enforces Trust Boundary 1 perimeter hygiene (existence, format, 1KB-15MB size, b'%PDF-' magic bytes).
-- Applies 3-way deterministic routing (VALID -> READY_FOR_REVIEW, INCOMPLETE, ERROR).
-- Displays formatted summary tables on stdout.
-- Produces an audit log report file (ingestion_batch_01_report.txt).
+- Pass 1: Parse CSV applicant records, map explicit 33-column schema, and stage in PostgreSQL (or dry run).
+- Pass 2: Traverse documents, link to applicants, upload raw PDFs to MinIO ('admissions-raw-docs'),
+          attach metadata to documents JSONB, and archive orphan documents in OrphanDocument table.
+- Manifest Gate: Enforces 3-way routing (VALID -> READY_FOR_REVIEW, INCOMPLETE, ERROR) and 2 LOR policy.
+- Updates PostgreSQL applicant statuses.
+- Generates affected_ids.json containing all applicant IDs marked READY_FOR_REVIEW.
 - Hard stop enforcement: explicitly halts execution prior to downstream summarizers/agents.
 """
 
@@ -22,9 +23,8 @@ from typing import Optional
 # Ensure project root is in sys.path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-# Pure Component 2 & Component 3 imports ONLY.
-# Strictly NO OCR parsers, DocumentParser, ModelGateway, VLM agents, or downstream summarizers.
-from ingestion.batch_ingest import BatchIngestor
+from ingestion.batch_ingest import BatchIngestor, BatchIngestionResult
+from storage.storage_manager import StorageManager
 from validation.manifest_gate import GateStatus, ManifestValidationGate, ManifestGateResult
 
 
@@ -43,6 +43,7 @@ def generate_report_text(
     input_dir: Path,
     config_path: Path,
     result: ManifestGateResult,
+    orphans_count: int,
     execution_time: datetime,
 ) -> str:
     """Generate comprehensive audit report text."""
@@ -58,6 +59,7 @@ def generate_report_text(
     lines.append(f"Target Input Batch  : {input_dir.resolve()}")
     lines.append(f"Configuration File  : {config_path.resolve()}")
     lines.append(f"Trust Boundary Check: Trust Boundary 1 (Inbound Perimeter Constraints)")
+    lines.append(f"Storage Persistence : PostgreSQL (relational + JSONB arrays) & MinIO (admissions-raw-docs)")
     lines.append(subsep)
     lines.append("")
 
@@ -68,6 +70,8 @@ def generate_report_text(
     lines.append(f"Valid Applications (Ready)   : {result.total_valid} (-> Application packet complete, ready for handoff)")
     lines.append(f"Incomplete Applications      : {result.total_incomplete} (-> Routed to 'Applicant Packet Update')")
     lines.append(f"Error / Corrupted Packets    : {result.total_error} (-> Routed to 'Human Review')")
+    lines.append(f"Orphan Documents Recorded    : {orphans_count} (-> Stored in OrphanDocument table & MinIO orphans/)")
+    lines.append(f"Affected IDs (Ready)         : {', '.join(result.affected_ids) if result.affected_ids else 'None'}")
     lines.append("")
 
     # Summary Breakdown Table
@@ -121,8 +125,10 @@ def generate_report_text(
         lines.append(subsep)
 
     lines.append("")
-    lines.append("PIPELINE HALT ENFORCEMENT")
+    lines.append("PIPELINE HALT ENFORCEMENT & HANDOFF")
     lines.append("================================================================================")
+    lines.append(f"Affected IDs for Summarizing Agent: {result.affected_ids}")
+    lines.append("Saved to: affected_ids.json")
     lines.append("Execution hard stop enforced immediately after Manifest Gate validation.")
     lines.append("No downstream OCR parsers, LLM gateways, VLM agents, or summarizers invoked.")
     lines.append("================================================================================")
@@ -132,12 +138,19 @@ def generate_report_text(
     return "\n".join(lines)
 
 
-def print_console_summary(result: ManifestGateResult, input_dir: Path, execution_time: datetime):
+def print_console_summary(
+    result: ManifestGateResult,
+    orphans_count: int,
+    input_dir: Path,
+    execution_time: datetime,
+    affected_ids_file: Path,
+):
     """Print clean formatted summary to stdout."""
     bold = "\033[1m"
     green = "\033[32m"
     yellow = "\033[33m"
     red = "\033[31m"
+    cyan = "\033[36m"
     reset = "\033[0m"
 
     print("\n" + "=" * 80)
@@ -152,6 +165,8 @@ def print_console_summary(result: ManifestGateResult, input_dir: Path, execution
     print(f"{green}{bold}Valid           :{reset} {result.total_valid}  (Application packet complete -> READY_FOR_REVIEW)")
     print(f"{yellow}{bold}Incomplete      :{reset} {result.total_incomplete}  (Missing Documents/Fields -> Applicant Packet Update)")
     print(f"{red}{bold}Error           :{reset} {result.total_error}  (Corrupted/Magic Bytes/Size -> Human Review)")
+    if orphans_count > 0:
+        print(f"{cyan}{bold}Orphans Recorded:{reset} {orphans_count}  (OrphanDocument table & MinIO 'orphans/')")
     print("-" * 80)
 
     # Detail Table
@@ -194,6 +209,9 @@ def print_console_summary(result: ManifestGateResult, input_dir: Path, execution
                 cells.append(f"{v:<{w}}")
         print(" | ".join(cells))
 
+    print("-" * 80)
+    print(f"{bold}Affected IDs (READY_FOR_REVIEW):{reset} {cyan}{result.affected_ids}{reset}")
+    print(f"{bold}Exported Affected IDs File     :{reset} {affected_ids_file.resolve()}")
     print("=" * 80 + "\n")
 
 
@@ -201,8 +219,10 @@ def run_pipeline(
     input_dir: str = "batch_01",
     config_file: Optional[str] = None,
     report_file: Optional[str] = None,
+    affected_ids_file: Optional[str] = None,
+    storage_manager: Optional[StorageManager] = None,
 ) -> ManifestGateResult:
-    """Execute pure batch ingestion and manifest completeness gate with hard stop."""
+    """Execute two-pass batch ingestion, manifest completeness gate, and hard stop."""
     input_path = Path(input_dir)
     if not input_path.exists():
         print(f"Error: Target input directory does not exist: {input_path}", file=sys.stderr)
@@ -210,29 +230,56 @@ def run_pipeline(
 
     config_path = Path(config_file) if config_file else Path("config/policies.yaml")
     execution_time = datetime.now(timezone.utc)
+    storage = storage_manager or StorageManager()
 
-    # 1. Component 2: Pure Ingestion & Linking
-    ingestor = BatchIngestor(config_path=config_path)
-    applications = ingestor.ingest_batch(input_path)
+    # 1. Component 2: Two-Pass Batch Ingestion & Linking
+    ingestor = BatchIngestor(config_path=config_path, storage_manager=storage)
+    ingest_result = ingestor.ingest_batch(input_path)
 
     # 2. Component 3: Manifest Validation Gate
     gate = ManifestValidationGate(config_path=config_path)
-    result = gate.evaluate_batch(applications)
+    result = gate.evaluate_batch(ingest_result.applications)
 
-    # 3. Print Summary to stdout
-    print_console_summary(result, input_path, execution_time)
+    # 3. Update PostgreSQL applicant records with gate evaluation results
+    for routed in result.routed_applicants:
+        storage.update_applicant_status(
+            app_id=routed.applicant_id,
+            status=routed.status.value,
+            routing_destination=routed.routing_destination,
+        )
 
-    # 4. Generate and save Audit Report
+    # 4. Save affected_ids.json for downstream summarizing agent
+    out_affected = Path(affected_ids_file) if affected_ids_file else Path("affected_ids.json")
+    with open(out_affected, "w", encoding="utf-8") as f:
+        json.dump(result.affected_ids, f, indent=2)
+
+    # 5. Print Summary to stdout
+    print_console_summary(
+        result=result,
+        orphans_count=len(ingest_result.orphans),
+        input_dir=input_path,
+        execution_time=execution_time,
+        affected_ids_file=out_affected,
+    )
+
+    # 6. Generate and save Audit Report
     out_file = Path(report_file) if report_file else Path("ingestion_batch_01_report.txt")
-    report_text = generate_report_text(input_path, config_path, result, execution_time)
+    report_text = generate_report_text(
+        input_dir=input_path,
+        config_path=config_path,
+        result=result,
+        orphans_count=len(ingest_result.orphans),
+        execution_time=execution_time,
+    )
     with open(out_file, "w", encoding="utf-8") as f:
         f.write(report_text)
     print(f"Audit log successfully written to: {out_file.resolve()}\n")
 
-    # 5. Hard Stop Enforcement Message
+    # 7. Hard Stop Enforcement Message
     print("=" * 80)
     print("[HARD STOP] Ingestion and completeness check is complete.")
     print(f"[HARD STOP] Audit report generated at: {out_file.resolve()}")
+    print(f"[HARD STOP] Affected IDs ({len(result.affected_ids)}) exported to: {out_affected.resolve()}")
     print("[HARD STOP] Pipeline execution halted prior to the summarizing agent.")
     print("=" * 80 + "\n")
 
@@ -241,7 +288,7 @@ def run_pipeline(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Run Admissions Ingestion & Manifest Completeness Gate across an applicant batch."
+        description="Run Admissions Two-Pass Ingestion & Manifest Completeness Gate across an applicant batch."
     )
     parser.add_argument(
         "--input-dir",
@@ -261,10 +308,21 @@ def main():
         default="ingestion_batch_01_report.txt",
         help="Path to output audit log report file (default: ingestion_batch_01_report.txt)",
     )
+    parser.add_argument(
+        "--affected-ids",
+        "-a",
+        default="affected_ids.json",
+        help="Path to output affected_ids.json file (default: affected_ids.json)",
+    )
 
     args = parser.parse_args()
     try:
-        run_pipeline(input_dir=args.input_dir, config_file=args.config, report_file=args.output)
+        run_pipeline(
+            input_dir=args.input_dir,
+            config_file=args.config,
+            report_file=args.output,
+            affected_ids_file=args.affected_ids,
+        )
         sys.exit(0)
     except Exception as e:
         print(f"Error during ingestion pipeline: {e}", file=sys.stderr)

@@ -2,10 +2,11 @@
 RIVERVIEW STATE UNIVERSITY ADMISSIONS PIPELINE
 COMPONENT 2 (INGESTION) & COMPONENT 3 (MANIFEST VALIDATION GATE) AUDIT REPORT
 ================================================================================
-Execution Timestamp : 2026-10-04T02:49:38.767506+00:00
+Execution Timestamp : 2026-10-05T00:59:53.352965+00:00
 Target Input Batch  : /Users/mc/MSA8770-Fall2026/batch_01
 Configuration File  : /Users/mc/MSA8770-Fall2026/config/policies.yaml
 Trust Boundary Check: Trust Boundary 1 (Inbound Perimeter Constraints)
+Storage Persistence : PostgreSQL (relational + JSONB arrays) & MinIO (admissions-raw-docs)
 --------------------------------------------------------------------------------
 
 BATCH PROCESSING SUMMARY
@@ -14,6 +15,8 @@ Total Applications Processed : 10
 Valid Applications (Ready)   : 9 (-> Application packet complete, ready for handoff)
 Incomplete Applications      : 1 (-> Routed to 'Applicant Packet Update')
 Error / Corrupted Packets    : 0 (-> Routed to 'Human Review')
+Orphan Documents Recorded    : 0 (-> Stored in OrphanDocument table & MinIO orphans/)
+Affected IDs (Ready)         : APP_001, APP_002, APP_003, APP_004, APP_005, APP_006, APP_007, APP_008, APP_009
 
 ROUTING DISPOSITION TABLE
 --------------------------------------------------------------------------------
@@ -105,8 +108,10 @@ DETAILED APPLICANT AUDIT TRAILS
      Missing Documents   : transcript
 --------------------------------------------------------------------------------
 
-PIPELINE HALT ENFORCEMENT
+PIPELINE HALT ENFORCEMENT & HANDOFF
 ================================================================================
+Affected IDs for Summarizing Agent: ['APP_001', 'APP_002', 'APP_003', 'APP_004', 'APP_005', 'APP_006', 'APP_007', 'APP_008', 'APP_009']
+Saved to: affected_ids.json
 Execution hard stop enforced immediately after Manifest Gate validation.
 No downstream OCR parsers, LLM gateways, VLM agents, or summarizers invoked.
 ================================================================================

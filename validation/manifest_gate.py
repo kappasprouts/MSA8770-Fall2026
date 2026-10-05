@@ -6,7 +6,8 @@ Component 3 as specified in Architecture Section 4:
   * VALID -> status: "READY_FOR_REVIEW" (application packet complete, ready for handoff).
   * INCOMPLETE -> status: "INCOMPLETE" (missing required files/metadata -> Applicant Packet Update queue).
   * ERROR -> status: "ERROR" (corrupted/missing magic bytes/size violation -> Human Review queue).
-- Generates structured summary results and reports.
+- Enforces the 2 Letters of Recommendation (LOR 1 and LOR 2) requirement.
+- Generates structured summary results, reports, and affected_ids list.
 """
 
 from dataclasses import asdict, dataclass, field
@@ -78,7 +79,16 @@ class ManifestGateResult:
     total_incomplete: int
     total_error: int
     routed_applicants: List[RoutedApplicant] = field(default_factory=list)
+    affected_ids: List[str] = field(default_factory=list)
     evaluated_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+    def __post_init__(self):
+        if not self.affected_ids and self.routed_applicants:
+            self.affected_ids = [
+                app.applicant_id
+                for app in self.routed_applicants
+                if app.status == GateStatus.READY_FOR_REVIEW or app.status == GateStatus.VALID
+            ]
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -86,6 +96,7 @@ class ManifestGateResult:
             "total_valid": self.total_valid,
             "total_incomplete": self.total_incomplete,
             "total_error": self.total_error,
+            "affected_ids": self.affected_ids,
             "evaluated_at": self.evaluated_at,
             "routed_applicants": [app.to_dict() for app in self.routed_applicants],
         }
@@ -105,9 +116,12 @@ class ManifestValidationGate:
         "application_form": "application_form",
         "common_app_application": "application_form",
         "personal_statement": "personal_statement",
-        "recommendation_letter": "recommendation_letter",
-        "recommendation_letter_1": "recommendation_letter",
-        "recommendation_letter_2": "recommendation_letter",
+        "recommendation_letter_1": "recommendation_letter_1",
+        "recommendation_letter_2": "recommendation_letter_2",
+        "lor_1": "recommendation_letter_1",
+        "lor_2": "recommendation_letter_2",
+        "counselor_recommendation": "recommendation_letter_1",
+        "teacher_recommendation": "recommendation_letter_2",
     }
 
     def __init__(self, config_path: Optional[Path] = None):
@@ -116,7 +130,13 @@ class ManifestValidationGate:
         self.checklist = self.policies.get("checklists", {}).get("first_year", {})
         self.required_docs = self.checklist.get(
             "required_documents",
-            ["application_form", "transcript", "personal_statement", "recommendation_letter"],
+            [
+                "application_form",
+                "transcript",
+                "personal_statement",
+                "recommendation_letter_1",
+                "recommendation_letter_2",
+            ],
         )
         self.required_fields = self.policies.get(
             "required_applicant_fields",
@@ -186,16 +206,30 @@ class ManifestValidationGate:
 
         # 3. Check Required Document Checklist Items (only from valid/existing documents)
         present_types: Set[str] = set()
+        lor_docs: List[IngestedDocument] = []
+
         for doc in app.documents:
             if doc.exists and doc.is_readable:
                 c_type = self.CANONICAL_ALIASES.get(doc.doc_type, doc.doc_type)
                 present_types.add(c_type)
                 present_types.add(doc.doc_type)
+                if "recommendation_letter" in doc.doc_type or "lor" in doc.doc_type:
+                    lor_docs.append(doc)
 
         for req_doc in self.required_docs:
             c_req = self.CANONICAL_ALIASES.get(req_doc, req_doc)
-            if c_req not in present_types and req_doc not in present_types:
-                missing_docs.append(req_doc)
+
+            # Special check for 2 LORs
+            if req_doc in ("recommendation_letter_1", "recommendation_letter_2", "recommendation_letter"):
+                if req_doc == "recommendation_letter_1" and len(lor_docs) < 1:
+                    missing_docs.append("recommendation_letter_1")
+                elif req_doc == "recommendation_letter_2" and len(lor_docs) < 2:
+                    missing_docs.append("recommendation_letter_2")
+                elif req_doc == "recommendation_letter" and len(lor_docs) < 1:
+                    missing_docs.append("recommendation_letter")
+            else:
+                if c_req not in present_types and req_doc not in present_types:
+                    missing_docs.append(req_doc)
 
         # 4. Resolve 3-Way Deterministic Routing
         # Precedence: ERROR > INCOMPLETE > VALID
@@ -238,12 +272,14 @@ class ManifestValidationGate:
         valid_cnt = 0
         incomplete_cnt = 0
         error_cnt = 0
+        affected_ids: List[str] = []
 
         for app in applications:
             result = self.evaluate_applicant(app)
             routed.append(result)
             if result.status == GateStatus.READY_FOR_REVIEW or result.status == GateStatus.VALID:
                 valid_cnt += 1
+                affected_ids.append(app.applicant_id)
             elif result.status == GateStatus.INCOMPLETE:
                 incomplete_cnt += 1
             elif result.status == GateStatus.ERROR:
@@ -255,4 +291,5 @@ class ManifestValidationGate:
             total_incomplete=incomplete_cnt,
             total_error=error_cnt,
             routed_applicants=routed,
+            affected_ids=affected_ids,
         )

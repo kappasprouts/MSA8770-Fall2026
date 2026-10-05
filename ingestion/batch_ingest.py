@@ -1,12 +1,18 @@
 """Pure Batch Ingestion & Linking Module for Admissions Data (Component 2).
 
-Enforces Lightweight Trust Boundary 1 Perimeter Hygiene:
-- Ingests and parses applicant CSV data.
-- Deterministically links each applicant record to documents via applicant ID subfolders or prefixed filenames.
-- Lightweight perimeter hygiene: checks file existence, size constraints (1 KB to 15 MB),
-  and standard PDF magic numbers (b"%PDF-") without opening or scanning document text/pages.
-- Strictly pure ingestion: no OCR, no DocumentParser, and no PyMuPDF page-to-image/PNG rendering.
-- Maintains SHA-256 checksums, clean metadata, and file paths ready for PostgreSQL and MinIO.
+Implements Two-Pass Ingestion:
+- Pass 1: Parse the application flat file (CSV), extract standard scalar columns
+  and structured lists (activities, awards, APs, hooks), and stage/upsert application
+  records in PostgreSQL (or dry-run store).
+- Pass 2: Traverse all documents across the batch directory.
+  * If document maps to a known app_id: check format/magic bytes (%PDF-),
+    compute SHA-256, upload to MinIO bucket ('admissions-raw-docs'), and attach
+    document metadata to the applicant's documents JSONB array.
+  * If document has no matching application record (orphan / late-coming LOR):
+    save to the OrphanDocument table and upload to MinIO under 'orphans/'.
+- Enforces lightweight Trust Boundary 1 perimeter hygiene: check file existence,
+  file size (1 KB to 15 MB), and read the first 5 bytes for standard PDF magic
+  numbers (b"%PDF-") without opening or scanning document text/pages.
 """
 
 from dataclasses import asdict, dataclass, field
@@ -16,10 +22,12 @@ import logging
 import mimetypes
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+import re
+from typing import Any, Dict, Iterator, List, Optional, Tuple
 import csv
 
 from config import get_file_constraints, load_policies
+from storage.storage_manager import StorageManager
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +46,30 @@ def compute_sha256(file_path: Path) -> str:
     return hasher.hexdigest()
 
 
+def _parse_float(val: Any) -> Optional[float]:
+    if val is None:
+        return None
+    s = str(val).strip()
+    if not s or s.lower() == "nan":
+        return None
+    try:
+        return float(s)
+    except ValueError:
+        return None
+
+
+def _parse_int(val: Any) -> Optional[int]:
+    if val is None:
+        return None
+    s = str(val).strip()
+    if not s or s.lower() == "nan":
+        return None
+    try:
+        return int(float(s))
+    except ValueError:
+        return None
+
+
 @dataclass
 class IngestedDocument:
     """Document linked to an applicant record with Trust Boundary 1 verification metadata."""
@@ -48,24 +80,36 @@ class IngestedDocument:
     mime_type: str
     sha256_checksum: str
     applicant_id: str
+    minio_key: str = field(default="")
     exists: bool = True
     is_readable: bool = True
     error_message: Optional[str] = None
-    minio_object_key: str = field(default="")
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
-        if not self.minio_object_key and self.applicant_id and self.filename:
-            self.minio_object_key = f"{self.applicant_id}/{self.filename}"
+        if not self.minio_key and self.applicant_id and self.filename:
+            self.minio_key = f"{self.applicant_id}/{self.filename}"
 
-    def to_storage_record_dict(self, bucket: str = "applicant-documents") -> Dict[str, Any]:
+    def to_metadata_dict(self) -> Dict[str, Any]:
+        """Produce dictionary formatted for applicant documents JSONB array."""
+        return {
+            "doc_type": self.doc_type,
+            "minio_key": self.minio_key,
+            "filename": self.filename,
+            "sha256": self.sha256_checksum,
+            "file_size": self.file_size_bytes,
+            "is_readable": self.is_readable,
+            "error_message": self.error_message,
+        }
+
+    def to_storage_record_dict(self, bucket: str = "admissions-raw-docs") -> Dict[str, Any]:
         """Produce dictionary formatted for PostgreSQL document_records and MinIO object storage."""
         return {
             "applicant_id": self.applicant_id,
             "document_type": self.doc_type,
             "filename": self.filename,
             "minio_bucket": bucket,
-            "minio_object_key": self.minio_object_key,
+            "minio_object_key": self.minio_key,
             "file_size_bytes": self.file_size_bytes,
             "mime_type": self.mime_type,
             "sha256_checksum": self.sha256_checksum,
@@ -80,26 +124,100 @@ class IngestedApplication:
     """Ingested applicant packet linking CSV metadata to physical documents."""
     applicant_id: str
     metadata: Dict[str, Any]
+    activities: List[str] = field(default_factory=list)
+    awards: List[str] = field(default_factory=list)
+    ap_test_scores: List[str] = field(default_factory=list)
+    hooks: List[str] = field(default_factory=list)
     subfolder_path: Optional[Path] = None
     documents: List[IngestedDocument] = field(default_factory=list)
     trust_boundary_errors: List[str] = field(default_factory=list)
+    status: str = "PENDING"
+    routing_destination: str = "READY_FOR_REVIEW"
     ingested_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
-    def to_postgres_application_data(self) -> Dict[str, Any]:
-        """Format clean metadata ready for PostgreSQL applications table JSONB payload."""
+    def to_applicant_dict(self) -> Dict[str, Any]:
+        """Produce dictionary with explicit typed relational columns and JSONB arrays."""
+        m = self.metadata
+        unweighted = _parse_float(m.get("Unweighted_GPA"))
+        weighted = _parse_float(m.get("Weighted_GPA"))
+        gpa = weighted if weighted is not None else unweighted
+
+        sat = _parse_float(m.get("Superscored_SAT_Score"))
+        act = _parse_float(m.get("Superscored_ACT_Score"))
+        adm_yr = _parse_int(m.get("Admission_Year"))
+        tot_aps = _parse_float(m.get("Total_APs"))
+        tot_ibs = _parse_float(m.get("Total_IBs"))
+        rev_ctr = _parse_int(m.get("Review_Ctr")) or 0
+
+        doc_dicts = [d.to_metadata_dict() for d in self.documents]
+
         return {
-            "applicant_id": self.applicant_id,
-            "csv_metadata": self.metadata,
-            "documents_count": len(self.documents),
-            "documents": [d.to_storage_record_dict() for d in self.documents],
-            "subfolder": str(self.subfolder_path) if self.subfolder_path else None,
-            "trust_boundary_errors": self.trust_boundary_errors,
-            "ingested_at": self.ingested_at.isoformat(),
+            "app_id": self.applicant_id,
+            "first_name": str(m.get("First_Name") or "").strip(),
+            "last_name": str(m.get("Last_Name") or "").strip(),
+            "date_of_birth": str(m.get("Date_Of_Birth") or "").strip() or None,
+            "mailing_address": str(m.get("Mailing_Address") or "").strip() or None,
+            "phone_number": str(m.get("Primary_Phone_Number") or "").strip() or None,
+            "email_address": str(m.get("Email_Address") or "").strip() or None,
+            "gender": str(m.get("Gender") or "").strip() or None,
+            "ethnicity": str(m.get("Ethnicity") or "").strip() or None,
+            "name_of_hs": str(m.get("Name_of_HS") or "").strip() or None,
+            "counselor_name": str(m.get("Counselor_Name") or "").strip() or None,
+            "country": str(m.get("Country") or "").strip() or None,
+            "region": str(m.get("Region") or "").strip() or None,
+            "intended_major": str(m.get("Intended_Major") or "").strip() or None,
+            "admission_year": adm_yr,
+            "admission_term": str(m.get("Admission_Term") or "").strip() or None,
+            "gpa": gpa,
+            "unweighted_gpa": unweighted,
+            "weighted_gpa": weighted,
+            "class_rank": str(m.get("Rank") or "").strip() or None,
+            "rank": str(m.get("Rank") or "").strip() or None,
+            "superscored_sat_score": sat,
+            "sat_math": None,
+            "sat_ebrw": None,
+            "superscored_act_score": act,
+            "act_composite": act,
+            "total_aps": tot_aps,
+            "total_ibs": tot_ibs,
+            "ib_courses": str(m.get("IB_Courses") or "").strip() or None,
+            "create_date_time": str(m.get("Create_Date_Time") or "").strip() or None,
+            "last_updated_csv": str(m.get("Last_Updated") or "").strip() or None,
+            "review_ctr": rev_ctr,
+            "application_status_raw": str(m.get("Application_status") or "").strip() or None,
+            "final_decision": str(m.get("Final_Decision") or "").strip() or None,
+            "activities": self.activities,
+            "awards": self.awards,
+            "ap_test_scores": self.ap_test_scores,
+            "hooks": self.hooks,
+            "documents": doc_dicts,
+            "status": self.status,
+            "routing_destination": self.routing_destination,
         }
 
 
+@dataclass
+class BatchIngestionResult:
+    """Outcome of full two-pass batch ingestion."""
+    applications: List[IngestedApplication] = field(default_factory=list)
+    orphans: List[Dict[str, Any]] = field(default_factory=list)
+    total_processed: int = 0
+    csv_path: Optional[Path] = None
+
+    def __iter__(self) -> Iterator[IngestedApplication]:
+        return iter(self.applications)
+
+    def __len__(self) -> int:
+        return len(self.applications)
+
+    def __getitem__(self, idx: int) -> IngestedApplication:
+        return self.applications[idx]
+
+
 class BatchIngestor:
-    """Ingests application batches, maps CSV records to documents, and enforces Trust Boundary 1 perimeter hygiene."""
+    """Ingests application batches using two-pass ingestion, linking CSV records to documents
+    and persisting into PostgreSQL relational columns and MinIO raw object storage.
+    """
 
     CANONICAL_TYPE_MAP = {
         "transcript": "transcript",
@@ -113,10 +231,14 @@ class BatchIngestor:
         "essay": "personal_statement",
         "personal_essay": "personal_statement",
         "statement_of_purpose": "personal_statement",
-        "recommendation_letter": "recommendation_letter",
-        "recommendation_letter_1": "recommendation_letter",
-        "recommendation_letter_2": "recommendation_letter",
-        "lor": "recommendation_letter",
+        "recommendation_letter_1": "recommendation_letter_1",
+        "recommendation_letter_2": "recommendation_letter_2",
+        "recommendation_letter": "recommendation_letter_1",
+        "lor_1": "recommendation_letter_1",
+        "lor_2": "recommendation_letter_2",
+        "lor": "recommendation_letter_1",
+        "counselor_recommendation": "recommendation_letter_1",
+        "teacher_recommendation": "recommendation_letter_2",
         "standardized_test_score": "standardized_test_score",
         "sat_score": "standardized_test_score",
         "act_score": "standardized_test_score",
@@ -132,13 +254,18 @@ class BatchIngestor:
         "special_circumstance": "exception_supporting_document",
     }
 
-    def __init__(self, config_path: Optional[Path] = None):
+    def __init__(
+        self,
+        config_path: Optional[Path] = None,
+        storage_manager: Optional[StorageManager] = None,
+    ):
         self.policies = load_policies(config_path)
         self.file_constraints = self.policies.get("file_constraints", {})
         self.allowed_mimes = set(self.file_constraints.get("allowed_mime_types", ["application/pdf"]))
         self.allowed_exts = set(self.file_constraints.get("allowed_extensions", [".pdf"]))
         self.min_size = self.file_constraints.get("min_file_size_bytes", MIN_FILE_SIZE_BYTES)
         self.max_size = self.file_constraints.get("max_file_size_bytes", MAX_FILE_SIZE_BYTES)
+        self.storage = storage_manager or StorageManager()
 
     def classify_document(self, filename: str) -> str:
         """Deterministically classify document into its canonical policy type."""
@@ -146,7 +273,7 @@ class BatchIngestor:
         if stem in self.CANONICAL_TYPE_MAP:
             return self.CANONICAL_TYPE_MAP[stem]
 
-        # Prefix / partial matching
+        # Prioritize exact sub-pattern matches
         for pattern, canonical in self.CANONICAL_TYPE_MAP.items():
             if pattern in stem:
                 return canonical
@@ -157,7 +284,6 @@ class BatchIngestor:
         """Locate the batch applicant CSV file."""
         csv_files = list(input_dir.glob("*.csv"))
         if csv_files:
-            # Prioritize file with applicant in name if multiple
             for c in csv_files:
                 if "applicant" in c.name.lower():
                     return c
@@ -225,94 +351,191 @@ class BatchIngestor:
 
         return True, True, "application/pdf", None
 
-    def link_applicant_documents(
-        self,
-        applicant_id: str,
-        input_dir: Path,
-    ) -> Tuple[Optional[Path], List[IngestedDocument], List[str]]:
-        """Link applicant record to files in input_dir using subfolder or prefix mapping."""
-        documents: List[IngestedDocument] = []
-        errors: List[str] = []
-
-        # Find subfolder: check APP_001, APP-001, etc.
-        candidates = [
-            input_dir / applicant_id,
-            input_dir / applicant_id.replace("-", "_"),
-            input_dir / applicant_id.replace("_", "-"),
-        ]
-
-        target_dir = None
-        for cand in candidates:
-            if cand.exists() and cand.is_dir():
-                target_dir = cand
-                break
-
-        if target_dir is None:
-            # Check for direct files prefixed with applicant_id
-            prefixed_files = sorted([p for p in input_dir.glob(f"{applicant_id}*") if p.is_file() and not p.name.startswith(".")])
-            if not prefixed_files:
-                errors.append(f"No document directory or files found for applicant '{applicant_id}'")
-                return None, documents, errors
-            files_to_process = prefixed_files
-        else:
-            files_to_process = sorted([p for p in target_dir.glob("*") if p.is_file() and not p.name.startswith(".")])
-
-        for fp in files_to_process:
-            size = fp.stat().st_size if fp.exists() else 0
-            exists, readable, mime, err = self.verify_file_trust_boundary(fp, applicant_id)
-            checksum = compute_sha256(fp) if exists else ""
-            doc_type = self.classify_document(fp.name)
-
-            if err:
-                errors.append(err)
-
-            doc_item = IngestedDocument(
-                filename=fp.name,
-                file_path=fp,
-                doc_type=doc_type,
-                file_size_bytes=size,
-                mime_type=mime,
-                sha256_checksum=checksum,
-                applicant_id=applicant_id,
-                exists=exists,
-                is_readable=readable,
-                error_message=err,
-                minio_object_key=f"{applicant_id}/{fp.name}",
-            )
-            documents.append(doc_item)
-
-        return target_dir, documents, errors
-
-    def ingest_batch(self, input_dir: Path) -> List[IngestedApplication]:
-        """Execute full pure batch ingestion and document linking on input_dir."""
-        input_path = Path(input_dir)
-        csv_path = self.find_csv_file(input_path)
+    def pass_1_parse_and_stage_csv(self, input_dir: Path) -> Tuple[Path, Dict[str, IngestedApplication]]:
+        """Pass 1: Parse application flat file (CSV), extract standard scalar columns
+        and structured lists (activities, awards, APs, hooks), and stage/upsert application
+        records into PostgreSQL (or dry-run store).
+        """
+        csv_path = self.find_csv_file(input_dir)
         csv_records = self.parse_csv(csv_path)
 
-        # Check if subfolders exist in input_path
-        subfolders = {d.name for d in input_path.iterdir() if d.is_dir()}
+        # Detect subfolders in input_dir to scope batch if needed
+        subfolders = {d.name for d in input_dir.iterdir() if d.is_dir()}
 
-        ingested_apps: List[IngestedApplication] = []
+        staged_applicants: Dict[str, IngestedApplication] = {}
 
         for record in csv_records:
             app_id = record.get("App_ID") or record.get("applicant_id") or record.get("Applicant_ID", "")
             if not app_id:
                 continue
 
-            # If the CSV has records not in this batch and subfolders exist, only process matching records
             app_variants = {app_id, app_id.replace("-", "_"), app_id.replace("_", "-")}
             if subfolders and not (app_variants & subfolders):
+                # Skip records not in this batch if batch directory is scoped by subfolders
                 continue
 
-            subfolder, docs, errs = self.link_applicant_documents(app_id, input_path)
+            # Extract variable-length array fields
+            activities_str = record.get("Activities") or ""
+            activities = [s.strip() for s in activities_str.split(",") if s.strip()][:10]
 
-            app = IngestedApplication(
+            awards_str = record.get("Awards") or ""
+            awards = [s.strip() for s in awards_str.split(",") if s.strip()][:5]
+
+            ap_str = record.get("AP_Courses") or ""
+            ap_scores = [s.strip() for s in ap_str.split(",") if s.strip()][:12]
+
+            hooks_str = record.get("Hooks") or ""
+            hooks = [s.strip() for s in hooks_str.split(",") if s.strip()][:5]
+
+            # Find matching subfolder if present
+            subfolder_path = None
+            for cand in [input_dir / app_id, input_dir / app_id.replace("-", "_"), input_dir / app_id.replace("_", "-")]:
+                if cand.exists() and cand.is_dir():
+                    subfolder_path = cand
+                    break
+
+            ingested_app = IngestedApplication(
                 applicant_id=app_id,
                 metadata=record,
-                subfolder_path=subfolder,
-                documents=docs,
-                trust_boundary_errors=errs,
+                activities=activities,
+                awards=awards,
+                ap_test_scores=ap_scores,
+                hooks=hooks,
+                subfolder_path=subfolder_path,
+                documents=[],
+                trust_boundary_errors=[],
+                status="PENDING",
+                routing_destination="READY_FOR_REVIEW",
             )
-            ingested_apps.append(app)
 
-        return ingested_apps
+            # Stage in PostgreSQL / storage manager
+            self.storage.stage_applicant(ingested_app.to_applicant_dict())
+            staged_applicants[app_id] = ingested_app
+
+        logger.info("Pass 1 Complete: Staged %d applicants from %s", len(staged_applicants), csv_path.name)
+        return csv_path, staged_applicants
+
+    def pass_2_traverse_and_link_documents(
+        self,
+        input_dir: Path,
+        staged_applicants: Dict[str, IngestedApplication],
+    ) -> Tuple[List[IngestedApplication], List[Dict[str, Any]]]:
+        """Pass 2: Traverse all documents across the batch directory.
+        - If document maps to a known app_id: check format/magic bytes (%PDF-),
+          compute SHA-256, upload to MinIO bucket ('admissions-raw-docs'), and attach
+          document metadata to the applicant's documents JSONB array.
+        - If document has no matching application record (orphan / late-coming LOR):
+          save to the OrphanDocument table and upload to MinIO under 'orphans/'.
+        """
+        orphans_list: List[Dict[str, Any]] = []
+
+        # Find all documents: in applicant subfolders and at root of input_dir
+        candidate_files: List[Tuple[Optional[str], Path]] = []
+
+        for item in sorted(input_dir.iterdir()):
+            if item.is_dir() and not item.name.startswith("."):
+                # Subdirectory
+                subfolder_id = item.name
+                for doc_file in sorted(item.iterdir()):
+                    if doc_file.is_file() and not doc_file.name.startswith(".") and not doc_file.name.endswith(".csv"):
+                        candidate_files.append((subfolder_id, doc_file))
+            elif item.is_file() and not item.name.startswith(".") and not item.name.endswith(".csv"):
+                # Loose file at root level
+                match = re.match(r"(APP[_-]\d+)", item.name, re.IGNORECASE)
+                detected_id = match.group(1).upper() if match else None
+                candidate_files.append((detected_id, item))
+
+        # Build alias map for staged applicants
+        applicant_alias_map: Dict[str, str] = {}
+        for app_id in staged_applicants.keys():
+            applicant_alias_map[app_id] = app_id
+            applicant_alias_map[app_id.replace("-", "_")] = app_id
+            applicant_alias_map[app_id.replace("_", "-")] = app_id
+
+        for detected_id, doc_path in candidate_files:
+            matched_app_id = applicant_alias_map.get(detected_id) if detected_id else None
+            size = doc_path.stat().st_size if doc_path.exists() else 0
+            exists, readable, mime, err = self.verify_file_trust_boundary(doc_path, matched_app_id or "ORPHAN")
+            checksum = compute_sha256(doc_path) if exists else ""
+            doc_type = self.classify_document(doc_path.name)
+
+            if matched_app_id and matched_app_id in staged_applicants:
+                # MATCHED: Known Applicant
+                target_app = staged_applicants[matched_app_id]
+                minio_key = f"{matched_app_id}/{doc_path.name}"
+
+                # Upload to MinIO bucket ('admissions-raw-docs')
+                self.storage.upload_file(
+                    file_path=doc_path,
+                    minio_key=minio_key,
+                    bucket_name="admissions-raw-docs",
+                )
+
+                doc_item = IngestedDocument(
+                    filename=doc_path.name,
+                    file_path=doc_path,
+                    doc_type=doc_type,
+                    file_size_bytes=size,
+                    mime_type=mime,
+                    sha256_checksum=checksum,
+                    applicant_id=matched_app_id,
+                    minio_key=minio_key,
+                    exists=exists,
+                    is_readable=readable,
+                    error_message=err,
+                )
+                target_app.documents.append(doc_item)
+                if err:
+                    target_app.trust_boundary_errors.append(err)
+            else:
+                # UNMATCHED: Orphan Document
+                minio_key = f"orphans/{doc_path.name}"
+                logger.warning("Orphan document detected: %s (detected_id: %s)", doc_path.name, detected_id)
+
+                # Upload to MinIO under 'orphans/'
+                self.storage.upload_file(
+                    file_path=doc_path,
+                    minio_key=minio_key,
+                    bucket_name="admissions-raw-docs",
+                )
+
+                orphan_dict = {
+                    "filename": doc_path.name,
+                    "file_path": str(doc_path),
+                    "minio_key": minio_key,
+                    "detected_app_id": detected_id,
+                    "sha256": checksum,
+                    "file_size_bytes": size,
+                }
+                self.storage.save_orphan(orphan_dict)
+                orphans_list.append(orphan_dict)
+
+        # Update staged applicants in database with populated documents JSONB array
+        for app in staged_applicants.values():
+            self.storage.update_applicant_status(
+                app_id=app.applicant_id,
+                status=app.status,
+                routing_destination=app.routing_destination,
+                documents=[d.to_metadata_dict() for d in app.documents],
+            )
+
+        logger.info(
+            "Pass 2 Complete: Processed %d documents across %d applicants (%d orphans recorded)",
+            len(candidate_files),
+            len(staged_applicants),
+            len(orphans_list),
+        )
+        return list(staged_applicants.values()), orphans_list
+
+    def ingest_batch(self, input_dir: Path) -> BatchIngestionResult:
+        """Execute full two-pass batch ingestion on input_dir."""
+        input_path = Path(input_dir)
+        csv_path, staged_applicants = self.pass_1_parse_and_stage_csv(input_path)
+        apps, orphans = self.pass_2_traverse_and_link_documents(input_path, staged_applicants)
+
+        return BatchIngestionResult(
+            applications=apps,
+            orphans=orphans,
+            total_processed=len(apps),
+            csv_path=csv_path,
+        )

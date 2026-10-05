@@ -10,8 +10,13 @@ Verifies:
    - INCOMPLETE -> status: "INCOMPLETE" (missing required files -> Applicant Packet Update)
    - ERROR -> status: "ERROR" (corrupted/missing magic bytes/size violation -> Human Review)
 5. Hard stop enforcement: CLI runner halts before downstream summarizers/agents with exit code 0.
+6. Schema mappings: explicit typed relational columns + JSONB variable-length arrays.
+7. Two-Pass orphan document handling: saving to OrphanDocument and MinIO 'orphans/'.
+8. affected_ids.json generation and export for downstream Summarizing Agent.
+9. Two letters of recommendation (LOR) requirement enforcement.
 """
 
+import json
 from pathlib import Path
 import subprocess
 import sys
@@ -29,6 +34,8 @@ from ingestion.batch_ingest import (
     PDF_MAGIC_BYTES,
     compute_sha256,
 )
+from storage.models import Applicant, OrphanDocument
+from storage.storage_manager import StorageManager
 from validation.manifest_gate import (
     GateRoutingDestination,
     GateStatus,
@@ -80,10 +87,55 @@ def test_pure_ingestion_no_image_rendering_or_storage(batch_dir, config_file):
     for app in apps:
         for doc in app.documents:
             assert len(doc.sha256_checksum) == 64, f"Invalid SHA-256 checksum for {doc.filename}"
-            assert doc.minio_object_key == f"{app.applicant_id}/{doc.filename}"
-            storage_dict = doc.to_storage_record_dict()
-            assert storage_dict["minio_bucket"] == "applicant-documents"
-            assert storage_dict["minio_object_key"] == f"{app.applicant_id}/{doc.filename}"
+            assert doc.minio_key == f"{app.applicant_id}/{doc.filename}"
+            meta_dict = doc.to_metadata_dict()
+            assert meta_dict["minio_key"] == f"{app.applicant_id}/{doc.filename}"
+            assert meta_dict["sha256"] == doc.sha256_checksum
+
+
+def test_schema_mapping_scalar_and_jsonb_arrays(batch_dir, config_file):
+    """Verify Pass 1 extracts 33-column flat file schema into typed relational fields
+    and stores variable-length arrays (activities, awards, ap_test_scores, hooks) in JSONB.
+    """
+    storage = StorageManager()
+    ingestor = BatchIngestor(config_path=config_file, storage_manager=storage)
+    _, staged = ingestor.pass_1_parse_and_stage_csv(batch_dir)
+
+    app_001 = staged["APP_001"]
+    data = app_001.to_applicant_dict()
+
+    # Typed relational columns
+    assert data["app_id"] == "APP_001"
+    assert data["first_name"] == "Alex"
+    assert data["last_name"] == "Bennett"
+    assert data["date_of_birth"] == "2008-11-21"
+    assert data["unweighted_gpa"] == 3.86
+    assert data["weighted_gpa"] == 4.68
+    assert data["superscored_sat_score"] == 1500.0
+    assert data["total_aps"] == 7.0
+    assert data["admission_year"] == 2026
+    assert data["admission_term"] in ("F", "Fall")
+
+    # JSONB array fields
+    assert isinstance(data["activities"], list)
+    assert len(data["activities"]) <= 10
+    assert "Varsity soccer player" in data["activities"]
+
+    assert isinstance(data["awards"], list)
+    assert len(data["awards"]) <= 5
+    assert "School academic honor roll" in data["awards"]
+
+    assert isinstance(data["ap_test_scores"], list)
+    assert len(data["ap_test_scores"]) <= 12
+    assert "AP World History" in data["ap_test_scores"]
+
+    assert isinstance(data["hooks"], list)
+    assert len(data["hooks"]) <= 5
+
+    # Check APP_002 hooks
+    app_002 = staged["APP_002"]
+    data_002 = app_002.to_applicant_dict()
+    assert "First-Gen" in data_002["hooks"]
 
 
 def test_trust_boundary_1_perimeter_hygiene(tmp_path, config_file):
@@ -143,12 +195,50 @@ def test_trust_boundary_1_does_not_scan_pages_app_008(batch_dir, config_file):
     apps = ingestor.ingest_batch(batch_dir)
     app_008 = next(a for a in apps if a.applicant_id == "APP_008")
 
-    # In pure ingestion, APP_008 has 0 perimeter hygiene errors
     assert len(app_008.trust_boundary_errors) == 0
     transcript_doc = next(d for d in app_008.documents if d.doc_type == "transcript")
     assert transcript_doc.exists is True
     assert transcript_doc.is_readable is True
     assert transcript_doc.error_message is None
+
+
+def test_two_pass_orphan_document_handling(tmp_path, config_file):
+    """Verify Pass 2 records unmatched files into the OrphanDocument table and MinIO 'orphans/'."""
+    batch_dir = tmp_path / "orphan_test_batch"
+    batch_dir.mkdir()
+
+    # 1. Create a minimal CSV with only APP_001
+    csv_file = batch_dir / "applicant_data.csv"
+    csv_file.write_text(
+        "App_ID,First_Name,Last_Name,Date_Of_Birth,Email_Address,Name_of_HS,Intended_Major,Admission_Year,Admission_Term\n"
+        "APP_001,John,Doe,2007-01-01,john@example.com,City High,CS,2026,Fall\n",
+        encoding="utf-8",
+    )
+
+    # 2. Valid matched document for APP_001
+    app_001_dir = batch_dir / "APP_001"
+    app_001_dir.mkdir()
+    (app_001_dir / "transcript.pdf").write_bytes(PDF_MAGIC_BYTES + b"1.4\n" + b"X" * 2000)
+
+    # 3. Unmatched orphan document at root level (e.g. late LOR for non-existent APP_999)
+    orphan_file = batch_dir / "APP_999_recommendation_letter.pdf"
+    orphan_file.write_bytes(PDF_MAGIC_BYTES + b"1.4\n" + b"Y" * 2000)
+
+    storage = StorageManager()
+    ingestor = BatchIngestor(config_path=config_file, storage_manager=storage)
+    result = ingestor.ingest_batch(batch_dir)
+
+    # Verify APP_001 is staged and has its document
+    assert len(result.applications) == 1
+    assert result.applications[0].applicant_id == "APP_001"
+    assert len(result.applications[0].documents) == 1
+
+    # Verify orphan document was recorded
+    assert len(result.orphans) == 1
+    orphan = result.orphans[0]
+    assert orphan["filename"] == "APP_999_recommendation_letter.pdf"
+    assert orphan["minio_key"] == "orphans/APP_999_recommendation_letter.pdf"
+    assert orphan["detected_app_id"] == "APP_999"
 
 
 def test_manifest_validation_gate_3_way_routing(batch_dir, config_file):
@@ -158,15 +248,21 @@ def test_manifest_validation_gate_3_way_routing(batch_dir, config_file):
     - ERROR -> status: 'ERROR' (0 in clean batch_01)
     """
     ingestor = BatchIngestor(config_path=config_file)
-    apps = ingestor.ingest_batch(batch_dir)
+    result_ingest = ingestor.ingest_batch(batch_dir)
 
     gate = ManifestValidationGate(config_path=config_file)
-    result = gate.evaluate_batch(apps)
+    result = gate.evaluate_batch(result_ingest.applications)
 
     assert result.total_processed == 10
     assert result.total_valid == 9
     assert result.total_incomplete == 1
     assert result.total_error == 0
+
+    # Verify affected_ids contains the 9 ready applicants
+    assert len(result.affected_ids) == 9
+    assert "APP_001" in result.affected_ids
+    assert "APP_008" in result.affected_ids
+    assert "APP_010" not in result.affected_ids
 
     # Verify APP_001 is VALID -> READY_FOR_REVIEW
     app_001 = next(a for a in result.routed_applicants if a.applicant_id == "APP_001")
@@ -176,7 +272,7 @@ def test_manifest_validation_gate_3_way_routing(batch_dir, config_file):
     assert app_001.routing_destination == GateRoutingDestination.READY_FOR_REVIEW.value
     assert app_001.is_valid is True
 
-    # Verify APP_008 is VALID -> READY_FOR_REVIEW (no text scan false positive)
+    # Verify APP_008 is VALID -> READY_FOR_REVIEW
     app_008 = next(a for a in result.routed_applicants if a.applicant_id == "APP_008")
     assert app_008.status == GateStatus.READY_FOR_REVIEW
     assert app_008.routing_destination == GateRoutingDestination.READY_FOR_REVIEW.value
@@ -191,11 +287,94 @@ def test_manifest_validation_gate_3_way_routing(batch_dir, config_file):
     assert "transcript" in app_010.missing_documents
 
 
+def test_manifest_gate_enforces_two_lors_requirement(config_file):
+    """Verify that the manifest gate strictly requires 2 letters of recommendation."""
+    gate = ManifestValidationGate(config_path=config_file)
+
+    base_metadata = {
+        "App_ID": "APP_LOR_TEST",
+        "First_Name": "Sam",
+        "Last_Name": "Taylor",
+        "Date_Of_Birth": "2007-02-15",
+        "Email_Address": "sam@example.com",
+        "Name_of_HS": "West High",
+        "Intended_Major": "Biology",
+        "Admission_Year": "2026",
+        "Admission_Term": "Fall",
+    }
+
+    doc_app_form = IngestedDocument(
+        filename="application_form.pdf",
+        file_path=Path("/tmp/app.pdf"),
+        doc_type="application_form",
+        file_size_bytes=5000,
+        mime_type="application/pdf",
+        sha256_checksum="a" * 64,
+        applicant_id="APP_LOR_TEST",
+    )
+    doc_transcript = IngestedDocument(
+        filename="transcript.pdf",
+        file_path=Path("/tmp/trans.pdf"),
+        doc_type="transcript",
+        file_size_bytes=5000,
+        mime_type="application/pdf",
+        sha256_checksum="b" * 64,
+        applicant_id="APP_LOR_TEST",
+    )
+    doc_essay = IngestedDocument(
+        filename="personal_statement.pdf",
+        file_path=Path("/tmp/essay.pdf"),
+        doc_type="personal_statement",
+        file_size_bytes=5000,
+        mime_type="application/pdf",
+        sha256_checksum="c" * 64,
+        applicant_id="APP_LOR_TEST",
+    )
+    doc_lor_1 = IngestedDocument(
+        filename="recommendation_letter_1.pdf",
+        file_path=Path("/tmp/lor1.pdf"),
+        doc_type="recommendation_letter_1",
+        file_size_bytes=5000,
+        mime_type="application/pdf",
+        sha256_checksum="d" * 64,
+        applicant_id="APP_LOR_TEST",
+    )
+    doc_lor_2 = IngestedDocument(
+        filename="recommendation_letter_2.pdf",
+        file_path=Path("/tmp/lor2.pdf"),
+        doc_type="recommendation_letter_2",
+        file_size_bytes=5000,
+        mime_type="application/pdf",
+        sha256_checksum="e" * 64,
+        applicant_id="APP_LOR_TEST",
+    )
+
+    # 1. Packet with only 1 LOR -> Must be INCOMPLETE
+    app_with_1_lor = IngestedApplication(
+        applicant_id="APP_LOR_TEST",
+        metadata=base_metadata,
+        documents=[doc_app_form, doc_transcript, doc_essay, doc_lor_1],
+    )
+    routed_1 = gate.evaluate_applicant(app_with_1_lor)
+    assert routed_1.status == GateStatus.INCOMPLETE
+    assert "recommendation_letter_2" in routed_1.missing_documents
+
+    # 2. Packet with 2 LORs -> Must be VALID / READY_FOR_REVIEW
+    app_with_2_lors = IngestedApplication(
+        applicant_id="APP_LOR_TEST",
+        metadata=base_metadata,
+        documents=[doc_app_form, doc_transcript, doc_essay, doc_lor_1, doc_lor_2],
+    )
+    routed_2 = gate.evaluate_applicant(app_with_2_lors)
+    assert routed_2.status == GateStatus.READY_FOR_REVIEW
+    assert routed_2.is_valid is True
+    assert len(routed_2.missing_documents) == 0
+
+
 def test_manifest_validation_gate_routes_error_queue(config_file):
     """Verify corrupted/magic-bytes/size violations route to ERROR -> Human Review."""
     gate = ManifestValidationGate(config_path=config_file)
 
-    # Construct an application with a perimeter error
     corrupted_doc = IngestedDocument(
         filename="corrupted_transcript.pdf",
         file_path=Path("/tmp/corrupted.pdf"),
@@ -233,9 +412,10 @@ def test_manifest_validation_gate_routes_error_queue(config_file):
     assert any("Invalid PDF magic bytes" in err for err in routed.errors)
 
 
-def test_hard_stop_enforcement_and_cli_exit_code(tmp_path):
-    """Verify CLI runner halts execution with exit code 0 and prints hard stop notification."""
+def test_hard_stop_enforcement_and_affected_ids_export(tmp_path):
+    """Verify CLI runner halts execution with exit code 0, prints hard stop, and exports affected_ids.json."""
     report_file = tmp_path / "test_report.txt"
+    affected_ids_file = tmp_path / "affected_ids.json"
     cmd = [
         sys.executable,
         "run_ingestion_check.py",
@@ -243,6 +423,8 @@ def test_hard_stop_enforcement_and_cli_exit_code(tmp_path):
         "batch_01",
         "--output",
         str(report_file),
+        "--affected-ids",
+        str(affected_ids_file),
     ]
     proc = subprocess.run(cmd, capture_output=True, text=True)
 
@@ -250,20 +432,30 @@ def test_hard_stop_enforcement_and_cli_exit_code(tmp_path):
     stdout = proc.stdout
     assert "[HARD STOP] Ingestion and completeness check is complete." in stdout
     assert "[HARD STOP] Pipeline execution halted prior to the summarizing agent." in stdout
+    assert "Affected IDs (READY_FOR_REVIEW):" in stdout
     assert report_file.exists()
+    assert affected_ids_file.exists()
 
+    # Verify affected_ids.json content
+    affected_data = json.loads(affected_ids_file.read_text(encoding="utf-8"))
+    assert len(affected_data) == 9
+    assert "APP_001" in affected_data
+    assert "APP_009" in affected_data
+    assert "APP_010" not in affected_data
+
+    # Verify report content
     report_content = report_file.read_text(encoding="utf-8")
     assert "Total Applications Processed : 10" in report_content
     assert "Valid Applications (Ready)   : 9" in report_content
     assert "Incomplete Applications      : 1" in report_content
     assert "Error / Corrupted Packets    : 0" in report_content
-    assert "PIPELINE HALT ENFORCEMENT" in report_content
-    assert "Execution hard stop enforced immediately after Manifest Gate validation." in report_content
+    assert "PIPELINE HALT ENFORCEMENT & HANDOFF" in report_content
 
 
 def test_no_downstream_agents_or_ocr_triggered(tmp_path):
     """Verify that neither ModelGateway, summarizers, nor DocumentParser are invoked during pipeline run."""
     report_file = tmp_path / "test_report.txt"
+    affected_file = tmp_path / "test_affected.json"
 
     with patch("gateway.client.ModelGateway", side_effect=RuntimeError("Downstream ModelGateway must NOT be called")), \
          patch("parsing.parser.DocumentParser", side_effect=RuntimeError("Downstream DocumentParser must NOT be called")):
@@ -271,9 +463,11 @@ def test_no_downstream_agents_or_ocr_triggered(tmp_path):
             input_dir="batch_01",
             config_file="config/policies.yaml",
             report_file=str(report_file),
+            affected_ids_file=str(affected_file),
         )
 
     assert result.total_processed == 10
     assert result.total_valid == 9
     assert result.total_incomplete == 1
     assert result.total_error == 0
+    assert len(result.affected_ids) == 9

@@ -115,7 +115,104 @@ Encloses PostgreSQL, MinIO, and internal processing:
 
 ## Ingestion & Completeness Check (Batch Ingestion)
 
-This stage performs batch linking and deterministic manifest validation against Trust Boundary 1. It explicitly halts after the completeness check without performing OCR or image rendering, leaving raw application payloads ready for the downstream multimodal Summarizing Agent.
+This stage implements Component 2 (Two-Pass Ingestion Layer) and Component 3 (Deterministic Manifest Validation Gate) in compliance with Architecture Section 4 and Trust Boundary 1. It explicitly halts after manifest validation without performing OCR or image rendering, leaving clean relational records, MinIO raw documents, and an `affected_ids.json` artifact ready for the downstream multimodal Summarizing Agent.
+
+### Architecture & Two-Pass Design
+
+```
++-----------------------------------------------------------------------------------------+
+|                                    BATCH DIRECTORY                                      |
+|   +-----------------------+     +--------------------+     +------------------------+   |
+|   |  applicant_data.csv   |     | APP_001/ ... APP_N |     | Orphan documents (LOR) |   |
+|   +-----------+-----------+     +---------+----------+     +-----------+------------+   |
++---------------|---------------------------|----------------------------|----------------+
+                |                           |                            |
+       [Pass 1: Flat File CSV]              |                            |
+                v                           |                            |
++-------------------------------+           |                            |
+| 33-Column Relational Mapping  |           |                            |
+| + JSONB Array Staging         |           |                            |
+| (activities, awards, APs,     |           |                            |
+|  hooks, documents=[])         |           |                            |
++---------------+---------------+           |                            |
+                |                           |                            |
+                v                           |                            |
++-------------------------------+           |                            |
+|  PostgreSQL: applicants table |           |                            |
++---------------+---------------+           |                            |
+                |                           |                            |
+                +-------------------> [Pass 2: Document Traversal] <-----+
+                                            |
+                         +------------------+------------------+
+                         v                                     v
+             [Matched Applicant ID]                   [Orphan Document]
+                         |                                     |
+         +---------------+---------------+             +-------+-------+
+         | Upload to MinIO:              |             | Upload to     |
+         | s3://admissions-raw-docs/     |             | MinIO:        |
+         |      {app_id}/{filename}      |             | s3://.../     |
+         | Attach metadata to documents  |             | orphans/      |
+         | JSONB array                   |             | Save to       |
+         +---------------+---------------+             | OrphanDocument|
+                         |                             | table         |
+                         v                             +---------------+
+         +---------------+---------------+
+         | Component 3: Manifest Gate    |
+         | 3-Way Deterministic Routing   |
+         | (Enforce 2 LORs, TB1 hygiene) |
+         +---------------+---------------+
+                         |
+           +-------------+-------------+
+           v                           v
+     [READY_FOR_REVIEW]       [INCOMPLETE / ERROR]
+           |                           |
+           v                           v
++----------------------+   +-----------------------+
+| Save to              |   | Route to Applicant    |
+| affected_ids.json    |   | Packet Update or      |
+| & update PostgreSQL  |   | Human Review queue    |
++----------+-----------+   +-----------------------+
+           |
+           v
++----------------------+
+| HARD STOP            |
+| Halted prior to LLM  |
+| Summarizing Agent    |
++----------------------+
+```
+
+1. **Pass 1 (CSV Flat File Parsing & Relational Staging)**:
+   - Extracts 33 scalar columns into explicit, strongly typed relational attributes: `app_id` (PK), `first_name`, `last_name`, `date_of_birth`, `mailing_address`, `phone_number`, `email_address`, `gender`, `ethnicity`, `name_of_hs`, `counselor_name`, `country`, `region`, `intended_major`, `admission_year`, `admission_term`, `gpa`, `unweighted_gpa`, `weighted_gpa`, `class_rank`, `superscored_sat_score`, `superscored_act_score`, `total_aps`, `total_ibs`, etc.
+   - Restricts JSONB exclusively to variable-length array payloads:
+     - `activities`: List of up to 10 extracurricular activities.
+     - `awards`: List of up to 5 honors/awards.
+     - `ap_test_scores`: List of up to 12 advanced courses and scores.
+     - `hooks`: List of up to 5 institutional consideration flags (e.g. First-Gen, URM).
+     - `documents`: Initialized as empty list `[]`.
+   - Upserts records in PostgreSQL (`applicants` table) with status initialized to `PENDING`.
+
+2. **Pass 2 (Document Traversal, Perimeter Hygiene & MinIO Archival)**:
+   - Scans subdirectories and root files across the batch.
+   - Enforces lightweight **Trust Boundary 1** perimeter hygiene:
+     - File existence and size constraint check (1 KB to 15 MB).
+     - Standard PDF magic bytes verification (first 5 bytes `b"%PDF-"`) without opening or scanning text.
+     - Streaming SHA-256 checksum computation.
+   - **Matched Submissions**: Raw PDFs uploaded to MinIO bucket `admissions-raw-docs` under `{app_id}/{filename}`, with metadata attached to the applicant's `documents` JSONB array.
+   - **Orphan Submissions**: Unmatched files (e.g. late LORs without an existing application row) uploaded to MinIO under `orphans/{filename}` and recorded in the dedicated `OrphanDocument` PostgreSQL table.
+
+3. **Component 3 (Deterministic Manifest Validation Gate)**:
+   - Evaluates applicant packet against institutional policy rules (`config/policies.yaml`):
+     - **`VALID`** -> Status updated to `READY_FOR_REVIEW` (all mandatory fields, transcript, application form, personal statement, and **2 letters of recommendation** present).
+     - **`INCOMPLETE`** -> Status `INCOMPLETE` (missing required files or metadata -> routed to **Applicant Packet Update**).
+     - **`ERROR`** -> Status `ERROR` (corrupted files, magic byte mismatches, or size violations -> routed to **Human Review**).
+
+4. **`affected_ids.json` Output & Hard Stop**:
+   - The IDs of all applicants reaching `READY_FOR_REVIEW` in the run are exported to `affected_ids.json` and printed to stdout.
+   - Execution halts with clean exit code `0` immediately after report generation, ensuring downstream LLM/VLM summarizers are only triggered on demand.
+
+### Storage & Resilience Fallback
+- Connection parameters are read from environment variables (`DATABASE_URL`, `MINIO_ENDPOINT`, `MINIO_BUCKET`, `MINIO_ACCESS_KEY`, `MINIO_SECRET_KEY`).
+- If PostgreSQL or MinIO services are offline during local prototyping, the `StorageManager` logs clear warnings and automatically engages dry-run simulation mode, permitting full local manifest generation and test execution while performing real inserts/uploads whenever services are live.
 
 ### Run Instructions
 
