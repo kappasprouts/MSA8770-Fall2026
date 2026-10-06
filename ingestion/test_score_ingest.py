@@ -6,8 +6,8 @@ Implements Component 2 delta ingestion:
 - Matches incoming student records to ApplicationRecord by email (case-insensitive) or DOB fallback.
 - Appends AP scores to ap_test_scores JSONB array without duplicating subject/score pairs.
 - Unmatched records are archived to the OrphanTestScore table.
-- Re-triggers ManifestValidationGate on matched applicants; if previously INCOMPLETE and now complete,
-  promotes status to READY_FOR_REVIEW and appends ID to affected_ids.json.
+- Re-triggers ManifestValidationGate on matched applicants and writes a separate
+  affected-ID handoff for each run when ready applicants receive new scores.
 - Operates in live PostgreSQL or in-memory dry-run mode when DB is unavailable.
 """
 
@@ -17,9 +17,11 @@ from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 import json
 import logging
+import os
 from pathlib import Path
 import re
 from typing import Any, Dict, List, Optional, Tuple, Union
+from uuid import uuid4
 
 from ingestion.batch_ingest import IngestedApplication, IngestedDocument
 from storage.models import Applicant, OrphanTestScore
@@ -44,6 +46,9 @@ class ScoreIngestResult:
     orphan_count: int = 0
     matched_app_ids: List[str] = field(default_factory=list)
     promoted_app_ids: List[str] = field(default_factory=list)
+    affected_ids: List[str] = field(default_factory=list)
+    affected_ids_file: Optional[str] = None
+    handoff_ready: bool = False
     orphan_identifiers: List[str] = field(default_factory=list)
     orphans: List[OrphanTestScore] = field(default_factory=list)
     executed_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
@@ -57,6 +62,9 @@ class ScoreIngestResult:
             "orphan_count": self.orphan_count,
             "matched_app_ids": self.matched_app_ids,
             "promoted_app_ids": self.promoted_app_ids,
+            "affected_ids": self.affected_ids,
+            "affected_ids_file": self.affected_ids_file,
+            "handoff_ready": self.handoff_ready,
             "orphan_identifiers": self.orphan_identifiers,
             "executed_at": self.executed_at,
         }
@@ -110,29 +118,24 @@ def _is_duplicate_ap(existing_scores: List[Any], subject: str, score: int) -> bo
     return False
 
 
-def _append_to_affected_ids(app_id: str, file_path: Union[str, Path] = "affected_ids.json") -> bool:
-    """Append app_id to affected_ids.json if not already present."""
-    path = Path(file_path)
-    existing: List[str] = []
-    if path.exists():
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                if isinstance(data, list):
-                    existing = [str(x) for x in data]
-        except Exception as e:
-            logger.warning("Error reading %s: %s", path, e)
-            existing = []
-
-    if app_id not in existing:
-        existing.append(app_id)
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(existing, f, indent=2)
-        return True
-    return False
+def _score_snapshot(app: Applicant) -> Tuple[Any, ...]:
+    """Capture fields owned by the score feeds before and after persistence."""
+    return (
+        app.sat_math,
+        app.sat_ebrw,
+        app.superscored_sat_score,
+        app.act_composite,
+        app.superscored_act_score,
+        app.act_english,
+        app.act_math,
+        app.act_reading,
+        app.act_science,
+        app.act_writing,
+        json.dumps(app.ap_test_scores or [], sort_keys=True, default=str),
+    )
 
 
-def applicant_to_ingested(app: Applicant) -> IngestedApplication:
+def applicant_to_ingested(app: Applicant, default_bucket: str = "admissions-raw-docs") -> IngestedApplication:
     """Convert an Applicant ORM/dry-run instance into an IngestedApplication for gate evaluation."""
     docs: List[IngestedDocument] = []
     raw_docs = getattr(app, "documents", []) or []
@@ -151,6 +154,7 @@ def applicant_to_ingested(app: Applicant) -> IngestedApplication:
                     is_readable=d.get("is_readable", True),
                     error_message=d.get("error_message"),
                     minio_key=d.get("minio_key", ""),
+                    minio_bucket=d.get("minio_bucket", default_bucket),
                 )
             )
         elif isinstance(d, IngestedDocument):
@@ -196,8 +200,10 @@ def re_evaluate_applicant(
 ) -> Optional[RoutedApplicant]:
     """Re-runs ManifestValidationGate on an applicant who received updated scores.
 
-    If their previous status was 'INCOMPLETE' and all checklist criteria are now satisfied,
-    updates their status to 'READY_FOR_REVIEW' and appends their ID to affected_ids.json.
+    Status changes are persisted here. The score ingestor owns the per-run
+    affected-ID handoff after it verifies that score persistence succeeded.
+
+    ``affected_ids_path`` remains accepted for callers using the older signature.
     """
     storage = storage_manager or StorageManager()
     applicant = storage.get_applicant(app_id)
@@ -211,23 +217,27 @@ def re_evaluate_applicant(
     ingested_app = applicant_to_ingested(applicant)
     routed = validation_gate.evaluate_applicant(ingested_app)
 
-    # If previously INCOMPLETE and now VALID / READY_FOR_REVIEW: promote and append to affected_ids.json
+    # An incomplete packet can become ready after a score feed or a prior gate
+    # evaluation that has since become stale.
     if prev_status == "INCOMPLETE" and (
         routed.status == GateStatus.READY_FOR_REVIEW or routed.status == GateStatus.VALID
     ):
-        storage.update_applicant_status(
+        updated = storage.update_applicant_status(
             app_id=app_id,
             status=GateStatus.READY_FOR_REVIEW.value,
             routing_destination=GateRoutingDestination.READY_FOR_REVIEW.value,
         )
-        _append_to_affected_ids(app_id, affected_ids_path)
+        if not updated:
+            raise RuntimeError(f"Could not persist manifest status for {app_id}")
         logger.info("Applicant '%s' promoted from INCOMPLETE to READY_FOR_REVIEW.", app_id)
     elif routed.status.value != prev_status:
-        storage.update_applicant_status(
+        updated = storage.update_applicant_status(
             app_id=app_id,
             status=routed.status.value,
             routing_destination=routed.routing_destination,
         )
+        if not updated:
+            raise RuntimeError(f"Could not persist manifest status for {app_id}")
 
     return routed
 
@@ -241,11 +251,89 @@ class TestScoreIngestor:
         storage_manager: Optional[StorageManager] = None,
         config_path: Optional[Union[str, Path]] = None,
         affected_ids_path: Union[str, Path] = "affected_ids.json",
+        require_object_storage: bool = False,
+        require_postgresql: bool = False,
     ):
         self.storage_manager = storage_manager or StorageManager()
         self.config_path = Path(config_path) if config_path else Path("config/policies.yaml")
         self.affected_ids_path = Path(affected_ids_path)
+        self.require_object_storage = require_object_storage
+        self.require_postgresql = require_postgresql
         self.gate = ManifestValidationGate(config_path=self.config_path)
+
+    def _check_storage(self) -> None:
+        if self.require_postgresql and (
+            not self.storage_manager.db_available or self.storage_manager.is_sqlite_fallback
+        ):
+            raise RuntimeError("PostgreSQL is unavailable; refusing score handoff")
+        if self.require_object_storage and not self.storage_manager.minio_available:
+            raise RuntimeError("MinIO is unavailable; refusing score handoff")
+
+    def _new_result(self, source: str, path: Path) -> ScoreIngestResult:
+        run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ") + "_" + uuid4().hex[:8]
+        base = self.affected_ids_path
+        output = base.with_name(f"{base.stem}_{source.lower()}_{run_id}{base.suffix or '.json'}")
+        return ScoreIngestResult(
+            source=source,
+            file_path=str(path),
+            affected_ids_file=str(output.resolve()),
+            handoff_ready=self.require_postgresql and self.require_object_storage,
+        )
+
+    @staticmethod
+    def _write_handoff(result: ScoreIngestResult) -> None:
+        """Publish one complete handoff artifact without replacing another run's file."""
+        output = Path(result.affected_ids_file)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        temporary = output.with_name(f".{output.name}.tmp")
+        try:
+            temporary.write_text(json.dumps(result.affected_ids, indent=2), encoding="utf-8")
+            os.replace(temporary, output)
+        finally:
+            temporary.unlink(missing_ok=True)
+
+    def _record_matched_update(
+        self,
+        result: ScoreIngestResult,
+        app: Applicant,
+        before: Tuple[Any, ...],
+        persisted: Optional[Applicant],
+        prev_status: str,
+    ) -> None:
+        if persisted is None:
+            raise RuntimeError(f"Could not persist test scores for {app.app_id}")
+
+        routed = re_evaluate_applicant(
+            app_id=app.app_id,
+            storage_manager=self.storage_manager,
+            config_path=self.config_path,
+            gate=self.gate,
+        )
+        if routed is None:
+            raise RuntimeError(f"Could not re-evaluate applicant {app.app_id}")
+
+        result.matched_count += 1
+        result.matched_app_ids.append(app.app_id)
+        promoted = prev_status == "INCOMPLETE" and routed.is_valid
+        if promoted and app.app_id not in result.promoted_app_ids:
+            result.promoted_app_ids.append(app.app_id)
+        if routed.is_valid and (promoted or before != _score_snapshot(persisted)):
+            if self.require_object_storage:
+                for document in applicant_to_ingested(persisted, self.storage_manager.minio_bucket).documents:
+                    if self.storage_manager.object_exists(document.minio_key, document.minio_bucket):
+                        continue
+                    if not self.storage_manager.update_applicant_status(
+                        app_id=app.app_id,
+                        status=GateStatus.ERROR.value,
+                        routing_destination=GateRoutingDestination.HUMAN_REVIEW.value,
+                    ):
+                        raise RuntimeError(f"Could not persist storage error for {app.app_id}")
+                    raise RuntimeError(
+                        f"Document object is unavailable for {app.app_id}: "
+                        f"s3://{document.minio_bucket}/{document.minio_key}"
+                    )
+            if app.app_id not in result.affected_ids:
+                result.affected_ids.append(app.app_id)
 
     def _match_applicant(self, row: Dict[str, Any]) -> Tuple[Optional[Applicant], str]:
         """Match incoming row to an existing Applicant by email or DOB fallback.
@@ -281,8 +369,9 @@ class TestScoreIngestor:
         path = Path(file_path)
         if not path.exists():
             raise FileNotFoundError(f"College Board input file not found: {path}")
+        self._check_storage()
 
-        result = ScoreIngestResult(source="COLLEGE_BOARD", file_path=str(path))
+        result = self._new_result("COLLEGE_BOARD", path)
 
         with open(path, "r", encoding="utf-8-sig") as f:
             reader = csv.DictReader(f)
@@ -372,33 +461,18 @@ class TestScoreIngestor:
                         current_aps.append({"subject": subj, "score": sc})
                         updated_aps = True
 
-                # Persist score updates
-                self.storage_manager.update_applicant_scores(
+                # Only a committed change can enter the summary handoff.
+                before = _score_snapshot(app)
+                prev_status = app.status
+                persisted = self.storage_manager.update_applicant_scores(
                     app_id=app.app_id,
                     sat_math=sat_math if sat_math is not None else app.sat_math,
                     sat_ebrw=sat_ebrw if sat_ebrw is not None else app.sat_ebrw,
                     ap_test_scores=current_aps if updated_aps else None,
                 )
+                self._record_matched_update(result, app, before, persisted, prev_status)
 
-                result.matched_count += 1
-                result.matched_app_ids.append(app.app_id)
-
-                # Re-evaluate with Manifest Gate
-                prev_status = app.status
-                routed = re_evaluate_applicant(
-                    app_id=app.app_id,
-                    storage_manager=self.storage_manager,
-                    config_path=self.config_path,
-                    affected_ids_path=self.affected_ids_path,
-                    gate=self.gate,
-                )
-                if (
-                    prev_status == "INCOMPLETE"
-                    and routed
-                    and (routed.status == GateStatus.READY_FOR_REVIEW or routed.status == GateStatus.VALID)
-                ):
-                    result.promoted_app_ids.append(app.app_id)
-
+        self._write_handoff(result)
         return result
 
     def ingest_act(self, file_path: Union[str, Path]) -> ScoreIngestResult:
@@ -411,8 +485,9 @@ class TestScoreIngestor:
         path = Path(file_path)
         if not path.exists():
             raise FileNotFoundError(f"ACT input file not found: {path}")
+        self._check_storage()
 
-        result = ScoreIngestResult(source="ACT", file_path=str(path))
+        result = self._new_result("ACT", path)
 
         with open(path, "r", encoding="utf-8-sig") as f:
             reader = csv.DictReader(f)
@@ -446,31 +521,16 @@ class TestScoreIngestor:
                     "act_writing": _parse_int_by_aliases(row, ["act_writing", "writing", "writing_score"]),
                 }
 
-                self.storage_manager.update_applicant_scores(
+                before = _score_snapshot(app)
+                prev_status = app.status
+                persisted = self.storage_manager.update_applicant_scores(
                     app_id=app.app_id,
                     act_composite=act_comp if act_comp is not None else app.act_composite,
                     act_sections=sections,
                 )
+                self._record_matched_update(result, app, before, persisted, prev_status)
 
-                result.matched_count += 1
-                result.matched_app_ids.append(app.app_id)
-
-                # Re-evaluate with Manifest Gate
-                prev_status = app.status
-                routed = re_evaluate_applicant(
-                    app_id=app.app_id,
-                    storage_manager=self.storage_manager,
-                    config_path=self.config_path,
-                    affected_ids_path=self.affected_ids_path,
-                    gate=self.gate,
-                )
-                if (
-                    prev_status == "INCOMPLETE"
-                    and routed
-                    and (routed.status == GateStatus.READY_FOR_REVIEW or routed.status == GateStatus.VALID)
-                ):
-                    result.promoted_app_ids.append(app.app_id)
-
+        self._write_handoff(result)
         return result
 
     async def ingest_college_board_async(self, file_path: Union[str, Path]) -> ScoreIngestResult:

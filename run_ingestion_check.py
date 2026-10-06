@@ -18,14 +18,15 @@ import json
 import os
 from pathlib import Path
 import sys
-from typing import Optional
+from typing import Optional, Set
+import uuid
 
 # Ensure project root is in sys.path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from ingestion.batch_ingest import BatchIngestor, BatchIngestionResult
 from storage.storage_manager import StorageManager
-from validation.manifest_gate import GateStatus, ManifestValidationGate, ManifestGateResult
+from validation.manifest_gate import GateRoutingDestination, GateStatus, ManifestValidationGate, ManifestGateResult
 
 
 def format_table_row(cols, widths, fillchar=" ", align="<"):
@@ -45,6 +46,7 @@ def generate_report_text(
     result: ManifestGateResult,
     orphans_count: int,
     execution_time: datetime,
+    affected_ids_file: Path,
 ) -> str:
     """Generate comprehensive audit report text."""
     lines = []
@@ -128,7 +130,7 @@ def generate_report_text(
     lines.append("PIPELINE HALT ENFORCEMENT & HANDOFF")
     lines.append("================================================================================")
     lines.append(f"Affected IDs for Summarizing Agent: {result.affected_ids}")
-    lines.append("Saved to: affected_ids.json")
+    lines.append(f"Saved to: {affected_ids_file.resolve()}")
     lines.append("Execution hard stop enforced immediately after Manifest Gate validation.")
     lines.append("No downstream OCR parsers, LLM gateways, VLM agents, or summarizers invoked.")
     lines.append("================================================================================")
@@ -221,6 +223,9 @@ def run_pipeline(
     report_file: Optional[str] = None,
     affected_ids_file: Optional[str] = None,
     storage_manager: Optional[StorageManager] = None,
+    applicant_ids: Optional[Set[str]] = None,
+    require_object_storage: bool = False,
+    require_postgresql: bool = False,
 ) -> ManifestGateResult:
     """Execute two-pass batch ingestion, manifest completeness gate, and hard stop."""
     input_path = Path(input_dir)
@@ -231,34 +236,61 @@ def run_pipeline(
     config_path = Path(config_file) if config_file else Path("config/policies.yaml")
     execution_time = datetime.now(timezone.utc)
     storage = storage_manager or StorageManager()
+    if require_postgresql and (not storage.db_available or storage.is_sqlite_fallback):
+        raise RuntimeError("PostgreSQL is unavailable; refusing to export a summary-agent handoff")
+    if require_object_storage and not storage.minio_available:
+        raise RuntimeError("MinIO is unavailable; refusing to export a summary-agent handoff")
 
     # 1. Component 2: Two-Pass Batch Ingestion & Linking
     ingestor = BatchIngestor(config_path=config_path, storage_manager=storage)
-    ingest_result = ingestor.ingest_batch(input_path)
+    ingest_result = ingestor.ingest_batch(input_path, applicant_ids=applicant_ids)
 
     # 2. Component 3: Manifest Validation Gate
     gate = ManifestValidationGate(config_path=config_path)
     result = gate.evaluate_batch(ingest_result.applications)
 
-    # Ensure Case 2 affected IDs from prior batches are included if ready
-    for aff_id in ingest_result.affected_ids:
-        if aff_id not in result.affected_ids:
-            app = storage.get_applicant(aff_id)
-            if app and (app.status == "READY_FOR_REVIEW" or app.status == "VALID"):
-                result.affected_ids.append(aff_id)
+    if require_object_storage:
+        by_id = {app.applicant_id: app for app in ingest_result.applications}
+        for routed in result.routed_applicants:
+            if not routed.is_valid:
+                continue
+            for document in by_id[routed.applicant_id].documents:
+                if storage.object_exists(document.minio_key, document.minio_bucket):
+                    continue
+                if not storage.update_applicant_status(
+                    app_id=routed.applicant_id,
+                    status=GateStatus.ERROR.value,
+                    routing_destination=GateRoutingDestination.HUMAN_REVIEW.value,
+                ):
+                    raise RuntimeError(f"Could not persist storage error for {routed.applicant_id}")
+                raise RuntimeError(
+                    f"Document object is unavailable for {routed.applicant_id}: "
+                    f"s3://{document.minio_bucket}/{document.minio_key}"
+                )
 
     # 3. Update PostgreSQL applicant records with gate evaluation results
     for routed in result.routed_applicants:
-        storage.update_applicant_status(
+        if not storage.update_applicant_status(
             app_id=routed.applicant_id,
             status=routed.status.value,
             routing_destination=routed.routing_destination,
-        )
+        ):
+            raise RuntimeError(f"Could not persist manifest status for {routed.applicant_id}")
 
     # 4. Save affected_ids.json for downstream summarizing agent
-    out_affected = Path(affected_ids_file) if affected_ids_file else Path("affected_ids.json")
-    with open(out_affected, "w", encoding="utf-8") as f:
-        json.dump(result.affected_ids, f, indent=2)
+    out_affected = (
+        Path(affected_ids_file)
+        if affected_ids_file
+        else Path(f"affected_ids_{execution_time.strftime('%Y%m%dT%H%M%SZ')}_{uuid.uuid4().hex[:8]}.json")
+    )
+    out_affected.parent.mkdir(parents=True, exist_ok=True)
+    temporary_affected = out_affected.with_name(f".{out_affected.name}.{uuid.uuid4().hex}.tmp")
+    try:
+        with open(temporary_affected, "w", encoding="utf-8") as f:
+            json.dump(result.affected_ids, f, indent=2)
+        os.replace(temporary_affected, out_affected)
+    finally:
+        temporary_affected.unlink(missing_ok=True)
 
     # 5. Print Summary to stdout
     print_console_summary(
@@ -277,6 +309,7 @@ def run_pipeline(
         result=result,
         orphans_count=len(ingest_result.orphans),
         execution_time=execution_time,
+        affected_ids_file=out_affected,
     )
     with open(out_file, "w", encoding="utf-8") as f:
         f.write(report_text)
@@ -318,8 +351,18 @@ def main():
     parser.add_argument(
         "--affected-ids",
         "-a",
-        default="affected_ids.json",
-        help="Path to output affected_ids.json file (default: affected_ids.json)",
+        default=None,
+        help="Exact output path for this run (default: unique affected_ids_<timestamp>_<id>.json)",
+    )
+    parser.add_argument(
+        "--require-object-storage",
+        action="store_true",
+        help="Fail instead of exporting a handoff when MinIO is unavailable.",
+    )
+    parser.add_argument(
+        "--require-postgresql",
+        action="store_true",
+        help="Fail instead of exporting a handoff when PostgreSQL falls back to SQLite.",
     )
 
     args = parser.parse_args()
@@ -329,6 +372,8 @@ def main():
             config_file=args.config,
             report_file=args.output,
             affected_ids_file=args.affected_ids,
+            require_object_storage=args.require_object_storage,
+            require_postgresql=args.require_postgresql,
         )
         sys.exit(0)
     except Exception as e:

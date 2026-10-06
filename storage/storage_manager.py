@@ -11,7 +11,7 @@ import logging
 import os
 from pathlib import Path
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set
 import urllib.parse
 
 from sqlalchemy import create_engine, func, select, text
@@ -53,6 +53,16 @@ def normalize_applicant_id(text: Optional[str]) -> Optional[str]:
             num = int(digits)
             return f"APP_{num:03d}"
     return None
+
+
+def applicant_id_candidates(app_id: str) -> List[str]:
+    """Return known spellings of an applicant ID, preferring the supplied spelling."""
+    normalized = normalize_applicant_id(app_id)
+    variants = [app_id, app_id.replace("-", "_"), app_id.replace("_", "-"), app_id.upper()]
+    if normalized:
+        variants.extend((normalized, normalized.replace("_", "-"), normalized.replace("_", "")))
+    variants.extend(variant.lower() for variant in tuple(variants))
+    return list(dict.fromkeys(variants))
 
 
 class StorageManager:
@@ -296,11 +306,25 @@ class StorageManager:
             logger.info("Uploaded to MinIO: s3://%s/%s (%d bytes)", target_bucket, minio_key, path.stat().st_size)
             return minio_key
         except Exception as e:
-            logger.warning("MinIO upload failed for %s (%s). Falling back to recorded key.", minio_key, e)
-            return minio_key
+            logger.exception("MinIO upload failed for %s", minio_key)
+            raise RuntimeError(f"MinIO upload failed for {minio_key}") from e
 
-    def stage_applicant(self, applicant_data: Dict[str, Any]) -> Applicant:
-        """Stage or upsert an applicant record into PostgreSQL or dry-run store."""
+    def object_exists(self, minio_key: str, bucket_name: Optional[str] = None) -> bool:
+        """Confirm a linked document is retrievable before production handoff."""
+        if not minio_key or not self.minio_available or not self.minio_client:
+            return False
+        try:
+            self.minio_client.stat_object(bucket_name or self.minio_bucket, minio_key)
+            return True
+        except Exception as exc:
+            logger.warning("MinIO object is unavailable: s3://%s/%s (%s)", bucket_name or self.minio_bucket, minio_key, exc)
+            return False
+
+    def stage_applicant(
+        self, applicant_data: Dict[str, Any], update_fields: Optional[Set[str]] = None
+    ) -> Applicant:
+        """Stage or upsert an applicant, optionally limiting fields updated on an existing row."""
+        applicant_data = dict(applicant_data)
         app_id = applicant_data.get("app_id")
         if not app_id:
             raise ValueError("Applicant data must contain an 'app_id'")
@@ -317,21 +341,30 @@ class StorageManager:
         if self.db_available and self.SessionLocal:
             session: Session = self.SessionLocal()
             try:
-                existing = session.execute(select(Applicant).where(Applicant.app_id == app_id)).scalar_one_or_none()
+                existing = None
+                for candidate in applicant_id_candidates(app_id):
+                    existing = session.execute(select(Applicant).where(Applicant.app_id == candidate)).scalar_one_or_none()
+                    if existing:
+                        break
                 if existing:
+                    updated_json_columns = set()
                     for k, v in applicant_data.items():
+                        if update_fields is not None and k not in update_fields:
+                            continue
                         if k == "documents" and not v and existing.documents:
                             continue
-                        if hasattr(existing, k):
+                        if k != "app_id" and hasattr(existing, k):
                             setattr(existing, k, v)
-                    for json_col in ("activities", "awards", "ap_test_scores", "hooks", "documents"):
-                        if hasattr(existing, json_col) and json_col in applicant_data:
-                            flag_modified(existing, json_col)
+                            if k in ("activities", "awards", "ap_test_scores", "hooks", "documents"):
+                                updated_json_columns.add(k)
+                    for json_col in updated_json_columns:
+                        flag_modified(existing, json_col)
                     existing.updated_at = datetime.now(timezone.utc)
                     session.commit()
                     session.refresh(existing)
                     return existing
                 else:
+                    applicant_data["app_id"] = normalize_applicant_id(app_id) or app_id
                     new_app = Applicant(**applicant_data)
                     session.add(new_app)
                     session.commit()
@@ -339,20 +372,26 @@ class StorageManager:
                     return new_app
             except Exception as e:
                 session.rollback()
-                logger.warning("Database stage_applicant failed for %s (%s). Using dry-run cache.", app_id, e)
+                logger.exception("Database stage_applicant failed for %s", app_id)
+                raise
             finally:
                 session.close()
 
         # Dry-run in-memory fallback
-        if app_id in self.dry_run_applicants:
-            cached = self.dry_run_applicants[app_id]
+        existing_key = next((c for c in applicant_id_candidates(app_id) if c in self.dry_run_applicants), None)
+        if existing_key is not None:
+            cached = self.dry_run_applicants[existing_key]
             for k, v in applicant_data.items():
+                if update_fields is not None and k not in update_fields:
+                    continue
                 if k == "documents" and not v and getattr(cached, "documents", None):
                     continue
-                if hasattr(cached, k):
+                if k != "app_id" and hasattr(cached, k):
                     setattr(cached, k, v)
             return cached
         else:
+            app_id = normalize_applicant_id(app_id) or app_id
+            applicant_data["app_id"] = app_id
             cached = Applicant(**applicant_data)
             self.dry_run_applicants[app_id] = cached
             return cached
@@ -362,6 +401,11 @@ class StorageManager:
         if self.db_available and self.SessionLocal:
             session: Session = self.SessionLocal()
             try:
+                existing = session.execute(
+                    select(OrphanDocument).where(OrphanDocument.minio_key == orphan_data["minio_key"])
+                ).scalar_one_or_none()
+                if existing:
+                    return existing
                 orphan = OrphanDocument(**orphan_data)
                 session.add(orphan)
                 session.commit()
@@ -369,10 +413,14 @@ class StorageManager:
                 return orphan
             except Exception as e:
                 session.rollback()
-                logger.warning("Database save_orphan failed (%s). Using dry-run cache.", e)
+                logger.exception("Database save_orphan failed for %s", orphan_data.get("minio_key"))
+                raise
             finally:
                 session.close()
 
+        for orphan in self.dry_run_orphans:
+            if orphan.minio_key == orphan_data["minio_key"]:
+                return orphan
         orphan = OrphanDocument(**orphan_data)
         self.dry_run_orphans.append(orphan)
         return orphan
@@ -388,13 +436,7 @@ class StorageManager:
         if not app_id:
             return False
 
-        candidates = [app_id]
-        norm = normalize_applicant_id(app_id)
-        if norm and norm not in candidates:
-            candidates.append(norm)
-        for var in [app_id.replace("-", "_"), app_id.replace("_", "-"), app_id.upper()]:
-            if var not in candidates:
-                candidates.append(var)
+        candidates = applicant_id_candidates(app_id)
 
         if self.db_available and self.SessionLocal:
             session: Session = self.SessionLocal()
@@ -435,13 +477,7 @@ class StorageManager:
         if not app_id:
             return None
 
-        candidates = [app_id]
-        norm = normalize_applicant_id(app_id)
-        if norm and norm not in candidates:
-            candidates.append(norm)
-        for var in [app_id.replace("-", "_"), app_id.replace("_", "-"), app_id.upper()]:
-            if var not in candidates:
-                candidates.append(var)
+        candidates = applicant_id_candidates(app_id)
 
         if self.db_available and self.SessionLocal:
             session: Session = self.SessionLocal()
@@ -491,7 +527,8 @@ class StorageManager:
                 return orphan
             except Exception as e:
                 session.rollback()
-                logger.warning("Database save_orphan_score failed (%s). Using dry-run cache.", e)
+                logger.exception("Database save_orphan_score failed for %s", orphan_data.get("identifier"))
+                raise
             finally:
                 session.close()
 
@@ -539,43 +576,49 @@ class StorageManager:
             session: Session = self.SessionLocal()
             try:
                 if clean_email:
-                    app = session.execute(
+                    email_matches = session.execute(
                         select(Applicant).where(func.lower(Applicant.email_address) == clean_email)
-                    ).scalar_one_or_none()
-                    if app:
-                        return app
+                    ).scalars().all()
+                    if len(email_matches) == 1:
+                        return email_matches[0]
+                    if len(email_matches) > 1:
+                        logger.warning("Ambiguous score-feed email: %s", clean_email)
+                        return None
 
                 if clean_dob:
-                    app = session.execute(
-                        select(Applicant).where(Applicant.date_of_birth == clean_dob)
-                    ).scalars().first()
-                    if app:
-                        return app
-
-                    if norm_dob:
-                        all_apps = session.execute(
-                            select(Applicant).where(Applicant.date_of_birth.is_not(None))
-                        ).scalars().all()
-                        for a in all_apps:
-                            if _norm_dob(a.date_of_birth) == norm_dob:
-                                return a
+                    all_apps = session.execute(
+                        select(Applicant).where(Applicant.date_of_birth.is_not(None))
+                    ).scalars().all()
+                    dob_matches = [a for a in all_apps if _norm_dob(a.date_of_birth) == norm_dob]
+                    if len(dob_matches) == 1:
+                        return dob_matches[0]
+                    if len(dob_matches) > 1:
+                        logger.warning("Ambiguous score-feed date of birth: %s", norm_dob)
                 return None
             finally:
                 session.close()
 
         # Dry-run in-memory matching
         if clean_email:
-            for app in self.dry_run_applicants.values():
-                if app.email_address and app.email_address.strip().lower() == clean_email:
-                    return app
+            email_matches = [
+                app for app in self.dry_run_applicants.values()
+                if app.email_address and app.email_address.strip().lower() == clean_email
+            ]
+            if len(email_matches) == 1:
+                return email_matches[0]
+            if len(email_matches) > 1:
+                logger.warning("Ambiguous score-feed email: %s", clean_email)
+                return None
 
         if clean_dob:
-            for app in self.dry_run_applicants.values():
-                if app.date_of_birth and (
-                    app.date_of_birth.strip() == clean_dob
-                    or (norm_dob and _norm_dob(app.date_of_birth) == norm_dob)
-                ):
-                    return app
+            dob_matches = [
+                app for app in self.dry_run_applicants.values()
+                if app.date_of_birth and _norm_dob(app.date_of_birth) == norm_dob
+            ]
+            if len(dob_matches) == 1:
+                return dob_matches[0]
+            if len(dob_matches) > 1:
+                logger.warning("Ambiguous score-feed date of birth: %s", norm_dob)
 
         return None
 
@@ -594,13 +637,7 @@ class StorageManager:
         if not app_id:
             return None
 
-        candidates = [app_id]
-        norm = normalize_applicant_id(app_id)
-        if norm and norm not in candidates:
-            candidates.append(norm)
-        for var in [app_id.replace("-", "_"), app_id.replace("_", "-"), app_id.upper()]:
-            if var not in candidates:
-                candidates.append(var)
+        candidates = applicant_id_candidates(app_id)
 
         if self.db_available and self.SessionLocal:
             session: Session = self.SessionLocal()
@@ -616,14 +653,15 @@ class StorageManager:
                     if sat_ebrw is not None:
                         app.sat_ebrw = sat_ebrw
                     if superscored_sat is not None:
-                        app.superscored_sat_score = superscored_sat
+                        app.superscored_sat_score = max(app.superscored_sat_score or superscored_sat, superscored_sat)
                     elif sat_math is not None and sat_ebrw is not None:
-                        app.superscored_sat_score = float(sat_math + sat_ebrw)
+                        total = float(sat_math + sat_ebrw)
+                        app.superscored_sat_score = max(app.superscored_sat_score or total, total)
 
                     if act_composite is not None:
                         app.act_composite = act_composite
                         if superscored_act is not None:
-                            app.superscored_act_score = superscored_act
+                            app.superscored_act_score = max(app.superscored_act_score or superscored_act, superscored_act)
                         elif app.superscored_act_score is None or float(act_composite) > app.superscored_act_score:
                             app.superscored_act_score = float(act_composite)
 
@@ -654,14 +692,15 @@ class StorageManager:
                 if sat_ebrw is not None:
                     cached.sat_ebrw = sat_ebrw
                 if superscored_sat is not None:
-                    cached.superscored_sat_score = superscored_sat
+                    cached.superscored_sat_score = max(cached.superscored_sat_score or superscored_sat, superscored_sat)
                 elif sat_math is not None and sat_ebrw is not None:
-                    cached.superscored_sat_score = float(sat_math + sat_ebrw)
+                    total = float(sat_math + sat_ebrw)
+                    cached.superscored_sat_score = max(cached.superscored_sat_score or total, total)
 
                 if act_composite is not None:
                     cached.act_composite = act_composite
                     if superscored_act is not None:
-                        cached.superscored_act_score = superscored_act
+                        cached.superscored_act_score = max(cached.superscored_act_score or superscored_act, superscored_act)
                     elif cached.superscored_act_score is None or float(act_composite) > cached.superscored_act_score:
                         cached.superscored_act_score = float(act_composite)
 

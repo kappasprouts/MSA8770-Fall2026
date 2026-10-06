@@ -55,6 +55,54 @@ def config_file():
     return Path("config/policies.yaml")
 
 
+def _write_regression_batch(batch_path, app_id, first_name, document_names=()):
+    """Create a small first-year batch with only perimeter-valid PDFs."""
+    batch_path.mkdir()
+    (batch_path / "applicant_data.csv").write_text(
+        "App_ID,First_Name,Last_Name,Date_Of_Birth,Email_Address,Name_of_HS,"
+        "Intended_Major,Admission_Year,Admission_Term,AP_Courses\n"
+        f"{app_id},{first_name},Rostova,2008-03-15,elena.r@example.com,"
+        "Northwest Academy,Physics,2026,Fall,AP Biology\n",
+        encoding="utf-8",
+    )
+    if document_names:
+        app_dir = batch_path / app_id
+        app_dir.mkdir()
+        for index, filename in enumerate(document_names):
+            (app_dir / filename).write_bytes(
+                PDF_MAGIC_BYTES + b"1.4\n" + bytes([65 + index]) * 2048
+            )
+
+
+def _run_regression_pipeline(tmp_path, batch_path, config_file, storage, run_name):
+    return run_pipeline(
+        input_dir=batch_path,
+        config_file=config_file,
+        report_file=tmp_path / f"{run_name}_report.txt",
+        affected_ids_file=tmp_path / f"{run_name}_affected.json",
+        storage_manager=storage,
+    )
+
+
+def test_malformed_csv_id_cannot_update_an_existing_applicant(tmp_path, config_file):
+    """A substring resembling an ID must not be treated as a canonical CSV ID."""
+    storage = StorageManager(
+        database_url=f"sqlite:///{tmp_path / 'applicants.db'}",
+        minio_endpoint="127.0.0.1:1",
+    )
+    storage.stage_applicant({"app_id": "APP_001", "first_name": "Original", "last_name": "Student"})
+    batch = tmp_path / "invalid_id"
+    batch.mkdir()
+    (batch / "applicant_data.csv").write_text(
+        "App_ID,First_Name\nXAPP001Z,Incorrect\n", encoding="utf-8"
+    )
+
+    with pytest.raises(ValueError, match="Invalid applicant ID in CSV"):
+        _run_regression_pipeline(tmp_path, batch, config_file, storage, "invalid_id")
+
+    assert storage.get_applicant("APP_001").first_name == "Original"
+
+
 def test_batch_ingest_finds_all_applicants(batch_dir, config_file):
     """Verify batch ingestor correctly indexes all applicants in batch_01."""
     ingestor = BatchIngestor(config_path=config_file)
@@ -225,7 +273,10 @@ def test_two_pass_orphan_document_handling(tmp_path, config_file):
     orphan_file = batch_dir / "APP_999_recommendation_letter.pdf"
     orphan_file.write_bytes(PDF_MAGIC_BYTES + b"1.4\n" + b"Y" * 2000)
 
-    storage = StorageManager()
+    storage = StorageManager(
+        database_url=f"sqlite:///{tmp_path / 'orphan_test_store.db'}",
+        minio_endpoint="127.0.0.1:1",
+    )
     ingestor = BatchIngestor(config_path=config_file, storage_manager=storage)
     result = ingestor.ingest_batch(batch_dir)
 
@@ -238,8 +289,12 @@ def test_two_pass_orphan_document_handling(tmp_path, config_file):
     assert len(result.orphans) == 1
     orphan = result.orphans[0]
     assert orphan["filename"] == "APP_999_recommendation_letter.pdf"
-    assert orphan["minio_key"] == "orphans/APP_999_recommendation_letter.pdf"
+    assert orphan["minio_key"].startswith("orphans/")
+    assert orphan["minio_key"].endswith("/APP_999_recommendation_letter.pdf")
     assert orphan["detected_app_id"] == "APP_999"
+
+    ingestor.ingest_batch(batch_dir)
+    assert len(storage.get_all_orphans()) == 1
 
 
 def test_manifest_validation_gate_3_way_routing(batch_dir, config_file):
@@ -641,6 +696,436 @@ def test_persistent_dry_run_multi_batch_late_arrival(tmp_path, config_file, batc
     assert "APP_010" not in orphan_ids
     assert "APP_999" in orphan_ids
 
+    # Replaying the same document-only delta must not append a second transcript.
+    storage_run3 = StorageManager(sqlite_store_path=str(store_file))
+    replay_result = run_pipeline(
+        input_dir=delta_dir,
+        config_file=config_file,
+        report_file=tmp_path / "batch3_report.txt",
+        affected_ids_file=tmp_path / "batch3_affected.json",
+        storage_manager=storage_run3,
+    )
+    replayed = storage_run3.get_applicant("APP_010")
+    assert replayed.status == "READY_FOR_REVIEW"
+    assert len(replayed.documents) == 10
+    assert [d["filename"] for d in replayed.documents].count("APP010_transcript.pdf") == 1
+    assert "APP_010" in replay_result.affected_ids
+
+
+def test_repeated_csv_upserts_without_erasing_documents_or_score_feed(tmp_path, config_file):
+    """A later CSV correction must retain earlier documents and feed-owned scores."""
+    store_file = tmp_path / "repeat_store.db"
+    original_batch = tmp_path / "original_batch"
+    required_docs = (
+        "application_form.pdf",
+        "transcript.pdf",
+        "personal_statement.pdf",
+        "recommendation_letter_1.pdf",
+        "recommendation_letter_2.pdf",
+    )
+    _write_regression_batch(original_batch, "APP_042", "Elena", required_docs)
+
+    original_storage = StorageManager(
+        database_url=f"sqlite:///{store_file}", minio_endpoint="127.0.0.1:1"
+    )
+    first_result = _run_regression_pipeline(
+        tmp_path, original_batch, config_file, original_storage, "original"
+    )
+    assert first_result.affected_ids == ["APP_042"]
+    assert len(original_storage.get_applicant("APP_042").documents) == 5
+
+    scored_ap = {"subject": "AP Biology", "score": 5}
+    original_storage.update_applicant_scores(
+        "APP_042", sat_math=750, sat_ebrw=720, ap_test_scores=[scored_ap]
+    )
+
+    corrected_batch = tmp_path / "corrected_csv_only"
+    _write_regression_batch(corrected_batch, "APP_042", "Ellie")
+    later_storage = StorageManager(
+        database_url=f"sqlite:///{store_file}", minio_endpoint="127.0.0.1:1"
+    )
+    repeat_result = _run_regression_pipeline(
+        tmp_path, corrected_batch, config_file, later_storage, "corrected"
+    )
+
+    updated = later_storage.get_applicant("APP_042")
+    assert updated.first_name == "Ellie"
+    assert {doc["filename"] for doc in updated.documents} == set(required_docs)
+    assert len(updated.documents) == 5
+    assert updated.sat_math == 750
+    assert updated.sat_ebrw == 720
+    assert updated.superscored_sat_score == 1470
+    assert scored_ap in updated.ap_test_scores
+    assert updated.status == "READY_FOR_REVIEW"
+    assert updated.routing_destination == "READY_FOR_REVIEW"
+    assert repeat_result.affected_ids == ["APP_042"]
+
+    # A sparse correction should update its supplied field without blanking the
+    # required metadata that came from the original CSV.
+    sparse_batch = tmp_path / "sparse_csv_only"
+    sparse_batch.mkdir()
+    (sparse_batch / "applicant_data.csv").write_text(
+        "App_ID,First_Name\nAPP_042,Elle\n", encoding="utf-8"
+    )
+    sparse_result = _run_regression_pipeline(
+        tmp_path, sparse_batch, config_file, later_storage, "sparse"
+    )
+    sparse_app = later_storage.get_applicant("APP_042")
+    assert sparse_app.first_name == "Elle"
+    assert sparse_app.last_name == "Rostova"
+    assert len(sparse_app.documents) == 5
+    assert sparse_app.sat_math == 750
+    assert sparse_app.status == "READY_FOR_REVIEW"
+    assert sparse_result.affected_ids == ["APP_042"]
+
+
+def test_repeated_csv_id_and_late_document_promote_without_duplicates(tmp_path, config_file):
+    """A late transcript joins the canonical prior row, even with a new CSV ID spelling."""
+    store_file = tmp_path / "late_repeat_store.db"
+    initial_batch = tmp_path / "initial_incomplete"
+    _write_regression_batch(
+        initial_batch,
+        "APP_042",
+        "Elena",
+        (
+            "application_form.pdf",
+            "personal_statement.pdf",
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf",
+        ),
+    )
+    initial_storage = StorageManager(
+        database_url=f"sqlite:///{store_file}", minio_endpoint="127.0.0.1:1"
+    )
+    first_result = _run_regression_pipeline(
+        tmp_path, initial_batch, config_file, initial_storage, "incomplete"
+    )
+    assert first_result.affected_ids == []
+    assert initial_storage.get_applicant("APP_042").status == "INCOMPLETE"
+
+    late_batch = tmp_path / "late_with_repeated_csv"
+    _write_regression_batch(late_batch, "app42", "Ellie")
+    (late_batch / "APP042_transcript.pdf").write_bytes(
+        PDF_MAGIC_BYTES + b"1.4\n" + b"LATE" * 512
+    )
+
+    for run_name in ("late_first", "late_repeat"):
+        later_storage = StorageManager(
+            database_url=f"sqlite:///{store_file}", minio_endpoint="127.0.0.1:1"
+        )
+        result = _run_regression_pipeline(
+            tmp_path, late_batch, config_file, later_storage, run_name
+        )
+
+        assert [app.app_id for app in later_storage.get_all_applicants()] == ["APP_042"]
+        updated = later_storage.get_applicant("APP_042")
+        assert updated.first_name == "Ellie"
+        assert updated.status == "READY_FOR_REVIEW"
+        assert updated.routing_destination == "READY_FOR_REVIEW"
+        assert len(updated.documents) == 5
+        assert len({doc["filename"] for doc in updated.documents}) == 5
+        assert "APP042_transcript.pdf" in {doc["filename"] for doc in updated.documents}
+        assert result.affected_ids == ["APP_042"]
+        assert result.total_valid == 1
+        assert later_storage.get_all_orphans() == []
+
+
+def test_filename_id_conflict_does_not_link_to_another_applicant(tmp_path, config_file):
+    """A file inside one applicant's folder cannot complete a different packet."""
+    batch = tmp_path / "mismatched_document_batch"
+    batch.mkdir()
+    (batch / "applicant_data.csv").write_text(
+        "App_ID,First_Name,Last_Name,Date_Of_Birth,Email_Address,Name_of_HS,"
+        "Intended_Major,Admission_Year,Admission_Term\n"
+        "APP_042,Elena,Rostova,2008-03-15,elena@example.com,Northwest Academy,Physics,2026,Fall\n"
+        "APP_043,Jordan,Lee,2008-03-16,jordan@example.com,Northwest Academy,Physics,2026,Fall\n",
+        encoding="utf-8",
+    )
+    for app_id in ("APP_042", "APP_043"):
+        folder = batch / app_id
+        folder.mkdir()
+        for filename in (
+            "application_form.pdf",
+            "personal_statement.pdf",
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf",
+        ):
+            (folder / filename).write_bytes(PDF_MAGIC_BYTES + b"1.4\n" + b"X" * 2048)
+
+    # The folder and explicit filename IDs conflict. Neither applicant supplied
+    # an ordinary transcript in this batch.
+    (batch / "APP_042" / "APP_043_transcript.pdf").write_bytes(
+        PDF_MAGIC_BYTES + b"1.4\n" + b"T" * 2048
+    )
+    storage = StorageManager(
+        database_url=f"sqlite:///{tmp_path / 'mismatch.db'}", minio_endpoint="127.0.0.1:1"
+    )
+    result = BatchIngestor(config_path=config_file, storage_manager=storage).ingest_batch(batch)
+
+    folder_app = storage.get_applicant("APP_042")
+    filename_app = storage.get_applicant("APP_043")
+    assert folder_app.status == "ERROR"
+    assert filename_app.status == "INCOMPLETE"
+    assert "APP_043_transcript.pdf" not in {d["filename"] for d in filename_app.documents}
+    assert result.affected_ids == []
+
+
+def test_duplicate_recommendation_content_cannot_satisfy_two_letter_rule(tmp_path, config_file):
+    """Two filenames with the same recommendation bytes count as one letter."""
+    batch = tmp_path / "duplicate_letters_batch"
+    _write_regression_batch(batch, "APP_042", "Elena")
+    folder = batch / "APP_042"
+    folder.mkdir()
+    for filename, marker in (
+        ("application_form.pdf", b"A"),
+        ("transcript.pdf", b"T"),
+        ("personal_statement.pdf", b"P"),
+    ):
+        (folder / filename).write_bytes(PDF_MAGIC_BYTES + b"1.4\n" + marker * 2048)
+    repeated_letter = PDF_MAGIC_BYTES + b"1.4\n" + b"L" * 2048
+    (folder / "recommendation_letter_1.pdf").write_bytes(repeated_letter)
+    (folder / "recommendation_letter_2.pdf").write_bytes(repeated_letter)
+
+    storage = StorageManager(
+        database_url=f"sqlite:///{tmp_path / 'duplicate_letters.db'}",
+        minio_endpoint="127.0.0.1:1",
+    )
+    result = BatchIngestor(config_path=config_file, storage_manager=storage).ingest_batch(batch)
+
+    assert storage.get_applicant("APP_042").status == "INCOMPLETE"
+    assert result.affected_ids == []
+
+
+def test_document_only_subfolder_batch_never_uses_workspace_csv(tmp_path, config_file):
+    """A delta subfolder carries only its documents, with no CSV from another path."""
+    initial = tmp_path / "initial_document_batch"
+    _write_regression_batch(
+        initial,
+        "APP_042",
+        "Elena",
+        (
+            "application_form.pdf",
+            "personal_statement.pdf",
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf",
+        ),
+    )
+    storage = StorageManager(
+        database_url=f"sqlite:///{tmp_path / 'document_only.db'}",
+        minio_endpoint="127.0.0.1:1",
+    )
+    ingestor = BatchIngestor(config_path=config_file, storage_manager=storage)
+    ingestor.ingest_batch(initial)
+    assert storage.get_applicant("APP_042").status == "INCOMPLETE"
+
+    delta = tmp_path / "document_only_delta"
+    delta.mkdir()
+    folder = delta / "APP_042"
+    folder.mkdir()
+    (folder / "transcript.pdf").write_bytes(PDF_MAGIC_BYTES + b"1.4\n" + b"T" * 2048)
+    result = ingestor.ingest_batch(delta)
+
+    assert result.csv_path is None
+    assert result.affected_ids == ["APP_042"]
+    updated = storage.get_applicant("APP_042")
+    assert updated.first_name == "Elena"
+    assert updated.status == "READY_FOR_REVIEW"
+    assert len(updated.documents) == 5
+
+
+def test_blank_cells_in_repeated_csv_preserve_existing_metadata(tmp_path, config_file):
+    """Blank cells in a repeated row are omissions, not requests to clear fields."""
+    initial = tmp_path / "initial_full_metadata"
+    _write_regression_batch(
+        initial,
+        "APP_042",
+        "Elena",
+        (
+            "application_form.pdf",
+            "transcript.pdf",
+            "personal_statement.pdf",
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf",
+        ),
+    )
+    storage = StorageManager(
+        database_url=f"sqlite:///{tmp_path / 'blank_repeat.db'}",
+        minio_endpoint="127.0.0.1:1",
+    )
+    ingestor = BatchIngestor(config_path=config_file, storage_manager=storage)
+    ingestor.ingest_batch(initial)
+    assert storage.get_applicant("APP_042").status == "READY_FOR_REVIEW"
+
+    correction = tmp_path / "correction_with_empty_cells"
+    correction.mkdir()
+    (correction / "applicant_data.csv").write_text(
+        "App_ID,First_Name,Last_Name,Date_Of_Birth,Email_Address,Name_of_HS,"
+        "Intended_Major,Admission_Year,Admission_Term,AP_Courses\n"
+        "APP_042,Ellie,,,,,,,,\n",
+        encoding="utf-8",
+    )
+    result = ingestor.ingest_batch(correction)
+
+    updated = storage.get_applicant("APP_042")
+    assert updated.first_name == "Ellie"
+    assert updated.last_name == "Rostova"
+    assert updated.email_address == "elena.r@example.com"
+    assert updated.name_of_hs == "Northwest Academy"
+    assert updated.admission_year == 2026
+    assert updated.admission_term == "Fall"
+    assert updated.ap_test_scores == ["AP Biology"]
+    assert len(updated.documents) == 5
+    assert updated.status == "READY_FOR_REVIEW"
+    assert result.affected_ids == ["APP_042"]
+
+
+def test_orphan_database_write_failure_is_not_silently_cached(tmp_path, monkeypatch):
+    """A failed durable orphan insert must surface instead of reporting a dry-run success."""
+    storage = StorageManager(
+        database_url=f"sqlite:///{tmp_path / 'orphan_failure.db'}",
+        minio_endpoint="127.0.0.1:1",
+    )
+    original_add = storage.SessionLocal.class_.add
+
+    def fail_orphan_add(session, instance, *args, **kwargs):
+        if isinstance(instance, OrphanDocument):
+            raise RuntimeError("simulated orphan insert failure")
+        return original_add(session, instance, *args, **kwargs)
+
+    monkeypatch.setattr(storage.SessionLocal.class_, "add", fail_orphan_add)
+    with pytest.raises(RuntimeError, match="simulated orphan insert failure"):
+        storage.save_orphan({
+            "filename": "APP_999_transcript.pdf",
+            "file_path": str(tmp_path / "APP_999_transcript.pdf"),
+            "minio_key": "orphans/APP_999_transcript.pdf",
+            "detected_app_id": "APP_999",
+            "sha256": "a" * 64,
+            "file_size_bytes": 2048,
+        })
+
+    assert storage.get_all_orphans() == []
+    assert storage.dry_run_orphans == []
+
+
+def test_document_stat_failure_routes_to_error(tmp_path, config_file, monkeypatch):
+    """An unreadable file stat is a gate error, not an unhandled Pass 2 exception."""
+    batch_path = tmp_path / "stat_failure_batch"
+    _write_regression_batch(batch_path, "APP_042", "Elena", ("application_form.pdf",))
+    affected_file = tmp_path / "stat_failure_affected.json"
+    target_doc = batch_path / "APP_042" / "application_form.pdf"
+    original_stat = Path.stat
+    original_exists = Path.exists
+    original_is_file = Path.is_file
+
+    def failing_stat(path, *args, **kwargs):
+        if path == target_doc:
+            raise OSError("simulated stat failure")
+        return original_stat(path, *args, **kwargs)
+
+    def existing_file(path):
+        return True if path == target_doc else original_exists(path)
+
+    def candidate_file(path):
+        return True if path == target_doc else original_is_file(path)
+
+    monkeypatch.setattr(Path, "stat", failing_stat)
+    monkeypatch.setattr(Path, "exists", existing_file)
+    monkeypatch.setattr(Path, "is_file", candidate_file)
+    storage = StorageManager(
+        database_url=f"sqlite:///{tmp_path / 'stat_failure.db'}",
+        minio_endpoint="127.0.0.1:1",
+    )
+
+    result = run_pipeline(
+        input_dir=batch_path,
+        config_file=config_file,
+        report_file=tmp_path / "stat_failure_report.txt",
+        affected_ids_file=affected_file,
+        storage_manager=storage,
+    )
+
+    assert result.total_error == 1
+    assert result.routed_applicants[0].status == GateStatus.ERROR
+    assert result.routed_applicants[0].routing_destination == "Human Review"
+    assert result.affected_ids == []
+    assert json.loads(affected_file.read_text(encoding="utf-8")) == []
+    stored = storage.get_applicant("APP_042")
+    assert stored.status == "ERROR"
+    assert stored.routing_destination == "Human Review"
+    assert stored.documents[0]["is_readable"] is False
+    assert "simulated stat failure" in stored.documents[0]["error_message"]
+
+
+def test_csv_replay_requires_historical_minio_objects_for_handoff(tmp_path, config_file):
+    """A packet cannot be exported when its stored documents have no MinIO objects."""
+    storage = StorageManager(
+        database_url=f"sqlite:///{tmp_path / 'missing_objects.db'}",
+        minio_endpoint="127.0.0.1:1",
+    )
+    required_docs = (
+        "application_form.pdf",
+        "transcript.pdf",
+        "personal_statement.pdf",
+        "recommendation_letter_1.pdf",
+        "recommendation_letter_2.pdf",
+    )
+    storage.stage_applicant({
+        "app_id": "APP_042",
+        "first_name": "Elena",
+        "last_name": "Rostova",
+        "date_of_birth": "2008-03-15",
+        "email_address": "elena.r@example.com",
+        "name_of_hs": "Northwest Academy",
+        "intended_major": "Physics",
+        "admission_year": 2026,
+        "admission_term": "Fall",
+        "status": "READY_FOR_REVIEW",
+        "routing_destination": "READY_FOR_REVIEW",
+        "documents": [
+            {
+                "filename": filename,
+                "doc_type": filename.removesuffix(".pdf"),
+                "minio_key": f"APP_042/{filename}",
+                "minio_bucket": "admissions-raw-docs",
+                "sha256": f"{index:064x}",
+                "file_size": 2048,
+                "is_readable": True,
+            }
+            for index, filename in enumerate(required_docs, start=1)
+        ],
+    })
+
+    class MissingObjectClient:
+        def __init__(self):
+            self.lookups = []
+
+        def stat_object(self, bucket, key):
+            self.lookups.append((bucket, key))
+            raise FileNotFoundError(f"missing MinIO object: {key}")
+
+    fake_minio = MissingObjectClient()
+    storage.minio_available = True
+    storage.minio_client = fake_minio
+    replay_batch = tmp_path / "csv_only_replay"
+    _write_regression_batch(replay_batch, "APP_042", "Ellie")
+    affected_file = tmp_path / "should_not_export.json"
+
+    with pytest.raises(RuntimeError):
+        run_pipeline(
+            input_dir=replay_batch,
+            config_file=config_file,
+            report_file=tmp_path / "missing_objects_report.txt",
+            affected_ids_file=affected_file,
+            storage_manager=storage,
+            require_object_storage=True,
+        )
+
+    assert fake_minio.lookups
+    assert not affected_file.exists()
+    updated = storage.get_applicant("APP_042")
+    assert updated.status == "ERROR"
+    assert updated.routing_destination == "Human Review"
+
 
 def test_extract_and_normalize_app_id_robustness():
     """Verify that extract_and_normalize_app_id flexibly handles various applicant ID formats."""
@@ -683,3 +1168,38 @@ def test_storage_manager_format_tolerance_and_clear(tmp_path):
     assert storage.get_applicant("APP_005") is None
 
 
+def test_failed_object_upload_stops_batch_before_handoff(tmp_path, batch_dir, config_file):
+    """A live MinIO failure must not be reported as a successful upload."""
+    class FailingMinio:
+        def fput_object(self, **kwargs):
+            raise OSError("simulated storage outage")
+
+    storage = StorageManager(
+        database_url=f"sqlite:///{tmp_path / 'upload_failure.db'}",
+        minio_endpoint="127.0.0.1:1",
+    )
+    storage.minio_available = True
+    storage.minio_client = FailingMinio()
+    ingestor = BatchIngestor(config_path=config_file, storage_manager=storage)
+
+    with pytest.raises(RuntimeError, match="MinIO upload failed"):
+        ingestor.ingest_batch(batch_dir)
+
+
+def test_strict_handoff_rejects_minio_dry_run(tmp_path, batch_dir, config_file):
+    """The summary-agent handoff requires actual object storage when requested."""
+    storage = StorageManager(
+        database_url=f"sqlite:///{tmp_path / 'strict_store.db'}",
+        minio_endpoint="127.0.0.1:1",
+    )
+    affected_file = tmp_path / "affected_ids.json"
+    with pytest.raises(RuntimeError, match="MinIO is unavailable"):
+        run_pipeline(
+            input_dir=batch_dir,
+            config_file=config_file,
+            report_file=tmp_path / "report.txt",
+            affected_ids_file=affected_file,
+            storage_manager=storage,
+            require_object_storage=True,
+        )
+    assert not affected_file.exists()

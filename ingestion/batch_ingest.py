@@ -23,7 +23,7 @@ import mimetypes
 import os
 from pathlib import Path
 import re
-from typing import Any, Dict, Iterator, List, Optional, Tuple
+from typing import Any, Dict, Iterator, List, Optional, Set, Tuple
 import csv
 
 from config import get_file_constraints, load_policies
@@ -35,6 +35,43 @@ logger = logging.getLogger(__name__)
 PDF_MAGIC_BYTES = b"%PDF-"
 MIN_FILE_SIZE_BYTES = 1024  # 1 KB
 MAX_FILE_SIZE_BYTES = 15 * 1024 * 1024  # 15 MB
+
+# A repeated CSV row may update only the columns actually supplied by that feed.
+# Documents, workflow status, and test-feed-only fields have separate owners.
+CSV_UPDATE_FIELDS = {
+    "First_Name": ("first_name",),
+    "Last_Name": ("last_name",),
+    "Date_Of_Birth": ("date_of_birth",),
+    "Mailing_Address": ("mailing_address",),
+    "Primary_Phone_Number": ("phone_number",),
+    "Email_Address": ("email_address",),
+    "Gender": ("gender",),
+    "Ethnicity": ("ethnicity",),
+    "Name_of_HS": ("name_of_hs",),
+    "Counselor_Name": ("counselor_name",),
+    "Country": ("country",),
+    "Region": ("region",),
+    "Intended_Major": ("intended_major",),
+    "Admission_Year": ("admission_year",),
+    "Admission_Term": ("admission_term",),
+    "Unweighted_GPA": ("unweighted_gpa", "gpa"),
+    "Weighted_GPA": ("weighted_gpa", "gpa"),
+    "Rank": ("rank", "class_rank"),
+    "Superscored_SAT_Score": ("superscored_sat_score",),
+    "Superscored_ACT_Score": ("superscored_act_score", "act_composite"),
+    "Total_APs": ("total_aps",),
+    "Total_IBs": ("total_ibs",),
+    "IB_Courses": ("ib_courses",),
+    "Create_Date_Time": ("create_date_time",),
+    "Last_Updated": ("last_updated_csv",),
+    "Review_Ctr": ("review_ctr",),
+    "Application_status": ("application_status_raw",),
+    "Final_Decision": ("final_decision",),
+    "Activities": ("activities",),
+    "Awards": ("awards",),
+    "AP_Courses": ("ap_test_scores",),
+    "Hooks": ("hooks",),
+}
 
 
 def compute_sha256(file_path: Path) -> str:
@@ -89,6 +126,11 @@ def _parse_int(val: Any) -> Optional[int]:
         return None
 
 
+def _has_csv_value(value: Any) -> bool:
+    """Treat blank cells in a repeated feed as absent updates."""
+    return value is not None and str(value).strip().lower() not in ("", "nan")
+
+
 @dataclass
 class IngestedDocument:
     """Document linked to an applicant record with Trust Boundary 1 verification metadata."""
@@ -100,6 +142,7 @@ class IngestedDocument:
     sha256_checksum: str
     applicant_id: str
     minio_key: str = field(default="")
+    minio_bucket: str = "admissions-raw-docs"
     exists: bool = True
     is_readable: bool = True
     error_message: Optional[str] = None
@@ -110,24 +153,29 @@ class IngestedDocument:
             self.minio_key = f"{self.applicant_id}/{self.filename}"
 
     def to_metadata_dict(self) -> Dict[str, Any]:
-        """Produce dictionary formatted for applicant documents JSONB array."""
-        return {
+        """Produce a document record without dropping metadata from an earlier batch."""
+        record = dict(self.metadata)
+        record.update({
             "doc_type": self.doc_type,
             "minio_key": self.minio_key,
+            "minio_bucket": self.minio_bucket,
             "filename": self.filename,
             "sha256": self.sha256_checksum,
             "file_size": self.file_size_bytes,
+            "mime_type": self.mime_type,
+            "exists": self.exists,
             "is_readable": self.is_readable,
             "error_message": self.error_message,
-        }
+        })
+        return record
 
-    def to_storage_record_dict(self, bucket: str = "admissions-raw-docs") -> Dict[str, Any]:
+    def to_storage_record_dict(self, bucket: Optional[str] = None) -> Dict[str, Any]:
         """Produce dictionary formatted for PostgreSQL document_records and MinIO object storage."""
         return {
             "applicant_id": self.applicant_id,
             "document_type": self.doc_type,
             "filename": self.filename,
-            "minio_bucket": bucket,
+            "minio_bucket": bucket or self.minio_bucket,
             "minio_object_key": self.minio_key,
             "file_size_bytes": self.file_size_bytes,
             "mime_type": self.mime_type,
@@ -145,7 +193,7 @@ class IngestedApplication:
     metadata: Dict[str, Any]
     activities: List[str] = field(default_factory=list)
     awards: List[str] = field(default_factory=list)
-    ap_test_scores: List[str] = field(default_factory=list)
+    ap_test_scores: List[Any] = field(default_factory=list)
     hooks: List[str] = field(default_factory=list)
     subfolder_path: Optional[Path] = None
     documents: List[IngestedDocument] = field(default_factory=list)
@@ -314,13 +362,20 @@ class BatchIngestor:
                         sha256_checksum=d.get("sha256", d.get("sha256_checksum", "0" * 64)),
                         applicant_id=db_app.app_id,
                         minio_key=d.get("minio_key", ""),
+                        minio_bucket=d.get("minio_bucket", self.storage.minio_bucket),
                         exists=d.get("exists", True),
                         is_readable=d.get("is_readable", True),
                         error_message=d.get("error_message"),
+                        metadata=dict(d),
                     )
                 )
             elif isinstance(d, IngestedDocument):
                 existing_docs.append(d)
+
+        # Earlier runs may already have appended the same object more than once.
+        # Keep its latest metadata and count it once during manifest validation.
+        unique_docs = {doc.minio_key: doc for doc in existing_docs}
+        existing_docs = list(unique_docs.values())
 
         metadata = {
             "App_ID": db_app.app_id,
@@ -353,6 +408,22 @@ class BatchIngestor:
             routing_destination=db_app.routing_destination,
         )
 
+    @staticmethod
+    def _attach_document(app: IngestedApplication, document: IngestedDocument) -> None:
+        """Replace a previously ingested object at the same storage key."""
+        for index, existing in enumerate(app.documents):
+            if existing.minio_key == document.minio_key:
+                app.documents[index] = document
+                return
+        app.documents.append(document)
+
+    @staticmethod
+    def _orphan_minio_key(input_dir: Path, doc_path: Path, checksum: str) -> str:
+        """Give distinct orphan files stable object keys across batch replays."""
+        relative_path = doc_path.relative_to(input_dir).as_posix()
+        digest = checksum or hashlib.sha256(str(doc_path.resolve()).encode()).hexdigest()
+        return f"orphans/{digest}/{relative_path}"
+
     def classify_document(self, filename: str) -> str:
         """Deterministically classify document into its canonical policy type."""
         stem = Path(filename).stem.lower().replace("-", "_")
@@ -375,16 +446,7 @@ class BatchIngestor:
                     return c
             return csv_files[0]
 
-        # Fallback to applicant_data in workspace only if input_dir has applicant subfolders
-        subfolders = [d for d in input_dir.iterdir() if d.is_dir() and not d.name.startswith(".")] if input_dir.exists() else []
-        if subfolders:
-            root = input_dir.resolve().parent
-            for candidate_dir in [root / "applicant_data", Path("applicant_data")]:
-                if candidate_dir.exists():
-                    candidates = list(candidate_dir.glob("*V3.csv")) or list(candidate_dir.glob("*.csv"))
-                    if candidates:
-                        return candidates[0]
-
+        # Document-only batches must not replay an unrelated CSV from the workspace.
         raise FileNotFoundError(f"No CSV file found in {input_dir}")
 
     def parse_csv(self, csv_path: Path) -> List[Dict[str, Any]]:
@@ -439,7 +501,9 @@ class BatchIngestor:
 
         return True, True, "application/pdf", None
 
-    def pass_1_parse_and_stage_csv(self, input_dir: Path) -> Tuple[Path, Dict[str, IngestedApplication]]:
+    def pass_1_parse_and_stage_csv(
+        self, input_dir: Path, applicant_ids: Optional[Set[str]] = None
+    ) -> Tuple[Path, Dict[str, IngestedApplication]]:
         """Pass 1: Parse application flat file (CSV), extract standard scalar columns
         and structured lists (activities, awards, APs, hooks), and stage/upsert application
         records into PostgreSQL (or dry-run store).
@@ -449,18 +513,28 @@ class BatchIngestor:
 
         # Detect subfolders in input_dir to scope batch if needed
         subfolders = {d.name for d in input_dir.iterdir() if d.is_dir()}
+        scoped_ids = {extract_and_normalize_app_id(name) or name for name in subfolders}
 
         staged_applicants: Dict[str, IngestedApplication] = {}
 
-        for record in csv_records:
-            app_id = record.get("App_ID") or record.get("applicant_id") or record.get("Applicant_ID", "")
-            if not app_id:
+        for csv_record in csv_records:
+            raw_app_id = csv_record.get("App_ID") or csv_record.get("applicant_id") or csv_record.get("Applicant_ID", "")
+            if not raw_app_id:
                 continue
+            if re.fullmatch(r"APP[_\-\s]?\d+", raw_app_id, re.IGNORECASE) is None:
+                raise ValueError(f"Invalid applicant ID in CSV: {raw_app_id!r}")
 
-            app_variants = {app_id, app_id.replace("-", "_"), app_id.replace("_", "-")}
-            if subfolders and not (app_variants & subfolders):
+            existing = self.storage.get_applicant(raw_app_id)
+            app_id = existing.app_id if existing else (extract_and_normalize_app_id(raw_app_id) or raw_app_id)
+            canonical_id = extract_and_normalize_app_id(app_id) or app_id
+            if applicant_ids is not None and canonical_id not in applicant_ids:
+                continue
+            if subfolders and canonical_id not in scoped_ids:
                 # Skip records not in this batch if batch directory is scoped by subfolders
                 continue
+
+            record = dict(csv_record)
+            record["App_ID"] = app_id
 
             # Extract variable-length array fields
             activities_str = record.get("Activities") or ""
@@ -477,7 +551,7 @@ class BatchIngestor:
 
             # Find matching subfolder if present
             subfolder_path = None
-            for cand in [input_dir / app_id, input_dir / app_id.replace("-", "_"), input_dir / app_id.replace("_", "-")]:
+            for cand in [input_dir / raw_app_id, input_dir / app_id, input_dir / canonical_id]:
                 if cand.exists() and cand.is_dir():
                     subfolder_path = cand
                     break
@@ -496,9 +570,59 @@ class BatchIngestor:
                 routing_destination="READY_FOR_REVIEW",
             )
 
-            # Stage in PostgreSQL / storage manager
-            self.storage.stage_applicant(ingested_app.to_applicant_dict())
-            staged_applicants[app_id] = ingested_app
+            applicant_data = ingested_app.to_applicant_dict()
+            update_fields = None
+            if existing:
+                update_fields = {
+                    field_name
+                    for csv_name, field_names in CSV_UPDATE_FIELDS.items()
+                    if csv_name in csv_record and _has_csv_value(csv_record[csv_name])
+                    for field_name in field_names
+                }
+
+                # The flat file lists AP courses; scored AP results belong to the
+                # independent test-score feed and must survive a CSV repeat.
+                if "ap_test_scores" in update_fields:
+                    scored_aps = [item for item in (existing.ap_test_scores or []) if isinstance(item, dict)]
+                    applicant_data["ap_test_scores"] = ap_scores + scored_aps
+
+                if "gpa" in update_fields:
+                    weighted = (applicant_data["weighted_gpa"] if "weighted_gpa" in update_fields else existing.weighted_gpa)
+                    unweighted = (applicant_data["unweighted_gpa"] if "unweighted_gpa" in update_fields else existing.unweighted_gpa)
+                    applicant_data["gpa"] = weighted if weighted is not None else unweighted
+
+                # A blank or older CSV superscore cannot erase a later score feed.
+                for field_name in ("superscored_sat_score", "superscored_act_score", "act_composite"):
+                    if field_name in update_fields:
+                        incoming = applicant_data[field_name]
+                        prior = getattr(existing, field_name)
+                        if incoming is None or (prior is not None and incoming < prior):
+                            update_fields.remove(field_name)
+
+            # Stage CSV-owned fields, then hydrate the packet from the persisted row
+            # so pass 2 sees earlier documents and score-feed updates.
+            staged_db = self.storage.stage_applicant(applicant_data, update_fields=update_fields)
+            stored_packet = self._db_applicant_to_ingested(staged_db)
+            ingested_app.applicant_id = staged_db.app_id
+            ingested_app.documents = stored_packet.documents
+            ingested_app.ap_test_scores = stored_packet.ap_test_scores
+            ingested_app.status = staged_db.status
+            ingested_app.routing_destination = staged_db.routing_destination
+            ingested_app.metadata = dict(stored_packet.metadata)
+            ingested_app.metadata.update({
+                key: value for key, value in record.items()
+                if not existing or _has_csv_value(value)
+            })
+            ingested_app.metadata.update({
+                "App_ID": staged_db.app_id,
+                "Superscored_SAT_Score": staged_db.superscored_sat_score,
+                "Superscored_ACT_Score": staged_db.superscored_act_score,
+                "sat_math": staged_db.sat_math,
+                "sat_ebrw": staged_db.sat_ebrw,
+                "act_composite": staged_db.act_composite,
+                "ap_test_scores": staged_db.ap_test_scores,
+            })
+            staged_applicants[staged_db.app_id] = ingested_app
 
         logger.info("Pass 1 Complete: Staged %d applicants from %s", len(staged_applicants), csv_path.name)
         return csv_path, staged_applicants
@@ -507,6 +631,7 @@ class BatchIngestor:
         self,
         input_dir: Path,
         staged_applicants: Dict[str, IngestedApplication],
+        applicant_ids: Optional[Set[str]] = None,
     ) -> Tuple[List[IngestedApplication], List[Dict[str, Any]]]:
         """Pass 2: Traverse all documents across the batch directory.
         - Case 1: If document maps to an in-memory staged applicant from Pass 1,
@@ -514,29 +639,37 @@ class BatchIngestor:
         - Case 2: If document's extracted app_id is NOT in staged_applicants, perform a
           quick database lookup against PostgreSQL (Applicant table).
           If record exists in DB (from a prior night's batch):
-            1. Add app_id to staged_applicants and affected_ids.
+            1. Add app_id to staged_applicants.
             2. Attach document metadata to the applicant's documents JSONB array (and upload to MinIO).
-            3. Trigger re-evaluation of the manifest gate for that applicant.
+            3. Re-evaluate the complete packet after document traversal.
         - Case 3: If not found in DB either, route to the OrphanDocument table and upload to MinIO under 'orphans/'.
         """
         orphans_list: List[Dict[str, Any]] = []
         affected_ids: List[str] = []
 
         # Find all documents: in applicant subfolders and at root of input_dir
-        candidate_files: List[Tuple[Optional[str], Path]] = []
+        candidate_files: List[Tuple[Optional[str], Path, Optional[str]]] = []
 
         for item in sorted(input_dir.iterdir()):
             if item.is_dir() and not item.name.startswith("."):
                 # Subdirectory
-                subfolder_id = extract_and_normalize_app_id(item.name) or item.name.replace("-", "_")
+                folder_id = extract_and_normalize_app_id(item.name)
+                subfolder_id = folder_id or item.name.replace("-", "_")
                 for doc_file in sorted(item.iterdir()):
                     if doc_file.is_file() and not doc_file.name.startswith(".") and not doc_file.name.endswith(".csv"):
-                        doc_id = extract_and_normalize_app_id(doc_file.name) or subfolder_id
-                        candidate_files.append((doc_id, doc_file))
+                        filename_id = extract_and_normalize_app_id(doc_file.name)
+                        doc_id = filename_id or subfolder_id
+                        scope_id = folder_id or filename_id or subfolder_id
+                        if applicant_ids is not None and scope_id not in applicant_ids:
+                            continue
+                        conflict_id = folder_id if filename_id and folder_id and filename_id != folder_id else None
+                        candidate_files.append((doc_id, doc_file, conflict_id))
             elif item.is_file() and not item.name.startswith(".") and not item.name.endswith(".csv"):
                 # Loose file at root level
                 detected_id = extract_and_normalize_app_id(item.name)
-                candidate_files.append((detected_id, item))
+                if applicant_ids is not None and detected_id not in applicant_ids:
+                    continue
+                candidate_files.append((detected_id, item, None))
 
         # Build alias map for staged applicants
         applicant_alias_map: Dict[str, str] = {}
@@ -547,15 +680,62 @@ class BatchIngestor:
             applicant_alias_map[app_id.replace("-", "_")] = app_id
             applicant_alias_map[app_id.replace("_", "-")] = app_id
 
-        for detected_id, doc_path in candidate_files:
+        for detected_id, doc_path, conflicting_folder_id in candidate_files:
             matched_app_id = applicant_alias_map.get(detected_id) if detected_id else None
             if not matched_app_id and detected_id:
                 matched_app_id = detected_id
 
-            size = doc_path.stat().st_size if doc_path.exists() else 0
+            try:
+                size = doc_path.stat().st_size
+            except OSError:
+                # The trust-boundary check records the specific read/stat error
+                # and routes the packet to human review below.
+                size = 0
             exists, readable, mime, err = self.verify_file_trust_boundary(doc_path, matched_app_id or "ORPHAN")
-            checksum = compute_sha256(doc_path) if exists else ""
+            checksum = ""
+            if exists:
+                try:
+                    checksum = compute_sha256(doc_path)
+                except OSError as exc:
+                    readable = False
+                    err = f"Cannot hash '{doc_path.name}': {exc}"
             doc_type = self.classify_document(doc_path.name)
+
+            if conflicting_folder_id:
+                # A filename must not move a document into another applicant's
+                # packet when its enclosing folder identifies someone else.
+                folder_app_id = applicant_alias_map.get(conflicting_folder_id, conflicting_folder_id)
+                target_app = staged_applicants.get(folder_app_id)
+                if target_app is None:
+                    db_app = self.storage.get_applicant(folder_app_id)
+                    if db_app:
+                        target_app = self._db_applicant_to_ingested(db_app)
+                        staged_applicants[db_app.app_id] = target_app
+                conflict_error = (
+                    f"Applicant ID mismatch for '{doc_path.name}': "
+                    f"folder {conflicting_folder_id}, filename {detected_id}"
+                )
+                logger.warning(conflict_error)
+                if target_app is not None:
+                    target_app.trust_boundary_errors.append(conflict_error)
+
+                minio_key = self._orphan_minio_key(input_dir, doc_path, checksum)
+                self.storage.upload_file(
+                    file_path=doc_path,
+                    minio_key=minio_key,
+                    bucket_name=self.storage.minio_bucket,
+                )
+                orphan_dict = {
+                    "filename": doc_path.name,
+                    "file_path": str(doc_path),
+                    "minio_key": minio_key,
+                    "detected_app_id": None,
+                    "sha256": checksum,
+                    "file_size_bytes": size,
+                }
+                self.storage.save_orphan(orphan_dict)
+                orphans_list.append(orphan_dict)
+                continue
 
             if matched_app_id and matched_app_id in staged_applicants:
                 # CASE 1: MATCHED with staged applicant from Pass 1
@@ -565,7 +745,7 @@ class BatchIngestor:
                 self.storage.upload_file(
                     file_path=doc_path,
                     minio_key=minio_key,
-                    bucket_name="admissions-raw-docs",
+                    bucket_name=self.storage.minio_bucket,
                 )
 
                 doc_item = IngestedDocument(
@@ -577,11 +757,12 @@ class BatchIngestor:
                     sha256_checksum=checksum,
                     applicant_id=matched_app_id,
                     minio_key=minio_key,
+                    minio_bucket=self.storage.minio_bucket,
                     exists=exists,
                     is_readable=readable,
                     error_message=err,
                 )
-                target_app.documents.append(doc_item)
+                self._attach_document(target_app, doc_item)
                 if err:
                     target_app.trust_boundary_errors.append(err)
 
@@ -595,7 +776,7 @@ class BatchIngestor:
                 canonical_id = db_app.app_id
                 logger.info("Case 2: Found applicant %s in database from prior batch", canonical_id)
 
-                # 1. Add app_id to staged_app_ids and affected_ids
+                # 1. Add the prior applicant to this batch's evaluation set.
                 if canonical_id in staged_applicants:
                     target_app = staged_applicants[canonical_id]
                 else:
@@ -607,15 +788,12 @@ class BatchIngestor:
                     applicant_alias_map[canonical_id.replace("-", "_")] = canonical_id
                     applicant_alias_map[canonical_id.replace("_", "-")] = canonical_id
 
-                if canonical_id not in affected_ids:
-                    affected_ids.append(canonical_id)
-
                 # 2. Attach document metadata to the applicant's documents JSONB array & upload to MinIO
                 minio_key = f"{canonical_id}/{doc_path.name}"
                 self.storage.upload_file(
                     file_path=doc_path,
                     minio_key=minio_key,
-                    bucket_name="admissions-raw-docs",
+                    bucket_name=self.storage.minio_bucket,
                 )
 
                 doc_item = IngestedDocument(
@@ -627,42 +805,24 @@ class BatchIngestor:
                     sha256_checksum=checksum,
                     applicant_id=canonical_id,
                     minio_key=minio_key,
+                    minio_bucket=self.storage.minio_bucket,
                     exists=exists,
                     is_readable=readable,
                     error_message=err,
                 )
-                target_app.documents.append(doc_item)
+                self._attach_document(target_app, doc_item)
                 if err:
                     target_app.trust_boundary_errors.append(err)
 
-                # 3. Trigger re-evaluation of the manifest gate for that applicant
-                routed = self.gate.evaluate_applicant(target_app)
-                target_app.status = routed.status.value
-                target_app.routing_destination = routed.routing_destination
-
-                doc_dicts = [d.to_metadata_dict() for d in target_app.documents]
-                self.storage.update_applicant_status(
-                    app_id=canonical_id,
-                    status=routed.status.value,
-                    routing_destination=routed.routing_destination,
-                    documents=doc_dicts,
-                )
-                logger.info(
-                    "Case 2: Re-evaluated manifest gate for %s: status=%s, destination=%s",
-                    canonical_id,
-                    routed.status.value,
-                    routed.routing_destination,
-                )
-
             else:
                 # CASE 3: UNMATCHED in CSV and DB -> Orphan Document
-                minio_key = f"orphans/{doc_path.name}"
+                minio_key = self._orphan_minio_key(input_dir, doc_path, checksum)
                 logger.warning("Case 3: Orphan document detected: %s (detected_id: %s)", doc_path.name, detected_id)
 
                 self.storage.upload_file(
                     file_path=doc_path,
                     minio_key=minio_key,
-                    bucket_name="admissions-raw-docs",
+                    bucket_name=self.storage.minio_bucket,
                 )
 
                 orphan_dict = {
@@ -676,18 +836,25 @@ class BatchIngestor:
                 self.storage.save_orphan(orphan_dict)
                 orphans_list.append(orphan_dict)
 
-        # Update staged applicants in database with populated documents JSONB array
+        # Evaluate the complete merged packet once, after every late document is
+        # attached. This also updates repeated CSV applicants without new PDFs.
         for app in staged_applicants.values():
-            self.storage.update_applicant_status(
+            routed = self.gate.evaluate_applicant(app)
+            app.status = routed.status.value
+            app.routing_destination = routed.routing_destination
+            if not self.storage.update_applicant_status(
                 app_id=app.applicant_id,
-                status=app.status,
-                routing_destination=app.routing_destination,
+                status=routed.status.value,
+                routing_destination=routed.routing_destination,
                 documents=[d.to_metadata_dict() for d in app.documents],
-            )
+            ):
+                raise RuntimeError(f"Could not persist ingestion outcome for {app.applicant_id}")
+            if routed.is_valid:
+                affected_ids.append(app.applicant_id)
 
         self.affected_ids = affected_ids
         logger.info(
-            "Pass 2 Complete: Processed %d documents across %d applicants (%d orphans, %d affected from DB)",
+            "Pass 2 Complete: Processed %d documents across %d applicants (%d orphans, %d ready)",
             len(candidate_files),
             len(staged_applicants),
             len(orphans_list),
@@ -695,16 +862,22 @@ class BatchIngestor:
         )
         return list(staged_applicants.values()), orphans_list
 
-    def ingest_batch(self, input_dir: Path) -> BatchIngestionResult:
+    def ingest_batch(
+        self, input_dir: Path, applicant_ids: Optional[Set[str]] = None
+    ) -> BatchIngestionResult:
         """Execute full two-pass batch ingestion on input_dir."""
         input_path = Path(input_dir)
+        scoped_ids = (
+            {extract_and_normalize_app_id(app_id) or app_id for app_id in applicant_ids}
+            if applicant_ids is not None else None
+        )
         try:
-            csv_path, staged_applicants = self.pass_1_parse_and_stage_csv(input_path)
+            csv_path, staged_applicants = self.pass_1_parse_and_stage_csv(input_path, scoped_ids)
         except FileNotFoundError:
             csv_path = None
             staged_applicants = {}
 
-        apps, orphans = self.pass_2_traverse_and_link_documents(input_path, staged_applicants)
+        apps, orphans = self.pass_2_traverse_and_link_documents(input_path, staged_applicants, scoped_ids)
 
         return BatchIngestionResult(
             applications=apps,

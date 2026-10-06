@@ -1,189 +1,179 @@
-"""Batch Ingestion Pipeline for Riverview State University Admissions.
+"""API and scheduler adapter for the canonical two-pass ingestion runner.
 
-Scans inbound external data feeds (simulating CommonApp SFTP, College Board SFTP,
-and University Portal), builds packet manifests, executes deterministic validation gates,
-parses documents with PyMuPDF/OCR, and persists records into PostgreSQL and MinIO.
+The ingestion boundary ends after document linking and the deterministic manifest
+gate. The affected IDs artifact is the handoff to the future summarizing agent;
+this module does not parse document text or invoke a model.
 """
 
 from datetime import datetime, timezone
-import hashlib
-import logging
-import mimetypes
+import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+import re
+from threading import Lock
+from typing import Any, Dict, Iterable, Optional
+from uuid import uuid4
 
-from config import load_policies
-from gateway import DocumentItem, InferenceRequest, ModelGateway
-from parsing import DocumentParser
-from storage import Application, AuditLog, DocumentRecord, MinIOClient
-from validation import DocumentManifestItem, ManifestValidator, PacketManifest, ValidationStatus
-
-logger = logging.getLogger(__name__)
+from storage.storage_manager import StorageManager, normalize_applicant_id
 
 
-def compute_sha256(file_path: Path) -> str:
-    """Compute SHA256 checksum of a file."""
-    hasher = hashlib.sha256()
-    with open(file_path, "rb") as f:
-        while chunk := f.read(65536):
-            hasher.update(chunk)
-    return hasher.hexdigest()
+# The API and APScheduler may share configured artifact paths in a process.
+_RUN_LOCK = Lock()
 
 
 class BatchIngestionPipeline:
-    """Orchestrates batch ingestion, validation, parsing, and storage."""
+    """Run the same ingestion, manifest gate, and hard stop used by the CLI."""
 
     def __init__(
         self,
         source_dir: Optional[Path] = None,
-        minio_client: Optional[MinIOClient] = None,
-        model_gateway: Optional[ModelGateway] = None,
-        db_session_factory=None,
-    ):
-        base_dir = Path(__file__).resolve().parent.parent
-        self.source_dir = (
-            source_dir
-            or base_dir
-            / "applicant_source_documents"
-            / "admitgpt_60_source_documents"
-            / "applicant_source_packets"
+        config_path: Optional[Path] = None,
+        report_path: Optional[Path] = None,
+        affected_ids_path: Optional[Path] = None,
+        storage_manager: Optional[StorageManager] = None,
+        require_object_storage: Optional[bool] = None,
+        require_postgresql: Optional[bool] = None,
+    ) -> None:
+        root = Path(__file__).resolve().parent.parent
+        self.source_dir = Path(source_dir or os.getenv("INGESTION_INPUT_DIR", root / "batch_01"))
+        self.config_path = Path(config_path or os.getenv("INGESTION_CONFIG_PATH", root / "config/policies.yaml"))
+        configured_report = report_path or os.getenv("INGESTION_REPORT_PATH")
+        configured_ids = affected_ids_path or os.getenv("INGESTION_AFFECTED_IDS_PATH")
+        self.report_path = Path(configured_report or root / "ingestion_batch_01_report.txt")
+        self.affected_ids_path = Path(configured_ids or root / "affected_ids.json")
+        self.storage_manager = storage_manager
+        self.require_object_storage = (
+            require_object_storage
+            if require_object_storage is not None
+            else os.getenv("INGESTION_REQUIRE_OBJECT_STORAGE", "true").strip().lower()
+            not in {"0", "false", "no", "off"}
         )
-        self.validator = ManifestValidator()
-        self.parser = DocumentParser()
-        self.minio = minio_client or MinIOClient()
-        self.gateway = model_gateway or ModelGateway()
-        self.db_session_factory = db_session_factory
-
-    def assemble_manifest(self, packet_dir: Path, applicant_id: str) -> PacketManifest:
-        """Scan a packet directory and assemble a validated PacketManifest."""
-        doc_items: List[DocumentManifestItem] = []
-
-        for file_path in packet_dir.glob("*"):
-            if file_path.is_file() and not file_path.name.startswith("."):
-                size = file_path.stat().st_size
-                mime, _ = mimetypes.guess_type(file_path.name)
-                mime = mime or "application/pdf"
-                checksum = compute_sha256(file_path)
-                doc_type, _ = self.parser.classify_document_type(file_path.name)
-
-                doc_items.append(
-                    DocumentManifestItem(
-                        filename=file_path.name,
-                        doc_type=doc_type,
-                        file_size_bytes=size,
-                        mime_type=mime,
-                        sha256_checksum=checksum,
-                        applicant_id=applicant_id,
-                        is_readable=True,
-                    )
-                )
-
-        return PacketManifest(
-            applicant_id=applicant_id,
-            application_type="first_year",
-            source_feed="Simulated_SFTP",
-            documents=doc_items,
+        self.require_postgresql = (
+            require_postgresql
+            if require_postgresql is not None
+            else os.getenv("INGESTION_REQUIRE_POSTGRESQL", "true").strip().lower()
+            not in {"0", "false", "no", "off"}
         )
 
-    def process_packet(self, packet_dir: Path, applicant_id: str) -> Dict[str, Any]:
-        """Process an individual applicant packet through validation, parsing, and archival."""
-        manifest = self.assemble_manifest(packet_dir, applicant_id)
-        validation_result = self.validator.validate(manifest)
+    @staticmethod
+    def _storage_mode(storage: StorageManager) -> str:
+        if not getattr(storage, "db_available", False):
+            return "dry_run"
+        if getattr(storage, "is_sqlite_fallback", False):
+            return "sqlite_fallback"
+        if str(getattr(storage, "database_url", "")).startswith("sqlite"):
+            return "sqlite"
+        return "postgresql"
 
-        result_summary = {
-            "applicant_id": applicant_id,
-            "status": validation_result.status.value,
-            "is_valid": validation_result.is_valid,
-            "routing_destination": validation_result.routing_destination,
-            "findings_count": len(validation_result.findings),
+    @staticmethod
+    def _applicant_result(routed: Any) -> Dict[str, Any]:
+        findings = routed.missing_documents + routed.missing_fields + routed.errors
+        return {
+            "applicant_id": routed.applicant_id,
+            "status": routed.status.value,
+            "is_valid": routed.is_valid,
+            "routing_destination": routed.routing_destination,
+            "findings_count": len(findings),
+            "missing_documents": list(routed.missing_documents),
+            "missing_fields": list(routed.missing_fields),
+            "errors": list(routed.errors),
+            "total_documents": routed.total_documents,
             "documents_parsed": 0,
             "ai_evaluated": False,
         }
 
-        # If incomplete or invalid, route accordingly without running full LLM evaluation
-        if validation_result.status != ValidationStatus.READY_FOR_REVIEW:
-            logger.info(
-                f"Packet {applicant_id} routed to '{validation_result.routing_destination}' "
-                f"with status '{validation_result.status.value}'"
+    @staticmethod
+    def _run_artifact_path(base: Path, run_id: str, label: Optional[str]) -> Path:
+        suffix = f"_{label}_{run_id}" if label else f"_{run_id}"
+        return base.with_name(f"{base.stem}{suffix}{base.suffix}")
+
+    def run_batch(
+        self,
+        max_packets: Optional[int] = None,
+        *,
+        applicant_ids: Optional[Iterable[str]] = None,
+        report_path: Optional[Path] = None,
+        affected_ids_path: Optional[Path] = None,
+        artifact_label: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Persist a batch and export its ready IDs, stopping before AI work.
+
+        ``max_packets`` belonged to the former directory-scanning implementation.
+        A truncated CSV/document batch is unsafe to stage, so reject this legacy
+        option explicitly instead of silently processing a different population.
+        """
+        if max_packets is not None:
+            raise ValueError("max_packets is unsupported for two-pass ingestion; use an applicant ID scope or a separate batch directory")
+
+        run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ") + "_" + uuid4().hex[:8]
+        output_report = Path(report_path) if report_path is not None else self._run_artifact_path(
+            self.report_path, run_id, artifact_label
+        )
+        output_ids = Path(affected_ids_path) if affected_ids_path is not None else self._run_artifact_path(
+            self.affected_ids_path, run_id, artifact_label
+        )
+        output_report.parent.mkdir(parents=True, exist_ok=True)
+        output_ids.parent.mkdir(parents=True, exist_ok=True)
+        storage = self.storage_manager or StorageManager()
+
+        # Import here to keep ingestion package initialization free of a cycle.
+        from run_ingestion_check import run_pipeline
+
+        with _RUN_LOCK:
+            gate_result = run_pipeline(
+                input_dir=str(self.source_dir),
+                config_file=str(self.config_path),
+                report_file=str(output_report),
+                affected_ids_file=str(output_ids),
+                storage_manager=storage,
+                applicant_ids=set(applicant_ids) if applicant_ids is not None else None,
+                require_object_storage=self.require_object_storage,
+                require_postgresql=self.require_postgresql,
             )
-            return result_summary
 
-        # Parse documents and prepare model inference payload
-        inference_docs: List[DocumentItem] = []
-        for doc_item in manifest.documents:
-            file_path = packet_dir / doc_item.filename
-            if file_path.exists():
-                parsed = self.parser.parse_document(
-                    file_path=file_path,
-                    applicant_id=applicant_id,
-                    force_doc_type=doc_item.doc_type,
-                )
-                result_summary["documents_parsed"] += 1
-
-                # Upload to MinIO archival bucket
-                try:
-                    obj_key = f"{applicant_id}/{doc_item.filename}"
-                    self.minio.upload_file(file_path, obj_key)
-                except Exception as e:
-                    logger.warning(f"MinIO upload skipped for {doc_item.filename}: {e}")
-
-                inference_docs.append(
-                    DocumentItem(
-                        document_type=parsed.document_type,
-                        content=parsed.full_text,
-                        filename=doc_item.filename,
-                    )
-                )
-
-        # Call Model Gateway with policy grounding (strictly bypassing essay)
-        try:
-            req = InferenceRequest(
-                applicant_id=applicant_id,
-                application_type=manifest.application_type,
-                documents=inference_docs,
-            )
-            llm_resp = self.gateway.evaluate_applicant(req)
-            result_summary["ai_evaluated"] = True
-            result_summary["essay_bypassed"] = llm_resp.essay_bypassed
-            result_summary["bypassed_documents"] = llm_resp.bypassed_documents
-        except Exception as e:
-            logger.error(f"Error calling model gateway for {applicant_id}: {e}")
-
-        return result_summary
-
-    def run_batch(self, max_packets: Optional[int] = None) -> Dict[str, Any]:
-        """Execute batch ingestion run over the drop zone directory."""
-        if not self.source_dir.exists():
-            return {
-                "status": "COMPLETED",
-                "message": f"Source directory {self.source_dir} not found.",
-                "total_processed": 0,
-            }
-
-        packet_dirs = sorted([d for d in self.source_dir.iterdir() if d.is_dir()])
-        if max_packets:
-            packet_dirs = packet_dirs[:max_packets]
-
-        batch_results = []
-        counts = {
-            "READY_FOR_REVIEW": 0,
-            "INCOMPLETE": 0,
-            "COUNSELOR_REVIEW": 0,
-            "REPLACEMENT_REQUESTED": 0,
-            "STOPPED": 0,
-        }
-
-        for p_dir in packet_dirs:
-            app_id = p_dir.name
-            res = self.process_packet(p_dir, app_id)
-            batch_results.append(res)
-            counts[res["status"]] = counts.get(res["status"], 0) + 1
-
-        summary = {
+        results = [self._applicant_result(routed) for routed in gate_result.routed_applicants]
+        return {
             "status": "COMPLETED",
             "executed_at": datetime.now(timezone.utc).isoformat(),
-            "total_packets_discovered": len(packet_dirs),
-            "status_breakdown": counts,
-            "results": batch_results,
+            "total_packets_discovered": gate_result.total_processed,
+            "status_breakdown": {
+                "READY_FOR_REVIEW": gate_result.total_valid,
+                "INCOMPLETE": gate_result.total_incomplete,
+                "ERROR": gate_result.total_error,
+            },
+            "results": results,
+            "affected_ids": list(gate_result.affected_ids),
+            "affected_ids_file": str(output_ids.resolve()),
+            "report_file": str(output_report.resolve()),
+            "hard_stop": True,
+            "storage_mode": self._storage_mode(storage),
+            "minio_available": bool(getattr(storage, "minio_available", False)),
+            "object_storage_required": self.require_object_storage,
+            "postgresql_required": self.require_postgresql,
+            "handoff_ready": self._storage_mode(storage) == "postgresql" and bool(getattr(storage, "minio_available", False)),
         }
-        return summary
+
+    def process_packet(self, applicant_id: str) -> Optional[Dict[str, Any]]:
+        """Run the canonical gate for one ID and write separate handoff files."""
+        if re.fullmatch(r"APP[_\-\s]?\d+", applicant_id, re.IGNORECASE) is None:
+            raise ValueError(f"Invalid applicant ID: {applicant_id!r}")
+        canonical_id = normalize_applicant_id(applicant_id)
+        if canonical_id is None:
+            raise ValueError(f"Invalid applicant ID: {applicant_id!r}")
+
+        safe_id = re.sub(r"[^A-Za-z0-9_]", "_", canonical_id)
+        summary = self.run_batch(applicant_ids={canonical_id}, artifact_label=safe_id)
+        if not summary["results"]:
+            return None
+        result = dict(summary["results"][0])
+        result.update({
+            "affected_ids": summary["affected_ids"],
+            "affected_ids_file": summary["affected_ids_file"],
+            "report_file": summary["report_file"],
+            "hard_stop": summary["hard_stop"],
+            "storage_mode": summary["storage_mode"],
+            "minio_available": summary["minio_available"],
+            "object_storage_required": summary["object_storage_required"],
+            "postgresql_required": summary["postgresql_required"],
+            "handoff_ready": summary["handoff_ready"],
+        })
+        return result

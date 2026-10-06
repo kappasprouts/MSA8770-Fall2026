@@ -7,7 +7,7 @@ Verifies:
 4. ACT composite and section scores parsing.
 5. Orphan test score staging in OrphanTestScore when unmatched.
 6. Manifest Gate re-evaluation and promotion from INCOMPLETE to READY_FOR_REVIEW.
-7. Append to affected_ids.json on status promotion.
+7. Write a separate affected-ID file for changed ready applicants.
 8. Asynchronous ingestor methods.
 9. Standalone CLI runner (run_score_ingest.py).
 """
@@ -115,6 +115,27 @@ def test_match_by_dob_fallback(tmp_path, mock_storage):
     assert updated.act_math == 32
 
 
+def test_ambiguous_dob_is_archived_instead_of_attached(tmp_path, mock_storage):
+    """A shared birth date cannot identify which applicant owns a score."""
+    for app_id in ("APP_111", "APP_112"):
+        mock_storage.stage_applicant(Applicant(
+            app_id=app_id, first_name=app_id, last_name="Student",
+            date_of_birth="2008-07-10", email_address=f"{app_id.lower()}@example.com",
+            status="INCOMPLETE",
+        ).to_dict())
+    score_csv = tmp_path / "ambiguous_scores.csv"
+    score_csv.write_text("DOB,Composite\n07/10/2008,34\n", encoding="utf-8")
+
+    result = TestScoreIngestor(
+        storage_manager=mock_storage, affected_ids_path=tmp_path / "affected_ids.json"
+    ).ingest_act(score_csv)
+
+    assert result.matched_count == 0
+    assert result.orphan_count == 1
+    assert mock_storage.get_applicant("APP_111").act_composite is None
+    assert mock_storage.get_applicant("APP_112").act_composite is None
+
+
 def test_college_board_sat_subscores_typed_integer(tmp_path, mock_storage):
     """Verify College Board SAT Math and EBRW subscores are stored as typed integers."""
     app = Applicant(
@@ -143,6 +164,24 @@ def test_college_board_sat_subscores_typed_integer(tmp_path, mock_storage):
     assert isinstance(updated.sat_ebrw, int)
     assert updated.sat_ebrw == 720
     assert updated.superscored_sat_score == 1500.0
+
+
+def test_lower_later_sat_feed_preserves_best_superscore(tmp_path, mock_storage):
+    app = Applicant(
+        app_id="APP_113", first_name="Casey", last_name="Rivera",
+        email_address="casey.best@example.com", date_of_birth="2008-02-14",
+        sat_math=780, sat_ebrw=740, superscored_sat_score=1520.0,
+        status="INCOMPLETE",
+    )
+    mock_storage.stage_applicant(app.to_dict())
+    scores = tmp_path / "lower_scores.csv"
+    scores.write_text("Email,SAT_Math,SAT_EBRW\ncasey.best@example.com,700,700\n", encoding="utf-8")
+
+    TestScoreIngestor(
+        storage_manager=mock_storage, affected_ids_path=tmp_path / "affected_ids.json"
+    ).ingest_college_board(scores)
+
+    assert mock_storage.get_applicant("APP_113").superscored_sat_score == 1520.0
 
 
 def test_duplicate_ap_scores_prevention(tmp_path, mock_storage):
@@ -240,7 +279,7 @@ def test_orphan_test_score_staging_unmatched(tmp_path, mock_storage):
 
 
 def test_manifest_gate_re_evaluate_promotion(tmp_path, mock_storage, temp_affected_ids):
-    """Verify applicant in INCOMPLETE status is promoted to READY_FOR_REVIEW upon receiving scores and added to affected_ids.json."""
+    """Verify score ingestion promotes a complete packet and publishes its ID."""
     # Seed applicant with all required documents and metadata, but initially marked INCOMPLETE
     docs = [
         {"doc_type": "application_form", "filename": "app.pdf", "exists": True, "is_readable": True},
@@ -288,11 +327,102 @@ def test_manifest_gate_re_evaluate_promotion(tmp_path, mock_storage, temp_affect
     assert updated.status == "READY_FOR_REVIEW"
     assert updated.routing_destination == "READY_FOR_REVIEW"
 
-    # Check affected_ids.json
-    with open(temp_affected_ids, "r", encoding="utf-8") as f:
-        affected_list = json.load(f)
-    assert "APP_200" in affected_list
-    assert "APP_001" in affected_list  # Original IDs preserved
+    # This score run has its own handoff and cannot overwrite another run.
+    affected_file = Path(result.affected_ids_file)
+    assert affected_file != temp_affected_ids
+    assert json.loads(affected_file.read_text(encoding="utf-8")) == ["APP_200"]
+    assert json.loads(temp_affected_ids.read_text(encoding="utf-8")) == ["APP_001", "APP_002"]
+
+
+def test_ready_score_change_gets_new_handoff_without_duplicate_replay(tmp_path, mock_storage):
+    """A changed score on a ready packet needs a new summary; replay does not."""
+    docs = [
+        {"doc_type": kind, "filename": f"{kind}.pdf", "exists": True, "is_readable": True,
+         "sha256": f"{index:064x}", "minio_key": f"APP_201/{kind}.pdf"}
+        for index, kind in enumerate((
+            "application_form", "transcript", "personal_statement",
+            "recommendation_letter_1", "recommendation_letter_2",
+        ), start=1)
+    ]
+    app = Applicant(
+        app_id="APP_201", first_name="Morgan", last_name="Vale",
+        date_of_birth="2008-04-12", email_address="morgan@example.com",
+        name_of_hs="Valley High", intended_major="Biology",
+        admission_year=2026, admission_term="Fall",
+        status="READY_FOR_REVIEW", routing_destination="READY_FOR_REVIEW",
+        documents=docs,
+    )
+    mock_storage.stage_applicant(app.to_dict())
+    score_csv = tmp_path / "scores.csv"
+    score_csv.write_text("Email,Composite\nmorgan@example.com,34\n", encoding="utf-8")
+    ingestor = TestScoreIngestor(storage_manager=mock_storage, affected_ids_path=tmp_path / "affected_ids.json")
+
+    first = ingestor.ingest_act(score_csv)
+    second = ingestor.ingest_act(score_csv)
+
+    assert first.affected_ids == ["APP_201"]
+    assert first.handoff_ready is False
+    assert first.promoted_app_ids == []
+    assert second.affected_ids == []
+    assert first.affected_ids_file != second.affected_ids_file
+    assert json.loads(Path(first.affected_ids_file).read_text()) == ["APP_201"]
+    assert json.loads(Path(second.affected_ids_file).read_text()) == []
+
+
+def test_score_write_failure_does_not_emit_handoff(tmp_path, mock_storage, monkeypatch):
+    """A matched row cannot appear in a handoff when score persistence fails."""
+    app = Applicant(app_id="APP_202", email_address="fail@example.com", status="READY_FOR_REVIEW")
+    mock_storage.stage_applicant(app.to_dict())
+    score_csv = tmp_path / "scores.csv"
+    score_csv.write_text("Email,Composite\nfail@example.com,32\n", encoding="utf-8")
+    monkeypatch.setattr(mock_storage, "update_applicant_scores", lambda **kwargs: None)
+    ingestor = TestScoreIngestor(storage_manager=mock_storage, affected_ids_path=tmp_path / "affected_ids.json")
+
+    with pytest.raises(RuntimeError, match="Could not persist test scores"):
+        ingestor.ingest_act(score_csv)
+
+    assert not list(tmp_path.glob("affected_ids_act_*.json"))
+
+
+def test_strict_score_handoff_rejects_unavailable_document(tmp_path, mock_storage):
+    """A live-looking score run must verify old document objects before handoff."""
+    docs = [
+        {"doc_type": kind, "filename": f"{kind}.pdf", "exists": True,
+         "is_readable": True, "sha256": f"{index:064x}",
+         "minio_key": f"APP_203/{kind}.pdf"}
+        for index, kind in enumerate((
+            "application_form", "transcript", "personal_statement",
+            "recommendation_letter_1", "recommendation_letter_2",
+        ), start=1)
+    ]
+    mock_storage.stage_applicant(Applicant(
+        app_id="APP_203", first_name="Missing", last_name="Object",
+        date_of_birth="2008-04-12", email_address="missing@example.com",
+        name_of_hs="Valley High", intended_major="Biology",
+        admission_year=2026, admission_term="Fall",
+        status="READY_FOR_REVIEW", routing_destination="READY_FOR_REVIEW",
+        documents=docs,
+    ).to_dict())
+
+    class MissingObjectClient:
+        def stat_object(self, bucket_name, object_name):
+            raise FileNotFoundError(object_name)
+
+    mock_storage.minio_available = True
+    mock_storage.minio_client = MissingObjectClient()
+    score_csv = tmp_path / "scores.csv"
+    score_csv.write_text("Email,Composite\nmissing@example.com,34\n", encoding="utf-8")
+    ingestor = TestScoreIngestor(
+        storage_manager=mock_storage,
+        affected_ids_path=tmp_path / "affected_ids.json",
+        require_object_storage=True,
+    )
+
+    with pytest.raises(RuntimeError, match="Document object is unavailable"):
+        ingestor.ingest_act(score_csv)
+
+    assert mock_storage.get_applicant("APP_203").status == "ERROR"
+    assert not list(tmp_path.glob("affected_ids_act_*.json"))
 
 
 @pytest.mark.asyncio

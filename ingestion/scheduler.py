@@ -1,8 +1,4 @@
-"""APScheduler setup for autonomous overnight batch ingestion.
-
-Schedules and executes batch ingestion runs over drop zone SFTP/portal folders,
-orchestrating manifest validation, document parsing, and storage.
-"""
+"""APScheduler setup for overnight two-pass ingestion and manifest validation."""
 
 from datetime import datetime, timezone
 import logging
@@ -26,16 +22,21 @@ _latest_batch_summary: Optional[Dict[str, Any]] = None
 
 def run_overnight_batch() -> Dict[str, Any]:
     """Execute scheduled overnight batch ingestion run."""
-    global _latest_batch_summary
     logger.info("Executing scheduled overnight batch ingestion run...")
     pipeline = BatchIngestionPipeline()
     summary = pipeline.run_batch()
-    _latest_batch_summary = summary
+    record_batch_summary(summary)
     logger.info(
         f"Overnight batch run finished. Processed: {summary.get('total_packets_discovered', 0)} packets. "
         f"Breakdown: {summary.get('status_breakdown')}"
     )
     return summary
+
+
+def record_batch_summary(summary: Dict[str, Any]) -> None:
+    """Publish the latest successful on-demand or overnight run for status reads."""
+    global _latest_batch_summary
+    _latest_batch_summary = summary
 
 
 def get_latest_batch_summary() -> Optional[Dict[str, Any]]:

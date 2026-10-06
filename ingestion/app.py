@@ -6,23 +6,22 @@ and hooks into APScheduler for overnight scheduling.
 
 from contextlib import asynccontextmanager
 import logging
-from pathlib import Path
 from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
 try:
-    from fastapi import FastAPI, HTTPException, BackgroundTasks, status
-    from fastapi.responses import JSONResponse
+    from fastapi import FastAPI, HTTPException, status
     FASTAPI_AVAILABLE = True
 except ImportError:
     FASTAPI_AVAILABLE = False
 
 from ingestion.pipeline import BatchIngestionPipeline
 from ingestion.scheduler import (
+    APSCHEDULER_AVAILABLE,
     get_latest_batch_summary,
     init_scheduler,
-    run_overnight_batch,
+    record_batch_summary,
     shutdown_scheduler,
     start_scheduler,
 )
@@ -63,17 +62,22 @@ if FASTAPI_AVAILABLE:
         return {
             "status": "healthy",
             "service": "ingestion",
-            "scheduler_available": True,
+            "scheduler_available": APSCHEDULER_AVAILABLE,
         }
 
     @app.post("/ingestion/batch/trigger")
     def trigger_batch(
-        background_tasks: BackgroundTasks,
         max_packets: Optional[int] = None,
     ) -> Dict[str, Any]:
-        """Trigger an on-demand batch ingestion run across drop zone folders."""
+        """Run two-pass ingestion and export the ready IDs for the summary agent."""
         pipeline = BatchIngestionPipeline()
-        summary = pipeline.run_batch(max_packets=max_packets)
+        try:
+            summary = pipeline.run_batch(max_packets=max_packets)
+        except ValueError as exc:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+        except RuntimeError as exc:
+            raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc
+        record_batch_summary(summary)
         return summary
 
     @app.get("/ingestion/batch/status")
@@ -86,16 +90,19 @@ if FASTAPI_AVAILABLE:
 
     @app.post("/ingestion/packet/{applicant_id}")
     def ingest_single_packet(applicant_id: str) -> Dict[str, Any]:
-        """Manually trigger ingestion and validation for a specific applicant packet."""
+        """Run the same gate for one applicant without touching other IDs."""
         pipeline = BatchIngestionPipeline()
-        packet_dir = pipeline.source_dir / applicant_id
-        if not packet_dir.exists():
+        try:
+            result = pipeline.process_packet(applicant_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+        except RuntimeError as exc:
+            raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc
+        if result is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Applicant packet directory '{applicant_id}' not found in source feed.",
+                detail=f"Applicant '{applicant_id}' was not found in this batch or existing storage.",
             )
-
-        result = pipeline.process_packet(packet_dir, applicant_id)
         return result
 
 else:

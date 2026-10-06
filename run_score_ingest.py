@@ -3,7 +3,7 @@
 
 Ingests external test scores (SAT/AP and ACT) from CSV feeds, links scores to
 existing ApplicationRecords, archives orphans to OrphanTestScore, re-triggers
-the Manifest Validation Gate, and updates affected_ids.json for downstream summarizers.
+the Manifest Validation Gate, and writes a separate affected-ID handoff per run.
 """
 
 import argparse
@@ -19,7 +19,7 @@ from ingestion.test_score_ingest import ScoreIngestResult, TestScoreIngestor
 from storage.storage_manager import StorageManager
 
 
-def print_score_summary(result: ScoreIngestResult, affected_ids_file: Path):
+def print_score_summary(result: ScoreIngestResult):
     """Print clean ANSI-formatted console summary of score delta ingestion."""
     has_tty = sys.stdout.isatty()
     bold = "\033[1m" if has_tty else ""
@@ -60,7 +60,9 @@ def print_score_summary(result: ScoreIngestResult, affected_ids_file: Path):
     else:
         print(f"{bold}Newly Promoted Applicants :{reset} None")
 
-    print(f"{bold}Affected IDs File         :{reset} {affected_ids_file.resolve()}")
+    print(f"{bold}Ready IDs Changed         :{reset} {result.affected_ids}")
+    print(f"{bold}Affected IDs File         :{reset} {result.affected_ids_file}")
+    print(f"{bold}Production Handoff Ready  :{reset} {result.handoff_ready}")
     print(f"{bold}{cyan}{sep}{reset}\n")
 
 
@@ -91,7 +93,17 @@ def main():
         "--affected-ids",
         "-a",
         default="affected_ids.json",
-        help="Path to affected_ids.json (default: affected_ids.json)",
+        help="Base path for a uniquely named per-run handoff (default: affected_ids.json)",
+    )
+    parser.add_argument(
+        "--require-object-storage",
+        action="store_true",
+        help="Require live MinIO and verify linked objects before a ready-ID handoff.",
+    )
+    parser.add_argument(
+        "--require-postgresql",
+        action="store_true",
+        help="Require shared PostgreSQL rather than local SQLite fallback.",
     )
 
     args = parser.parse_args()
@@ -109,6 +121,8 @@ def main():
         storage_manager=storage,
         config_path=config_path,
         affected_ids_path=affected_ids_path,
+        require_object_storage=args.require_object_storage,
+        require_postgresql=args.require_postgresql,
     )
 
     source_norm = args.source.upper()
@@ -121,7 +135,7 @@ def main():
             print(f"Error: Unsupported source: {args.source}", file=sys.stderr)
             sys.exit(1)
 
-        print_score_summary(result, affected_ids_path)
+        print_score_summary(result)
         sys.exit(0)
 
     except Exception as e:

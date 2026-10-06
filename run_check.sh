@@ -5,7 +5,7 @@ echo "=== Running Admissions Ingestion & Completeness Check ==="
 echo "Pipeline Architecture:"
 echo "  - Pass 1: Parse CSV flat file -> Stage explicit 33-column relational schema + JSONB arrays in PostgreSQL"
 echo "  - Pass 2: Traverse files -> Verify TB1 perimeter hygiene (%PDF-, size), upload to MinIO ('admissions-raw-docs'), archive orphans"
-echo "  - Component 3: Manifest Gate -> 3-way deterministic routing & export affected_ids.json"
+echo "  - Component 3: Manifest Gate -> 3-way deterministic routing & export run-specific affected IDs"
 echo "  - Hard Stop: Explicit halt prior to downstream Summarizer / LLM Gateway"
 echo "--------------------------------------------------------"
 
@@ -27,4 +27,4 @@ fi
 python3 run_ingestion_check.py --input-dir "$INPUT_DIR"
 
 echo "=== Pipeline Completed & Stopped (Halted before downstream Summarizer/VLM) ==="
-echo "Ready for downstream Summarizer: See affected_ids.json"
+echo "For a live handoff, use --require-postgresql --require-object-storage and the affected-ID path printed above."

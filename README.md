@@ -115,7 +115,7 @@ Encloses PostgreSQL, MinIO, and internal processing:
 
 ## Ingestion & Completeness Check (Batch Ingestion)
 
-This stage implements Component 2 (Two-Pass Ingestion Layer) and Component 3 (Deterministic Manifest Validation Gate) in compliance with Architecture Section 4 and Trust Boundary 1. It explicitly halts after manifest validation without performing OCR or image rendering, leaving clean relational records, MinIO raw documents, and an `affected_ids.json` artifact ready for the downstream multimodal Summarizing Agent.
+This stage implements Component 2 (Two-Pass Ingestion Layer) and Component 3 (Deterministic Manifest Validation Gate) in compliance with Architecture Section 4 and Trust Boundary 1. It halts after manifest validation without performing OCR or image rendering. Each successful run writes a separate affected-ID artifact for the downstream Summarizing Agent.
 
 ### Architecture & Two-Pass Design
 
@@ -133,7 +133,7 @@ This stage implements Component 2 (Two-Pass Ingestion Layer) and Component 3 (De
 | 33-Column Relational Mapping  |           |                            |
 | + JSONB Array Staging         |           |                            |
 | (activities, awards, APs,     |           |                            |
-|  hooks, documents=[])         |           |                            |
+|  hooks, existing documents)   |           |                            |
 +---------------+---------------+           |                            |
                 |                           |                            |
                 v                           |                            |
@@ -169,7 +169,7 @@ This stage implements Component 2 (Two-Pass Ingestion Layer) and Component 3 (De
            v                           v
 +----------------------+   +-----------------------+
 | Save to              |   | Route to Applicant    |
-| affected_ids.json    |   | Packet Update or      |
+| affected_ids_<run>.json|  | Packet Update or      |
 | & update PostgreSQL  |   | Human Review queue    |
 +----------+-----------+   +-----------------------+
            |
@@ -188,8 +188,8 @@ This stage implements Component 2 (Two-Pass Ingestion Layer) and Component 3 (De
      - `awards`: List of up to 5 honors/awards.
      - `ap_test_scores`: List of up to 12 advanced courses and scores.
      - `hooks`: List of up to 5 institutional consideration flags (e.g. First-Gen, URM).
-     - `documents`: Initialized as empty list `[]`.
-   - Upserts records in PostgreSQL (`applicants` table) with status initialized to `PENDING`.
+     - `documents`: Initialized as `[]` for new applicants; retained for existing applicants.
+   - Upserts records in PostgreSQL (`applicants` table). New records start as `PENDING`; repeated CSV rows retain prior documents and score-feed data until the merged packet is re-evaluated.
 
 2. **Pass 2 (Document Traversal, Perimeter Hygiene & MinIO Archival)**:
    - Scans subdirectories and root files across the batch.
@@ -197,8 +197,8 @@ This stage implements Component 2 (Two-Pass Ingestion Layer) and Component 3 (De
      - File existence and size constraint check (1 KB to 15 MB).
      - Standard PDF magic bytes verification (first 5 bytes `b"%PDF-"`) without opening or scanning text.
      - Streaming SHA-256 checksum computation.
-   - **Matched Submissions**: Raw PDFs uploaded to MinIO bucket `admissions-raw-docs` under `{app_id}/{filename}`, with metadata attached to the applicant's `documents` JSONB array.
-   - **Orphan Submissions**: Unmatched files (e.g. late LORs without an existing application row) uploaded to MinIO under `orphans/{filename}` and recorded in the dedicated `OrphanDocument` PostgreSQL table.
+   - **Matched Submissions**: Raw PDFs uploaded to MinIO bucket `admissions-raw-docs` under `{app_id}/{filename}`, with metadata attached to the applicant's `documents` JSONB array. Repeated files replace metadata at the same object key, and late files join documents from prior batches.
+   - **Orphan Submissions**: Unmatched files (e.g. late LORs without an existing application row) uploaded to MinIO under `orphans/{sha256}/{relative_path}` and recorded in the dedicated `OrphanDocument` PostgreSQL table.
 
 3. **Component 3 (Deterministic Manifest Validation Gate)**:
    - Evaluates applicant packet against institutional policy rules (`config/policies.yaml`):
@@ -206,22 +206,20 @@ This stage implements Component 2 (Two-Pass Ingestion Layer) and Component 3 (De
      - **`INCOMPLETE`** -> Status `INCOMPLETE` (missing required files or metadata -> routed to **Applicant Packet Update**).
      - **`ERROR`** -> Status `ERROR` (corrupted files, magic byte mismatches, or size violations -> routed to **Human Review**).
 
-4. **`affected_ids.json` Output & Hard Stop**:
-   - The IDs of all applicants reaching `READY_FOR_REVIEW` in the run are exported to `affected_ids.json` and printed to stdout.
+4. **Affected-ID Output & Hard Stop**:
+   - The IDs of applicants reaching `READY_FOR_REVIEW` in the run are exported to a unique `affected_ids_<run>.json` file and printed to stdout. The API also returns the exact file path.
    - Execution halts with clean exit code `0` immediately after report generation, ensuring downstream LLM/VLM summarizers are only triggered on demand.
 
 ### Storage & Resilience Fallback
 - Connection parameters are read from environment variables (`DATABASE_URL`, `MINIO_ENDPOINT`, `MINIO_BUCKET`, `MINIO_ACCESS_KEY`, `MINIO_SECRET_KEY`).
 - If PostgreSQL or MinIO services are offline during local prototyping, the `StorageManager` logs clear warnings and automatically engages dry-run simulation mode, permitting full local manifest generation and test execution while performing real inserts/uploads whenever services are live.
+- For a production summary-agent handoff, run the CLI with `--require-postgresql --require-object-storage`. The API and overnight scheduler require both by default and verify that every ready applicant's linked document exists in MinIO.
 
 ### Run Instructions
 
-Clone/checkout the branch and execute:
+From the repository root, execute:
 
 ```bash
-git checkout danny/architecture-plan
-git pull origin danny/architecture-plan
-
 # Option 1: One-click script
 ./run_check.sh batch_01
 
@@ -230,6 +228,9 @@ make check
 
 # Option 3: Direct Python CLI
 python3 run_ingestion_check.py --input-dir batch_01
+
+# Production handoff with shared storage checks
+python3 run_ingestion_check.py --input-dir batch_01 --require-postgresql --require-object-storage
 ```
 
 ---
@@ -259,7 +260,7 @@ To run a batch ingestion pass over local synthetic applicant packets:
 python3 -c "
 from ingestion import BatchIngestionPipeline
 pipeline = BatchIngestionPipeline()
-summary = pipeline.run_batch(max_packets=5)
+summary = pipeline.run_batch()
 print('Batch Run Summary:', summary)
 "
 ```
@@ -280,11 +281,15 @@ python3 run_score_ingest.py --source college_board --file path/to/college_board_
 
 # Ingest ACT composite and section scores
 python3 run_score_ingest.py --source act --file path/to/act_scores.csv
+
+# Use both checks before handing score changes to the summary agent
+python3 run_score_ingest.py --source act --file path/to/act_scores.csv --require-postgresql --require-object-storage
 ```
 * **Matching**: Case-insensitive matching by email with fallback to Date of Birth (`YYYY-MM-DD` or `MM/DD/YYYY`).
 * **Deduplication**: Appends AP scores to `ap_test_scores` without duplicating subject/score pairs.
 * **Orphan Handling**: Unmatched student score rows are archived in the `OrphanTestScore` table.
-* **Manifest Gate Re-triggering**: Automatically re-runs `ManifestValidationGate` on updated applicants. If an applicant was previously `INCOMPLETE` and is now satisfied, their status is promoted to `READY_FOR_REVIEW` and appended to `affected_ids.json`.
+* **Manifest Gate Re-triggering**: Automatically re-runs `ManifestValidationGate` on updated applicants. A changed score for a ready applicant, including an `INCOMPLETE` to ready promotion, is written to that score run's unique affected-ID file; an identical replay leaves the new file empty.
+* **Handoff**: The score result reports `handoff_ready`. It is true only when both strict storage checks were requested and completed; local dry-run artifacts are for inspection.
 
 ---
 

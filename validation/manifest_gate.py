@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 from enum import Enum
 import json
 from pathlib import Path
+import re
 from typing import Any, Dict, List, Optional, Set
 
 from config import (
@@ -198,6 +199,14 @@ class ManifestValidationGate:
                     errors.append(e)
                     seen_errors.add(e)
 
+        max_packet_bytes = self.file_constraints.get("max_packet_size_bytes")
+        if max_packet_bytes is not None:
+            packet_bytes = sum(int(doc.file_size_bytes or 0) for doc in app.documents)
+            if packet_bytes > max_packet_bytes:
+                errors.append(
+                    f"Packet size {packet_bytes} bytes exceeds maximum {max_packet_bytes} bytes"
+                )
+
         # 2. Check Required Applicant Metadata Fields
         for req_field in self.required_fields:
             val = app.metadata.get(req_field)
@@ -206,7 +215,7 @@ class ManifestValidationGate:
 
         # 3. Check Required Document Checklist Items (only from valid/existing documents)
         present_types: Set[str] = set()
-        lor_docs: List[IngestedDocument] = []
+        distinct_lors: Set[str] = set()
 
         for doc in app.documents:
             if doc.exists and doc.is_readable:
@@ -214,7 +223,11 @@ class ManifestValidationGate:
                 present_types.add(c_type)
                 present_types.add(doc.doc_type)
                 if "recommendation_letter" in doc.doc_type or "lor" in doc.doc_type:
-                    lor_docs.append(doc)
+                    checksum = (doc.sha256_checksum or "").lower()
+                    if re.fullmatch(r"[0-9a-f]{64}", checksum) and checksum != "0" * 64:
+                        distinct_lors.add(f"sha256:{checksum}")
+                    else:
+                        distinct_lors.add(f"key:{doc.minio_key or doc.filename}")
 
         # Recognize delta-ingested test scores in metadata as satisfying test score documents
         has_sat = bool(
@@ -237,11 +250,11 @@ class ManifestValidationGate:
 
             # Special check for 2 LORs
             if req_doc in ("recommendation_letter_1", "recommendation_letter_2", "recommendation_letter"):
-                if req_doc == "recommendation_letter_1" and len(lor_docs) < 1:
+                if req_doc == "recommendation_letter_1" and len(distinct_lors) < 1:
                     missing_docs.append("recommendation_letter_1")
-                elif req_doc == "recommendation_letter_2" and len(lor_docs) < 2:
+                elif req_doc == "recommendation_letter_2" and len(distinct_lors) < 2:
                     missing_docs.append("recommendation_letter_2")
-                elif req_doc == "recommendation_letter" and len(lor_docs) < 1:
+                elif req_doc == "recommendation_letter" and len(distinct_lors) < 1:
                     missing_docs.append("recommendation_letter")
             else:
                 if c_req not in present_types and req_doc not in present_types:
