@@ -240,6 +240,13 @@ def run_pipeline(
     gate = ManifestValidationGate(config_path=config_path)
     result = gate.evaluate_batch(ingest_result.applications)
 
+    # Ensure Case 2 affected IDs from prior batches are included if ready
+    for aff_id in ingest_result.affected_ids:
+        if aff_id not in result.affected_ids:
+            app = storage.get_applicant(aff_id)
+            if app and (app.status == "READY_FOR_REVIEW" or app.status == "VALID"):
+                result.affected_ids.append(aff_id)
+
     # 3. Update PostgreSQL applicant records with gate evaluation results
     for routed in result.routed_applicants:
         storage.update_applicant_status(

@@ -471,3 +471,92 @@ def test_no_downstream_agents_or_ocr_triggered(tmp_path):
     assert result.total_incomplete == 1
     assert result.total_error == 0
     assert len(result.affected_ids) == 9
+
+
+def test_case_2_db_lookup_late_arriving_document(tmp_path, config_file):
+    """Verify Case 2: When a document's extracted app_id is NOT in staged_applicants from Pass 1,
+    the ingestor performs a database lookup against PostgreSQL (Applicant table).
+    If the applicant exists in the DB (from a prior night's batch):
+    1. app_id is added to staged_applicants and affected_ids.
+    2. Document metadata is attached to the applicant's documents JSONB array.
+    3. Manifest gate re-evaluation is triggered for that applicant.
+    If not in DB either, document is routed to orphans (Case 3).
+    """
+    storage = StorageManager()
+    storage.db_available = False
+    storage.dry_run_applicants = {}
+    storage.dry_run_orphans = []
+
+    # 1. Seed an applicant existing ONLY in the database from a prior night's batch (missing transcript -> INCOMPLETE)
+    prior_docs = [
+        {"doc_type": "application_form", "filename": "application_form.pdf", "exists": True, "is_readable": True},
+        {"doc_type": "personal_statement", "filename": "personal_statement.pdf", "exists": True, "is_readable": True},
+        {"doc_type": "recommendation_letter_1", "filename": "recommendation_letter_1.pdf", "exists": True, "is_readable": True},
+        {"doc_type": "recommendation_letter_2", "filename": "recommendation_letter_2.pdf", "exists": True, "is_readable": True},
+    ]
+    prior_app = Applicant(
+        app_id="APP_042",
+        first_name="Elena",
+        last_name="Rostova",
+        date_of_birth="2008-03-15",
+        email_address="elena.r@example.com",
+        name_of_hs="Northwest Academy",
+        intended_major="Physics",
+        admission_year=2026,
+        admission_term="Fall",
+        status="INCOMPLETE",
+        routing_destination="Applicant Packet Update",
+        documents=prior_docs,
+    )
+    storage.stage_applicant(prior_app.to_dict())
+
+    # 2. Create tonight's batch directory
+    # CSV has ONLY APP_001 (APP_042 is NOT in the CSV)
+    batch_dir = tmp_path / "delta_batch"
+    batch_dir.mkdir()
+    csv_file = batch_dir / "applicant_data.csv"
+    csv_file.write_text(
+        "App_ID,First_Name,Last_Name,Date_Of_Birth,Email_Address,Name_of_HS,Intended_Major,Admission_Year,Admission_Term\n"
+        "APP_001,John,Doe,2007-01-01,john@example.com,City High,CS,2026,Fall\n",
+        encoding="utf-8",
+    )
+    # APP_001 docs
+    app_001_dir = batch_dir / "APP_001"
+    app_001_dir.mkdir()
+    (app_001_dir / "transcript.pdf").write_bytes(PDF_MAGIC_BYTES + b"1.4\n" + b"A" * 2000)
+
+    # Late-arriving transcript for APP_042 (existing in DB only)
+    late_doc = batch_dir / "APP_042_transcript.pdf"
+    late_doc.write_bytes(PDF_MAGIC_BYTES + b"1.4\n" + b"T" * 2000)
+
+    # Truly unmapped document for APP_999 (not in CSV, not in DB -> Case 3)
+    orphan_doc = batch_dir / "APP_999_portfolio.pdf"
+    orphan_doc.write_bytes(PDF_MAGIC_BYTES + b"1.4\n" + b"O" * 2000)
+
+    # 3. Run two-pass batch ingestion
+    ingestor = BatchIngestor(config_path=config_file, storage_manager=storage)
+    result = ingestor.ingest_batch(batch_dir)
+
+    # Verify APP_042 was added to staged_applicants / result.applications
+    app_ids = [a.applicant_id for a in result.applications]
+    assert "APP_042" in app_ids
+    assert "APP_001" in app_ids
+
+    # Verify APP_042 was added to affected_ids
+    assert "APP_042" in result.affected_ids
+    assert "APP_042" in ingestor.affected_ids
+
+    # Verify late-arriving document was attached to APP_042's documents JSONB array
+    db_updated = storage.get_applicant("APP_042")
+    doc_filenames = [d["filename"] for d in db_updated.documents]
+    assert "APP_042_transcript.pdf" in doc_filenames
+    assert len(db_updated.documents) == 5  # 4 prior + 1 new
+
+    # Verify manifest gate was re-evaluated and promoted APP_042 to READY_FOR_REVIEW
+    assert db_updated.status == "READY_FOR_REVIEW"
+    assert db_updated.routing_destination == "READY_FOR_REVIEW"
+
+    # Verify APP_999 was routed to orphans (Case 3) and APP_042 was NOT
+    orphan_app_ids = [o.get("detected_app_id") for o in result.orphans]
+    assert "APP_999" in orphan_app_ids
+    assert "APP_042" not in orphan_app_ids

@@ -203,6 +203,7 @@ class BatchIngestionResult:
     orphans: List[Dict[str, Any]] = field(default_factory=list)
     total_processed: int = 0
     csv_path: Optional[Path] = None
+    affected_ids: List[str] = field(default_factory=list)
 
     def __iter__(self) -> Iterator[IngestedApplication]:
         return iter(self.applications)
@@ -259,6 +260,7 @@ class BatchIngestor:
         config_path: Optional[Path] = None,
         storage_manager: Optional[StorageManager] = None,
     ):
+        self.config_path = config_path
         self.policies = load_policies(config_path)
         self.file_constraints = self.policies.get("file_constraints", {})
         self.allowed_mimes = set(self.file_constraints.get("allowed_mime_types", ["application/pdf"]))
@@ -266,6 +268,71 @@ class BatchIngestor:
         self.min_size = self.file_constraints.get("min_file_size_bytes", MIN_FILE_SIZE_BYTES)
         self.max_size = self.file_constraints.get("max_file_size_bytes", MAX_FILE_SIZE_BYTES)
         self.storage = storage_manager or StorageManager()
+        self.affected_ids: List[str] = []
+        self._gate = None
+
+    @property
+    def gate(self):
+        """Lazily load ManifestValidationGate to avoid circular import."""
+        if self._gate is None:
+            from validation.manifest_gate import ManifestValidationGate
+            self._gate = ManifestValidationGate(config_path=self.config_path)
+        return self._gate
+
+    def _db_applicant_to_ingested(self, db_app: Any) -> IngestedApplication:
+        """Convert a database Applicant record to an IngestedApplication instance."""
+        existing_docs: List[IngestedDocument] = []
+        raw_docs = getattr(db_app, "documents", []) or []
+        for d in raw_docs:
+            if isinstance(d, dict):
+                existing_docs.append(
+                    IngestedDocument(
+                        filename=d.get("filename", "document.pdf"),
+                        file_path=Path(d.get("storage_path") or d.get("filename") or "document.pdf"),
+                        doc_type=d.get("doc_type", "other"),
+                        file_size_bytes=d.get("file_size", d.get("file_size_bytes", 1024)),
+                        mime_type=d.get("mime_type", "application/pdf"),
+                        sha256_checksum=d.get("sha256", d.get("sha256_checksum", "0" * 64)),
+                        applicant_id=db_app.app_id,
+                        minio_key=d.get("minio_key", ""),
+                        exists=d.get("exists", True),
+                        is_readable=d.get("is_readable", True),
+                        error_message=d.get("error_message"),
+                    )
+                )
+            elif isinstance(d, IngestedDocument):
+                existing_docs.append(d)
+
+        metadata = {
+            "App_ID": db_app.app_id,
+            "First_Name": db_app.first_name,
+            "Last_Name": db_app.last_name,
+            "Date_Of_Birth": db_app.date_of_birth,
+            "Email_Address": db_app.email_address,
+            "Name_of_HS": db_app.name_of_hs,
+            "Intended_Major": db_app.intended_major,
+            "Admission_Year": db_app.admission_year,
+            "Admission_Term": db_app.admission_term,
+            "Superscored_SAT_Score": db_app.superscored_sat_score,
+            "Superscored_ACT_Score": db_app.superscored_act_score,
+            "sat_math": db_app.sat_math,
+            "sat_ebrw": db_app.sat_ebrw,
+            "act_composite": db_app.act_composite,
+        }
+
+        return IngestedApplication(
+            applicant_id=db_app.app_id,
+            metadata=metadata,
+            activities=list(db_app.activities or []),
+            awards=list(db_app.awards or []),
+            ap_test_scores=list(db_app.ap_test_scores or []),
+            hooks=list(db_app.hooks or []),
+            subfolder_path=None,
+            documents=existing_docs,
+            trust_boundary_errors=[],
+            status=db_app.status,
+            routing_destination=db_app.routing_destination,
+        )
 
     def classify_document(self, filename: str) -> str:
         """Deterministically classify document into its canonical policy type."""
@@ -421,13 +488,18 @@ class BatchIngestor:
         staged_applicants: Dict[str, IngestedApplication],
     ) -> Tuple[List[IngestedApplication], List[Dict[str, Any]]]:
         """Pass 2: Traverse all documents across the batch directory.
-        - If document maps to a known app_id: check format/magic bytes (%PDF-),
-          compute SHA-256, upload to MinIO bucket ('admissions-raw-docs'), and attach
-          document metadata to the applicant's documents JSONB array.
-        - If document has no matching application record (orphan / late-coming LOR):
-          save to the OrphanDocument table and upload to MinIO under 'orphans/'.
+        - Case 1: If document maps to an in-memory staged applicant from Pass 1,
+          upload to MinIO ('admissions-raw-docs') and attach metadata to documents JSONB array.
+        - Case 2: If document's extracted app_id is NOT in staged_applicants, perform a
+          quick database lookup against PostgreSQL (Applicant table).
+          If record exists in DB (from a prior night's batch):
+            1. Add app_id to staged_applicants and affected_ids.
+            2. Attach document metadata to the applicant's documents JSONB array (and upload to MinIO).
+            3. Trigger re-evaluation of the manifest gate for that applicant.
+        - Case 3: If not found in DB either, route to the OrphanDocument table and upload to MinIO under 'orphans/'.
         """
         orphans_list: List[Dict[str, Any]] = []
+        affected_ids: List[str] = []
 
         # Find all documents: in applicant subfolders and at root of input_dir
         candidate_files: List[Tuple[Optional[str], Path]] = []
@@ -435,14 +507,14 @@ class BatchIngestor:
         for item in sorted(input_dir.iterdir()):
             if item.is_dir() and not item.name.startswith("."):
                 # Subdirectory
-                subfolder_id = item.name
+                subfolder_id = item.name.replace("-", "_")
                 for doc_file in sorted(item.iterdir()):
                     if doc_file.is_file() and not doc_file.name.startswith(".") and not doc_file.name.endswith(".csv"):
                         candidate_files.append((subfolder_id, doc_file))
             elif item.is_file() and not item.name.startswith(".") and not item.name.endswith(".csv"):
                 # Loose file at root level
-                match = re.match(r"(APP[_-]\d+)", item.name, re.IGNORECASE)
-                detected_id = match.group(1).upper() if match else None
+                match = re.search(r"(APP[_-]\d+)", item.name, re.IGNORECASE)
+                detected_id = match.group(1).upper().replace("-", "_") if match else None
                 candidate_files.append((detected_id, item))
 
         # Build alias map for staged applicants
@@ -454,17 +526,19 @@ class BatchIngestor:
 
         for detected_id, doc_path in candidate_files:
             matched_app_id = applicant_alias_map.get(detected_id) if detected_id else None
+            if not matched_app_id and detected_id:
+                matched_app_id = detected_id
+
             size = doc_path.stat().st_size if doc_path.exists() else 0
             exists, readable, mime, err = self.verify_file_trust_boundary(doc_path, matched_app_id or "ORPHAN")
             checksum = compute_sha256(doc_path) if exists else ""
             doc_type = self.classify_document(doc_path.name)
 
             if matched_app_id and matched_app_id in staged_applicants:
-                # MATCHED: Known Applicant
+                # CASE 1: MATCHED with staged applicant from Pass 1
                 target_app = staged_applicants[matched_app_id]
                 minio_key = f"{matched_app_id}/{doc_path.name}"
 
-                # Upload to MinIO bucket ('admissions-raw-docs')
                 self.storage.upload_file(
                     file_path=doc_path,
                     minio_key=minio_key,
@@ -487,12 +561,80 @@ class BatchIngestor:
                 target_app.documents.append(doc_item)
                 if err:
                     target_app.trust_boundary_errors.append(err)
-            else:
-                # UNMATCHED: Orphan Document
-                minio_key = f"orphans/{doc_path.name}"
-                logger.warning("Orphan document detected: %s (detected_id: %s)", doc_path.name, detected_id)
 
-                # Upload to MinIO under 'orphans/'
+            elif matched_app_id and (
+                self.storage.get_applicant(matched_app_id)
+                or self.storage.get_applicant(matched_app_id.replace("-", "_"))
+                or self.storage.get_applicant(matched_app_id.replace("_", "-"))
+            ):
+                # CASE 2: NOT in staged_applicants from Pass 1, but exists in DB from prior night's batch
+                db_app = (
+                    self.storage.get_applicant(matched_app_id)
+                    or self.storage.get_applicant(matched_app_id.replace("-", "_"))
+                    or self.storage.get_applicant(matched_app_id.replace("_", "-"))
+                )
+                canonical_id = db_app.app_id
+                logger.info("Case 2: Found applicant %s in database from prior batch", canonical_id)
+
+                # 1. Add app_id to staged_app_ids and affected_ids
+                target_app = self._db_applicant_to_ingested(db_app)
+                staged_applicants[canonical_id] = target_app
+                applicant_alias_map[canonical_id] = canonical_id
+                applicant_alias_map[canonical_id.replace("-", "_")] = canonical_id
+                applicant_alias_map[canonical_id.replace("_", "-")] = canonical_id
+
+                if canonical_id not in affected_ids:
+                    affected_ids.append(canonical_id)
+
+                # 2. Attach document metadata to the applicant's documents JSONB array & upload to MinIO
+                minio_key = f"{canonical_id}/{doc_path.name}"
+                self.storage.upload_file(
+                    file_path=doc_path,
+                    minio_key=minio_key,
+                    bucket_name="admissions-raw-docs",
+                )
+
+                doc_item = IngestedDocument(
+                    filename=doc_path.name,
+                    file_path=doc_path,
+                    doc_type=doc_type,
+                    file_size_bytes=size,
+                    mime_type=mime,
+                    sha256_checksum=checksum,
+                    applicant_id=canonical_id,
+                    minio_key=minio_key,
+                    exists=exists,
+                    is_readable=readable,
+                    error_message=err,
+                )
+                target_app.documents.append(doc_item)
+                if err:
+                    target_app.trust_boundary_errors.append(err)
+
+                # 3. Trigger re-evaluation of the manifest gate for that applicant
+                routed = self.gate.evaluate_applicant(target_app)
+                target_app.status = routed.status.value
+                target_app.routing_destination = routed.routing_destination
+
+                doc_dicts = [d.to_metadata_dict() for d in target_app.documents]
+                self.storage.update_applicant_status(
+                    app_id=canonical_id,
+                    status=routed.status.value,
+                    routing_destination=routed.routing_destination,
+                    documents=doc_dicts,
+                )
+                logger.info(
+                    "Case 2: Re-evaluated manifest gate for %s: status=%s, destination=%s",
+                    canonical_id,
+                    routed.status.value,
+                    routed.routing_destination,
+                )
+
+            else:
+                # CASE 3: UNMATCHED in CSV and DB -> Orphan Document
+                minio_key = f"orphans/{doc_path.name}"
+                logger.warning("Case 3: Orphan document detected: %s (detected_id: %s)", doc_path.name, detected_id)
+
                 self.storage.upload_file(
                     file_path=doc_path,
                     minio_key=minio_key,
@@ -519,18 +661,25 @@ class BatchIngestor:
                 documents=[d.to_metadata_dict() for d in app.documents],
             )
 
+        self.affected_ids = affected_ids
         logger.info(
-            "Pass 2 Complete: Processed %d documents across %d applicants (%d orphans recorded)",
+            "Pass 2 Complete: Processed %d documents across %d applicants (%d orphans, %d affected from DB)",
             len(candidate_files),
             len(staged_applicants),
             len(orphans_list),
+            len(affected_ids),
         )
         return list(staged_applicants.values()), orphans_list
 
     def ingest_batch(self, input_dir: Path) -> BatchIngestionResult:
         """Execute full two-pass batch ingestion on input_dir."""
         input_path = Path(input_dir)
-        csv_path, staged_applicants = self.pass_1_parse_and_stage_csv(input_path)
+        try:
+            csv_path, staged_applicants = self.pass_1_parse_and_stage_csv(input_path)
+        except FileNotFoundError:
+            csv_path = None
+            staged_applicants = {}
+
         apps, orphans = self.pass_2_traverse_and_link_documents(input_path, staged_applicants)
 
         return BatchIngestionResult(
@@ -538,4 +687,5 @@ class BatchIngestor:
             orphans=orphans,
             total_processed=len(apps),
             csv_path=csv_path,
+            affected_ids=list(self.affected_ids),
         )
