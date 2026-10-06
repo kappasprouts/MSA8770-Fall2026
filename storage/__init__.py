@@ -9,6 +9,7 @@ from storage.models import (
     AuditLog,
     DocumentRecord,
     OrphanDocument,
+    OrphanTestScore,
 )
 from storage.storage_manager import StorageManager
 
@@ -21,6 +22,7 @@ __all__ = [
     "Application",
     "ApplicationRecord",
     "OrphanDocument",
+    "OrphanTestScore",
     "DocumentRecord",
     "AuditLog",
     "MinIOClient",

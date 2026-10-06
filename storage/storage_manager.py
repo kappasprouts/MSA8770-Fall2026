@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 import urllib.parse
 
-from sqlalchemy import create_engine, select, text
+from sqlalchemy import create_engine, func, select, text
 from sqlalchemy.orm import sessionmaker, Session
 
 try:
@@ -24,7 +24,13 @@ except ImportError:
     MINIO_SDK_AVAILABLE = False
 
 from storage.database import Base
-from storage.models import Applicant, OrphanDocument, DocumentRecord, AuditLog
+from storage.models import (
+    Applicant,
+    AuditLog,
+    DocumentRecord,
+    OrphanDocument,
+    OrphanTestScore,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +72,7 @@ class StorageManager:
         # In-memory stores for dry-run mode
         self.dry_run_applicants: Dict[str, Applicant] = {}
         self.dry_run_orphans: List[OrphanDocument] = []
+        self.dry_run_orphan_scores: List[OrphanTestScore] = []
 
         # Connect to Database
         self.db_available = False
@@ -368,3 +375,185 @@ class StorageManager:
             finally:
                 session.close()
         return list(self.dry_run_orphans)
+
+    def save_orphan_score(self, orphan_data: Dict[str, Any]) -> OrphanTestScore:
+        """Record an orphan test score received without a matching applicant row."""
+        if self.db_available and self.SessionLocal:
+            session: Session = self.SessionLocal()
+            try:
+                orphan = OrphanTestScore(**orphan_data)
+                session.add(orphan)
+                session.commit()
+                session.refresh(orphan)
+                return orphan
+            except Exception as e:
+                session.rollback()
+                logger.warning("Database save_orphan_score failed (%s). Using dry-run cache.", e)
+            finally:
+                session.close()
+
+        # In-memory dry run
+        data = dict(orphan_data)
+        if "id" not in data or data["id"] is None:
+            data["id"] = len(self.dry_run_orphan_scores) + 1
+        orphan = OrphanTestScore(**data)
+        self.dry_run_orphan_scores.append(orphan)
+        return orphan
+
+    def get_all_orphan_scores(self) -> List[OrphanTestScore]:
+        """Retrieve all recorded orphan test scores."""
+        if self.db_available and self.SessionLocal:
+            session: Session = self.SessionLocal()
+            try:
+                return list(session.execute(select(OrphanTestScore)).scalars().all())
+            finally:
+                session.close()
+        return list(self.dry_run_orphan_scores)
+
+    def find_applicant_by_email_or_dob(
+        self,
+        email: Optional[str] = None,
+        dob: Optional[str] = None,
+    ) -> Optional[Applicant]:
+        """Match applicant by email (case-insensitive) or date_of_birth fallback."""
+        clean_email = email.strip().lower() if email and str(email).strip() else None
+        clean_dob = dob.strip() if dob and str(dob).strip() else None
+
+        def _norm_dob(dob_str: Optional[str]) -> Optional[str]:
+            if not dob_str:
+                return None
+            s = str(dob_str).strip()
+            for fmt in ("%Y-%m-%d", "%m/%d/%Y", "%Y/%m/%d", "%m-%d-%Y", "%d-%m-%Y"):
+                try:
+                    return datetime.strptime(s, fmt).strftime("%Y-%m-%d")
+                except ValueError:
+                    continue
+            return s
+
+        norm_dob = _norm_dob(clean_dob) if clean_dob else None
+
+        if self.db_available and self.SessionLocal:
+            session: Session = self.SessionLocal()
+            try:
+                if clean_email:
+                    app = session.execute(
+                        select(Applicant).where(func.lower(Applicant.email_address) == clean_email)
+                    ).scalar_one_or_none()
+                    if app:
+                        return app
+
+                if clean_dob:
+                    app = session.execute(
+                        select(Applicant).where(Applicant.date_of_birth == clean_dob)
+                    ).scalars().first()
+                    if app:
+                        return app
+
+                    if norm_dob:
+                        all_apps = session.execute(
+                            select(Applicant).where(Applicant.date_of_birth.is_not(None))
+                        ).scalars().all()
+                        for a in all_apps:
+                            if _norm_dob(a.date_of_birth) == norm_dob:
+                                return a
+                return None
+            finally:
+                session.close()
+
+        # Dry-run in-memory matching
+        if clean_email:
+            for app in self.dry_run_applicants.values():
+                if app.email_address and app.email_address.strip().lower() == clean_email:
+                    return app
+
+        if clean_dob:
+            for app in self.dry_run_applicants.values():
+                if app.date_of_birth and (
+                    app.date_of_birth.strip() == clean_dob
+                    or (norm_dob and _norm_dob(app.date_of_birth) == norm_dob)
+                ):
+                    return app
+
+        return None
+
+    def update_applicant_scores(
+        self,
+        app_id: str,
+        sat_math: Optional[int] = None,
+        sat_ebrw: Optional[int] = None,
+        act_composite: Optional[int] = None,
+        ap_test_scores: Optional[List[Any]] = None,
+        act_sections: Optional[Dict[str, Optional[int]]] = None,
+        superscored_sat: Optional[float] = None,
+        superscored_act: Optional[float] = None,
+    ) -> Optional[Applicant]:
+        """Update test score attributes for an applicant in DB or in-memory dry-run store."""
+        if self.db_available and self.SessionLocal:
+            session: Session = self.SessionLocal()
+            try:
+                app = session.execute(select(Applicant).where(Applicant.app_id == app_id)).scalar_one_or_none()
+                if app:
+                    if sat_math is not None:
+                        app.sat_math = sat_math
+                    if sat_ebrw is not None:
+                        app.sat_ebrw = sat_ebrw
+                    if superscored_sat is not None:
+                        app.superscored_sat_score = superscored_sat
+                    elif sat_math is not None and sat_ebrw is not None:
+                        app.superscored_sat_score = float(sat_math + sat_ebrw)
+
+                    if act_composite is not None:
+                        app.act_composite = act_composite
+                        if superscored_act is not None:
+                            app.superscored_act_score = superscored_act
+                        elif app.superscored_act_score is None or float(act_composite) > app.superscored_act_score:
+                            app.superscored_act_score = float(act_composite)
+
+                    if act_sections:
+                        for sec_k, sec_v in act_sections.items():
+                            if hasattr(app, sec_k) and sec_v is not None:
+                                setattr(app, sec_k, sec_v)
+
+                    if ap_test_scores is not None:
+                        app.ap_test_scores = list(ap_test_scores)
+
+                    app.updated_at = datetime.now(timezone.utc)
+                    session.commit()
+                    session.refresh(app)
+                    return app
+            except Exception as e:
+                session.rollback()
+                logger.warning("Failed to update applicant scores for %s: %s", app_id, e)
+            finally:
+                session.close()
+
+        if app_id in self.dry_run_applicants:
+            cached = self.dry_run_applicants[app_id]
+            if sat_math is not None:
+                cached.sat_math = sat_math
+            if sat_ebrw is not None:
+                cached.sat_ebrw = sat_ebrw
+            if superscored_sat is not None:
+                cached.superscored_sat_score = superscored_sat
+            elif sat_math is not None and sat_ebrw is not None:
+                cached.superscored_sat_score = float(sat_math + sat_ebrw)
+
+            if act_composite is not None:
+                cached.act_composite = act_composite
+                if superscored_act is not None:
+                    cached.superscored_act_score = superscored_act
+                elif cached.superscored_act_score is None or float(act_composite) > cached.superscored_act_score:
+                    cached.superscored_act_score = float(act_composite)
+
+            if act_sections:
+                for sec_k, sec_v in act_sections.items():
+                    if hasattr(cached, sec_k) and sec_v is not None:
+                        setattr(cached, sec_k, sec_v)
+
+            if ap_test_scores is not None:
+                cached.ap_test_scores = list(ap_test_scores)
+
+            cached.updated_at = datetime.now(timezone.utc)
+            return cached
+
+        return None

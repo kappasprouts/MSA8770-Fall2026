@@ -216,6 +216,22 @@ class ManifestValidationGate:
                 if "recommendation_letter" in doc.doc_type or "lor" in doc.doc_type:
                     lor_docs.append(doc)
 
+        # Recognize delta-ingested test scores in metadata as satisfying test score documents
+        has_sat = bool(
+            app.metadata.get("sat_math")
+            or app.metadata.get("sat_ebrw")
+            or app.metadata.get("Superscored_SAT_Score")
+        )
+        has_act = bool(
+            app.metadata.get("act_composite")
+            or app.metadata.get("Superscored_ACT_Score")
+        )
+        if has_sat or has_act:
+            present_types.add("standardized_test_score")
+
+        if getattr(app, "ap_test_scores", None) or app.metadata.get("ap_test_scores"):
+            present_types.add("advanced_coursework_and_ap_scores")
+
         for req_doc in self.required_docs:
             c_req = self.CANONICAL_ALIASES.get(req_doc, req_doc)
 

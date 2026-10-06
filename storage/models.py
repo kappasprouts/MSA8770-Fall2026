@@ -70,10 +70,15 @@ class Applicant(Base):
     rank = Column(String(64), nullable=True)
 
     superscored_sat_score = Column(Float, nullable=True)
-    sat_math = Column(Float, nullable=True)
-    sat_ebrw = Column(Float, nullable=True)
+    sat_math = Column(Integer, nullable=True)
+    sat_ebrw = Column(Integer, nullable=True)
     superscored_act_score = Column(Float, nullable=True)
-    act_composite = Column(Float, nullable=True)
+    act_composite = Column(Integer, nullable=True)
+    act_english = Column(Integer, nullable=True)
+    act_math = Column(Integer, nullable=True)
+    act_reading = Column(Integer, nullable=True)
+    act_science = Column(Integer, nullable=True)
+    act_writing = Column(Integer, nullable=True)
 
     total_aps = Column(Float, nullable=True)
     total_ibs = Column(Float, nullable=True)
@@ -139,6 +144,11 @@ class Applicant(Base):
             "sat_ebrw": self.sat_ebrw,
             "superscored_act_score": self.superscored_act_score,
             "act_composite": self.act_composite,
+            "act_english": self.act_english,
+            "act_math": self.act_math,
+            "act_reading": self.act_reading,
+            "act_science": self.act_science,
+            "act_writing": self.act_writing,
             "total_aps": self.total_aps,
             "total_ibs": self.total_ibs,
             "activities": self.activities or [],
@@ -156,6 +166,32 @@ class Applicant(Base):
 # Backwards compatibility aliases
 Application = Applicant
 ApplicationRecord = Applicant
+
+
+class OrphanTestScore(Base):
+    """Archival record of external test scores (College Board, ACT) received without a matching applicant."""
+
+    __tablename__ = "orphan_test_scores"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    source = Column(String(64), nullable=False)  # 'COLLEGE_BOARD' or 'ACT'
+    identifier = Column(String(256), nullable=False, index=True)  # email, DOB, or external student ID
+    payload = Column(JsonType, nullable=False, default=dict)
+    created_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize orphan test score record to dictionary."""
+        return {
+            "id": self.id,
+            "source": self.source,
+            "identifier": self.identifier,
+            "payload": self.payload,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
 
 
 class OrphanDocument(Base):

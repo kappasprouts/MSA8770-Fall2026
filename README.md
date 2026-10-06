@@ -272,6 +272,20 @@ Interactive API documentation will be available at:
 * Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
 * Health Check: [http://localhost:8000/health](http://localhost:8000/health)
 
+### 5. Delta Test Score Ingestion (College Board & ACT)
+Asynchronous and CLI delta ingestors link external SAT/AP and ACT score reports to existing `ApplicationRecord`s in PostgreSQL or in-memory dry-run mode:
+```bash
+# Ingest College Board SAT subscores and AP courses
+python3 run_score_ingest.py --source college_board --file path/to/college_board_scores.csv
+
+# Ingest ACT composite and section scores
+python3 run_score_ingest.py --source act --file path/to/act_scores.csv
+```
+* **Matching**: Case-insensitive matching by email with fallback to Date of Birth (`YYYY-MM-DD` or `MM/DD/YYYY`).
+* **Deduplication**: Appends AP scores to `ap_test_scores` without duplicating subject/score pairs.
+* **Orphan Handling**: Unmatched student score rows are archived in the `OrphanTestScore` table.
+* **Manifest Gate Re-triggering**: Automatically re-runs `ManifestValidationGate` on updated applicants. If an applicant was previously `INCOMPLETE` and is now satisfied, their status is promoted to `READY_FOR_REVIEW` and appended to `affected_ids.json`.
+
 ---
 
 ## Detailed Documentation Directory

@@ -10,6 +10,11 @@ from ingestion.scheduler import (
     shutdown_scheduler,
     start_scheduler,
 )
+from ingestion.test_score_ingest import (
+    ScoreIngestResult,
+    TestScoreIngestor,
+    re_evaluate_applicant,
+)
 
 __all__ = [
     "app",
@@ -22,4 +27,7 @@ __all__ = [
     "shutdown_scheduler",
     "run_overnight_batch",
     "get_latest_batch_summary",
+    "TestScoreIngestor",
+    "ScoreIngestResult",
+    "re_evaluate_applicant",
 ]
