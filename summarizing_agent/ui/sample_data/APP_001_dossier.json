@@ -1,0 +1,461 @@
+{
+  "run": {
+    "app_id": "APP_001",
+    "documents_sent": {
+      "application_form.pdf": [
+        1
+      ],
+      "transcript.pdf": [
+        1,
+        2
+      ],
+      "recommendation_letter_1.pdf": [
+        1
+      ],
+      "recommendation_letter_2.pdf": [
+        1
+      ],
+      "standardized_test_score.pdf": [
+        1
+      ],
+      "activities_and_awards.pdf": [
+        1,
+        2
+      ],
+      "advanced_coursework_and_ap_scores.pdf": [
+        1
+      ],
+      "university_supplement.pdf": [
+        1
+      ]
+    },
+    "documents_withheld": {
+      "common_app_application.pdf": "restricted demographic/contact data",
+      "personal_statement.pdf": "POL-ESSAY-01 personal statement (humans only)"
+    },
+    "policies_retrieved": [
+      {
+        "policy_id": "POL-DATE-01",
+        "title": "Date Consistency",
+        "similarity": 0.871,
+        "query": "issue dates and graduation dates must be consistent"
+      },
+      {
+        "policy_id": "POL-ESSAY-01",
+        "title": "Personal Statement Human Review",
+        "similarity": null,
+        "query": "always included"
+      },
+      {
+        "policy_id": "POL-FT-01",
+        "title": "First-Year Core Materials",
+        "similarity": 0.769,
+        "query": "first-year required application materials transcript recommendation letters"
+      },
+      {
+        "policy_id": "POL-HUMAN-01",
+        "title": "Human Admissions Authority",
+        "similarity": null,
+        "query": "always included"
+      },
+      {
+        "policy_id": "POL-ID-01",
+        "title": "Applicant and Document Matching",
+        "similarity": 0.85,
+        "query": "documents must match the applicant ID"
+      },
+      {
+        "policy_id": "POL-LOR-01",
+        "title": "Letters of Recommendation Requirement",
+        "similarity": 0.775,
+        "query": "first-year required application materials transcript recommendation letters"
+      },
+      {
+        "policy_id": "POL-READ-01",
+        "title": "Unreadable Attachments",
+        "similarity": 0.785,
+        "query": "unreadable corrupted or obscured documents"
+      },
+      {
+        "policy_id": "POL-TEST-01",
+        "title": "Test-Optional Review",
+        "similarity": 0.825,
+        "query": "standardized test scores SAT ACT optional"
+      }
+    ],
+    "attempts": 6,
+    "runtime_seconds": 58.5,
+    "validation": {
+      "passed": false,
+      "failed_sections": {
+        "academic": [
+          "output: quote \"Self-reported GPA 3.86\" is not on transcript.pdf page 2."
+        ]
+      },
+      "load_problems": [],
+      "calls": [
+        {
+          "section": "academic",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 2112,
+            "output_tokens": 980,
+            "seconds": 14.2
+          },
+          "errors": [
+            "output: quote \"Fall 2026 entry term\" is not on transcript.pdf page 2."
+          ]
+        },
+        {
+          "section": "academic",
+          "attempt": 2,
+          "usage": {
+            "prompt_tokens": 2163,
+            "output_tokens": 1066,
+            "seconds": 9.4
+          },
+          "errors": [
+            "output: quote \"Self-reported GPA 3.86\" is not on transcript.pdf page 2."
+          ]
+        },
+        {
+          "section": "engagement",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 1068,
+            "output_tokens": 1066,
+            "seconds": 10.2
+          },
+          "errors": [
+            "output: quote \"Team member and peer mentor; helped newer members learn procedures and meet dead\" is not on activities_and_awards.pdf page 2."
+          ]
+        },
+        {
+          "section": "engagement",
+          "attempt": 2,
+          "usage": {
+            "prompt_tokens": 1129,
+            "output_tokens": 1041,
+            "seconds": 9.9
+          },
+          "errors": []
+        },
+        {
+          "section": "recommendation",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 1006,
+            "output_tokens": 491,
+            "seconds": 5.6
+          },
+          "errors": []
+        },
+        {
+          "section": "supplement",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 654,
+            "output_tokens": 269,
+            "seconds": 3.6
+          },
+          "errors": []
+        }
+      ]
+    },
+    "run_status": "HUMAN_REVIEW_AI_FAILED",
+    "failed_output": {
+      "completed_sections": {
+        "engagement": {
+          "activities": [
+            {
+              "activity": "Environmental club volunteer",
+              "role_and_description": "Participant and project contributor; organized weekly tasks and documented results. This experience strengthened collaboration, follow-through, and interest in Studio Art, illustration.",
+              "years": "9-12",
+              "hours_per_week": "2"
+            },
+            {
+              "activity": "Track and field athlete",
+              "role_and_description": "Team member and peer mentor; helped newer members learn procedures and meet deadlines. This experience strengthened collaboration, follow-through, and interest in Studio Art, illustration.",
+              "years": "9-12",
+              "hours_per_week": "3"
+            },
+            {
+              "activity": "Varsity soccer player",
+              "role_and_description": "Student coordinator; planned a community-facing event and gathered feedback. This experience strengthened collaboration, follow-through, and interest in Studio Art, illustration.",
+              "years": "9-12",
+              "hours_per_week": "4"
+            },
+            {
+              "activity": "School club member",
+              "role_and_description": "Volunteer contributor; used clear communication to solve practical problems. This experience strengthened collaboration, follow-through, and interest in Studio Art, illustration.",
+              "years": "10-12",
+              "hours_per_week": "5"
+            },
+            {
+              "activity": "Science club member",
+              "role_and_description": "Participant and project contributor; organized weekly tasks and documented results. This experience strengthened collaboration, follow-through, and interest in Studio Art, illustration.",
+              "years": "10-12",
+              "hours_per_week": "6"
+            },
+            {
+              "activity": "Animal shelter volunteer",
+              "role_and_description": "Team member and peer mentor; helped newer members learn procedures and meet deadlines. This experience strengthened collaboration, follow-through, and interest in Studio Art, illustration.",
+              "years": "10-12",
+              "hours_per_week": "7"
+            },
+            {
+              "activity": "Debate team member",
+              "role_and_description": "Student coordinator; planned a community-facing event and gathered feedback. This experience strengthened collaboration, follow-through, and interest in Studio Art, illustration.",
+              "years": "10-12",
+              "hours_per_week": "8"
+            },
+            {
+              "activity": "Chess club member",
+              "role_and_description": "Volunteer contributor; used clear communication to solve practical problems. This experience strengthened collaboration, follow-through, and interest in Studio Art, illustration.",
+              "years": "10-12",
+              "hours_per_week": "2"
+            },
+            {
+              "activity": "Robotics club member",
+              "role_and_description": "Participant and project contributor; organized weekly tasks and documented results. This experience strengthened collaboration, follow-through, and interest in Studio Art, illustration.",
+              "years": "10-12",
+              "hours_per_week": "3"
+            }
+          ],
+          "awards": [
+            "School academic honor roll",
+            "District art competition finalist",
+            "School mathematics award",
+            "School leadership award",
+            "Student journalism recognition"
+          ],
+          "summary": "Alex Bennett participated in a variety of activities including environmental club volunteering, track and field athletics, varsity soccer, school clubs, science and animal shelter volunteering, debate team coordination, chess club participation, and robotics club involvement. He also received the School academic honor roll, District art competition finalist, School mathematics award, School leadership award, and Student journalism recognition.",
+          "leadership_service_employment": "Alex participated in activities that involved collaboration, teamwork, peer mentoring, event planning, and communication skills. These experiences demonstrate his commitment to leadership roles and involvement in school-based organizations.",
+          "themes": [
+            "Collaboration",
+            "Teamwork",
+            "Community Engagement",
+            "Leadership Development"
+          ],
+          "assessment": "Alex's activities showcase a diverse range of interests and skills, including participation in sports, clubs, and leadership roles. His involvement demonstrates his commitment to extracurricular activities and willingness to contribute to the school community.",
+          "notes": [],
+          "evidence": [
+            {
+              "document": "activities_and_awards.pdf",
+              "page": 1,
+              "quote": "Team member and peer mentor; helped newer members learn procedures and meet dead"
+            }
+          ]
+        },
+        "recommendation": {
+          "recommenders": [
+            {
+              "name": "Avery James",
+              "role": "School Counselor",
+              "document": "recommendation_letter_1.pdf",
+              "relationship": "Knows the applicant for three years",
+              "key_observations": [
+                "I am pleased to recommend Alex Bennett.",
+                "Across that time, I have seen a thoughtful student who prepares carefully...",
+                "Alex helped the group move from broad intentions to a workable plan..."
+              ]
+            },
+            {
+              "name": "Dr. Morgan Lee",
+              "role": "Teacher",
+              "document": "recommendation_letter_2.pdf",
+              "relationship": "Knows the applicant for two semesters",
+              "key_observations": [
+                "I am pleased to recommend Alex Bennett.",
+                "Across that time, I have seen a thoughtful student who prepares carefully...",
+                "Alex helped the group move from broad intentions to a workable plan..."
+              ]
+            }
+          ],
+          "summary": "Both recommendation letters express positive opinions of Alex Bennett. The recommenders note that he is a thoughtful student who prepares carefully, responds constructively to feedback, and contributes to the learning of others. Both letters highlight his assistance with an environmental club project and his ability to work collaboratively.",
+          "common_themes": [
+            "Positive attitude and preparation",
+            "Collaborative spirit",
+            "Support for group projects"
+          ],
+          "strengths_identified": [
+            "Thoughtful student",
+            "Responsiveness to feedback",
+            "Collaboration skills"
+          ],
+          "notes": [],
+          "evidence": [
+            {
+              "document": "recommendation_letter_1.pdf",
+              "page": 1,
+              "quote": "I am pleased to recommend Alex Bennett."
+            },
+            {
+              "document": "recommendation_letter_1.pdf",
+              "page": 1,
+              "quote": "Across that time, I have seen a thoughtful student"
+            },
+            {
+              "document": "recommendation_letter_2.pdf",
+              "page": 1,
+              "quote": "I am pleased to recommend Alex Bennett."
+            },
+            {
+              "document": "recommendation_letter_2.pdf",
+              "page": 1,
+              "quote": "Across that time, I have seen a thoughtful student"
+            }
+          ]
+        },
+        "supplement": {
+          "responses": [
+            {
+              "prompt": "Why Riverview State University?",
+              "summary": "The applicant is interested in Riverview State University because of its project-based curriculum and the opportunity to learn from students with diverse experiences."
+            },
+            {
+              "prompt": "Community Contribution",
+              "summary": "The applicant gained experience through environmental club volunteer work, learning to proactively address group tasks and contribute to campus organizations."
+            },
+            {
+              "prompt": "Academic Curiosity",
+              "summary": "The applicant is interested in courses that combine analysis, writing, and collaborative problem solving, particularly those utilizing Studio Art and Illustration methods."
+            }
+          ],
+          "summary": "The applicant expresses interest in Riverview State University's project-based curriculum and a desire to learn from diverse students. They highlight experience with proactive community contribution through volunteer work and an academic curiosity for courses combining analysis, writing, and collaborative problem solving.",
+          "major_themes": [
+            "Project-Based Curriculum",
+            "Diverse Learning Environment",
+            "Community Involvement",
+            "Academic Interests (Studio Art, Problem Solving)"
+          ],
+          "notes": [],
+          "evidence": []
+        }
+      },
+      "failed_sections": {
+        "academic": {
+          "errors": [
+            "output: quote \"Self-reported GPA 3.86\" is not on transcript.pdf page 2."
+          ],
+          "output": {
+            "document_facts": {
+              "unweighted_gpa": null,
+              "weighted_gpa": null,
+              "class_rank": "Not reported",
+              "sat_superscore": null,
+              "act_superscore": null,
+              "intended_major": "Studio Art, Illustration",
+              "high_school": "Raleigh High School",
+              "expected_graduation": "June 2026"
+            },
+            "ap_courses_on_transcript": [
+              {
+                "course": "AP World History",
+                "grade_level": "11",
+                "final_grade": "3"
+              },
+              {
+                "course": "AP English Literature",
+                "grade_level": "11",
+                "final_grade": "4"
+              },
+              {
+                "course": "AP Human Geography",
+                "grade_level": "12",
+                "final_grade": "5"
+              },
+              {
+                "course": "AP Spanish Language",
+                "grade_level": "12",
+                "final_grade": "3"
+              },
+              {
+                "course": "AP Physics C Mechanics",
+                "grade_level": "12",
+                "final_grade": "4"
+              },
+              {
+                "course": "AP Microeconomics",
+                "grade_level": "12",
+                "final_grade": "5"
+              },
+              {
+                "course": "AP Computer Science A",
+                "grade_level": "12",
+                "final_grade": "3"
+              }
+            ],
+            "ap_exam_scores": [
+              {
+                "course": "AP World History",
+                "score": "3",
+                "date": "May 2025"
+              },
+              {
+                "course": "AP English Literature",
+                "score": "4",
+                "date": "May 2025"
+              },
+              {
+                "course": "AP Human Geography",
+                "score": "5",
+                "date": "May 2025"
+              },
+              {
+                "course": "AP Spanish Language",
+                "score": "3",
+                "date": "May 2025"
+              },
+              {
+                "course": "AP Physics C Mechanics",
+                "score": "4",
+                "date": "May 2025"
+              },
+              {
+                "course": "AP Microeconomics",
+                "score": "5",
+                "date": "May 2025"
+              },
+              {
+                "course": "AP Computer Science A",
+                "score": "3",
+                "date": "May 2025"
+              }
+            ],
+            "summary": "Alex Bennett is a first-year applicant for Fall 2026 entry to Riverview State University, intending to major in Studio Art, Illustration. He has a self-reported GPA of 3.86 and achieved high scores on several AP exams including AP World History, AP English Literature, AP Human Geography, AP Spanish Language, AP Physics C Mechanics, AP Microeconomics, and AP Computer Science A.",
+            "course_rigor": "The applicant's course record includes regular/honors level courses such as English I, Algebra I, Biology, World History, Spanish I, Visual Performing Arts Foundations, English II, Geometry, Chemistry, U.S. History, Spanish II, and Visual Performing Arts Seminar. He also took AP courses in World History, Literature, Human Geography, Spanish Language, Physics C Mechanics, Microeconomics, and Computer Science A.",
+            "performance_patterns": "The applicant has consistently achieved high grades (A- and above) throughout his high school career, particularly in the AP courses where he earned scores of 3, 4, and 5. His transcript shows a strong academic foundation with a GPA of 3.86.",
+            "strengths": [
+              "High GPA: 3.86",
+              "Strong AP performance: Multiple scores of 4 and 5 on AP exams",
+              "Wide range of coursework including both standard and advanced courses."
+            ],
+            "concerns": [
+              "No class rank reported"
+            ],
+            "notes": [],
+            "evidence": [
+              {
+                "document": "application_form.pdf",
+                "page": 1,
+                "quote": "Fall 2026 entry term"
+              },
+              {
+                "document": "transcript.pdf",
+                "page": 1,
+                "quote": "Application ID APP_001"
+              },
+              {
+                "document": "transcript.pdf",
+                "page": 2,
+                "quote": "Self-reported GPA 3.86"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "applicant_dossier": null
+}
