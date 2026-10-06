@@ -33,7 +33,7 @@ The Review Console is the central human-in-the-loop web interface through which 
 +-----------------------------------------------------------------------------------------------+
 | Riverview State University | Admissions Review Console            [Officer: Avery Adams (v)]   |
 +-----------------------------------------------------------------------------------------------+
-| Queue: [READY_FOR_REVIEW (14)]  | [COUNSELOR_REVIEW (2)]  | [INCOMPLETE (5)]                  |
+| Queue: [READY_FOR_REVIEW (14)]  | [AWAITING_MATERIALS (3)] | [INCOMPLETE (2)]                  |
 +-----------------------------------------------------------------------------------------------+
 | APPLICANT DOSSIER: Alex Bennett (APP-001)                    Application Type: First-Year     |
 | High School: Northfield Regional HS (HS-001)                 Intended Major: Studio Art       |
@@ -85,5 +85,5 @@ When an officer records a decision, the console issues a `POST` request to the b
   ```
 * **State Updates**:
   1. Updates `applications.status = 'DECIDED'`.
-  2. Updates `applications.routing_destination = 'ARCHIVE'`.
+  2. Records the archive action in the review console's workflow state.
   3. Appends an immutable record to `audit_logs` tracking officer ID, timestamp, and decision rationale.

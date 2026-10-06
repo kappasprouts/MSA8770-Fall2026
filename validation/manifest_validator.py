@@ -7,7 +7,7 @@ file size/MIME verification, and status/routing assignment based on YAML policy 
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from config import get_checklist, get_file_constraints, get_routing_rules, get_status_priority, load_policies
+from config import derive_routing_destination, get_checklist, get_file_constraints, get_routing_rules, get_status_priority, load_policies
 from validation.models import (
     DocumentManifestItem,
     PacketManifest,
@@ -26,7 +26,7 @@ class ManifestValidator:
         self.checklists = self.policies.get("checklists", {})
         self.status_priority = self.policies.get(
             "status_priority",
-            ["STOPPED", "COUNSELOR_REVIEW", "REPLACEMENT_REQUESTED", "INCOMPLETE", "READY_FOR_REVIEW"],
+            ["STOPPED", "COUNSELOR_REVIEW", "REPLACEMENT_REQUESTED", "INCOMPLETE", "AWAITING_MATERIALS", "READY_FOR_REVIEW"],
         )
         self.routing_rules = self.policies.get(
             "routing_rules",
@@ -178,7 +178,7 @@ class ManifestValidator:
                         policy_id=policy_ref,
                         rule="Required checklist documents must be present in submission packet",
                         severity="WARNING",
-                        status=ValidationStatus.INCOMPLETE,
+                        status=ValidationStatus.AWAITING_MATERIALS,
                         message=f"Required document '{req}' is missing from the packet.",
                         document_type=req,
                         details={"missing_document": req, "application_type": manifest.application_type},
@@ -219,16 +219,5 @@ class ManifestValidator:
         return ValidationStatus.READY_FOR_REVIEW
 
     def _determine_routing(self, status: ValidationStatus) -> str:
-        """Route packets per Architecture Section 4:
-
-        - Invalid applications route to Human Review
-        - Incomplete packets route to Applicant Packet Update
-        - Ready applications route to READY_FOR_REVIEW review queue
-        """
-        if status == ValidationStatus.READY_FOR_REVIEW:
-            return self.routing_rules.get("on_ready", "READY_FOR_REVIEW")
-        elif status == ValidationStatus.INCOMPLETE:
-            return self.routing_rules.get("on_incomplete", "Applicant Packet Update")
-        else:
-            # STOPPED, COUNSELOR_REVIEW, REPLACEMENT_REQUESTED are invalid/exception conditions
-            return self.routing_rules.get("on_invalid", "Human Review")
+        """Derive the queue from status using the current policy rules."""
+        return derive_routing_destination(status.value, self.routing_rules)

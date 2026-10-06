@@ -128,6 +128,7 @@ class BatchIngestionPipeline:
                 applicant_ids=set(applicant_ids) if applicant_ids is not None else None,
                 require_object_storage=self.require_object_storage,
                 require_postgresql=self.require_postgresql,
+                run_id=run_id,
             )
 
         results = [self._applicant_result(routed) for routed in gate_result.routed_applicants]
@@ -137,6 +138,7 @@ class BatchIngestionPipeline:
             "total_packets_discovered": gate_result.total_processed,
             "status_breakdown": {
                 "READY_FOR_REVIEW": gate_result.total_valid,
+                "AWAITING_MATERIALS": gate_result.total_awaiting_materials,
                 "INCOMPLETE": gate_result.total_incomplete,
                 "ERROR": gate_result.total_error,
             },
@@ -149,7 +151,12 @@ class BatchIngestionPipeline:
             "minio_available": bool(getattr(storage, "minio_available", False)),
             "object_storage_required": self.require_object_storage,
             "postgresql_required": self.require_postgresql,
-            "handoff_ready": self._storage_mode(storage) == "postgresql" and bool(getattr(storage, "minio_available", False)),
+            "handoff_ready": (
+                self.require_postgresql
+                and self.require_object_storage
+                and self._storage_mode(storage) == "postgresql"
+                and bool(getattr(storage, "minio_available", False))
+            ),
         }
 
     def process_packet(self, applicant_id: str) -> Optional[Dict[str, Any]]:

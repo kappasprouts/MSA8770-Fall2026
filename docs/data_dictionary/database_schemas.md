@@ -3,6 +3,18 @@
 **Database Engine**: PostgreSQL 15+ with `pgvector` extension  
 **ORM Implementation**: [`storage/models.py`](../../storage/models.py), [`storage/database.py`](../../storage/database.py)
 
+> This page records an earlier `applications` design. The active ingestion
+> table is `applicants` in `storage/models.py`. Its queue destination is derived
+> from `status` and is not a persisted column. Use the migration in
+> `storage/migrations/20261006_status_only_applicants.sql` for an existing
+> PostgreSQL database. `date_of_birth` is a PostgreSQL `DATE`; use
+> `storage/migrations/20261006_date_of_birth_date.sql` to convert existing text
+> values. If `audit_logs` was created from the earlier SQL example, run
+> `storage/migrations/20261006_audit_logs_created_at.sql` to align its timestamp
+> column with the active ORM. Run
+> `storage/migrations/20261006_gpa_numeric.sql` to convert existing GPA columns
+> to `NUMERIC(5,3)`.
+
 ---
 
 ## 1. Relational Tables Overview
@@ -18,7 +30,6 @@ erDiagram
         varchar(64) applicant_id UK
         varchar(32) application_type
         varchar(32) status "DEFAULT: READY_FOR_REVIEW"
-        varchar(64) routing_destination
         jsonb application_data
         jsonb ai_review
         jsonb validation_findings
@@ -48,7 +59,7 @@ erDiagram
         varchar(64) action
         varchar(64) actor
         jsonb details
-        timestamp timestamp
+        timestamp created_at
     }
 
     POLICY_EMBEDDINGS {
@@ -76,7 +87,6 @@ CREATE TABLE IF NOT EXISTS applications (
     applicant_id VARCHAR(64) UNIQUE NOT NULL,
     application_type VARCHAR(32) NOT NULL DEFAULT 'first_year',
     status VARCHAR(32) NOT NULL DEFAULT 'READY_FOR_REVIEW',
-    routing_destination VARCHAR(64) NOT NULL DEFAULT 'READY_FOR_REVIEW',
     application_data JSONB NOT NULL DEFAULT '{}'::jsonb,
     ai_review JSONB NOT NULL DEFAULT '{}'::jsonb,
     validation_findings JSONB NOT NULL DEFAULT '[]'::jsonb,
@@ -87,7 +97,6 @@ CREATE TABLE IF NOT EXISTS applications (
 
 CREATE INDEX IF NOT EXISTS idx_applications_applicant_id ON applications(applicant_id);
 CREATE INDEX IF NOT EXISTS idx_applications_status ON applications(status);
-CREATE INDEX IF NOT EXISTS idx_applications_routing ON applications(routing_destination);
 
 -- 2. Document Archival Records Table
 CREATE TABLE IF NOT EXISTS document_records (
@@ -116,7 +125,7 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     action VARCHAR(64) NOT NULL,
     actor VARCHAR(64) NOT NULL DEFAULT 'system_pipeline',
     details JSONB NOT NULL DEFAULT '{}'::jsonb,
-    timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_audit_applicant_id ON audit_logs(applicant_id);

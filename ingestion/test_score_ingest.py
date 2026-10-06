@@ -27,7 +27,6 @@ from ingestion.batch_ingest import IngestedApplication, IngestedDocument
 from storage.models import Applicant, OrphanTestScore
 from storage.storage_manager import StorageManager
 from validation.manifest_gate import (
-    GateRoutingDestination,
     GateStatus,
     ManifestValidationGate,
     RoutedApplicant,
@@ -187,7 +186,6 @@ def applicant_to_ingested(app: Applicant, default_bucket: str = "admissions-raw-
         hooks=list(app.hooks or []),
         documents=docs,
         status=app.status,
-        routing_destination=app.routing_destination,
     )
 
 
@@ -217,24 +215,34 @@ def re_evaluate_applicant(
     ingested_app = applicant_to_ingested(applicant)
     routed = validation_gate.evaluate_applicant(ingested_app)
 
-    # An incomplete packet can become ready after a score feed or a prior gate
+    # A non-ready packet can become ready after a score feed or a prior gate
     # evaluation that has since become stale.
-    if prev_status == "INCOMPLETE" and (
+    if prev_status in {"INCOMPLETE", "AWAITING_MATERIALS"} and (
         routed.status == GateStatus.READY_FOR_REVIEW or routed.status == GateStatus.VALID
     ):
         updated = storage.update_applicant_status(
             app_id=app_id,
             status=GateStatus.READY_FOR_REVIEW.value,
-            routing_destination=GateRoutingDestination.READY_FOR_REVIEW.value,
+            audit_action="MANIFEST_REEVALUATED",
+            audit_details={
+                "missing_fields": list(routed.missing_fields),
+                "missing_documents": list(routed.missing_documents),
+                "error_count": len(routed.errors),
+            },
         )
         if not updated:
             raise RuntimeError(f"Could not persist manifest status for {app_id}")
-        logger.info("Applicant '%s' promoted from INCOMPLETE to READY_FOR_REVIEW.", app_id)
+        logger.info("Applicant '%s' promoted from %s to READY_FOR_REVIEW.", app_id, prev_status)
     elif routed.status.value != prev_status:
         updated = storage.update_applicant_status(
             app_id=app_id,
             status=routed.status.value,
-            routing_destination=routed.routing_destination,
+            audit_action="MANIFEST_REEVALUATED",
+            audit_details={
+                "missing_fields": list(routed.missing_fields),
+                "missing_documents": list(routed.missing_documents),
+                "error_count": len(routed.errors),
+            },
         )
         if not updated:
             raise RuntimeError(f"Could not persist manifest status for {app_id}")
@@ -314,7 +322,7 @@ class TestScoreIngestor:
 
         result.matched_count += 1
         result.matched_app_ids.append(app.app_id)
-        promoted = prev_status == "INCOMPLETE" and routed.is_valid
+        promoted = prev_status in {"INCOMPLETE", "AWAITING_MATERIALS"} and routed.is_valid
         if promoted and app.app_id not in result.promoted_app_ids:
             result.promoted_app_ids.append(app.app_id)
         if routed.is_valid and (promoted or before != _score_snapshot(persisted)):
@@ -325,7 +333,8 @@ class TestScoreIngestor:
                     if not self.storage_manager.update_applicant_status(
                         app_id=app.app_id,
                         status=GateStatus.ERROR.value,
-                        routing_destination=GateRoutingDestination.HUMAN_REVIEW.value,
+                        audit_action="OBJECT_STORAGE_UNAVAILABLE",
+                        audit_details={"document_type": document.doc_type},
                     ):
                         raise RuntimeError(f"Could not persist storage error for {app.app_id}")
                     raise RuntimeError(

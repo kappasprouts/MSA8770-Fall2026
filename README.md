@@ -164,7 +164,7 @@ This stage implements Component 2 (Two-Pass Ingestion Layer) and Component 3 (De
                          |
            +-------------+-------------+
            v                           v
-     [READY_FOR_REVIEW]       [INCOMPLETE / ERROR]
+     [READY_FOR_REVIEW]  [AWAITING_MATERIALS / INCOMPLETE / ERROR]
            |                           |
            v                           v
 +----------------------+   +-----------------------+
@@ -182,7 +182,7 @@ This stage implements Component 2 (Two-Pass Ingestion Layer) and Component 3 (De
 ```
 
 1. **Pass 1 (CSV Flat File Parsing & Relational Staging)**:
-   - Extracts 33 scalar columns into explicit, strongly typed relational attributes: `app_id` (PK), `first_name`, `last_name`, `date_of_birth`, `mailing_address`, `phone_number`, `email_address`, `gender`, `ethnicity`, `name_of_hs`, `counselor_name`, `country`, `region`, `intended_major`, `admission_year`, `admission_term`, `gpa`, `unweighted_gpa`, `weighted_gpa`, `class_rank`, `superscored_sat_score`, `superscored_act_score`, `total_aps`, `total_ibs`, etc.
+   - Extracts CSV values into typed relational attributes, including `app_id` (PK), names, `date_of_birth` (`DATE`), contact and school fields, `unweighted_gpa` and `weighted_gpa` (`NUMERIC(5,3)`), `rank`, scores, and admission term/year.
    - Restricts JSONB exclusively to variable-length array payloads:
      - `activities`: List of up to 10 extracurricular activities.
      - `awards`: List of up to 5 honors/awards.
@@ -202,9 +202,12 @@ This stage implements Component 2 (Two-Pass Ingestion Layer) and Component 3 (De
 
 3. **Component 3 (Deterministic Manifest Validation Gate)**:
    - Evaluates applicant packet against institutional policy rules (`config/policies.yaml`):
+     - Required CSV fields are `App_ID`, `First_Name`, `Last_Name`, `Date_Of_Birth`, and `Email_Address`; other applicant metadata is optional for completeness.
      - **`VALID`** -> Status updated to `READY_FOR_REVIEW` (all mandatory fields, transcript, application form, personal statement, and **2 letters of recommendation** present).
-     - **`INCOMPLETE`** -> Status `INCOMPLETE` (missing required files or metadata -> routed to **Applicant Packet Update**).
+     - **`AWAITING_MATERIALS`** -> Required documents are missing; routed to **Applicant Packet Update**.
+     - **`INCOMPLETE`** -> Required metadata fields are missing; routed to **Applicant Packet Update**. If both fields and documents are missing, `INCOMPLETE` takes priority and the report lists both.
      - **`ERROR`** -> Status `ERROR` (corrupted files, magic byte mismatches, or size violations -> routed to **Human Review**).
+   - Each applicant's final gate result appends a `MANIFEST_EVALUATED` row to PostgreSQL `audit_logs` in the same transaction as the status update. Its JSON details include a run ID, status, missing field and document names, error count, and document count; raw applicant metadata is excluded.
 
 4. **Affected-ID Output & Hard Stop**:
    - The IDs of applicants reaching `READY_FOR_REVIEW` in the run are exported to a unique `affected_ids_<run>.json` file and printed to stdout. The API also returns the exact file path.
@@ -288,7 +291,7 @@ python3 run_score_ingest.py --source act --file path/to/act_scores.csv --require
 * **Matching**: Case-insensitive matching by email with fallback to Date of Birth (`YYYY-MM-DD` or `MM/DD/YYYY`).
 * **Deduplication**: Appends AP scores to `ap_test_scores` without duplicating subject/score pairs.
 * **Orphan Handling**: Unmatched student score rows are archived in the `OrphanTestScore` table.
-* **Manifest Gate Re-triggering**: Automatically re-runs `ManifestValidationGate` on updated applicants. A changed score for a ready applicant, including an `INCOMPLETE` to ready promotion, is written to that score run's unique affected-ID file; an identical replay leaves the new file empty.
+* **Manifest Gate Re-triggering**: Automatically re-runs `ManifestValidationGate` on updated applicants. A changed score for a ready applicant, including an `INCOMPLETE` or `AWAITING_MATERIALS` to ready promotion, is written to that score run's unique affected-ID file; an identical replay leaves the new file empty.
 * **Handoff**: The score result reports `handoff_ready`. It is true only when both strict storage checks were requested and completed; local dry-run artifacts are for inspection.
 
 ---

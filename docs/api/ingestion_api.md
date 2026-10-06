@@ -7,6 +7,15 @@ packet's status and writes an `affected_ids` JSON file containing IDs ready for
 the downstream AI summary agent. Ingestion stops there: it does not perform OCR,
 parse document text, or call the Model Gateway.
 
+`routing_destination` in API results and audit reports is derived from the
+applicant's status and the current policy. It is not stored in `applicants`.
+Existing PostgreSQL databases need the migration in
+`storage/migrations/20261006_status_only_applicants.sql` before running this version.
+They also need `storage/migrations/20261006_date_of_birth_date.sql` to convert
+`applicants.date_of_birth` from text to PostgreSQL `DATE`. Ingestion accepts the
+supported date formats and stores a date; serialized applicant data uses ISO
+`YYYY-MM-DD`.
+
 ## Endpoints
 
 | Method | Path | Action |
@@ -34,7 +43,8 @@ and the affected IDs file are complete. The response is a JSON summary:
   "total_packets_discovered": 2,
   "status_breakdown": {
     "READY_FOR_REVIEW": 1,
-    "INCOMPLETE": 1,
+    "AWAITING_MATERIALS": 1,
+    "INCOMPLETE": 0,
     "ERROR": 0
   },
   "affected_ids": ["APP_102"],
@@ -64,9 +74,15 @@ and the affected IDs file are complete. The response is a JSON summary:
 }
 ```
 
+`AWAITING_MATERIALS` means required documents are missing. `INCOMPLETE` means
+required metadata fields are missing. When both are missing, `INCOMPLETE` takes
+priority and both lists remain in the per-applicant result. Only
+`READY_FOR_REVIEW` IDs enter the affected-ID handoff.
+
 `storage_mode` is `postgresql`, `sqlite`, `sqlite_fallback`, or `dry_run`.
-`handoff_ready` is true when applicant storage is PostgreSQL and MinIO is
-available. Pass the returned `affected_ids_file` to the summary agent; the API
+`handoff_ready` is true when both strict storage checks were requested and
+passed: applicant storage is PostgreSQL, and linked documents were verified in
+MinIO. Pass the returned `affected_ids_file` to the summary agent; the API
 does not invoke it.
 
 The former `max_packets` query option is rejected with HTTP 400 because truncating
@@ -120,7 +136,8 @@ Callers using `BatchIngestionPipeline.run_batch(report_path=...,
 affected_ids_path=...)` directly can pass exact run-specific paths.
 Set both `INGESTION_REQUIRE_OBJECT_STORAGE=false` and
 `INGESTION_REQUIRE_POSTGRESQL=false` only for local dry-run and testing. The
-response reports `handoff_ready: false` unless both live services are available.
+response reports `handoff_ready: false` unless both strict checks are enabled
+and the live services pass them.
 The CLI writes a unique affected-ID file by default and supports
 `--require-object-storage --require-postgresql` for a live handoff.
 

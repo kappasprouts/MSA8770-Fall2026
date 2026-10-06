@@ -6,7 +6,7 @@ as specified in Architecture Section 4:
 - Pass 1: Parse CSV applicant records, map explicit 33-column schema, and stage in PostgreSQL (or dry run).
 - Pass 2: Traverse documents, link to applicants, upload raw PDFs to MinIO ('admissions-raw-docs'),
           attach metadata to documents JSONB, and archive orphan documents in OrphanDocument table.
-- Manifest Gate: Enforces 3-way routing (VALID -> READY_FOR_REVIEW, INCOMPLETE, ERROR) and 2 LOR policy.
+- Manifest Gate: Distinguishes missing documents (AWAITING_MATERIALS) from missing fields (INCOMPLETE).
 - Updates PostgreSQL applicant statuses.
 - Generates affected_ids.json containing all applicant IDs marked READY_FOR_REVIEW.
 - Hard stop enforcement: explicitly halts execution prior to downstream summarizers/agents.
@@ -26,7 +26,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from ingestion.batch_ingest import BatchIngestor, BatchIngestionResult
 from storage.storage_manager import StorageManager
-from validation.manifest_gate import GateRoutingDestination, GateStatus, ManifestValidationGate, ManifestGateResult
+from validation.manifest_gate import GateStatus, ManifestValidationGate, ManifestGateResult
 
 
 def format_table_row(cols, widths, fillchar=" ", align="<"):
@@ -47,6 +47,9 @@ def generate_report_text(
     orphans_count: int,
     execution_time: datetime,
     affected_ids_file: Path,
+    run_id: str,
+    database_mode: str,
+    object_storage_mode: str,
 ) -> str:
     """Generate comprehensive audit report text."""
     lines = []
@@ -58,10 +61,11 @@ def generate_report_text(
     lines.append("COMPONENT 2 (INGESTION) & COMPONENT 3 (MANIFEST VALIDATION GATE) AUDIT REPORT")
     lines.append(sep)
     lines.append(f"Execution Timestamp : {execution_time.isoformat()}")
+    lines.append(f"Run ID              : {run_id}")
     lines.append(f"Target Input Batch  : {input_dir.resolve()}")
     lines.append(f"Configuration File  : {config_path.resolve()}")
     lines.append(f"Trust Boundary Check: Trust Boundary 1 (Inbound Perimeter Constraints)")
-    lines.append(f"Storage Persistence : PostgreSQL (relational + JSONB arrays) & MinIO (admissions-raw-docs)")
+    lines.append(f"Storage Persistence : {database_mode} applicant records; {object_storage_mode} raw documents")
     lines.append(subsep)
     lines.append("")
 
@@ -70,7 +74,8 @@ def generate_report_text(
     lines.append("------------------------")
     lines.append(f"Total Applications Processed : {result.total_processed}")
     lines.append(f"Valid Applications (Ready)   : {result.total_valid} (-> Application packet complete, ready for handoff)")
-    lines.append(f"Incomplete Applications      : {result.total_incomplete} (-> Routed to 'Applicant Packet Update')")
+    lines.append(f"Awaiting Materials           : {result.total_awaiting_materials} (-> Missing required documents)")
+    lines.append(f"Incomplete Applications      : {result.total_incomplete} (-> Missing required metadata fields)")
     lines.append(f"Error / Corrupted Packets    : {result.total_error} (-> Routed to 'Human Review')")
     lines.append(f"Orphan Documents Recorded    : {orphans_count} (-> Stored in OrphanDocument table & MinIO orphans/)")
     lines.append(f"Affected IDs (Ready)         : {', '.join(result.affected_ids) if result.affected_ids else 'None'}")
@@ -165,7 +170,8 @@ def print_console_summary(
     # Summary box
     print(f"{bold}Total Processed :{reset} {result.total_processed}")
     print(f"{green}{bold}Valid           :{reset} {result.total_valid}  (Application packet complete -> READY_FOR_REVIEW)")
-    print(f"{yellow}{bold}Incomplete      :{reset} {result.total_incomplete}  (Missing Documents/Fields -> Applicant Packet Update)")
+    print(f"{yellow}{bold}Awaiting Materials:{reset} {result.total_awaiting_materials}  (Missing required documents -> Applicant Packet Update)")
+    print(f"{yellow}{bold}Incomplete      :{reset} {result.total_incomplete}  (Missing required fields -> Applicant Packet Update)")
     print(f"{red}{bold}Error           :{reset} {result.total_error}  (Corrupted/Magic Bytes/Size -> Human Review)")
     if orphans_count > 0:
         print(f"{cyan}{bold}Orphans Recorded:{reset} {orphans_count}  (OrphanDocument table & MinIO 'orphans/')")
@@ -179,12 +185,12 @@ def print_console_summary(
     print("-+-".join("-" * w for w in widths))
 
     for app in result.routed_applicants:
-        color = green if app.status == GateStatus.READY_FOR_REVIEW else (yellow if app.status == GateStatus.INCOMPLETE else red)
+        color = green if app.status == GateStatus.READY_FOR_REVIEW else (yellow if app.status in (GateStatus.AWAITING_MATERIALS, GateStatus.INCOMPLETE) else red)
         
         detail_msg = ""
         if app.status == GateStatus.READY_FOR_REVIEW:
             detail_msg = "Complete - Ready for handoff"
-        elif app.status == GateStatus.INCOMPLETE:
+        elif app.status in (GateStatus.AWAITING_MATERIALS, GateStatus.INCOMPLETE):
             missing = app.missing_documents + app.missing_fields
             detail_msg = f"Missing: {', '.join(missing)}"
         else:
@@ -226,6 +232,7 @@ def run_pipeline(
     applicant_ids: Optional[Set[str]] = None,
     require_object_storage: bool = False,
     require_postgresql: bool = False,
+    run_id: Optional[str] = None,
 ) -> ManifestGateResult:
     """Execute two-pass batch ingestion, manifest completeness gate, and hard stop."""
     input_path = Path(input_dir)
@@ -235,6 +242,11 @@ def run_pipeline(
 
     config_path = Path(config_file) if config_file else Path("config/policies.yaml")
     execution_time = datetime.now(timezone.utc)
+    run_id = run_id or execution_time.strftime("%Y%m%dT%H%M%S%fZ") + "_" + uuid.uuid4().hex[:8]
+    out_affected = Path(affected_ids_file) if affected_ids_file else Path(f"affected_ids_{run_id}.json")
+    out_file = Path(report_file) if report_file else Path("ingestion_batch_01_report.txt")
+    if out_affected.resolve() == out_file.resolve():
+        raise ValueError("The audit report and affected-ID file must use different paths")
     storage = storage_manager or StorageManager()
     if require_postgresql and (not storage.db_available or storage.is_sqlite_fallback):
         raise RuntimeError("PostgreSQL is unavailable; refusing to export a summary-agent handoff")
@@ -243,7 +255,7 @@ def run_pipeline(
 
     # 1. Component 2: Two-Pass Batch Ingestion & Linking
     ingestor = BatchIngestor(config_path=config_path, storage_manager=storage)
-    ingest_result = ingestor.ingest_batch(input_path, applicant_ids=applicant_ids)
+    ingest_result = ingestor.ingest_batch(input_path, applicant_ids=applicant_ids, audit_run_id=run_id)
 
     # 2. Component 3: Manifest Validation Gate
     gate = ManifestValidationGate(config_path=config_path)
@@ -260,7 +272,8 @@ def run_pipeline(
                 if not storage.update_applicant_status(
                     app_id=routed.applicant_id,
                     status=GateStatus.ERROR.value,
-                    routing_destination=GateRoutingDestination.HUMAN_REVIEW.value,
+                    audit_action="OBJECT_STORAGE_UNAVAILABLE",
+                    audit_details={"document_type": document.doc_type},
                 ):
                     raise RuntimeError(f"Could not persist storage error for {routed.applicant_id}")
                 raise RuntimeError(
@@ -268,21 +281,42 @@ def run_pipeline(
                     f"s3://{document.minio_bucket}/{document.minio_key}"
                 )
 
-    # 3. Update PostgreSQL applicant records with gate evaluation results
+    # 3. Confirm the final gate status. Pass 2 has already persisted each
+    # applicant's status, documents, and audit row in one transaction.
     for routed in result.routed_applicants:
         if not storage.update_applicant_status(
             app_id=routed.applicant_id,
             status=routed.status.value,
-            routing_destination=routed.routing_destination,
         ):
             raise RuntimeError(f"Could not persist manifest status for {routed.applicant_id}")
 
-    # 4. Save affected_ids.json for downstream summarizing agent
-    out_affected = (
-        Path(affected_ids_file)
-        if affected_ids_file
-        else Path(f"affected_ids_{execution_time.strftime('%Y%m%dT%H%M%SZ')}_{uuid.uuid4().hex[:8]}.json")
+    # Prepare the report and handoff paths. Publish the ID file only after the
+    # report is complete, because a watcher may treat the ID file as a trigger.
+    # 4. Save the audit report atomically.
+    report_text = generate_report_text(
+        input_dir=input_path,
+        config_path=config_path,
+        result=result,
+        orphans_count=len(ingest_result.orphans),
+        execution_time=execution_time,
+        affected_ids_file=out_affected,
+        run_id=run_id,
+        database_mode=(
+            "PostgreSQL"
+            if storage.db_available and not storage.is_sqlite_fallback
+            else "SQLite" if storage.db_available else "In-memory"
+        ),
+        object_storage_mode="MinIO" if storage.minio_available else "Simulated",
     )
+    out_file.parent.mkdir(parents=True, exist_ok=True)
+    temporary_report = out_file.with_name(f".{out_file.name}.{uuid.uuid4().hex}.tmp")
+    try:
+        temporary_report.write_text(report_text, encoding="utf-8")
+        os.replace(temporary_report, out_file)
+    finally:
+        temporary_report.unlink(missing_ok=True)
+
+    # 5. Publish the ready IDs last for the downstream summarizing agent.
     out_affected.parent.mkdir(parents=True, exist_ok=True)
     temporary_affected = out_affected.with_name(f".{out_affected.name}.{uuid.uuid4().hex}.tmp")
     try:
@@ -292,7 +326,7 @@ def run_pipeline(
     finally:
         temporary_affected.unlink(missing_ok=True)
 
-    # 5. Print Summary to stdout
+    # 6. Print the completed run summary.
     print_console_summary(
         result=result,
         orphans_count=len(ingest_result.orphans),
@@ -300,19 +334,6 @@ def run_pipeline(
         execution_time=execution_time,
         affected_ids_file=out_affected,
     )
-
-    # 6. Generate and save Audit Report
-    out_file = Path(report_file) if report_file else Path("ingestion_batch_01_report.txt")
-    report_text = generate_report_text(
-        input_dir=input_path,
-        config_path=config_path,
-        result=result,
-        orphans_count=len(ingest_result.orphans),
-        execution_time=execution_time,
-        affected_ids_file=out_affected,
-    )
-    with open(out_file, "w", encoding="utf-8") as f:
-        f.write(report_text)
     print(f"Audit log successfully written to: {out_file.resolve()}\n")
 
     # 7. Hard Stop Enforcement Message

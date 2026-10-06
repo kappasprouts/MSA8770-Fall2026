@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 class ValidationStatus(str, Enum):
     """Workflow status codes according to institutional policy."""
     READY_FOR_REVIEW = "READY_FOR_REVIEW"
+    AWAITING_MATERIALS = "AWAITING_MATERIALS"
     INCOMPLETE = "INCOMPLETE"
     COUNSELOR_REVIEW = "COUNSELOR_REVIEW"
     REPLACEMENT_REQUESTED = "REPLACEMENT_REQUESTED"

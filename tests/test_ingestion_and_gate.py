@@ -7,7 +7,8 @@ Verifies:
    without opening or scanning document text/pages.
 4. Deterministic 3-way routing:
    - VALID -> status: "READY_FOR_REVIEW" (application packet complete, ready for handoff)
-   - INCOMPLETE -> status: "INCOMPLETE" (missing required files -> Applicant Packet Update)
+   - AWAITING_MATERIALS -> missing required files -> Applicant Packet Update
+   - INCOMPLETE -> missing required metadata fields -> Applicant Packet Update
    - ERROR -> status: "ERROR" (corrupted/missing magic bytes/size violation -> Human Review)
 5. Hard stop enforcement: CLI runner halts before downstream summarizers/agents with exit code 0.
 6. Schema mappings: explicit typed relational columns + JSONB variable-length arrays.
@@ -17,6 +18,8 @@ Verifies:
 """
 
 import json
+from datetime import date
+from decimal import Decimal
 from pathlib import Path
 import subprocess
 import sys
@@ -157,9 +160,9 @@ def test_schema_mapping_scalar_and_jsonb_arrays(batch_dir, config_file):
     assert data["app_id"] == "APP_001"
     assert data["first_name"] == "Alex"
     assert data["last_name"] == "Bennett"
-    assert data["date_of_birth"] == "2008-11-21"
-    assert data["unweighted_gpa"] == 3.86
-    assert data["weighted_gpa"] == 4.68
+    assert data["date_of_birth"] == date(2008, 11, 21)
+    assert data["unweighted_gpa"] == Decimal("3.860")
+    assert data["weighted_gpa"] == Decimal("4.680")
     assert data["superscored_sat_score"] == 1500.0
     assert data["total_aps"] == 7.0
     assert data["admission_year"] == 2026
@@ -297,10 +300,10 @@ def test_two_pass_orphan_document_handling(tmp_path, config_file):
     assert len(storage.get_all_orphans()) == 1
 
 
-def test_manifest_validation_gate_3_way_routing(batch_dir, config_file):
-    """Verify deterministic 3-way routing across batch_01:
+def test_manifest_validation_gate_routing(batch_dir, config_file):
+    """Verify deterministic routing across batch_01:
     - VALID -> status: 'READY_FOR_REVIEW' (9 applicants)
-    - INCOMPLETE -> status: 'INCOMPLETE' (APP_010 missing transcript)
+    - AWAITING_MATERIALS -> status: 'AWAITING_MATERIALS' (APP_010 missing transcript)
     - ERROR -> status: 'ERROR' (0 in clean batch_01)
     """
     ingestor = BatchIngestor(config_path=config_file)
@@ -311,7 +314,8 @@ def test_manifest_validation_gate_3_way_routing(batch_dir, config_file):
 
     assert result.total_processed == 10
     assert result.total_valid == 9
-    assert result.total_incomplete == 1
+    assert result.total_awaiting_materials == 1
+    assert result.total_incomplete == 0
     assert result.total_error == 0
 
     # Verify affected_ids contains the 9 ready applicants
@@ -334,10 +338,10 @@ def test_manifest_validation_gate_3_way_routing(batch_dir, config_file):
     assert app_008.routing_destination == GateRoutingDestination.READY_FOR_REVIEW.value
     assert app_008.is_valid is True
 
-    # Verify APP_010 is INCOMPLETE -> Applicant Packet Update
+    # Verify APP_010 is AWAITING_MATERIALS -> Applicant Packet Update
     app_010 = next(a for a in result.routed_applicants if a.applicant_id == "APP_010")
-    assert app_010.status == GateStatus.INCOMPLETE
-    assert app_010.status.value == "INCOMPLETE"
+    assert app_010.status == GateStatus.AWAITING_MATERIALS
+    assert app_010.status.value == "AWAITING_MATERIALS"
     assert app_010.routing_destination == GateRoutingDestination.APPLICANT_PACKET_UPDATE.value
     assert app_010.is_valid is False
     assert "transcript" in app_010.missing_documents
@@ -405,14 +409,14 @@ def test_manifest_gate_enforces_two_lors_requirement(config_file):
         applicant_id="APP_LOR_TEST",
     )
 
-    # 1. Packet with only 1 LOR -> Must be INCOMPLETE
+    # 1. Packet with only 1 LOR -> Must await materials
     app_with_1_lor = IngestedApplication(
         applicant_id="APP_LOR_TEST",
         metadata=base_metadata,
         documents=[doc_app_form, doc_transcript, doc_essay, doc_lor_1],
     )
     routed_1 = gate.evaluate_applicant(app_with_1_lor)
-    assert routed_1.status == GateStatus.INCOMPLETE
+    assert routed_1.status == GateStatus.AWAITING_MATERIALS
     assert "recommendation_letter_2" in routed_1.missing_documents
 
     # 2. Packet with 2 LORs -> Must be VALID / READY_FOR_REVIEW
@@ -425,6 +429,30 @@ def test_manifest_gate_enforces_two_lors_requirement(config_file):
     assert routed_2.status == GateStatus.READY_FOR_REVIEW
     assert routed_2.is_valid is True
     assert len(routed_2.missing_documents) == 0
+
+    # Missing metadata alone remains INCOMPLETE.
+    no_email = IngestedApplication(
+        applicant_id="APP_LOR_TEST",
+        metadata={**base_metadata, "Email_Address": ""},
+        documents=[doc_app_form, doc_transcript, doc_essay, doc_lor_1, doc_lor_2],
+    )
+    routed_fields = gate.evaluate_applicant(no_email)
+    assert routed_fields.status == GateStatus.INCOMPLETE
+    assert routed_fields.missing_documents == []
+    assert routed_fields.missing_fields == ["Email_Address"]
+    assert routed_fields.routing_destination == "Applicant Packet Update"
+
+    # When both are missing, required metadata takes priority while both
+    # findings remain visible in the report/API result.
+    no_email_or_second_letter = IngestedApplication(
+        applicant_id="APP_LOR_TEST",
+        metadata={**base_metadata, "Email_Address": ""},
+        documents=[doc_app_form, doc_transcript, doc_essay, doc_lor_1],
+    )
+    routed_both = gate.evaluate_applicant(no_email_or_second_letter)
+    assert routed_both.status == GateStatus.INCOMPLETE
+    assert routed_both.missing_fields == ["Email_Address"]
+    assert routed_both.missing_documents == ["recommendation_letter_2"]
 
 
 def test_manifest_validation_gate_routes_error_queue(config_file):
@@ -503,7 +531,8 @@ def test_hard_stop_enforcement_and_affected_ids_export(tmp_path):
     report_content = report_file.read_text(encoding="utf-8")
     assert "Total Applications Processed : 10" in report_content
     assert "Valid Applications (Ready)   : 9" in report_content
-    assert "Incomplete Applications      : 1" in report_content
+    assert "Awaiting Materials           : 1" in report_content
+    assert "Incomplete Applications      : 0" in report_content
     assert "Error / Corrupted Packets    : 0" in report_content
     assert "PIPELINE HALT ENFORCEMENT & HANDOFF" in report_content
 
@@ -524,7 +553,8 @@ def test_no_downstream_agents_or_ocr_triggered(tmp_path):
 
     assert result.total_processed == 10
     assert result.total_valid == 9
-    assert result.total_incomplete == 1
+    assert result.total_awaiting_materials == 1
+    assert result.total_incomplete == 0
     assert result.total_error == 0
     assert len(result.affected_ids) == 9
 
@@ -543,7 +573,7 @@ def test_case_2_db_lookup_late_arriving_document(tmp_path, config_file):
     storage.dry_run_applicants = {}
     storage.dry_run_orphans = []
 
-    # 1. Seed an applicant existing ONLY in the database from a prior night's batch (missing transcript -> INCOMPLETE)
+    # 1. Seed an applicant existing ONLY in the database from a prior night's batch (missing transcript)
     prior_docs = [
         {"doc_type": "application_form", "filename": "application_form.pdf", "exists": True, "is_readable": True},
         {"doc_type": "personal_statement", "filename": "personal_statement.pdf", "exists": True, "is_readable": True},
@@ -560,8 +590,7 @@ def test_case_2_db_lookup_late_arriving_document(tmp_path, config_file):
         intended_major="Physics",
         admission_year=2026,
         admission_term="Fall",
-        status="INCOMPLETE",
-        routing_destination="Applicant Packet Update",
+        status="AWAITING_MATERIALS",
         documents=prior_docs,
     )
     storage.stage_applicant(prior_app.to_dict())
@@ -621,7 +650,7 @@ def test_case_2_db_lookup_late_arriving_document(tmp_path, config_file):
 def test_persistent_dry_run_multi_batch_late_arrival(tmp_path, config_file, batch_dir):
     """Verify persistent local dry-run state across multi-batch CLI runs:
     1. Run Batch 1 on batch_01 (ingesting APP_001..APP_010) using persistent SQLite store.
-       APP_010 is missing its transcript and ends with status INCOMPLETE.
+       APP_010 is missing its transcript and ends with status AWAITING_MATERIALS.
     2. In a separate CLI execution with a fresh StorageManager instance connected to the same store,
        run Pass 2 / late-arrival check on a delta batch containing APP010_transcript.pdf.
     3. Verify APP_010 is retrieved from the persistent store, promoted to READY_FOR_REVIEW,
@@ -645,13 +674,14 @@ def test_persistent_dry_run_multi_batch_late_arrival(tmp_path, config_file, batc
         storage_manager=storage_run1,
     )
 
-    # In Batch 1, APP_010 is INCOMPLETE (missing transcript)
+    # In Batch 1, APP_010 is AWAITING_MATERIALS (missing transcript)
     assert result_1.total_processed == 10
-    assert result_1.total_incomplete == 1
+    assert result_1.total_awaiting_materials == 1
+    assert result_1.total_incomplete == 0
     assert "APP_010" not in result_1.affected_ids
     app_010_stored = storage_run1.get_applicant("APP_010")
     assert app_010_stored is not None
-    assert app_010_stored.status == "INCOMPLETE"
+    assert app_010_stored.status == "AWAITING_MATERIALS"
 
     # Create delta batch directory with late-arriving transcript for APP_010 (testing flexible regex: APP010)
     delta_dir = tmp_path / "delta_batch_late"
@@ -801,7 +831,7 @@ def test_repeated_csv_id_and_late_document_promote_without_duplicates(tmp_path, 
         tmp_path, initial_batch, config_file, initial_storage, "incomplete"
     )
     assert first_result.affected_ids == []
-    assert initial_storage.get_applicant("APP_042").status == "INCOMPLETE"
+    assert initial_storage.get_applicant("APP_042").status == "AWAITING_MATERIALS"
 
     late_batch = tmp_path / "late_with_repeated_csv"
     _write_regression_batch(late_batch, "app42", "Ellie")
@@ -865,7 +895,7 @@ def test_filename_id_conflict_does_not_link_to_another_applicant(tmp_path, confi
     folder_app = storage.get_applicant("APP_042")
     filename_app = storage.get_applicant("APP_043")
     assert folder_app.status == "ERROR"
-    assert filename_app.status == "INCOMPLETE"
+    assert filename_app.status == "AWAITING_MATERIALS"
     assert "APP_043_transcript.pdf" not in {d["filename"] for d in filename_app.documents}
     assert result.affected_ids == []
 
@@ -892,7 +922,7 @@ def test_duplicate_recommendation_content_cannot_satisfy_two_letter_rule(tmp_pat
     )
     result = BatchIngestor(config_path=config_file, storage_manager=storage).ingest_batch(batch)
 
-    assert storage.get_applicant("APP_042").status == "INCOMPLETE"
+    assert storage.get_applicant("APP_042").status == "AWAITING_MATERIALS"
     assert result.affected_ids == []
 
 
@@ -916,7 +946,7 @@ def test_document_only_subfolder_batch_never_uses_workspace_csv(tmp_path, config
     )
     ingestor = BatchIngestor(config_path=config_file, storage_manager=storage)
     ingestor.ingest_batch(initial)
-    assert storage.get_applicant("APP_042").status == "INCOMPLETE"
+    assert storage.get_applicant("APP_042").status == "AWAITING_MATERIALS"
 
     delta = tmp_path / "document_only_delta"
     delta.mkdir()
@@ -1080,7 +1110,6 @@ def test_csv_replay_requires_historical_minio_objects_for_handoff(tmp_path, conf
         "admission_year": 2026,
         "admission_term": "Fall",
         "status": "READY_FOR_REVIEW",
-        "routing_destination": "READY_FOR_REVIEW",
         "documents": [
             {
                 "filename": filename,

@@ -7,6 +7,7 @@ while performing real uploads and inserts when services are online.
 """
 
 from datetime import datetime, timezone
+import json
 import logging
 import os
 from pathlib import Path
@@ -26,6 +27,7 @@ except ImportError:
     MINIO_SDK_AVAILABLE = False
 
 from storage.database import Base
+from storage.date_utils import parse_date_of_birth
 from storage.models import (
     Applicant,
     AuditLog,
@@ -131,6 +133,27 @@ class StorageManager:
         except (OSError, ConnectionRefusedError):
             return False
 
+    @staticmethod
+    def _migrate_sqlite_applicants(engine) -> None:
+        """Upgrade the persistent local fallback to the status-only model."""
+        with engine.begin() as conn:
+            columns = {row[1] for row in conn.execute(text("PRAGMA table_info(applicants)"))}
+            if "ib_test_scores" not in columns:
+                conn.execute(text("ALTER TABLE applicants ADD COLUMN ib_test_scores JSON NOT NULL DEFAULT '[]'"))
+                if "ib_courses" in columns:
+                    old_rows = conn.execute(text(
+                        "SELECT app_id, ib_courses FROM applicants "
+                        "WHERE ib_courses IS NOT NULL AND trim(ib_courses) <> ''"
+                    ))
+                    for app_id, courses in old_rows:
+                        items = [item.strip() for item in courses.split(",") if item.strip()][:12]
+                        conn.execute(
+                            text("UPDATE applicants SET ib_test_scores = :items WHERE app_id = :app_id"),
+                            {"items": json.dumps(items), "app_id": app_id},
+                        )
+            if "routing_destination" in columns:
+                conn.execute(text("ALTER TABLE applicants DROP COLUMN routing_destination"))
+
     def _init_db_connection(self):
         """Attempt to establish PostgreSQL connection, falling back gracefully to persistent SQLite store."""
         # 1. Direct SQLite database URL requested
@@ -143,6 +166,7 @@ class StorageManager:
                     autocommit=False, autoflush=False, expire_on_commit=False, bind=self.engine
                 )
                 Base.metadata.create_all(bind=self.engine)
+                self._migrate_sqlite_applicants(self.engine)
                 self.db_available = True
                 self.is_sqlite_fallback = True
                 logger.info("Successfully connected to SQLite database at: %s", self.database_url)
@@ -193,6 +217,7 @@ class StorageManager:
                     autocommit=False, autoflush=False, expire_on_commit=False, bind=self.engine
                 )
                 Base.metadata.create_all(bind=self.engine)
+                self._migrate_sqlite_applicants(self.engine)
                 self.db_available = True
                 self.is_sqlite_fallback = True
                 logger.info("Persistent local SQLite fallback initialized at: %s", db_path)
@@ -325,6 +350,10 @@ class StorageManager:
     ) -> Applicant:
         """Stage or upsert an applicant, optionally limiting fields updated on an existing row."""
         applicant_data = dict(applicant_data)
+        # Serialized applicants may expose this derived value for API callers.
+        applicant_data.pop("routing_destination", None)
+        if "date_of_birth" in applicant_data:
+            applicant_data["date_of_birth"] = parse_date_of_birth(applicant_data["date_of_birth"])
         app_id = applicant_data.get("app_id")
         if not app_id:
             raise ValueError("Applicant data must contain an 'app_id'")
@@ -336,7 +365,6 @@ class StorageManager:
         applicant_data.setdefault("hooks", [])
         applicant_data.setdefault("documents", [])
         applicant_data.setdefault("status", "PENDING")
-        applicant_data.setdefault("routing_destination", "READY_FOR_REVIEW")
 
         if self.db_available and self.SessionLocal:
             session: Session = self.SessionLocal()
@@ -429,10 +457,12 @@ class StorageManager:
         self,
         app_id: str,
         status: str,
-        routing_destination: str,
         documents: Optional[List[Dict[str, Any]]] = None,
+        *,
+        audit_action: Optional[str] = None,
+        audit_details: Optional[Dict[str, Any]] = None,
     ) -> bool:
-        """Update the gate evaluation status and documents of an applicant."""
+        """Update status and, when requested, append an audit row in one transaction."""
         if not app_id:
             return False
 
@@ -447,12 +477,22 @@ class StorageManager:
                     if app:
                         break
                 if app:
+                    previous_status = app.status
                     app.status = status
-                    app.routing_destination = routing_destination
                     if documents is not None:
                         app.documents = documents
                         flag_modified(app, "documents")
                     app.updated_at = datetime.now(timezone.utc)
+                    if audit_action:
+                        session.add(AuditLog(
+                            applicant_id=app.app_id,
+                            action=audit_action,
+                            details={
+                                **(audit_details or {}),
+                                "previous_status": previous_status,
+                                "status": status,
+                            },
+                        ))
                     session.commit()
                     return True
             except Exception as e:
@@ -461,11 +501,15 @@ class StorageManager:
             finally:
                 session.close()
 
+        # A requested audit must never appear successful through the in-memory
+        # fallback after a relational write fails.
+        if audit_action and self.db_available:
+            return False
+
         for cand in candidates:
             if cand in self.dry_run_applicants:
                 cached = self.dry_run_applicants[cand]
                 cached.status = status
-                cached.routing_destination = routing_destination
                 if documents is not None:
                     cached.documents = documents
                 return True
@@ -556,21 +600,11 @@ class StorageManager:
         dob: Optional[str] = None,
     ) -> Optional[Applicant]:
         """Match applicant by email (case-insensitive) or date_of_birth fallback."""
-        clean_email = email.strip().lower() if email and str(email).strip() else None
-        clean_dob = dob.strip() if dob and str(dob).strip() else None
-
-        def _norm_dob(dob_str: Optional[str]) -> Optional[str]:
-            if not dob_str:
-                return None
-            s = str(dob_str).strip()
-            for fmt in ("%Y-%m-%d", "%m/%d/%Y", "%Y/%m/%d", "%m-%d-%Y", "%d-%m-%Y"):
-                try:
-                    return datetime.strptime(s, fmt).strftime("%Y-%m-%d")
-                except ValueError:
-                    continue
-            return s
-
-        norm_dob = _norm_dob(clean_dob) if clean_dob else None
+        clean_email = str(email).strip().lower() if email and str(email).strip() else None
+        try:
+            norm_dob = parse_date_of_birth(dob)
+        except ValueError:
+            norm_dob = None
 
         if self.db_available and self.SessionLocal:
             session: Session = self.SessionLocal()
@@ -585,11 +619,10 @@ class StorageManager:
                         logger.warning("Ambiguous score-feed email: %s", clean_email)
                         return None
 
-                if clean_dob:
-                    all_apps = session.execute(
-                        select(Applicant).where(Applicant.date_of_birth.is_not(None))
+                if norm_dob:
+                    dob_matches = session.execute(
+                        select(Applicant).where(Applicant.date_of_birth == norm_dob)
                     ).scalars().all()
-                    dob_matches = [a for a in all_apps if _norm_dob(a.date_of_birth) == norm_dob]
                     if len(dob_matches) == 1:
                         return dob_matches[0]
                     if len(dob_matches) > 1:
@@ -610,10 +643,10 @@ class StorageManager:
                 logger.warning("Ambiguous score-feed email: %s", clean_email)
                 return None
 
-        if clean_dob:
+        if norm_dob:
             dob_matches = [
                 app for app in self.dry_run_applicants.values()
-                if app.date_of_birth and _norm_dob(app.date_of_birth) == norm_dob
+                if app.date_of_birth and parse_date_of_birth(app.date_of_birth) == norm_dob
             ]
             if len(dob_matches) == 1:
                 return dob_matches[0]

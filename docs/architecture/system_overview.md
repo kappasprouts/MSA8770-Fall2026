@@ -42,8 +42,12 @@ sequenceDiagram
     Gate->>Gate: Verify MIME, size <= 15MB, checksums
     Gate->>Gate: Evaluate checklist completeness against policies.yaml
 
-    alt Incomplete Submission
-        Gate-->>Pipe: Status: INCOMPLETE (Missing required items)
+    alt Missing Documents
+        Gate-->>Pipe: Status: AWAITING_MATERIALS
+        Pipe->>DB: Persist Application (routing: "Applicant Packet Update")
+        Pipe->>DB: Write Immutable Audit Log
+    else Missing Required Fields
+        Gate-->>Pipe: Status: INCOMPLETE
         Pipe->>DB: Persist Application (routing: "Applicant Packet Update")
         Pipe->>DB: Write Immutable Audit Log
     else Invalid / Malformed / Corrupt
@@ -85,7 +89,8 @@ sequenceDiagram
   * **Path Sanitization**: Rejects paths containing directory traversal patterns (`..`, `/`, `\`).
   * **Checklist Completeness**: Matches submitted document types against institutional checklists in `config/policies.yaml`.
   * **Deterministic Routing Matrix**:
-    * If missing required items: Status `INCOMPLETE` $\rightarrow$ Target: **Applicant Packet Update**.
+    * If required documents are missing: Status `AWAITING_MATERIALS` $\rightarrow$ Target: **Applicant Packet Update**.
+    * If required fields are missing: Status `INCOMPLETE` $\rightarrow$ Target: **Applicant Packet Update**. Fields take priority if both are missing.
     * If unreadable required items: Status `REPLACEMENT_REQUESTED` $\rightarrow$ Target: **Human Review**.
     * If applicant ID mismatch or ambiguous coursework: Status `COUNSELOR_REVIEW` $\rightarrow$ Target: **Human Review**.
     * If perimeter violation (disallowed MIME/size limit): Status `STOPPED` $\rightarrow$ Target: **Human Review**.
@@ -104,7 +109,7 @@ sequenceDiagram
 
 When multiple findings occur within a single packet, the system evaluates status resolution in strict priority order:
 
-$$\text{STOPPED} \succ \text{COUNSELOR\_REVIEW} \succ \text{REPLACEMENT\_REQUESTED} \succ \text{INCOMPLETE} \succ \text{READY\_FOR\_REVIEW}$$
+$$\text{STOPPED} \succ \text{COUNSELOR\_REVIEW} \succ \text{REPLACEMENT\_REQUESTED} \succ \text{INCOMPLETE} \succ \text{AWAITING\_MATERIALS} \succ \text{READY\_FOR\_REVIEW}$$
 
 ```mermaid
 stateDiagram-v2
@@ -114,10 +119,12 @@ stateDiagram-v2
     Deterministic_Gate --> STOPPED: Perimeter / Security Violation
     Deterministic_Gate --> COUNSELOR_REVIEW: Ambiguity / ID Mismatch / Waiver
     Deterministic_Gate --> REPLACEMENT_REQUESTED: Corrupt / Unreadable Attachment
-    Deterministic_Gate --> INCOMPLETE: Missing Required Document
+    Deterministic_Gate --> INCOMPLETE: Missing Required Field
+    Deterministic_Gate --> AWAITING_MATERIALS: Missing Required Document
     Deterministic_Gate --> READY_FOR_REVIEW: All Criteria Satisfied
 
-    INCOMPLETE --> Applicant_Packet_Update: Route for missing documents
+    INCOMPLETE --> Applicant_Packet_Update: Route for missing fields
+    AWAITING_MATERIALS --> Applicant_Packet_Update: Route for missing documents
     STOPPED --> Human_Review_Queue: Route for manual inspection
     COUNSELOR_REVIEW --> Human_Review_Queue: Route for counselor adjudication
     REPLACEMENT_REQUESTED --> Human_Review_Queue: Route for re-request

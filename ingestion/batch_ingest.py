@@ -17,6 +17,7 @@ Implements Two-Pass Ingestion:
 
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 import hashlib
 import logging
 import mimetypes
@@ -25,8 +26,10 @@ from pathlib import Path
 import re
 from typing import Any, Dict, Iterator, List, Optional, Set, Tuple
 import csv
+from uuid import uuid4
 
-from config import get_file_constraints, load_policies
+from config import derive_routing_destination, get_file_constraints, load_policies
+from storage.date_utils import parse_date_of_birth
 from storage.storage_manager import StorageManager
 
 logger = logging.getLogger(__name__)
@@ -54,14 +57,14 @@ CSV_UPDATE_FIELDS = {
     "Intended_Major": ("intended_major",),
     "Admission_Year": ("admission_year",),
     "Admission_Term": ("admission_term",),
-    "Unweighted_GPA": ("unweighted_gpa", "gpa"),
-    "Weighted_GPA": ("weighted_gpa", "gpa"),
-    "Rank": ("rank", "class_rank"),
+    "Unweighted_GPA": ("unweighted_gpa",),
+    "Weighted_GPA": ("weighted_gpa",),
+    "Rank": ("rank",),
     "Superscored_SAT_Score": ("superscored_sat_score",),
     "Superscored_ACT_Score": ("superscored_act_score", "act_composite"),
     "Total_APs": ("total_aps",),
     "Total_IBs": ("total_ibs",),
-    "IB_Courses": ("ib_courses",),
+    "IB_Courses": ("ib_test_scores",),
     "Create_Date_Time": ("create_date_time",),
     "Last_Updated": ("last_updated_csv",),
     "Review_Ctr": ("review_ctr",),
@@ -111,6 +114,19 @@ def _parse_float(val: Any) -> Optional[float]:
     try:
         return float(s)
     except ValueError:
+        return None
+
+
+def _parse_gpa(val: Any) -> Optional[Decimal]:
+    """Parse CSV GPA without binary float rounding before NUMERIC(5,3) storage."""
+    if val is None or str(val).strip().lower() in {"", "nan"}:
+        return None
+    try:
+        value = Decimal(str(val).strip())
+        if not value.is_finite():
+            return None
+        return value.quantize(Decimal("0.001"), rounding=ROUND_HALF_UP)
+    except InvalidOperation:
         return None
 
 
@@ -199,16 +215,17 @@ class IngestedApplication:
     documents: List[IngestedDocument] = field(default_factory=list)
     trust_boundary_errors: List[str] = field(default_factory=list)
     status: str = "PENDING"
-    routing_destination: str = "READY_FOR_REVIEW"
     ingested_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+
+    @property
+    def routing_destination(self) -> str:
+        return derive_routing_destination(self.status)
 
     def to_applicant_dict(self) -> Dict[str, Any]:
         """Produce dictionary with explicit typed relational columns and JSONB arrays."""
         m = self.metadata
-        unweighted = _parse_float(m.get("Unweighted_GPA"))
-        weighted = _parse_float(m.get("Weighted_GPA"))
-        gpa = weighted if weighted is not None else unweighted
-
+        unweighted = _parse_gpa(m.get("Unweighted_GPA"))
+        weighted = _parse_gpa(m.get("Weighted_GPA"))
         sat = _parse_float(m.get("Superscored_SAT_Score"))
         act = _parse_float(m.get("Superscored_ACT_Score"))
         adm_yr = _parse_int(m.get("Admission_Year"))
@@ -222,7 +239,7 @@ class IngestedApplication:
             "app_id": self.applicant_id,
             "first_name": str(m.get("First_Name") or "").strip(),
             "last_name": str(m.get("Last_Name") or "").strip(),
-            "date_of_birth": str(m.get("Date_Of_Birth") or "").strip() or None,
+            "date_of_birth": parse_date_of_birth(m.get("Date_Of_Birth")),
             "mailing_address": str(m.get("Mailing_Address") or "").strip() or None,
             "phone_number": str(m.get("Primary_Phone_Number") or "").strip() or None,
             "email_address": str(m.get("Email_Address") or "").strip() or None,
@@ -235,10 +252,8 @@ class IngestedApplication:
             "intended_major": str(m.get("Intended_Major") or "").strip() or None,
             "admission_year": adm_yr,
             "admission_term": str(m.get("Admission_Term") or "").strip() or None,
-            "gpa": gpa,
             "unweighted_gpa": unweighted,
             "weighted_gpa": weighted,
-            "class_rank": str(m.get("Rank") or "").strip() or None,
             "rank": str(m.get("Rank") or "").strip() or None,
             "superscored_sat_score": sat,
             "sat_math": None,
@@ -247,7 +262,10 @@ class IngestedApplication:
             "act_composite": act,
             "total_aps": tot_aps,
             "total_ibs": tot_ibs,
-            "ib_courses": str(m.get("IB_Courses") or "").strip() or None,
+            "ib_test_scores": [
+                item.strip() for item in str(m.get("IB_Courses") or "").split(",")
+                if item.strip()
+            ][:12],
             "create_date_time": str(m.get("Create_Date_Time") or "").strip() or None,
             "last_updated_csv": str(m.get("Last_Updated") or "").strip() or None,
             "review_ctr": rev_ctr,
@@ -259,7 +277,6 @@ class IngestedApplication:
             "hooks": self.hooks,
             "documents": doc_dicts,
             "status": self.status,
-            "routing_destination": self.routing_destination,
         }
 
 
@@ -405,7 +422,6 @@ class BatchIngestor:
             documents=existing_docs,
             trust_boundary_errors=[],
             status=db_app.status,
-            routing_destination=db_app.routing_destination,
         )
 
     @staticmethod
@@ -567,7 +583,6 @@ class BatchIngestor:
                 documents=[],
                 trust_boundary_errors=[],
                 status="PENDING",
-                routing_destination="READY_FOR_REVIEW",
             )
 
             applicant_data = ingested_app.to_applicant_dict()
@@ -586,11 +601,6 @@ class BatchIngestor:
                     scored_aps = [item for item in (existing.ap_test_scores or []) if isinstance(item, dict)]
                     applicant_data["ap_test_scores"] = ap_scores + scored_aps
 
-                if "gpa" in update_fields:
-                    weighted = (applicant_data["weighted_gpa"] if "weighted_gpa" in update_fields else existing.weighted_gpa)
-                    unweighted = (applicant_data["unweighted_gpa"] if "unweighted_gpa" in update_fields else existing.unweighted_gpa)
-                    applicant_data["gpa"] = weighted if weighted is not None else unweighted
-
                 # A blank or older CSV superscore cannot erase a later score feed.
                 for field_name in ("superscored_sat_score", "superscored_act_score", "act_composite"):
                     if field_name in update_fields:
@@ -607,7 +617,6 @@ class BatchIngestor:
             ingested_app.documents = stored_packet.documents
             ingested_app.ap_test_scores = stored_packet.ap_test_scores
             ingested_app.status = staged_db.status
-            ingested_app.routing_destination = staged_db.routing_destination
             ingested_app.metadata = dict(stored_packet.metadata)
             ingested_app.metadata.update({
                 key: value for key, value in record.items()
@@ -632,6 +641,7 @@ class BatchIngestor:
         input_dir: Path,
         staged_applicants: Dict[str, IngestedApplication],
         applicant_ids: Optional[Set[str]] = None,
+        audit_run_id: Optional[str] = None,
     ) -> Tuple[List[IngestedApplication], List[Dict[str, Any]]]:
         """Pass 2: Traverse all documents across the batch directory.
         - Case 1: If document maps to an in-memory staged applicant from Pass 1,
@@ -646,6 +656,8 @@ class BatchIngestor:
         """
         orphans_list: List[Dict[str, Any]] = []
         affected_ids: List[str] = []
+        if audit_run_id is None:
+            audit_run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ") + "_" + uuid4().hex[:8]
 
         # Find all documents: in applicant subfolders and at root of input_dir
         candidate_files: List[Tuple[Optional[str], Path, Optional[str]]] = []
@@ -841,12 +853,19 @@ class BatchIngestor:
         for app in staged_applicants.values():
             routed = self.gate.evaluate_applicant(app)
             app.status = routed.status.value
-            app.routing_destination = routed.routing_destination
             if not self.storage.update_applicant_status(
                 app_id=app.applicant_id,
                 status=routed.status.value,
-                routing_destination=routed.routing_destination,
                 documents=[d.to_metadata_dict() for d in app.documents],
+                audit_action="MANIFEST_EVALUATED",
+                audit_details={
+                    "run_id": audit_run_id,
+                    "missing_fields": list(routed.missing_fields),
+                    "missing_documents": list(routed.missing_documents),
+                    "error_count": len(routed.errors),
+                    "total_documents": routed.total_documents,
+                    "ready_for_review": routed.is_valid,
+                },
             ):
                 raise RuntimeError(f"Could not persist ingestion outcome for {app.applicant_id}")
             if routed.is_valid:
@@ -863,7 +882,10 @@ class BatchIngestor:
         return list(staged_applicants.values()), orphans_list
 
     def ingest_batch(
-        self, input_dir: Path, applicant_ids: Optional[Set[str]] = None
+        self,
+        input_dir: Path,
+        applicant_ids: Optional[Set[str]] = None,
+        audit_run_id: Optional[str] = None,
     ) -> BatchIngestionResult:
         """Execute full two-pass batch ingestion on input_dir."""
         input_path = Path(input_dir)
@@ -877,7 +899,9 @@ class BatchIngestor:
             csv_path = None
             staged_applicants = {}
 
-        apps, orphans = self.pass_2_traverse_and_link_documents(input_path, staged_applicants, scoped_ids)
+        apps, orphans = self.pass_2_traverse_and_link_documents(
+            input_path, staged_applicants, scoped_ids, audit_run_id=audit_run_id
+        )
 
         return BatchIngestionResult(
             applications=apps,

@@ -42,7 +42,7 @@ def print_score_summary(result: ScoreIngestResult):
     print(f"Total Records Read   : {bold}{result.total_records}{reset}")
     print(f"Matched Applications : {green}{bold}{result.matched_count}{reset} (Linked to applicant records)")
     print(f"Orphan Records       : {yellow}{bold}{result.orphan_count}{reset} (Archived to OrphanTestScore)")
-    print(f"Promoted to READY    : {magenta}{bold}{len(result.promoted_app_ids)}{reset} (Promoted from INCOMPLETE)")
+    print(f"Promoted to READY    : {magenta}{bold}{len(result.promoted_app_ids)}{reset} (Previously incomplete or awaiting materials)")
     print(subsep)
 
     if result.matched_app_ids:

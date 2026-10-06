@@ -2,9 +2,10 @@
 
 Component 3 as specified in Architecture Section 4:
 - Evaluates ingested applications against institutional policies.yaml.
-- Enforces 3-way deterministic routing based strictly on metadata fields and file presence/integrity:
+- Enforces deterministic routing based on metadata fields and file presence/integrity:
   * VALID -> status: "READY_FOR_REVIEW" (application packet complete, ready for handoff).
-  * INCOMPLETE -> status: "INCOMPLETE" (missing required files/metadata -> Applicant Packet Update queue).
+  * AWAITING_MATERIALS -> required documents missing -> Applicant Packet Update queue.
+  * INCOMPLETE -> required metadata fields missing -> Applicant Packet Update queue.
   * ERROR -> status: "ERROR" (corrupted/missing magic bytes/size violation -> Human Review queue).
 - Enforces the 2 Letters of Recommendation (LOR 1 and LOR 2) requirement.
 - Generates structured summary results, reports, and affected_ids list.
@@ -19,6 +20,7 @@ import re
 from typing import Any, Dict, List, Optional, Set
 
 from config import (
+    derive_routing_destination,
     get_checklist,
     get_file_constraints,
     get_required_applicant_fields,
@@ -29,9 +31,10 @@ from ingestion.batch_ingest import IngestedApplication, IngestedDocument
 
 
 class GateStatus(str, Enum):
-    """3-way deterministic gate status."""
+    """Deterministic completeness gate status."""
     READY_FOR_REVIEW = "READY_FOR_REVIEW"
     VALID = "READY_FOR_REVIEW"  # Canonical alias: VALID routes to status "READY_FOR_REVIEW"
+    AWAITING_MATERIALS = "AWAITING_MATERIALS"
     INCOMPLETE = "INCOMPLETE"
     ERROR = "ERROR"
 
@@ -79,6 +82,7 @@ class ManifestGateResult:
     total_valid: int
     total_incomplete: int
     total_error: int
+    total_awaiting_materials: int = 0
     routed_applicants: List[RoutedApplicant] = field(default_factory=list)
     affected_ids: List[str] = field(default_factory=list)
     evaluated_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
@@ -95,6 +99,7 @@ class ManifestGateResult:
         return {
             "total_processed": self.total_processed,
             "total_valid": self.total_valid,
+            "total_awaiting_materials": self.total_awaiting_materials,
             "total_incomplete": self.total_incomplete,
             "total_error": self.total_error,
             "affected_ids": self.affected_ids,
@@ -107,7 +112,7 @@ class ManifestGateResult:
 
 
 class ManifestValidationGate:
-    """Deterministic validation gate applying 3-way routing logic based on policies.yaml."""
+    """Deterministic validation gate applying routing logic from policies.yaml."""
 
     # Map aliases to canonical checklist keys
     CANONICAL_ALIASES = {
@@ -139,20 +144,7 @@ class ManifestValidationGate:
                 "recommendation_letter_2",
             ],
         )
-        self.required_fields = self.policies.get(
-            "required_applicant_fields",
-            [
-                "App_ID",
-                "First_Name",
-                "Last_Name",
-                "Date_Of_Birth",
-                "Email_Address",
-                "Name_of_HS",
-                "Intended_Major",
-                "Admission_Year",
-                "Admission_Term",
-            ],
-        )
+        self.required_fields = get_required_applicant_fields(config_path)
         self.routing_rules = self.policies.get(
             "routing_rules",
             {
@@ -164,10 +156,11 @@ class ManifestValidationGate:
         )
 
     def evaluate_applicant(self, app: IngestedApplication) -> RoutedApplicant:
-        """Evaluate a single ingested applicant packet and determine 3-way route strictly
+        """Evaluate a single ingested applicant packet and determine its route strictly
         based on metadata fields and file presence/integrity:
         - VALID -> status: "READY_FOR_REVIEW" (application packet complete, ready for handoff)
-        - INCOMPLETE -> status: "INCOMPLETE" (missing required files -> Applicant Packet Update)
+        - AWAITING_MATERIALS -> required documents missing -> Applicant Packet Update
+        - INCOMPLETE -> required metadata fields missing -> Applicant Packet Update
         - ERROR -> status: "ERROR" (corrupted/missing magic bytes/size violation -> Human Review)
         """
         missing_docs: List[str] = []
@@ -261,23 +254,20 @@ class ManifestValidationGate:
                     missing_docs.append(req_doc)
 
         # 4. Resolve 3-Way Deterministic Routing
-        # Precedence: ERROR > INCOMPLETE > VALID
+        # Precedence: ERROR > missing fields > missing documents > ready.
         if errors:
             status = GateStatus.ERROR
-            routing = self.routing_rules.get("on_error", GateRoutingDestination.HUMAN_REVIEW.value)
             is_valid = False
-        elif missing_docs or missing_fields:
+        elif missing_fields:
             status = GateStatus.INCOMPLETE
-            routing = self.routing_rules.get(
-                "on_incomplete", GateRoutingDestination.APPLICANT_PACKET_UPDATE.value
-            )
+            is_valid = False
+        elif missing_docs:
+            status = GateStatus.AWAITING_MATERIALS
             is_valid = False
         else:
             status = GateStatus.READY_FOR_REVIEW
-            routing = self.routing_rules.get(
-                "on_valid", GateRoutingDestination.READY_FOR_REVIEW.value
-            )
             is_valid = True
+        routing = derive_routing_destination(status.value, self.routing_rules)
 
         return RoutedApplicant(
             applicant_id=app.applicant_id,
@@ -299,6 +289,7 @@ class ManifestValidationGate:
         """Evaluate a list of ingested applications across the manifest validation gate."""
         routed: List[RoutedApplicant] = []
         valid_cnt = 0
+        awaiting_cnt = 0
         incomplete_cnt = 0
         error_cnt = 0
         affected_ids: List[str] = []
@@ -309,6 +300,8 @@ class ManifestValidationGate:
             if result.status == GateStatus.READY_FOR_REVIEW or result.status == GateStatus.VALID:
                 valid_cnt += 1
                 affected_ids.append(app.applicant_id)
+            elif result.status == GateStatus.AWAITING_MATERIALS:
+                awaiting_cnt += 1
             elif result.status == GateStatus.INCOMPLETE:
                 incomplete_cnt += 1
             elif result.status == GateStatus.ERROR:
@@ -317,6 +310,7 @@ class ManifestValidationGate:
         return ManifestGateResult(
             total_processed=len(applications),
             total_valid=valid_cnt,
+            total_awaiting_materials=awaiting_cnt,
             total_incomplete=incomplete_cnt,
             total_error=error_cnt,
             routed_applicants=routed,

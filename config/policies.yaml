@@ -23,10 +23,6 @@ required_applicant_fields:
   - "Last_Name"
   - "Date_Of_Birth"
   - "Email_Address"
-  - "Name_of_HS"
-  - "Intended_Major"
-  - "Admission_Year"
-  - "Admission_Term"
 
 # Document Type Definitions
 document_types:
@@ -96,7 +92,7 @@ checklists:
       - "advanced_coursework_and_ap_scores"
       - "university_supplement"
       - "exception_supporting_document"
-    on_missing: "INCOMPLETE"
+    on_missing: "AWAITING_MATERIALS"
 
   transfer:
     name: "Transfer Applicant Checklist"
@@ -110,7 +106,7 @@ checklists:
       - "activities_and_awards"
       - "university_supplement"
       - "exception_supporting_document"
-    on_missing: "INCOMPLETE"
+    on_missing: "AWAITING_MATERIALS"
 
   international_first_year:
     name: "International First-Year Applicant Checklist"
@@ -129,13 +125,14 @@ checklists:
       - "activities_and_awards"
       - "university_supplement"
       - "exception_supporting_document"
-    on_missing: "INCOMPLETE"
+    on_missing: "AWAITING_MATERIALS"
 
 # Validation Criteria and Status Codes
 status_codes:
   VALID: "All mandatory files and fields present; application packet complete, ready for handoff."
   READY_FOR_REVIEW: "Automated ingestion and validation checks passed; application packet complete, ready for handoff."
-  INCOMPLETE: "One or more required checklist documents or metadata fields are missing. Route to Applicant Packet Update."
+  AWAITING_MATERIALS: "One or more required checklist documents are missing. Route to Applicant Packet Update."
+  INCOMPLETE: "One or more required metadata fields are missing. Route to Applicant Packet Update."
   ERROR: "Corrupted, missing magic bytes, or size violations encountered. Route to Human Review."
   COUNSELOR_REVIEW: "Ambiguity, duplicate conflict, date mismatch, or waiver requires counselor intervention."
   REPLACEMENT_REQUESTED: "A document failed readability or corrupted structure. Replacement requested."
@@ -148,12 +145,14 @@ status_priority:
   - "COUNSELOR_REVIEW"
   - "REPLACEMENT_REQUESTED"
   - "INCOMPLETE"
+  - "AWAITING_MATERIALS"
   - "VALID"
   - "READY_FOR_REVIEW"
 
 # 3-Way Deterministic Routing Destination Rules (Architecture Section 4)
 routing_rules:
   on_valid: "READY_FOR_REVIEW"
+  on_awaiting_materials: "Applicant Packet Update"
   on_incomplete: "Applicant Packet Update"
   on_error: "Human Review"
   on_invalid: "Human Review"
@@ -163,27 +162,27 @@ policies:
   - id: "POL-FT-01"
     title: "First-Year Core Materials"
     rule: "Official transcript, personal statement, and two letters of recommendation (LOR 1 and LOR 2) are required for review handoff. Test scores are optional."
-    system_action: "Mark INCOMPLETE if a required item is missing; route to Applicant Packet Update."
+    system_action: "Mark AWAITING_MATERIALS if a required document is missing; route to Applicant Packet Update."
 
   - id: "POL-LOR-01"
     title: "Letters of Recommendation Requirement"
-    rule: "First-year applicants must provide exactly two letters of recommendation (recommendation_letter_1 and recommendation_letter_2). Packets with fewer than 2 recommendation letters remain INCOMPLETE."
-    system_action: "Enforce presence of 2 letters of recommendation; route to Applicant Packet Update queue if incomplete."
+    rule: "First-year applicants must provide exactly two letters of recommendation (recommendation_letter_1 and recommendation_letter_2). Packets with fewer than 2 recommendation letters remain AWAITING_MATERIALS."
+    system_action: "Enforce presence of 2 letters of recommendation; route to Applicant Packet Update queue if missing."
 
   - id: "POL-TR-01"
     title: "Transfer Core Materials"
     rule: "Official transcripts and personal statement are required. Recommendations are optional."
-    system_action: "Mark INCOMPLETE if transcript or statement is missing."
+    system_action: "Mark AWAITING_MATERIALS if transcript or statement is missing."
 
   - id: "POL-INT-01"
     title: "English Proficiency"
     rule: "Approved English proficiency evidence required unless documented waiver is on file."
-    system_action: "Mark INCOMPLETE if absent; route waiver requests to COUNSELOR_REVIEW."
+    system_action: "Mark AWAITING_MATERIALS if absent; route waiver requests to COUNSELOR_REVIEW."
 
   - id: "POL-INT-02"
     title: "International Credential Evaluation"
     rule: "Recognized credential evaluation required for non-U.S. academic records."
-    system_action: "Mark INCOMPLETE if missing; route uncertain recognition to COUNSELOR_REVIEW."
+    system_action: "Mark AWAITING_MATERIALS if missing; route uncertain recognition to COUNSELOR_REVIEW."
 
   - id: "POL-TEST-01"
     title: "Test-Optional Review"

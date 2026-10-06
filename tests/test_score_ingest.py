@@ -12,6 +12,7 @@ Verifies:
 9. Standalone CLI runner (run_score_ingest.py).
 """
 
+import asyncio
 import json
 from pathlib import Path
 import subprocess
@@ -278,9 +279,10 @@ def test_orphan_test_score_staging_unmatched(tmp_path, mock_storage):
     assert "sat_math" in orphans[0].payload or "SAT_Math" in orphans[0].payload
 
 
-def test_manifest_gate_re_evaluate_promotion(tmp_path, mock_storage, temp_affected_ids):
+@pytest.mark.parametrize("initial_status", ["INCOMPLETE", "AWAITING_MATERIALS"])
+def test_manifest_gate_re_evaluate_promotion(tmp_path, mock_storage, temp_affected_ids, initial_status):
     """Verify score ingestion promotes a complete packet and publishes its ID."""
-    # Seed applicant with all required documents and metadata, but initially marked INCOMPLETE
+    # Seed a complete packet with a stale non-ready status.
     docs = [
         {"doc_type": "application_form", "filename": "app.pdf", "exists": True, "is_readable": True},
         {"doc_type": "transcript", "filename": "trans.pdf", "exists": True, "is_readable": True},
@@ -299,8 +301,7 @@ def test_manifest_gate_re_evaluate_promotion(tmp_path, mock_storage, temp_affect
         intended_major="Computer Science",
         admission_year=2026,
         admission_term="Fall",
-        status="INCOMPLETE",
-        routing_destination="Applicant Packet Update",
+        status=initial_status,
         documents=docs,
     )
     mock_storage.stage_applicant(app.to_dict())
@@ -349,7 +350,7 @@ def test_ready_score_change_gets_new_handoff_without_duplicate_replay(tmp_path, 
         date_of_birth="2008-04-12", email_address="morgan@example.com",
         name_of_hs="Valley High", intended_major="Biology",
         admission_year=2026, admission_term="Fall",
-        status="READY_FOR_REVIEW", routing_destination="READY_FOR_REVIEW",
+        status="READY_FOR_REVIEW",
         documents=docs,
     )
     mock_storage.stage_applicant(app.to_dict())
@@ -400,7 +401,7 @@ def test_strict_score_handoff_rejects_unavailable_document(tmp_path, mock_storag
         date_of_birth="2008-04-12", email_address="missing@example.com",
         name_of_hs="Valley High", intended_major="Biology",
         admission_year=2026, admission_term="Fall",
-        status="READY_FOR_REVIEW", routing_destination="READY_FOR_REVIEW",
+        status="READY_FOR_REVIEW",
         documents=docs,
     ).to_dict())
 
@@ -425,8 +426,7 @@ def test_strict_score_handoff_rejects_unavailable_document(tmp_path, mock_storag
     assert not list(tmp_path.glob("affected_ids_act_*.json"))
 
 
-@pytest.mark.asyncio
-async def test_async_delta_ingestion(tmp_path, mock_storage):
+def test_async_delta_ingestion(tmp_path, mock_storage):
     """Verify asynchronous ingest methods operate correctly with asyncio."""
     app = Applicant(
         app_id="APP_300",
@@ -446,7 +446,7 @@ async def test_async_delta_ingestion(tmp_path, mock_storage):
     )
 
     ingestor = TestScoreIngestor(storage_manager=mock_storage, affected_ids_path=tmp_path / "affected_ids.json")
-    result = await ingestor.ingest_college_board_async(score_csv)
+    result = asyncio.run(ingestor.ingest_college_board_async(score_csv))
 
     assert result.matched_count == 1
     assert "APP_300" in result.matched_app_ids

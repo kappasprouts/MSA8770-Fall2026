@@ -51,10 +51,6 @@ def get_required_applicant_fields(path: Optional[Path] = None) -> List[str]:
         "Last_Name",
         "Date_Of_Birth",
         "Email_Address",
-        "Name_of_HS",
-        "Intended_Major",
-        "Admission_Year",
-        "Admission_Term",
     ])
 
 
@@ -63,7 +59,7 @@ def get_status_priority(path: Optional[Path] = None) -> List[str]:
     policies = load_policies(path)
     return policies.get(
         "status_priority",
-        ["ERROR", "STOPPED", "COUNSELOR_REVIEW", "REPLACEMENT_REQUESTED", "INCOMPLETE", "VALID", "READY_FOR_REVIEW"],
+        ["ERROR", "STOPPED", "COUNSELOR_REVIEW", "REPLACEMENT_REQUESTED", "INCOMPLETE", "AWAITING_MATERIALS", "VALID", "READY_FOR_REVIEW"],
     )
 
 
@@ -71,6 +67,23 @@ def get_routing_rules(path: Optional[Path] = None) -> Dict[str, str]:
     """Retrieve routing targets for application statuses."""
     policies = load_policies(path)
     return policies.get("routing_rules", {})
+
+
+def derive_routing_destination(status: str, rules: Optional[Dict[str, str]] = None) -> str:
+    """Compute the current queue from a workflow status without storing it."""
+    targets = rules if rules is not None else get_routing_rules()
+    status_value = getattr(status, "value", status)
+    if status_value in {"READY_FOR_REVIEW", "VALID"}:
+        return targets.get("on_valid", targets.get("on_ready", "READY_FOR_REVIEW"))
+    if status_value == "INCOMPLETE":
+        return targets.get("on_incomplete", "Applicant Packet Update")
+    if status_value == "AWAITING_MATERIALS":
+        return targets.get("on_awaiting_materials", targets.get("on_incomplete", "Applicant Packet Update"))
+    if status_value == "PENDING":
+        return "PENDING"
+    if status_value == "ERROR":
+        return targets.get("on_error", targets.get("on_invalid", "Human Review"))
+    return targets.get("on_invalid", targets.get("on_error", "Human Review"))
 
 
 __all__ = [
@@ -82,4 +95,5 @@ __all__ = [
     "get_required_applicant_fields",
     "get_status_priority",
     "get_routing_rules",
+    "derive_routing_destination",
 ]
