@@ -10,11 +10,13 @@ from datetime import datetime, timezone
 import logging
 import os
 from pathlib import Path
+import re
 from typing import Any, Dict, List, Optional
 import urllib.parse
 
 from sqlalchemy import create_engine, func, select, text
 from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm.attributes import flag_modified
 
 try:
     from minio import Minio
@@ -35,9 +37,27 @@ from storage.models import (
 logger = logging.getLogger(__name__)
 
 
+def normalize_applicant_id(text: Optional[str]) -> Optional[str]:
+    """Normalize applicant ID to canonical format (e.g., APP_001).
+
+    Supports formats like APP_001, APP001, app_001, APP-001, app10, etc.
+    """
+    if not text:
+        return None
+    match = re.search(r"APP[_\-\s]?(\d+)", str(text), re.IGNORECASE)
+    if match:
+        digits = match.group(1)
+        if len(digits) >= 3:
+            return f"APP_{digits}"
+        else:
+            num = int(digits)
+            return f"APP_{num:03d}"
+    return None
+
+
 class StorageManager:
-    """Manages relational (PostgreSQL) and object storage (MinIO) interactions
-    with automatic dry-run fallback when services are not reachable.
+    """Manages relational (PostgreSQL or persistent SQLite) and object storage (MinIO) interactions
+    with automatic persistent local SQLite fallback when PostgreSQL is not reachable.
     """
 
     def __init__(
@@ -48,6 +68,8 @@ class StorageManager:
         minio_secret_key: Optional[str] = None,
         minio_secure: Optional[bool] = None,
         minio_bucket: Optional[str] = None,
+        sqlite_store_path: Optional[str] = None,
+        use_sqlite_fallback: bool = True,
     ):
         # Database Configuration
         self.database_url = database_url or os.getenv(
@@ -57,6 +79,10 @@ class StorageManager:
         # Adapt postgresql:// to postgresql+psycopg:// if using psycopg v3
         if self.database_url.startswith("postgresql://") and not self.database_url.startswith("postgresql+"):
             self.database_url = self.database_url.replace("postgresql://", "postgresql+psycopg://", 1)
+
+        self.sqlite_store_path = sqlite_store_path or os.getenv("SQLITE_STORE_PATH", ".local_dev_store.db")
+        self.use_sqlite_fallback = use_sqlite_fallback
+        self.is_sqlite_fallback = False
 
         # MinIO Configuration
         self.minio_endpoint = minio_endpoint or os.getenv("MINIO_ENDPOINT", "localhost:9000")
@@ -96,45 +122,79 @@ class StorageManager:
             return False
 
     def _init_db_connection(self):
-        """Attempt to establish PostgreSQL connection, falling back gracefully to dry-run."""
-        # Fast probe for host/port reachability before engine creation
-        if not self.database_url.startswith("sqlite"):
+        """Attempt to establish PostgreSQL connection, falling back gracefully to persistent SQLite store."""
+        # 1. Direct SQLite database URL requested
+        if self.database_url.startswith("sqlite"):
             try:
-                parsed = urllib.parse.urlsplit(self.database_url)
-                host = parsed.hostname or "localhost"
-                port = parsed.port or 5432
-                if not self._is_reachable(host, port, timeout=0.2):
-                    self.db_available = False
-                    logger.warning(
-                        "Database host %s:%s is not reachable. Operating in dry-run local mode.",
-                        host,
-                        port,
-                    )
-                    return
-            except Exception:
-                pass
-
-        try:
-            if self.database_url.startswith("sqlite"):
                 self.engine = create_engine(self.database_url, connect_args={"check_same_thread": False})
-            else:
-                self.engine = create_engine(self.database_url, pool_pre_ping=True)
+                with self.engine.connect() as conn:
+                    conn.execute(text("SELECT 1"))
+                self.SessionLocal = sessionmaker(
+                    autocommit=False, autoflush=False, expire_on_commit=False, bind=self.engine
+                )
+                Base.metadata.create_all(bind=self.engine)
+                self.db_available = True
+                self.is_sqlite_fallback = True
+                logger.info("Successfully connected to SQLite database at: %s", self.database_url)
+                return
+            except Exception as e:
+                logger.warning("Could not connect to specified SQLite database (%s).", e)
 
-            # Test connection
-            with self.engine.connect() as conn:
-                conn.execute(text("SELECT 1"))
-            self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
-            Base.metadata.create_all(bind=self.engine)
-            self.db_available = True
-            logger.info("Successfully connected to database at: %s", self._safe_url(self.database_url))
-        except Exception as e:
-            self.db_available = False
-            self.engine = None
-            self.SessionLocal = None
-            logger.warning(
-                "Could not connect to database (%s). Operating in dry-run local mode for relational storage.",
-                str(e),
-            )
+        # 2. Check PostgreSQL availability
+        postgres_online = False
+        host, port = "localhost", 5432
+        try:
+            parsed = urllib.parse.urlsplit(self.database_url)
+            host = parsed.hostname or "localhost"
+            port = parsed.port or 5432
+            if self._is_reachable(host, port, timeout=0.2):
+                postgres_online = True
+        except Exception:
+            postgres_online = False
+
+        if postgres_online:
+            try:
+                self.engine = create_engine(self.database_url, pool_pre_ping=True)
+                with self.engine.connect() as conn:
+                    conn.execute(text("SELECT 1"))
+                self.SessionLocal = sessionmaker(
+                    autocommit=False, autoflush=False, expire_on_commit=False, bind=self.engine
+                )
+                Base.metadata.create_all(bind=self.engine)
+                self.db_available = True
+                self.is_sqlite_fallback = False
+                logger.info("Successfully connected to PostgreSQL at: %s", self._safe_url(self.database_url))
+                return
+            except Exception as e:
+                logger.warning("PostgreSQL connection failed (%s). Falling back to persistent SQLite.", e)
+        else:
+            logger.info("Database host %s:%s is not reachable. Operating in persistent local SQLite mode.", host, port)
+
+        # 3. Persistent Local SQLite Fallback
+        if self.use_sqlite_fallback:
+            try:
+                db_path = Path(self.sqlite_store_path).resolve()
+                db_path.parent.mkdir(parents=True, exist_ok=True)
+                sqlite_url = f"sqlite:///{db_path}"
+                self.engine = create_engine(sqlite_url, connect_args={"check_same_thread": False})
+                with self.engine.connect() as conn:
+                    conn.execute(text("SELECT 1"))
+                self.SessionLocal = sessionmaker(
+                    autocommit=False, autoflush=False, expire_on_commit=False, bind=self.engine
+                )
+                Base.metadata.create_all(bind=self.engine)
+                self.db_available = True
+                self.is_sqlite_fallback = True
+                logger.info("Persistent local SQLite fallback initialized at: %s", db_path)
+                return
+            except Exception as e:
+                logger.warning("Could not initialize local SQLite fallback store (%s).", e)
+
+        # 4. Volatile In-Memory Fallback if SQLite fails
+        self.db_available = False
+        self.engine = None
+        self.SessionLocal = None
+        logger.warning("Operating in ephemeral dry-run in-memory mode.")
 
     def _init_minio_connection(self):
         """Attempt to establish MinIO client connection, falling back gracefully to dry-run."""
@@ -260,8 +320,13 @@ class StorageManager:
                 existing = session.execute(select(Applicant).where(Applicant.app_id == app_id)).scalar_one_or_none()
                 if existing:
                     for k, v in applicant_data.items():
+                        if k == "documents" and not v and existing.documents:
+                            continue
                         if hasattr(existing, k):
                             setattr(existing, k, v)
+                    for json_col in ("activities", "awards", "ap_test_scores", "hooks", "documents"):
+                        if hasattr(existing, json_col) and json_col in applicant_data:
+                            flag_modified(existing, json_col)
                     existing.updated_at = datetime.now(timezone.utc)
                     session.commit()
                     session.refresh(existing)
@@ -282,6 +347,8 @@ class StorageManager:
         if app_id in self.dry_run_applicants:
             cached = self.dry_run_applicants[app_id]
             for k, v in applicant_data.items():
+                if k == "documents" and not v and getattr(cached, "documents", None):
+                    continue
                 if hasattr(cached, k):
                     setattr(cached, k, v)
             return cached
@@ -318,15 +385,31 @@ class StorageManager:
         documents: Optional[List[Dict[str, Any]]] = None,
     ) -> bool:
         """Update the gate evaluation status and documents of an applicant."""
+        if not app_id:
+            return False
+
+        candidates = [app_id]
+        norm = normalize_applicant_id(app_id)
+        if norm and norm not in candidates:
+            candidates.append(norm)
+        for var in [app_id.replace("-", "_"), app_id.replace("_", "-"), app_id.upper()]:
+            if var not in candidates:
+                candidates.append(var)
+
         if self.db_available and self.SessionLocal:
             session: Session = self.SessionLocal()
             try:
-                app = session.execute(select(Applicant).where(Applicant.app_id == app_id)).scalar_one_or_none()
+                app = None
+                for cand in candidates:
+                    app = session.execute(select(Applicant).where(Applicant.app_id == cand)).scalar_one_or_none()
+                    if app:
+                        break
                 if app:
                     app.status = status
                     app.routing_destination = routing_destination
                     if documents is not None:
                         app.documents = documents
+                        flag_modified(app, "documents")
                     app.updated_at = datetime.now(timezone.utc)
                     session.commit()
                     return True
@@ -336,25 +419,45 @@ class StorageManager:
             finally:
                 session.close()
 
-        if app_id in self.dry_run_applicants:
-            cached = self.dry_run_applicants[app_id]
-            cached.status = status
-            cached.routing_destination = routing_destination
-            if documents is not None:
-                cached.documents = documents
-            return True
+        for cand in candidates:
+            if cand in self.dry_run_applicants:
+                cached = self.dry_run_applicants[cand]
+                cached.status = status
+                cached.routing_destination = routing_destination
+                if documents is not None:
+                    cached.documents = documents
+                return True
 
         return False
 
     def get_applicant(self, app_id: str) -> Optional[Applicant]:
-        """Retrieve an applicant record by ID."""
+        """Retrieve an applicant record by ID with flexible format matching."""
+        if not app_id:
+            return None
+
+        candidates = [app_id]
+        norm = normalize_applicant_id(app_id)
+        if norm and norm not in candidates:
+            candidates.append(norm)
+        for var in [app_id.replace("-", "_"), app_id.replace("_", "-"), app_id.upper()]:
+            if var not in candidates:
+                candidates.append(var)
+
         if self.db_available and self.SessionLocal:
             session: Session = self.SessionLocal()
             try:
-                return session.execute(select(Applicant).where(Applicant.app_id == app_id)).scalar_one_or_none()
+                for cand in candidates:
+                    app = session.execute(select(Applicant).where(Applicant.app_id == cand)).scalar_one_or_none()
+                    if app:
+                        return app
+                return None
             finally:
                 session.close()
-        return self.dry_run_applicants.get(app_id)
+
+        for cand in candidates:
+            if cand in self.dry_run_applicants:
+                return self.dry_run_applicants[cand]
+        return None
 
     def get_all_applicants(self) -> List[Applicant]:
         """Retrieve all staged applicant records."""
@@ -488,10 +591,25 @@ class StorageManager:
         superscored_act: Optional[float] = None,
     ) -> Optional[Applicant]:
         """Update test score attributes for an applicant in DB or in-memory dry-run store."""
+        if not app_id:
+            return None
+
+        candidates = [app_id]
+        norm = normalize_applicant_id(app_id)
+        if norm and norm not in candidates:
+            candidates.append(norm)
+        for var in [app_id.replace("-", "_"), app_id.replace("_", "-"), app_id.upper()]:
+            if var not in candidates:
+                candidates.append(var)
+
         if self.db_available and self.SessionLocal:
             session: Session = self.SessionLocal()
             try:
-                app = session.execute(select(Applicant).where(Applicant.app_id == app_id)).scalar_one_or_none()
+                app = None
+                for cand in candidates:
+                    app = session.execute(select(Applicant).where(Applicant.app_id == cand)).scalar_one_or_none()
+                    if app:
+                        break
                 if app:
                     if sat_math is not None:
                         app.sat_math = sat_math
@@ -516,6 +634,7 @@ class StorageManager:
 
                     if ap_test_scores is not None:
                         app.ap_test_scores = list(ap_test_scores)
+                        flag_modified(app, "ap_test_scores")
 
                     app.updated_at = datetime.now(timezone.utc)
                     session.commit()
@@ -527,33 +646,47 @@ class StorageManager:
             finally:
                 session.close()
 
-        if app_id in self.dry_run_applicants:
-            cached = self.dry_run_applicants[app_id]
-            if sat_math is not None:
-                cached.sat_math = sat_math
-            if sat_ebrw is not None:
-                cached.sat_ebrw = sat_ebrw
-            if superscored_sat is not None:
-                cached.superscored_sat_score = superscored_sat
-            elif sat_math is not None and sat_ebrw is not None:
-                cached.superscored_sat_score = float(sat_math + sat_ebrw)
+        for cand in candidates:
+            if cand in self.dry_run_applicants:
+                cached = self.dry_run_applicants[cand]
+                if sat_math is not None:
+                    cached.sat_math = sat_math
+                if sat_ebrw is not None:
+                    cached.sat_ebrw = sat_ebrw
+                if superscored_sat is not None:
+                    cached.superscored_sat_score = superscored_sat
+                elif sat_math is not None and sat_ebrw is not None:
+                    cached.superscored_sat_score = float(sat_math + sat_ebrw)
 
-            if act_composite is not None:
-                cached.act_composite = act_composite
-                if superscored_act is not None:
-                    cached.superscored_act_score = superscored_act
-                elif cached.superscored_act_score is None or float(act_composite) > cached.superscored_act_score:
-                    cached.superscored_act_score = float(act_composite)
+                if act_composite is not None:
+                    cached.act_composite = act_composite
+                    if superscored_act is not None:
+                        cached.superscored_act_score = superscored_act
+                    elif cached.superscored_act_score is None or float(act_composite) > cached.superscored_act_score:
+                        cached.superscored_act_score = float(act_composite)
 
-            if act_sections:
-                for sec_k, sec_v in act_sections.items():
-                    if hasattr(cached, sec_k) and sec_v is not None:
-                        setattr(cached, sec_k, sec_v)
+                if act_sections:
+                    for sec_k, sec_v in act_sections.items():
+                        if hasattr(cached, sec_k) and sec_v is not None:
+                            setattr(cached, sec_k, sec_v)
 
-            if ap_test_scores is not None:
-                cached.ap_test_scores = list(ap_test_scores)
+                if ap_test_scores is not None:
+                    cached.ap_test_scores = list(ap_test_scores)
 
-            cached.updated_at = datetime.now(timezone.utc)
-            return cached
+                cached.updated_at = datetime.now(timezone.utc)
+                return cached
 
         return None
+
+    def clear_local_store(self):
+        """Reset/truncate local store for clean testing/dev states."""
+        self.dry_run_applicants.clear()
+        self.dry_run_orphans.clear()
+        self.dry_run_orphan_scores.clear()
+        if self.db_available and self.engine and 'sqlite' in str(self.engine.url):
+            try:
+                Base.metadata.drop_all(bind=self.engine)
+                Base.metadata.create_all(bind=self.engine)
+                logger.info('Cleared and recreated SQLite store tables.')
+            except Exception as e:
+                logger.warning('Error clearing SQLite store: %s', e)

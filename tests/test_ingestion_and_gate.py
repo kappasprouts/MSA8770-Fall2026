@@ -33,9 +33,10 @@ from ingestion.batch_ingest import (
     IngestedDocument,
     PDF_MAGIC_BYTES,
     compute_sha256,
+    extract_and_normalize_app_id,
 )
 from storage.models import Applicant, OrphanDocument
-from storage.storage_manager import StorageManager
+from storage.storage_manager import StorageManager, normalize_applicant_id
 from validation.manifest_gate import (
     GateRoutingDestination,
     GateStatus,
@@ -560,3 +561,125 @@ def test_case_2_db_lookup_late_arriving_document(tmp_path, config_file):
     orphan_app_ids = [o.get("detected_app_id") for o in result.orphans]
     assert "APP_999" in orphan_app_ids
     assert "APP_042" not in orphan_app_ids
+
+
+def test_persistent_dry_run_multi_batch_late_arrival(tmp_path, config_file, batch_dir):
+    """Verify persistent local dry-run state across multi-batch CLI runs:
+    1. Run Batch 1 on batch_01 (ingesting APP_001..APP_010) using persistent SQLite store.
+       APP_010 is missing its transcript and ends with status INCOMPLETE.
+    2. In a separate CLI execution with a fresh StorageManager instance connected to the same store,
+       run Pass 2 / late-arrival check on a delta batch containing APP010_transcript.pdf.
+    3. Verify APP_010 is retrieved from the persistent store, promoted to READY_FOR_REVIEW,
+       added to affected_ids.json, and NOT marked as an orphan.
+    4. Verify an unmatched document (APP_999) is correctly routed to orphans.
+    """
+    store_file = tmp_path / ".test_persistent_store.db"
+    report1 = tmp_path / "batch1_report.txt"
+    affected1 = tmp_path / "batch1_affected.json"
+
+    # Separate Run 1: Batch 1
+    storage_run1 = StorageManager(sqlite_store_path=str(store_file))
+    assert storage_run1.is_sqlite_fallback is True
+    assert storage_run1.db_available is True
+
+    result_1 = run_pipeline(
+        input_dir=batch_dir,
+        config_file=config_file,
+        report_file=report1,
+        affected_ids_file=affected1,
+        storage_manager=storage_run1,
+    )
+
+    # In Batch 1, APP_010 is INCOMPLETE (missing transcript)
+    assert result_1.total_processed == 10
+    assert result_1.total_incomplete == 1
+    assert "APP_010" not in result_1.affected_ids
+    app_010_stored = storage_run1.get_applicant("APP_010")
+    assert app_010_stored is not None
+    assert app_010_stored.status == "INCOMPLETE"
+
+    # Create delta batch directory with late-arriving transcript for APP_010 (testing flexible regex: APP010)
+    delta_dir = tmp_path / "delta_batch_late"
+    delta_dir.mkdir()
+    late_transcript = delta_dir / "APP010_transcript.pdf"
+    late_transcript.write_bytes(PDF_MAGIC_BYTES + b"1.4\n" + b"LATE_TRANSCRIPT" * 100)
+
+    unmatched_doc = delta_dir / "APP_999_unmatched.pdf"
+    unmatched_doc.write_bytes(PDF_MAGIC_BYTES + b"1.4\n" + b"ORPHAN_CONTENT" * 100)
+
+    # Separate Run 2: Completely fresh StorageManager instance simulating subsequent CLI run
+    report2 = tmp_path / "batch2_report.txt"
+    affected2 = tmp_path / "batch2_affected.json"
+    storage_run2 = StorageManager(sqlite_store_path=str(store_file))
+    assert storage_run2.is_sqlite_fallback is True
+
+    result_2 = run_pipeline(
+        input_dir=delta_dir,
+        config_file=config_file,
+        report_file=report2,
+        affected_ids_file=affected2,
+        storage_manager=storage_run2,
+    )
+
+    # Verify APP_010 was found from persistent SQLite store and promoted to READY_FOR_REVIEW
+    assert "APP_010" in result_2.affected_ids
+    with open(affected2, "r", encoding="utf-8") as f:
+        affected_ids_disk = json.load(f)
+    assert "APP_010" in affected_ids_disk
+
+    # Verify APP_010 in storage has all 5 documents and is READY_FOR_REVIEW
+    app_010_final = storage_run2.get_applicant("APP_010")
+    assert app_010_final is not None
+    assert app_010_final.status == "READY_FOR_REVIEW"
+    assert app_010_final.routing_destination == "READY_FOR_REVIEW"
+    doc_names = [d["filename"] for d in app_010_final.documents]
+    assert "APP010_transcript.pdf" in doc_names
+    assert len(app_010_final.documents) == 10  # 9 batch_01 docs + 1 late-arriving transcript
+
+    # Verify APP_010 was NOT marked as an orphan, and APP_999 was
+    orphan_ids = [o.detected_app_id for o in storage_run2.get_all_orphans()]
+    assert "APP_010" not in orphan_ids
+    assert "APP_999" in orphan_ids
+
+
+def test_extract_and_normalize_app_id_robustness():
+    """Verify that extract_and_normalize_app_id flexibly handles various applicant ID formats."""
+    assert extract_and_normalize_app_id("APP_001") == "APP_001"
+    assert extract_and_normalize_app_id("APP001") == "APP_001"
+    assert extract_and_normalize_app_id("app_001") == "APP_001"
+    assert extract_and_normalize_app_id("APP-001") == "APP_001"
+    assert extract_and_normalize_app_id("app-001") == "APP_001"
+    assert extract_and_normalize_app_id("APP 001") == "APP_001"
+    assert extract_and_normalize_app_id("app10") == "APP_010"
+    assert extract_and_normalize_app_id("APP010_transcript.pdf") == "APP_010"
+    assert extract_and_normalize_app_id("APP-042-essay.pdf") == "APP_042"
+    assert extract_and_normalize_app_id("app_010_transcript.pdf") == "APP_010"
+    assert extract_and_normalize_app_id("transcript_APP010.pdf") == "APP_010"
+    assert extract_and_normalize_app_id("transcript.pdf") is None
+    assert extract_and_normalize_app_id("") is None
+    assert extract_and_normalize_app_id(None) is None
+
+
+def test_storage_manager_format_tolerance_and_clear(tmp_path):
+    """Verify StorageManager get_applicant format tolerance and clear_local_store."""
+    db_file = tmp_path / "format_test.db"
+    storage = StorageManager(sqlite_store_path=str(db_file))
+    storage.stage_applicant({
+        "app_id": "APP_005",
+        "first_name": "Taylor",
+        "last_name": "Swift",
+    })
+
+    # Test flexible lookup
+    assert storage.get_applicant("APP_005") is not None
+    assert storage.get_applicant("APP005") is not None
+    assert storage.get_applicant("app_005") is not None
+    assert storage.get_applicant("APP-005") is not None
+    assert storage.get_applicant("app-005") is not None
+    assert storage.get_applicant("app5") is not None
+
+    # Test clear_local_store
+    storage.clear_local_store()
+    assert storage.get_applicant("APP_005") is None
+
+

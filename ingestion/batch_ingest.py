@@ -46,6 +46,25 @@ def compute_sha256(file_path: Path) -> str:
     return hasher.hexdigest()
 
 
+def extract_and_normalize_app_id(text: Optional[str]) -> Optional[str]:
+    """Extract and normalize applicant ID from filename, path, or directory name.
+
+    Supports formats like APP_001, APP001, app_001, APP-001, app10, etc.,
+    normalizing to standard canonical format: APP_XXX (e.g. APP_001).
+    """
+    if not text:
+        return None
+    match = re.search(r"APP[_\-\s]?(\d+)", str(text), re.IGNORECASE)
+    if match:
+        digits = match.group(1)
+        if len(digits) >= 3:
+            return f"APP_{digits}"
+        else:
+            num = int(digits)
+            return f"APP_{num:03d}"
+    return None
+
+
 def _parse_float(val: Any) -> Optional[float]:
     if val is None:
         return None
@@ -356,15 +375,17 @@ class BatchIngestor:
                     return c
             return csv_files[0]
 
-        # Fallback to applicant_data in workspace
-        root = input_dir.resolve().parent
-        for candidate_dir in [root / "applicant_data", Path("applicant_data")]:
-            if candidate_dir.exists():
-                candidates = list(candidate_dir.glob("*V3.csv")) or list(candidate_dir.glob("*.csv"))
-                if candidates:
-                    return candidates[0]
+        # Fallback to applicant_data in workspace only if input_dir has applicant subfolders
+        subfolders = [d for d in input_dir.iterdir() if d.is_dir() and not d.name.startswith(".")] if input_dir.exists() else []
+        if subfolders:
+            root = input_dir.resolve().parent
+            for candidate_dir in [root / "applicant_data", Path("applicant_data")]:
+                if candidate_dir.exists():
+                    candidates = list(candidate_dir.glob("*V3.csv")) or list(candidate_dir.glob("*.csv"))
+                    if candidates:
+                        return candidates[0]
 
-        raise FileNotFoundError(f"No CSV file found in {input_dir} or applicant_data/")
+        raise FileNotFoundError(f"No CSV file found in {input_dir}")
 
     def parse_csv(self, csv_path: Path) -> List[Dict[str, Any]]:
         """Parse applicant CSV records with clean stripped metadata."""
@@ -507,20 +528,22 @@ class BatchIngestor:
         for item in sorted(input_dir.iterdir()):
             if item.is_dir() and not item.name.startswith("."):
                 # Subdirectory
-                subfolder_id = item.name.replace("-", "_")
+                subfolder_id = extract_and_normalize_app_id(item.name) or item.name.replace("-", "_")
                 for doc_file in sorted(item.iterdir()):
                     if doc_file.is_file() and not doc_file.name.startswith(".") and not doc_file.name.endswith(".csv"):
-                        candidate_files.append((subfolder_id, doc_file))
+                        doc_id = extract_and_normalize_app_id(doc_file.name) or subfolder_id
+                        candidate_files.append((doc_id, doc_file))
             elif item.is_file() and not item.name.startswith(".") and not item.name.endswith(".csv"):
                 # Loose file at root level
-                match = re.search(r"(APP[_-]\d+)", item.name, re.IGNORECASE)
-                detected_id = match.group(1).upper().replace("-", "_") if match else None
+                detected_id = extract_and_normalize_app_id(item.name)
                 candidate_files.append((detected_id, item))
 
         # Build alias map for staged applicants
         applicant_alias_map: Dict[str, str] = {}
         for app_id in staged_applicants.keys():
+            norm_id = extract_and_normalize_app_id(app_id) or app_id
             applicant_alias_map[app_id] = app_id
+            applicant_alias_map[norm_id] = app_id
             applicant_alias_map[app_id.replace("-", "_")] = app_id
             applicant_alias_map[app_id.replace("_", "-")] = app_id
 
@@ -562,26 +585,27 @@ class BatchIngestor:
                 if err:
                     target_app.trust_boundary_errors.append(err)
 
-            elif matched_app_id and (
-                self.storage.get_applicant(matched_app_id)
-                or self.storage.get_applicant(matched_app_id.replace("-", "_"))
-                or self.storage.get_applicant(matched_app_id.replace("_", "-"))
+            elif (matched_app_id or detected_id) and (
+                (matched_app_id and self.storage.get_applicant(matched_app_id))
+                or (detected_id and self.storage.get_applicant(detected_id))
             ):
                 # CASE 2: NOT in staged_applicants from Pass 1, but exists in DB from prior night's batch
-                db_app = (
-                    self.storage.get_applicant(matched_app_id)
-                    or self.storage.get_applicant(matched_app_id.replace("-", "_"))
-                    or self.storage.get_applicant(matched_app_id.replace("_", "-"))
-                )
+                lookup_id = matched_app_id or detected_id
+                db_app = self.storage.get_applicant(lookup_id) or (self.storage.get_applicant(detected_id) if detected_id else None)
                 canonical_id = db_app.app_id
                 logger.info("Case 2: Found applicant %s in database from prior batch", canonical_id)
 
                 # 1. Add app_id to staged_app_ids and affected_ids
-                target_app = self._db_applicant_to_ingested(db_app)
-                staged_applicants[canonical_id] = target_app
-                applicant_alias_map[canonical_id] = canonical_id
-                applicant_alias_map[canonical_id.replace("-", "_")] = canonical_id
-                applicant_alias_map[canonical_id.replace("_", "-")] = canonical_id
+                if canonical_id in staged_applicants:
+                    target_app = staged_applicants[canonical_id]
+                else:
+                    target_app = self._db_applicant_to_ingested(db_app)
+                    staged_applicants[canonical_id] = target_app
+                    norm_id = extract_and_normalize_app_id(canonical_id) or canonical_id
+                    applicant_alias_map[canonical_id] = canonical_id
+                    applicant_alias_map[norm_id] = canonical_id
+                    applicant_alias_map[canonical_id.replace("-", "_")] = canonical_id
+                    applicant_alias_map[canonical_id.replace("_", "-")] = canonical_id
 
                 if canonical_id not in affected_ids:
                     affected_ids.append(canonical_id)
