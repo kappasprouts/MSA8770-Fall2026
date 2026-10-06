@@ -6,3 +6,4 @@ __pycache__/
 .DS_Store
 .Rhistory
 results/my_run_output.txt
+audit_logs/
