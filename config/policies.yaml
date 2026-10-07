@@ -82,13 +82,11 @@ checklists:
     required_documents:
       - "application_form"
       - "transcript"
-      - "personal_statement"
       - "recommendation_letter_1"
       - "recommendation_letter_2"
     required_recommendation_letters_count: 2
     optional_documents:
       - "standardized_test_score"
-      - "activities_and_awards"
       - "advanced_coursework_and_ap_scores"
       - "university_supplement"
       - "exception_supporting_document"
@@ -100,10 +98,8 @@ checklists:
     required_documents:
       - "application_form"
       - "transcript"
-      - "personal_statement"
     optional_documents:
       - "recommendation_letter"
-      - "activities_and_awards"
       - "university_supplement"
       - "exception_supporting_document"
     on_missing: "AWAITING_MATERIALS"
@@ -114,7 +110,6 @@ checklists:
     required_documents:
       - "application_form"
       - "transcript"
-      - "personal_statement"
       - "recommendation_letter_1"
       - "recommendation_letter_2"
       - "english_proficiency_evidence"
@@ -122,7 +117,6 @@ checklists:
     required_recommendation_letters_count: 2
     optional_documents:
       - "standardized_test_score"
-      - "activities_and_awards"
       - "university_supplement"
       - "exception_supporting_document"
     on_missing: "AWAITING_MATERIALS"
@@ -161,7 +155,7 @@ routing_rules:
 policies:
   - id: "POL-FT-01"
     title: "First-Year Core Materials"
-    rule: "Official transcript, personal statement, and two letters of recommendation (LOR 1 and LOR 2) are required for review handoff. Test scores are optional."
+    rule: "Official transcript, and two letters of recommendation (LOR 1 and LOR 2) are required for review handoff. Test scores are optional."
     system_action: "Mark AWAITING_MATERIALS if a required document is missing; route to Applicant Packet Update."
 
   - id: "POL-LOR-01"
@@ -171,7 +165,7 @@ policies:
 
   - id: "POL-TR-01"
     title: "Transfer Core Materials"
-    rule: "Official transcripts and personal statement are required. Recommendations are optional."
+    rule: "Official transcripts are required. Recommendations are optional."
     system_action: "Mark AWAITING_MATERIALS if transcript or statement is missing."
 
   - id: "POL-INT-01"

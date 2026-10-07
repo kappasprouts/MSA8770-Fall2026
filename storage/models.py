@@ -41,34 +41,34 @@ class Applicant(Base):
     __tablename__ = "applicants"
 
     # Primary Identifier
-    app_id = Column(String(64), primary_key=True, index=True)
+    app_id = Column(String(10), primary_key=True, index=True)
 
     # Core Demographic & Contact Information (relational columns)
-    first_name = Column(String(128), nullable=False)
-    last_name = Column(String(128), nullable=False)
+    first_name = Column(String(40), nullable=True)
+    last_name = Column(String(40), nullable=True)
     date_of_birth = Column(Date, nullable=True)
-    mailing_address = Column(String(256), nullable=True)
-    phone_number = Column(String(64), nullable=True)
-    email_address = Column(String(128), nullable=True, index=True)
-    gender = Column(String(32), nullable=True)
-    ethnicity = Column(String(64), nullable=True)
+    mailing_address = Column(String(100), nullable=True)
+    phone_number = Column(String(20), nullable=True)
+    email_address = Column(String(100), nullable=True, index=True)
+    gender = Column(String(10), nullable=True)
+    ethnicity = Column(String(50), nullable=True)
 
     # School & Geographic Context
-    name_of_hs = Column(String(256), nullable=True)
-    counselor_name = Column(String(128), nullable=True)
-    country = Column(String(64), nullable=True)
-    region = Column(String(64), nullable=True)
-    intended_major = Column(String(128), nullable=True)
+    name_of_hs = Column(String(100), nullable=True)
+    counselor_name = Column(String(60), nullable=True)
+    country = Column(String(50), nullable=True)
+    region = Column(String(20), nullable=True)
+    intended_major = Column(String(100), nullable=True)
 
     # Academic & Testing Metrics (typed numeric/string columns)
-    unweighted_gpa = Column(Numeric(5, 3), nullable=True)
-    weighted_gpa = Column(Numeric(5, 3), nullable=True)
-    rank = Column(String(64), nullable=True)
+    unweighted_gpa = Column(Numeric(3, 2), nullable=True)
+    weighted_gpa = Column(Numeric(3, 2), nullable=True)
+    rank = Column(String(15), nullable=True)
 
-    superscored_sat_score = Column(Float, nullable=True)
+    superscored_sat_score = Column(Integer, nullable=True)
     sat_math = Column(Integer, nullable=True)
     sat_ebrw = Column(Integer, nullable=True)
-    superscored_act_score = Column(Float, nullable=True)
+    superscored_act_score = Column(Integer, nullable=True)
     act_composite = Column(Integer, nullable=True)
     act_english = Column(Integer, nullable=True)
     act_math = Column(Integer, nullable=True)
@@ -76,9 +76,9 @@ class Applicant(Base):
     act_science = Column(Integer, nullable=True)
     act_writing = Column(Integer, nullable=True)
 
-    total_aps = Column(Float, nullable=True)
+    total_aps = Column(Integer, nullable=True)
     ap_test_scores = Column(JsonType, default=list, nullable=False)    # List of up to 12 AP scores/courses
-    total_ibs = Column(Float, nullable=True)
+    total_ibs = Column(Integer, nullable=True)
     ib_test_scores = Column(JsonType, default=list, nullable=False)    # List of up to 12 IB scores/courses
 
     # Variable-Length Array Fields (JSONB ONLY)
@@ -87,8 +87,8 @@ class Applicant(Base):
     hooks = Column(JsonType, default=list, nullable=False)             # List of up to 5 hooks
     documents = Column(JsonType, default=list, nullable=False)         # List of attached document metadata
 
-    admission_year = Column(Integer, nullable=True)
-    admission_term = Column(String(32), nullable=True)
+    admission_year = Column(Integer, nullable=False)
+    admission_term = Column(String(1), nullable=False)
 
     # Inbound Submission & Review Metadata
     create_date_time = Column(String(64), nullable=True)
@@ -98,7 +98,7 @@ class Applicant(Base):
     # Deterministic Gate Workflow Status
     # Statuses: PENDING, READY_FOR_REVIEW, AWAITING_MATERIALS, INCOMPLETE, ERROR
     status = Column(String(32), default="PENDING", nullable=False, index=True)
-    final_decision = Column(String(64), nullable=True)
+    final_decision = Column(String(10), nullable=True)
 
     # Timestamps
     created_at = Column(
@@ -208,7 +208,7 @@ class OrphanDocument(Base):
     filename = Column(String(255), nullable=False)
     file_path = Column(String(512), nullable=False)
     minio_key = Column(String(512), nullable=False)
-    detected_app_id = Column(String(64), nullable=True, index=True)
+    detected_app_id = Column(String(10), nullable=True, index=True)
     sha256 = Column(String(64), nullable=False)
     file_size_bytes = Column(Integer, nullable=True)
     ingested_at = Column(
@@ -237,7 +237,7 @@ class DocumentRecord(Base):
     __tablename__ = "document_records"
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
-    applicant_id = Column(String(64), nullable=False, index=True)
+    applicant_id = Column(String(10), nullable=False, index=True)
     document_type = Column(String(64), nullable=False)
     filename = Column(String(255), nullable=False)
     minio_bucket = Column(String(64), nullable=False, default="admissions-raw-docs")
@@ -260,7 +260,7 @@ class AuditLog(Base):
     __tablename__ = "audit_logs"
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
-    applicant_id = Column(String(64), nullable=False, index=True)
+    applicant_id = Column(String(10), nullable=False, index=True)
     action = Column(String(64), nullable=False)
     actor = Column(String(64), nullable=False, default="system_pipeline")
     details = Column(JsonType, default=dict, nullable=False)

@@ -244,7 +244,9 @@ def run_pipeline(
     execution_time = datetime.now(timezone.utc)
     run_id = run_id or execution_time.strftime("%Y%m%dT%H%M%S%fZ") + "_" + uuid.uuid4().hex[:8]
     out_affected = Path(affected_ids_file) if affected_ids_file else Path(f"affected_ids_{run_id}.json")
-    out_file = Path(report_file) if report_file else Path("ingestion_batch_01_report.txt")
+    
+    batch_name = input_path.name
+    out_file = Path(report_file) if report_file else Path(f"ingestion_{batch_name}_report.txt") 
     if out_affected.resolve() == out_file.resolve():
         raise ValueError("The audit report and affected-ID file must use different paths")
     storage = storage_manager or StorageManager()
@@ -366,8 +368,8 @@ def main():
     parser.add_argument(
         "--output",
         "-o",
-        default="ingestion_batch_01_report.txt",
-        help="Path to output audit log report file (default: ingestion_batch_01_report.txt)",
+        default=None,
+        help="Path to output audit log report file (default: derived from input batch directory)",
     )
     parser.add_argument(
         "--affected-ids",

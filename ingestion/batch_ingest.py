@@ -322,6 +322,8 @@ class BatchIngestor:
         "lor_1": "recommendation_letter_1",
         "lor_2": "recommendation_letter_2",
         "lor": "recommendation_letter_1",
+        "letter_rec1": "recommendation_letter_1",
+        "letter_rec2": "recommendation_letter_2",
         "counselor_recommendation": "recommendation_letter_1",
         "teacher_recommendation": "recommendation_letter_2",
         "standardized_test_score": "standardized_test_score",
@@ -551,6 +553,27 @@ class BatchIngestor:
 
             record = dict(csv_record)
             record["App_ID"] = app_id
+
+            # Hard-truncate scalar text fields to database VARCHAR limits
+            field_limits = {
+                "First_Name": 40,
+                "Last_Name": 40,
+                "Mailing_Address": 100,
+                "Primary_Phone_Number": 20,
+                "Email_Address": 100,
+                "Gender": 10,
+                "Ethnicity": 50,
+                "Name_of_HS": 100,
+                "Counselor_Name": 60,
+                "Country": 50,
+                "Region": 20,
+                "Intended_Major": 100,
+                }
+
+            for field, max_length in field_limits.items():
+                value = record.get(field)
+                if value:
+                    record[field] = str(value).strip()[:max_length]
 
             # Extract variable-length array fields
             activities_str = record.get("Activities") or ""

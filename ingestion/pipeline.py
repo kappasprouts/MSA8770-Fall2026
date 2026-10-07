@@ -38,7 +38,11 @@ class BatchIngestionPipeline:
         self.config_path = Path(config_path or os.getenv("INGESTION_CONFIG_PATH", root / "config/policies.yaml"))
         configured_report = report_path or os.getenv("INGESTION_REPORT_PATH")
         configured_ids = affected_ids_path or os.getenv("INGESTION_AFFECTED_IDS_PATH")
-        self.report_path = Path(configured_report or root / "ingestion_batch_01_report.txt")
+        
+        batch_name = self.source_dir.name
+        self.report_path = Path(
+            configured_report or root / f"ingestion_{batch_name}_report.txt"
+        )
         self.affected_ids_path = Path(configured_ids or root / "affected_ids.json")
         self.storage_manager = storage_manager
         self.require_object_storage = (
