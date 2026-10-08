@@ -19,3 +19,4 @@ venv/
 !.env.example
 *.log
 tmp/
+.local_dev_store.db*

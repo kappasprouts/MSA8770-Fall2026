@@ -1,0 +1,98 @@
+{
+  "master_rows": 60,
+  "master_unique_ids": 60,
+  "batch_rows": 10,
+  "batch_matches_v3": false,
+  "applicant_pdf_count": 100,
+  "applicant_pdf_id_conflicts": [],
+  "school_profile_conflicts": [
+    {
+      "app_id": "APP_001",
+      "csv_school": "Raleigh High School",
+      "old_link": "HS-001",
+      "linked_school": "Northfield Regional High School",
+      "transcript_school_id": "HS-009",
+      "same_name": false
+    },
+    {
+      "app_id": "APP_002",
+      "csv_school": "Madison High School",
+      "old_link": "HS-001",
+      "linked_school": "Northfield Regional High School",
+      "transcript_school_id": "HS-006",
+      "same_name": false
+    },
+    {
+      "app_id": "APP_003",
+      "csv_school": "Portland High School",
+      "old_link": "HS-002",
+      "linked_school": "Pacific Grove High School",
+      "transcript_school_id": "HS-008",
+      "same_name": false
+    },
+    {
+      "app_id": "APP_004",
+      "csv_school": "Boston High School",
+      "old_link": "HS-002",
+      "linked_school": "Pacific Grove High School",
+      "transcript_school_id": "HS-003",
+      "same_name": false
+    },
+    {
+      "app_id": "APP_005",
+      "csv_school": "Austin High School",
+      "old_link": "HS-003",
+      "linked_school": "Lakeview Central High School",
+      "transcript_school_id": "HS-002",
+      "same_name": false
+    },
+    {
+      "app_id": "APP_006",
+      "csv_school": "Denver High School",
+      "old_link": "HS-004",
+      "linked_school": "Cedar Hollow Academy",
+      "transcript_school_id": "HS-005",
+      "same_name": false
+    },
+    {
+      "app_id": "APP_007",
+      "csv_school": "Columbus High School",
+      "old_link": "HS-005",
+      "linked_school": "Prairie Ridge High School",
+      "transcript_school_id": "HS-004",
+      "same_name": false
+    },
+    {
+      "app_id": "APP_008",
+      "csv_school": "Richmond High School",
+      "old_link": "HS-006",
+      "linked_school": "Westhaven Magnet High School",
+      "transcript_school_id": null,
+      "same_name": false
+    },
+    {
+      "app_id": "APP_009",
+      "csv_school": "Albany High School",
+      "old_link": "HS-006",
+      "linked_school": "Westhaven Magnet High School",
+      "transcript_school_id": "HS-001",
+      "same_name": false
+    },
+    {
+      "app_id": "APP_010",
+      "csv_school": "Phoenix High School",
+      "old_link": "HS-007",
+      "linked_school": "Harborview Academy",
+      "transcript_school_id": null,
+      "same_name": false
+    }
+  ],
+  "exam_report_notes": [
+    {
+      "app_id": "APP_002",
+      "note": "No AP exam report supplied"
+    }
+  ],
+  "batch_matches_v3_after_numeric_normalization": true,
+  "numeric_formatting_note": "Strict text comparison differs only in numeric representations such as 1500 versus 1500.0."
+}

@@ -1,0 +1,124 @@
+================================================================================
+RIVERVIEW STATE UNIVERSITY ADMISSIONS PIPELINE
+COMPONENT 2 (INGESTION) & COMPONENT 3 (MANIFEST VALIDATION GATE) AUDIT REPORT
+================================================================================
+Execution Timestamp : 2026-10-07T03:37:46.280930+00:00
+Run ID              : 20261007T033746280930Z_6cf72464
+Target Input Batch  : /Users/mariamalhotra/MSA8770/MSA8770-Fall2026/batch_02
+Configuration File  : /Users/mariamalhotra/MSA8770/MSA8770-Fall2026/config/policies.yaml
+Trust Boundary Check: Trust Boundary 1 (Inbound Perimeter Constraints)
+Storage Persistence : PostgreSQL applicant records; MinIO raw documents
+--------------------------------------------------------------------------------
+
+BATCH PROCESSING SUMMARY
+------------------------
+Total Applications Processed : 10
+Valid Applications (Ready)   : 7 (-> Application packet complete, ready for handoff)
+Awaiting Materials           : 1 (-> Missing required documents)
+Incomplete Applications      : 2 (-> Missing required metadata fields)
+Error / Corrupted Packets    : 0 (-> Routed to 'Human Review')
+Orphan Documents Recorded    : 0 (-> Stored in OrphanDocument table & MinIO orphans/)
+Affected IDs (Ready)         : APP_012, APP_013, APP_014, APP_015, APP_016, APP_017, APP_020
+
+ROUTING DISPOSITION TABLE
+--------------------------------------------------------------------------------
+Applicant ID   | Status             | Routing Destination       | Documents  | Issues / Notes                          
+---------------+--------------------+---------------------------+------------+-----------------------------------------
+APP_011        | AWAITING_MATERIALS | Applicant Packet Update   | 4          | Missing docs: transcript                
+APP_012        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 5          | All checks passed                       
+APP_013        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 5          | All checks passed                       
+APP_014        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 5          | All checks passed                       
+APP_015        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 5          | All checks passed                       
+APP_016        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 5          | All checks passed                       
+APP_017        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 5          | All checks passed                       
+APP_018        | INCOMPLETE         | Applicant Packet Update   | 5          | Missing fields: Email_Address           
+APP_019        | INCOMPLETE         | Applicant Packet Update   | 5          | Missing fields: Last_Name               
+APP_020        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 5          | All checks passed                       
+--------------------------------------------------------------------------------
+
+DETAILED APPLICANT AUDIT TRAILS
+================================================================================
+[01] APPLICANT: APP_011
+     Status              : AWAITING_MATERIALS
+     Routing Destination : Applicant Packet Update
+     Valid for Pipeline  : False
+     Total Documents     : 4
+     Documents Present   : CommonApp.pdf, letter_rec1.pdf, letter_rec2.pdf, supplement.pdf
+     Missing Documents   : transcript
+--------------------------------------------------------------------------------
+[02] APPLICANT: APP_012
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 5
+     Documents Present   : CommonApp.pdf, letter_rec1.pdf, letter_rec2.pdf, supplement.pdf, transcript.pdf
+--------------------------------------------------------------------------------
+[03] APPLICANT: APP_013
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 5
+     Documents Present   : CommonApp.pdf, letter_rec1.pdf, letter_rec2.pdf, supplement.pdf, transcript.pdf
+--------------------------------------------------------------------------------
+[04] APPLICANT: APP_014
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 5
+     Documents Present   : CommonApp.pdf, letter_rec1.pdf, letter_rec2.pdf, supplement.pdf, transcript.pdf
+--------------------------------------------------------------------------------
+[05] APPLICANT: APP_015
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 5
+     Documents Present   : CommonApp.pdf, letter_rec1.pdf, letter_rec2.pdf, supplement.pdf, transcript.pdf
+--------------------------------------------------------------------------------
+[06] APPLICANT: APP_016
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 5
+     Documents Present   : CommonApp.pdf, letter_rec1.pdf, letter_rec2.pdf, supplement.pdf, transcript.pdf
+--------------------------------------------------------------------------------
+[07] APPLICANT: APP_017
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 5
+     Documents Present   : CommonApp.pdf, letter_rec1.pdf, letter_rec2.pdf, supplement.pdf, transcript.pdf
+--------------------------------------------------------------------------------
+[08] APPLICANT: APP_018
+     Status              : INCOMPLETE
+     Routing Destination : Applicant Packet Update
+     Valid for Pipeline  : False
+     Total Documents     : 5
+     Documents Present   : CommonApp.pdf, letter_rec1.pdf, letter_rec2.pdf, supplement.pdf, transcript.pdf
+     Missing Metadata    : Email_Address
+--------------------------------------------------------------------------------
+[09] APPLICANT: APP_019
+     Status              : INCOMPLETE
+     Routing Destination : Applicant Packet Update
+     Valid for Pipeline  : False
+     Total Documents     : 5
+     Documents Present   : CommonApp.pdf, letter_rec1.pdf, letter_rec2.pdf, supplement.pdf, transcript.pdf
+     Missing Metadata    : Last_Name
+--------------------------------------------------------------------------------
+[10] APPLICANT: APP_020
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 5
+     Documents Present   : CommonApp.pdf, letter_rec1.pdf, letter_rec2.pdf, supplement.pdf, transcript.pdf
+--------------------------------------------------------------------------------
+
+PIPELINE HALT ENFORCEMENT & HANDOFF
+================================================================================
+Affected IDs for Summarizing Agent: ['APP_012', 'APP_013', 'APP_014', 'APP_015', 'APP_016', 'APP_017', 'APP_020']
+Saved to: /Users/mariamalhotra/MSA8770/MSA8770-Fall2026/affected_ids_20261007T033746280930Z_6cf72464.json
+Execution hard stop enforced immediately after Manifest Gate validation.
+No downstream OCR parsers, LLM gateways, VLM agents, or summarizers invoked.
+================================================================================
+
+END OF AUDIT LOG
+================================================================================
