@@ -1,0 +1,826 @@
+{
+  "run": {
+    "app_id": "APP_001",
+    "documents_sent": {
+      "application_form.pdf": [
+        1
+      ],
+      "transcript.pdf": [
+        1,
+        2
+      ],
+      "recommendation_letter_1.pdf": [
+        1
+      ],
+      "recommendation_letter_2.pdf": [
+        1
+      ],
+      "standardized_test_score.pdf": [
+        1
+      ],
+      "activities_and_awards.pdf": [
+        1,
+        2
+      ],
+      "advanced_coursework_and_ap_scores.pdf": [
+        1
+      ],
+      "university_supplement.pdf": [
+        1
+      ]
+    },
+    "documents_withheld": {
+      "common_app_application.pdf": "restricted demographic/contact data",
+      "personal_statement.pdf": "POL-ESSAY-01 personal statement (humans only)"
+    },
+    "policies_retrieved": [
+      {
+        "policy_id": "POL-DATE-01",
+        "title": "Date Consistency",
+        "similarity": 0.797,
+        "query": "issue dates and graduation dates must be consistent"
+      },
+      {
+        "policy_id": "POL-ESSAY-01",
+        "title": "Personal Statement Human Review",
+        "similarity": null,
+        "query": "always included"
+      },
+      {
+        "policy_id": "POL-FT-01",
+        "title": "First-Year Core Materials",
+        "similarity": 0.672,
+        "query": "standardized test scores SAT ACT optional"
+      },
+      {
+        "policy_id": "POL-HUMAN-01",
+        "title": "Human Admissions Authority",
+        "similarity": null,
+        "query": "always included"
+      },
+      {
+        "policy_id": "POL-ID-01",
+        "title": "Applicant and Document Matching",
+        "similarity": 0.806,
+        "query": "documents must match the applicant ID"
+      },
+      {
+        "policy_id": "POL-LOR-01",
+        "title": "Letters of Recommendation Requirement",
+        "similarity": 0.708,
+        "query": "documents must match the applicant ID"
+      },
+      {
+        "policy_id": "POL-READ-01",
+        "title": "Unreadable Attachments",
+        "similarity": 0.762,
+        "query": "unreadable corrupted or obscured documents"
+      },
+      {
+        "policy_id": "POL-TEST-01",
+        "title": "Test-Optional Review",
+        "similarity": 0.77,
+        "query": "standardized test scores SAT ACT optional"
+      }
+    ],
+    "attempts": 7,
+    "runtime_seconds": 618.4,
+    "validation": {
+      "passed": true,
+      "failed_sections": {},
+      "load_problems": [],
+      "calls": [
+        {
+          "section": "academic",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 6061,
+            "output_tokens": 1089,
+            "seconds": 131.6
+          },
+          "errors": [
+            "output: quote \"AP Computer Science A 11 A\" is not on advanced_coursework_and_ap_scores.pdf page 1."
+          ]
+        },
+        {
+          "section": "academic",
+          "attempt": 2,
+          "usage": {
+            "prompt_tokens": 6114,
+            "output_tokens": 939,
+            "seconds": 67.4
+          },
+          "errors": []
+        },
+        {
+          "section": "engagement",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 2643,
+            "output_tokens": 1055,
+            "seconds": 104.8
+          },
+          "errors": []
+        },
+        {
+          "section": "recommendation",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 2587,
+            "output_tokens": 598,
+            "seconds": 72.1
+          },
+          "errors": []
+        },
+        {
+          "section": "supplement",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 1440,
+            "output_tokens": 504,
+            "seconds": 50.1
+          },
+          "errors": []
+        },
+        {
+          "section": "policy",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 4142,
+            "output_tokens": 1067,
+            "seconds": 118.9
+          },
+          "errors": []
+        },
+        {
+          "section": "synthesis",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 4538,
+            "output_tokens": 441,
+            "seconds": 73.2
+          },
+          "errors": []
+        }
+      ]
+    },
+    "run_status": "DOSSIER_READY"
+  },
+  "applicant_dossier": {
+    "app_id": "APP_001",
+    "applicant_demographics": {
+      "first_name": "Alex",
+      "last_name": "Bennett",
+      "name_of_hs": "Raleigh High School",
+      "country": "USA",
+      "region": "Southeast",
+      "intended_major": "Studio Art, llustration",
+      "admission_year": 2026,
+      "admission_term": "F"
+    },
+    "academic_profile": {
+      "document_facts": {
+        "unweighted_gpa": 3.86,
+        "weighted_gpa": 4.68,
+        "class_rank": "Not reported",
+        "sat_superscore": 1500,
+        "act_superscore": null,
+        "intended_major": "Studio Art, Illustration",
+        "high_school": "Raleigh High School",
+        "expected_graduation": "June 2026"
+      },
+      "ap_courses_on_transcript": [
+        {
+          "course": "AP World History",
+          "grade_level": "11",
+          "final_grade": "A"
+        },
+        {
+          "course": "AP English Literature",
+          "grade_level": "11",
+          "final_grade": "A"
+        },
+        {
+          "course": "AP Human Geography",
+          "grade_level": "11",
+          "final_grade": "A"
+        },
+        {
+          "course": "AP Spanish Language",
+          "grade_level": "11",
+          "final_grade": "A"
+        },
+        {
+          "course": "AP Physics C Mechanics",
+          "grade_level": "11",
+          "final_grade": "A"
+        },
+        {
+          "course": "AP Microeconomics",
+          "grade_level": "11",
+          "final_grade": "A"
+        }
+      ],
+      "ap_exam_scores": [
+        {
+          "course": "AP World History",
+          "score": "3",
+          "date": "May 2025"
+        },
+        {
+          "course": "AP English Literature",
+          "score": "4",
+          "date": "May 2025"
+        },
+        {
+          "course": "AP Human Geography",
+          "score": "5",
+          "date": "May 2025"
+        },
+        {
+          "course": "AP Spanish Language",
+          "score": "3",
+          "date": "May 2025"
+        },
+        {
+          "course": "AP Physics C Mechanics",
+          "score": "4",
+          "date": "May 2025"
+        },
+        {
+          "course": "AP Microeconomics",
+          "score": "5",
+          "date": "May 2025"
+        }
+      ],
+      "summary": "The applicant has a cumulative unweighted GPA of 3.86 and a weighted GPA of 4.68. They are applying for Studio Art, Illustration, and have taken several AP courses with grades ranging from A to B+.",
+      "course_rigor": "The applicant is enrolled in a rigorous course load, including multiple AP courses in grades 11 and 12, as well as honors-level courses in grades 9 and 10.",
+      "performance_patterns": "The applicant's grades are generally strong, with a mix of A and B+ grades across core subjects and AP courses. Performance is consistent across years, with grades in the 9th grade being slightly lower than in the 10th and 11th grades.",
+      "strengths": [
+        "Strong academic performance with a high unweighted and weighted GPA.",
+        "Enrollment in a significant number of AP courses with mostly A and B+ grades.",
+        "Consistent performance across multiple subject areas."
+      ],
+      "concerns": [
+        "Class rank is not reported, which may limit the ability to compare the applicant's academic standing relative to peers.",
+        "The SAT score is 1500, which is a strong score but may not be sufficient for highly competitive programs without other strong indicators."
+      ],
+      "evidence": [
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "Cumulative unweighted GPA 3.86"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "Cumulative weighted GPA 4.68"
+        },
+        {
+          "document": "standardized_test_score.pdf",
+          "page": 1,
+          "quote": "SAT 1500"
+        },
+        {
+          "document": "advanced_coursework_and_ap_scores.pdf",
+          "page": 1,
+          "quote": "AP Microeconomics 5 May 2025"
+        }
+      ]
+    },
+    "engagement_profile": {
+      "activities": [
+        {
+          "activity": "Environmental club volunteer",
+          "role_and_description": "Participant and project contributor; organized weekly tasks and documented results. This experience strengthened collaboration, follow-through, and interest in Studio Art, Illustration.",
+          "years": "9-12",
+          "hours_per_week": "2"
+        },
+        {
+          "activity": "Track and field athlete",
+          "role_and_description": "Team member and peer mentor; helped newer members learn procedures and meet deadlines. This experience strengthened collaboration, follow-through, and interest in Studio Art, Illustration.",
+          "years": "9-12",
+          "hours_per_week": "3"
+        },
+        {
+          "activity": "Varsity soccer player",
+          "role_and_description": "Student coordinator; planned a community-facing event and gathered feedback. This experience strengthened collaboration, follow-through, and interest in Studio Art, Illustration.",
+          "years": "9-12",
+          "hours_per_week": "4"
+        },
+        {
+          "activity": "School art club member",
+          "role_and_description": "Volunteer contributor; used clear communication to solve practical problems. This experience strengthened collaboration, follow-through, and interest in Studio Art, Illustration.",
+          "years": "10-12",
+          "hours_per_week": "5"
+        },
+        {
+          "activity": "Science club member",
+          "role_and_description": "Participant and project contributor; organized weekly tasks and documented results. This experience strengthened collaboration, follow-through, and interest in Studio Art, Illustration.",
+          "years": "10-12",
+          "hours_per_week": "6"
+        },
+        {
+          "activity": "Animal shelter volunteer",
+          "role_and_description": "Team member and peer mentor; helped newer members learn procedures and meet deadlines. This experience strengthened collaboration, follow-through, and interest in Studio Art, Illustration.",
+          "years": "10-12",
+          "hours_per_week": "7"
+        },
+        {
+          "activity": "Debate team member",
+          "role_and_description": "Student coordinator; planned a community-facing event and gathered feedback. This experience strengthened collaboration, follow-through, and interest in Studio Art, Illustration.",
+          "years": "10-12",
+          "hours_per_week": "8"
+        },
+        {
+          "activity": "Chess club member",
+          "role_and_description": "Volunteer contributor; used clear communication to solve practical problems. This experience strengthened collaboration, follow-through, and interest in Studio Art, Illustration.",
+          "years": "10-12",
+          "hours_per_week": "2"
+        },
+        {
+          "activity": "Robotics club member",
+          "role_and_description": "Participant and project contributor; organized weekly tasks and documented results. This experience strengthened collaboration, follow-through, and interest in Studio Art, Illustration.",
+          "years": "10-12",
+          "hours_per_week": "3"
+        }
+      ],
+      "awards": [
+        "School academic honor roll",
+        "District art competition finalist",
+        "School mathematics award",
+        "School leadership award",
+        "Student journalism recognition"
+      ],
+      "summary": "The applicant has participated in a variety of extracurricular activities, including sports, clubs, and volunteering, with roles ranging from participant to coordinator. These activities spanned multiple years and required varying weekly commitments. The applicant also received several academic and leadership awards.",
+      "leadership_service_employment": "The applicant held leadership roles such as student coordinator for varsity soccer and debate teams, and peer mentor for track and field and animal shelter volunteer work. They also contributed to community-facing events and used clear communication to solve problems.",
+      "themes": [
+        "Collaboration",
+        "Follow-through",
+        "Interest in Studio Art and Illustration"
+      ],
+      "assessment": "The applicant demonstrates consistent involvement in extracurricular activities with a focus on collaboration and follow-through. Their interest in Studio Art and Illustration is evident across multiple activities. They have received recognition for academic and leadership achievements.",
+      "evidence": [
+        {
+          "document": "activities_and_awards.pdf",
+          "page": 1,
+          "quote": "Participant and project contributor; organized weekly tasks and documented results. This experience strengthened collaboration, follow-through, and interest in Studio Art, Illustration."
+        },
+        {
+          "document": "activities_and_awards.pdf",
+          "page": 1,
+          "quote": "Student coordinator; planned a community-facing event and gathered feedback. This experience strengthened collaboration, follow-through, and interest in Studio Art, Illustration."
+        },
+        {
+          "document": "activities_and_awards.pdf",
+          "page": 2,
+          "quote": "School academic honor roll"
+        },
+        {
+          "document": "activities_and_awards.pdf",
+          "page": 2,
+          "quote": "Student journalism recognition"
+        }
+      ]
+    },
+    "recommendation_profile": {
+      "recommenders": [
+        {
+          "name": "Avery James",
+          "role": "School Counselor, Raleigh High School",
+          "document": "recommendation_letter_1.pdf",
+          "relationship": "known for three years through academic planning, course selection, and school activities",
+          "key_observations": [
+            "thoughtful student who prepares carefully, responds constructively to feedback, and contributes to the learning of others",
+            "ability to make progress without taking ownership away from teammates",
+            "approaches difficult material with persistence",
+            "connections are made between classroom ideas and an emerging interest in Studio Art, Illustration"
+          ]
+        },
+        {
+          "name": "Dr. Morgan Lee",
+          "role": "Teacher, Raleigh High School",
+          "document": "recommendation_letter_2.pdf",
+          "relationship": "known for two semesters in an advanced seminar and a collaborative capstone project",
+          "key_observations": [
+            "thoughtful student who prepares carefully, responds constructively to feedback, and contributes to the learning of others",
+            "ability to make progress without taking ownership away from teammates",
+            "approaches difficult material with persistence",
+            "connections are made between classroom ideas and an emerging interest in Studio Art, Illustration"
+          ]
+        }
+      ],
+      "summary": "Both recommenders describe Alex Bennett as a thoughtful, reliable, and collaborative student with strong academic persistence and intellectual curiosity. They highlight his ability to work effectively in teams and his interest in Studio Art and Illustration.",
+      "common_themes": [
+        "thoughtful and reliable",
+        "collaborative spirit",
+        "persistence in academics",
+        "ability to work with teams without taking ownership away",
+        "interest in Studio Art and Illustration"
+      ],
+      "strengths_identified": [
+        "preparation and carefulness",
+        "constructive response to feedback",
+        "teamwork and collaboration",
+        "academic persistence",
+        "intellectual curiosity"
+      ],
+      "evidence": [
+        {
+          "document": "recommendation_letter_1.pdf",
+          "page": 1,
+          "quote": "thoughtful student who prepares carefully, responds constructively to feedback, and contributes to the learning of others"
+        },
+        {
+          "document": "recommendation_letter_1.pdf",
+          "page": 1,
+          "quote": "ability to make progress without taking ownership away from teammates"
+        },
+        {
+          "document": "recommendation_letter_2.pdf",
+          "page": 1,
+          "quote": "approaches difficult material with persistence"
+        },
+        {
+          "document": "recommendation_letter_2.pdf",
+          "page": 1,
+          "quote": "connections are made between classroom ideas and an emerging interest in Studio Art, Illustration"
+        }
+      ]
+    },
+    "supplemental_essay_profile": {
+      "responses": [
+        {
+          "prompt": "Why Riverview State University?",
+          "summary": "The applicant wants to connect Studio Art and Illustration with real-world questions through the university's project-based curriculum, and to learn from diverse peers, use faculty feedback, and contribute to evidence-based teams."
+        },
+        {
+          "prompt": "Community Contribution",
+          "summary": "The applicant learned from environmental club volunteering to identify task blockers, and plans to apply this by listening first, clarifying goals, volunteering for concrete work, and helping groups document their learning."
+        },
+        {
+          "prompt": "Academic Curiosity",
+          "summary": "The applicant wants to explore how Studio Art and Illustration tools can be responsibly applied with incomplete information, and is especially interested in courses combining analysis, writing, and collaborative problem solving."
+        }
+      ],
+      "summary": "The applicant is drawn to Riverview State University for its project-based curriculum that links studio art and illustration to real-world issues. They aim to learn from diverse peers, use faculty feedback, and contribute to evidence-based teams. Through volunteering, they learned to identify task blockers and plan to apply this by listening, clarifying goals, volunteering for concrete work, and documenting group learning. Their academic curiosity centers on responsibly applying art tools with incomplete information, especially in courses combining analysis, writing, and collaborative problem solving.",
+      "major_themes": [
+        "Project-based learning connecting art to real-world issues",
+        "Learning from diverse peers and using faculty feedback",
+        "Community contribution through problem-solving and documentation",
+        "Exploring responsible application of art tools with incomplete information"
+      ],
+      "evidence": [
+        {
+          "document": "university_supplement.pdf",
+          "page": 1,
+          "quote": "project-based curriculum would let me connect"
+        },
+        {
+          "document": "university_supplement.pdf",
+          "page": 1,
+          "quote": "listen first, clarify the goal, volunteer"
+        },
+        {
+          "document": "university_supplement.pdf",
+          "page": 1,
+          "quote": "how tools and methods from Studio Art, Illustration can be applied"
+        },
+        {
+          "document": "university_supplement.pdf",
+          "page": 1,
+          "quote": "courses that combine analysis, writing, and collaborative problem solving"
+        }
+      ]
+    },
+    "strengths": [
+      {
+        "strength": "Strong academic performance with a high unweighted and weighted GPA.",
+        "evidence": [
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "Cumulative unweighted GPA 3.86"
+          }
+        ]
+      },
+      {
+        "strength": "Consistent involvement in extracurricular activities with a focus on collaboration and follow-through.",
+        "evidence": [
+          {
+            "document": "activities_and_awards.pdf",
+            "page": 1,
+            "quote": "Participant and project contributor; organized weekly tasks and documented results"
+          }
+        ]
+      },
+      {
+        "strength": "Thoughtful and reliable student with strong academic persistence and intellectual curiosity.",
+        "evidence": [
+          {
+            "document": "recommendation_letter_1.pdf",
+            "page": 1,
+            "quote": "thoughtful student who prepares carefully"
+          }
+        ]
+      },
+      {
+        "strength": "Interest in Studio Art and Illustration evident across multiple activities and academic pursuits.",
+        "evidence": [
+          {
+            "document": "activities_and_awards.pdf",
+            "page": 1,
+            "quote": "This experience strengthened collaboration, follow-through, and interest in Studio Art, Illustration"
+          }
+        ]
+      }
+    ],
+    "policy_assessment": [
+      {
+        "policy_id": "POL-DATE-01",
+        "criterion": "Issue dates and graduation/attendance dates must be chronologically valid.",
+        "alignment": "aligned",
+        "findings": "The applicant's expected graduation date is June 2026, and AP exam scores are dated May 2025, which is chronologically consistent with a 11th-grade student taking AP exams before graduation.",
+        "evidence": [
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "expected graduation: June 2026"
+          },
+          {
+            "document": "advanced_coursework_and_ap_scores.pdf",
+            "page": 1,
+            "quote": "AP Microeconomics 5 May 2025"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-ESSAY-01",
+        "criterion": "The system may check whether a personal statement is present, but only an admissions officer may read and evaluate its content.",
+        "alignment": "not_applicable",
+        "findings": "The personal statement is withheld by design and not available for review by the system.",
+        "evidence": []
+      },
+      {
+        "policy_id": "POL-FT-01",
+        "criterion": "Official transcript, personal statement, and two letters of recommendation (LOR 1 and LOR 2) are required for review handoff. Test scores are optional.",
+        "alignment": "aligned",
+        "findings": "The applicant has provided an official transcript, two letters of recommendation (recommendation_letter_1.pdf and recommendation_letter_2.pdf), and test scores (standardized_test_score.pdf). The personal statement is withheld but not required for first-year core materials.",
+        "evidence": [
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "Cumulative unweighted GPA 3.86"
+          },
+          {
+            "document": "recommendation_letter_1.pdf",
+            "page": 1,
+            "quote": "thoughtful student who prepares carefully"
+          },
+          {
+            "document": "recommendation_letter_2.pdf",
+            "page": 1,
+            "quote": "approaches difficult material with persistence"
+          },
+          {
+            "document": "standardized_test_score.pdf",
+            "page": 1,
+            "quote": "SAT 1500"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-HUMAN-01",
+        "criterion": "AI review findings are advisory. Authorized human admissions officers record all final admission decisions.",
+        "alignment": "not_applicable",
+        "findings": "This policy governs the final decision-making process, which is outside the scope of this automated assessment.",
+        "evidence": []
+      },
+      {
+        "policy_id": "POL-ID-01",
+        "criterion": "All packet documents must match the target applicant ID across filenames and metadata.",
+        "alignment": "not_applicable",
+        "findings": "The system has not been provided with metadata or filenames to verify applicant ID matching.",
+        "evidence": []
+      },
+      {
+        "policy_id": "POL-LOR-01",
+        "criterion": "First-year applicants must provide exactly two letters of recommendation (recommendation_letter_1 and recommendation_letter_2). Packets with fewer than 2 recommendation letters remain INCOMPLETE.",
+        "alignment": "aligned",
+        "findings": "The applicant has provided exactly two letters of recommendation: recommendation_letter_1.pdf and recommendation_letter_2.pdf.",
+        "evidence": [
+          {
+            "document": "recommendation_letter_1.pdf",
+            "page": 1,
+            "quote": "thoughtful student who prepares carefully"
+          },
+          {
+            "document": "recommendation_letter_2.pdf",
+            "page": 1,
+            "quote": "approaches difficult material with persistence"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-READ-01",
+        "criterion": "Documents must meet minimum readability threshold and not be corrupted or obscured.",
+        "alignment": "not_applicable",
+        "findings": "The system has not been provided with visual or technical data to assess document readability or corruption.",
+        "evidence": []
+      },
+      {
+        "policy_id": "POL-TEST-01",
+        "criterion": "Standardized test scores (SAT/ACT) are strictly optional for completeness.",
+        "alignment": "aligned",
+        "findings": "The applicant has provided an SAT score of 1500, which is optional under this policy. The absence of ACT scores does not affect completeness.",
+        "evidence": [
+          {
+            "document": "standardized_test_score.pdf",
+            "page": 1,
+            "quote": "SAT 1500"
+          }
+        ]
+      }
+    ],
+    "review_notes": [],
+    "holistic_assessment": "The applicant demonstrates strong academic performance with a high unweighted GPA and weighted GPA, supported by a rigorous course load including multiple AP courses. Their extracurricular engagement is broad and consistent, with leadership roles in sports and clubs that emphasize collaboration and follow-through. Recommenders highlight the applicant\u2019s thoughtful, persistent, and team-oriented approach to learning, with a clear connection to their interest in Studio Art and Illustration. In the supplement, the applicant articulates a desire to apply art tools to real-world problems through project-based learning and community contribution, showing academic curiosity and practical intent. All documents are chronologically valid and meet required submission standards, with no missing required materials or corrupted content visible in the provided pages.",
+    "evidence_map": [
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "Cumulative unweighted GPA 3.86"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "Cumulative weighted GPA 4.68"
+      },
+      {
+        "section": "academic_profile",
+        "document": "standardized_test_score.pdf",
+        "page": 1,
+        "quote": "SAT 1500"
+      },
+      {
+        "section": "academic_profile",
+        "document": "advanced_coursework_and_ap_scores.pdf",
+        "page": 1,
+        "quote": "AP Microeconomics 5 May 2025"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "activities_and_awards.pdf",
+        "page": 1,
+        "quote": "Participant and project contributor; organized weekly tasks and documented results. This experience strengthened collaboration, follow-through, and interest in Studio Art, Illustration."
+      },
+      {
+        "section": "engagement_profile",
+        "document": "activities_and_awards.pdf",
+        "page": 1,
+        "quote": "Student coordinator; planned a community-facing event and gathered feedback. This experience strengthened collaboration, follow-through, and interest in Studio Art, Illustration."
+      },
+      {
+        "section": "engagement_profile",
+        "document": "activities_and_awards.pdf",
+        "page": 2,
+        "quote": "School academic honor roll"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "activities_and_awards.pdf",
+        "page": 2,
+        "quote": "Student journalism recognition"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "recommendation_letter_1.pdf",
+        "page": 1,
+        "quote": "thoughtful student who prepares carefully, responds constructively to feedback, and contributes to the learning of others"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "recommendation_letter_1.pdf",
+        "page": 1,
+        "quote": "ability to make progress without taking ownership away from teammates"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "recommendation_letter_2.pdf",
+        "page": 1,
+        "quote": "approaches difficult material with persistence"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "recommendation_letter_2.pdf",
+        "page": 1,
+        "quote": "connections are made between classroom ideas and an emerging interest in Studio Art, Illustration"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "university_supplement.pdf",
+        "page": 1,
+        "quote": "project-based curriculum would let me connect"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "university_supplement.pdf",
+        "page": 1,
+        "quote": "listen first, clarify the goal, volunteer"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "university_supplement.pdf",
+        "page": 1,
+        "quote": "how tools and methods from Studio Art, Illustration can be applied"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "university_supplement.pdf",
+        "page": 1,
+        "quote": "courses that combine analysis, writing, and collaborative problem solving"
+      },
+      {
+        "section": "strengths",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "Cumulative unweighted GPA 3.86"
+      },
+      {
+        "section": "strengths",
+        "document": "activities_and_awards.pdf",
+        "page": 1,
+        "quote": "Participant and project contributor; organized weekly tasks and documented results"
+      },
+      {
+        "section": "strengths",
+        "document": "recommendation_letter_1.pdf",
+        "page": 1,
+        "quote": "thoughtful student who prepares carefully"
+      },
+      {
+        "section": "strengths",
+        "document": "activities_and_awards.pdf",
+        "page": 1,
+        "quote": "This experience strengthened collaboration, follow-through, and interest in Studio Art, Illustration"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "expected graduation: June 2026"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "advanced_coursework_and_ap_scores.pdf",
+        "page": 1,
+        "quote": "AP Microeconomics 5 May 2025"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "Cumulative unweighted GPA 3.86"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "recommendation_letter_1.pdf",
+        "page": 1,
+        "quote": "thoughtful student who prepares carefully"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "recommendation_letter_2.pdf",
+        "page": 1,
+        "quote": "approaches difficult material with persistence"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "standardized_test_score.pdf",
+        "page": 1,
+        "quote": "SAT 1500"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "recommendation_letter_1.pdf",
+        "page": 1,
+        "quote": "thoughtful student who prepares carefully"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "recommendation_letter_2.pdf",
+        "page": 1,
+        "quote": "approaches difficult material with persistence"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "standardized_test_score.pdf",
+        "page": 1,
+        "quote": "SAT 1500"
+      }
+    ],
+    "generated_at": "2026-10-06 01:18:26.643318+00:00",
+    "updated_at": "2026-10-06 04:09:41.437304+00:00"
+  }
+}
