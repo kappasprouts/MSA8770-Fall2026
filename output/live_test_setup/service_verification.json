@@ -1,0 +1,13 @@
+{
+  "verified_at": "2026-10-09T20:23:32.811437+00:00",
+  "minio_endpoint": "localhost:29000",
+  "bucket": "admissions-raw-docs",
+  "stored_objects": 49,
+  "transcript_sha256_matches_fixture": true,
+  "transcript_pages": 2,
+  "database": "rsu_live_test",
+  "applicants": 10,
+  "app_012_status": "READY_FOR_REVIEW",
+  "app_012_documents": 5,
+  "qwen_live_tested_in_this_fix": false
+}

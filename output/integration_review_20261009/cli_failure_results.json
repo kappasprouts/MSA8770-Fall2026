@@ -1,0 +1,18 @@
+{
+  "main_return": null,
+  "normal_process_exit_code": 0,
+  "generation_runs_added": 0,
+  "applicant": [
+    {
+      "status": "READY_FOR_REVIEW"
+    }
+  ],
+  "latest_audit": [
+    {
+      "event": "AGENT_ERROR",
+      "details": {
+        "error": "Document loading failed for APP_013: [{'filename': 'CommonApp.pdf', 'type': 'application_form', 'error': 'Hooks redaction verification failed'}]"
+      }
+    }
+  ]
+}
