@@ -1,0 +1,216 @@
+# Riverview State University - Admissions Policy & Manifest Validation Configuration
+# Grounded in Riverview State University Admissions Policy Handbook & Section 4 Architecture Plan
+
+schema_version: 1
+institution: "Riverview State University"
+policy_version: "1.0"
+published_on: "2026-09-29"
+
+# Trust Boundary 1: Untrusted Inbound Perimeter Constraints
+file_constraints:
+  allowed_mime_types:
+    - "application/pdf"
+  allowed_extensions:
+    - ".pdf"
+  max_file_size_bytes: 15728640    # 15 MB per individual file
+  max_packet_size_bytes: 52428800  # 50 MB total per applicant packet
+  min_file_size_bytes: 1024        # 1 KB minimum (reject empty or truncated files)
+
+# Required Applicant Metadata Fields (from CSV Schema)
+required_applicant_fields:
+  - "App_ID"
+  - "First_Name"
+  - "Last_Name"
+  - "Date_Of_Birth"
+  - "Email_Address"
+  - "Name_of_HS"
+  - "Intended_Major"
+  - "Admission_Year"
+  - "Admission_Term"
+
+# Document Type Definitions
+document_types:
+  application_form:
+    title: "Application Form"
+    description: "Core CommonApp or University application profile data."
+    aliases: ["common_app_application", "applicant_profile", "application_form"]
+  official_transcript:
+    title: "Official Academic Transcript"
+    description: "Official academic transcript from secondary or post-secondary institutions."
+    aliases: ["transcript", "academic_transcript"]
+  transcript:
+    title: "Academic Transcript"
+    description: "Academic transcript from secondary or post-secondary institutions."
+    aliases: ["official_transcript"]
+  personal_statement:
+    title: "Personal Statement / Essay"
+    description: "Applicant personal statement or essay. Evaluated exclusively by human officers."
+    skip_ai_inference: true
+    aliases: ["essay", "personal_essay", "statement_of_purpose"]
+  recommendation_letter:
+    title: "Letter of Recommendation"
+    description: "Counselor or teacher recommendation letter."
+    aliases: ["recommendation_letter_1", "recommendation_letter_2", "lor"]
+  standardized_test_score:
+    title: "Standardized Test Score Report"
+    description: "Official or self-reported SAT/ACT score report (Test-optional per POL-TEST-01)."
+    aliases: ["sat_score", "act_score", "test_score"]
+  activities_and_awards:
+    title: "Activities and Awards Record"
+    description: "Extracurriculars, honors, and leadership history."
+    aliases: ["activities", "awards", "extracurricular"]
+  advanced_coursework_and_ap_scores:
+    title: "Advanced Coursework and AP Scores"
+    description: "Report of AP, IB, or dual-enrollment coursework."
+    aliases: ["ap_scores", "advanced_coursework"]
+  university_supplement:
+    title: "University Supplement"
+    description: "Institution-specific questions and major selection supplement."
+    aliases: ["supplement"]
+  exception_supporting_document:
+    title: "Exception Supporting Document"
+    description: "Nonstandard circumstances, medical, home education, or disruption documentation."
+    aliases: ["special_circumstance", "exception_document"]
+  english_proficiency_evidence:
+    title: "English Proficiency Evidence"
+    description: "TOEFL, IELTS, or Duolingo evidence for non-English curriculum applicants."
+  credential_evaluation:
+    title: "International Credential Evaluation"
+    description: "Recognized third-party credential evaluation for non-U.S. transcripts."
+
+# Application Type Checklist Rules
+checklists:
+  first_year:
+    name: "First-Year Applicant Checklist"
+    policy_reference: "POL-FT-01"
+    required_documents:
+      - "application_form"
+      - "transcript"
+      - "personal_statement"
+      - "recommendation_letter_1"
+      - "recommendation_letter_2"
+    required_recommendation_letters_count: 2
+    optional_documents:
+      - "standardized_test_score"
+      - "activities_and_awards"
+      - "advanced_coursework_and_ap_scores"
+      - "university_supplement"
+      - "exception_supporting_document"
+    on_missing: "INCOMPLETE"
+
+  transfer:
+    name: "Transfer Applicant Checklist"
+    policy_reference: "POL-TR-01"
+    required_documents:
+      - "application_form"
+      - "transcript"
+      - "personal_statement"
+    optional_documents:
+      - "recommendation_letter"
+      - "activities_and_awards"
+      - "university_supplement"
+      - "exception_supporting_document"
+    on_missing: "INCOMPLETE"
+
+  international_first_year:
+    name: "International First-Year Applicant Checklist"
+    policy_reference: "POL-INT-01 / POL-INT-02"
+    required_documents:
+      - "application_form"
+      - "transcript"
+      - "personal_statement"
+      - "recommendation_letter_1"
+      - "recommendation_letter_2"
+      - "english_proficiency_evidence"
+      - "credential_evaluation"
+    required_recommendation_letters_count: 2
+    optional_documents:
+      - "standardized_test_score"
+      - "activities_and_awards"
+      - "university_supplement"
+      - "exception_supporting_document"
+    on_missing: "INCOMPLETE"
+
+# Validation Criteria and Status Codes
+status_codes:
+  VALID: "All mandatory files and fields present; application packet complete, ready for handoff."
+  READY_FOR_REVIEW: "Automated ingestion and validation checks passed; application packet complete, ready for handoff."
+  INCOMPLETE: "One or more required checklist documents or metadata fields are missing. Route to Applicant Packet Update."
+  ERROR: "Corrupted, missing magic bytes, or size violations encountered. Route to Human Review."
+  COUNSELOR_REVIEW: "Ambiguity, duplicate conflict, date mismatch, or waiver requires counselor intervention."
+  REPLACEMENT_REQUESTED: "A document failed readability or corrupted structure. Replacement requested."
+  STOPPED: "Critical exception or security boundary violation. Automated processing halted."
+
+# Status Resolution Priority (highest precedence first)
+status_priority:
+  - "ERROR"
+  - "STOPPED"
+  - "COUNSELOR_REVIEW"
+  - "REPLACEMENT_REQUESTED"
+  - "INCOMPLETE"
+  - "VALID"
+  - "READY_FOR_REVIEW"
+
+# 3-Way Deterministic Routing Destination Rules (Architecture Section 4)
+routing_rules:
+  on_valid: "READY_FOR_REVIEW"
+  on_incomplete: "Applicant Packet Update"
+  on_error: "Human Review"
+  on_invalid: "Human Review"
+
+# Core Operational Policies for Automated Gate & Model Gateway
+policies:
+  - id: "POL-FT-01"
+    title: "First-Year Core Materials"
+    rule: "Official transcript, personal statement, and two letters of recommendation (LOR 1 and LOR 2) are required for review handoff. Test scores are optional."
+    system_action: "Mark INCOMPLETE if a required item is missing; route to Applicant Packet Update."
+
+  - id: "POL-LOR-01"
+    title: "Letters of Recommendation Requirement"
+    rule: "First-year applicants must provide exactly two letters of recommendation (recommendation_letter_1 and recommendation_letter_2). Packets with fewer than 2 recommendation letters remain INCOMPLETE."
+    system_action: "Enforce presence of 2 letters of recommendation; route to Applicant Packet Update queue if incomplete."
+
+  - id: "POL-TR-01"
+    title: "Transfer Core Materials"
+    rule: "Official transcripts and personal statement are required. Recommendations are optional."
+    system_action: "Mark INCOMPLETE if transcript or statement is missing."
+
+  - id: "POL-INT-01"
+    title: "English Proficiency"
+    rule: "Approved English proficiency evidence required unless documented waiver is on file."
+    system_action: "Mark INCOMPLETE if absent; route waiver requests to COUNSELOR_REVIEW."
+
+  - id: "POL-INT-02"
+    title: "International Credential Evaluation"
+    rule: "Recognized credential evaluation required for non-U.S. academic records."
+    system_action: "Mark INCOMPLETE if missing; route uncertain recognition to COUNSELOR_REVIEW."
+
+  - id: "POL-TEST-01"
+    title: "Test-Optional Review"
+    rule: "Standardized test scores (SAT/ACT) are strictly optional for completeness."
+    system_action: "Do not mark incomplete solely because test scores are absent."
+
+  - id: "POL-READ-01"
+    title: "Unreadable Attachments"
+    rule: "Documents must meet minimum readability threshold and not be corrupted or obscured."
+    system_action: "Trigger ERROR / Human Review for corrupted or unreadable documents."
+
+  - id: "POL-ID-01"
+    title: "Applicant and Document Matching"
+    rule: "All packet documents must match the target applicant ID across filenames and metadata."
+    system_action: "Route mismatched documents to Human Review; do not merge automatically."
+
+  - id: "POL-DATE-01"
+    title: "Date Consistency"
+    rule: "Issue dates and graduation/attendance dates must be chronologically valid."
+    system_action: "Route chronological contradictions to COUNSELOR_REVIEW."
+
+  - id: "POL-ESSAY-01"
+    title: "Personal Statement Human Review"
+    rule: "The system may check whether a personal statement is present, but only an admissions officer may read and evaluate its content."
+    system_action: "Strictly exclude personal statement content from model prompts, embeddings, and automated scoring."
+
+  - id: "POL-HUMAN-01"
+    title: "Human Admissions Authority"
+    rule: "AI review findings are advisory. Authorized human admissions officers record all final admission decisions."
+    system_action: "Default status to READY_FOR_REVIEW upon successful automated processing; never emit automated admit/deny decisions."
