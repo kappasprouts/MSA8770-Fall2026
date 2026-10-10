@@ -1,0 +1,19 @@
+{
+  "verified_at": "2026-10-09T20:31:55.915843+00:00",
+  "model": "qwen3-vl:8b-instruct",
+  "live_minio": true,
+  "live_qwen": true,
+  "academic_pages": 4,
+  "attempts": 1,
+  "model_runtime_seconds": 112.5,
+  "validation_errors": [],
+  "key_metric_checks": {
+    "unweighted_gpa": true,
+    "weighted_gpa": true,
+    "sat_superscore": true,
+    "act_superscore": true
+  },
+  "evidence_items": 8,
+  "ap_course_entries": 11,
+  "review_note": "Generated prose says 12 AP courses, but the returned course list contains 11 entries; passing schema/citation validation does not prove the entire narrative accurate."
+}

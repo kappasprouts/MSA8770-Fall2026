@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" role="img" aria-labelledby="title desc">
+  <title id="title">Admissions review workflow</title>
+  <desc id="desc">Application records and PDFs are ingested and validated, a policy-grounded dossier is generated, and a human reviews the dossier alongside original evidence.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111827"/>
+      <stop offset="1" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5eead4"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="340" rx="24" fill="url(#background)"/>
+  <circle cx="1128" cy="-58" r="205" fill="#8b5cf6" opacity=".09"/>
+  <circle cx="22" cy="350" r="166" fill="#2dd4bf" opacity=".08"/>
+
+  <text x="48" y="51" fill="#5eead4" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" letter-spacing="2">THE LOCAL WORKFLOW</text>
+  <text x="48" y="89" fill="#f8fafc" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="700">From application packets to reviewable evidence</text>
+  <text x="48" y="115" fill="#cbd5e1" font-family="Arial, Helvetica, sans-serif" font-size="15">A staged prototype with a human reviewer at the end of the process.</text>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="48" y="146" width="334" height="150" rx="16" fill="#1e293b" stroke="#475569"/>
+    <circle cx="83" cy="181" r="17" fill="#134e4a"/>
+    <text x="77" y="187" fill="#99f6e4" font-size="17" font-weight="700">1</text>
+    <text x="111" y="186" fill="#99f6e4" font-size="14" font-weight="700" letter-spacing="1">INGEST + VALIDATE</text>
+    <text x="72" y="226" fill="#f8fafc" font-size="22" font-weight="700">CSV records + PDFs</text>
+    <text x="72" y="258" fill="#cbd5e1" font-size="15">Link files, check the manifest,</text>
+    <text x="72" y="279" fill="#cbd5e1" font-size="15">store status and originals.</text>
+
+    <path d="M394 221h28m-9-9 9 9-9 9" fill="none" stroke="url(#accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="434" y="146" width="334" height="150" rx="16" fill="#1e293b" stroke="#475569"/>
+    <circle cx="469" cy="181" r="17" fill="#312e81"/>
+    <text x="463" y="187" fill="#c4b5fd" font-size="17" font-weight="700">2</text>
+    <text x="497" y="186" fill="#c4b5fd" font-size="14" font-weight="700" letter-spacing="1">GENERATE DOSSIER</text>
+    <text x="458" y="226" fill="#f8fafc" font-size="22" font-weight="700">Evidence + policy</text>
+    <text x="458" y="258" fill="#cbd5e1" font-size="15">Render permitted pages and</text>
+    <text x="458" y="279" fill="#cbd5e1" font-size="15">write an advisory summary.</text>
+
+    <path d="M780 221h28m-9-9 9 9-9 9" fill="none" stroke="url(#accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="820" y="146" width="332" height="150" rx="16" fill="#1e293b" stroke="#475569"/>
+    <circle cx="855" cy="181" r="17" fill="#3b2c65"/>
+    <text x="849" y="187" fill="#ddd6fe" font-size="17" font-weight="700">3</text>
+    <text x="883" y="186" fill="#ddd6fe" font-size="14" font-weight="700" letter-spacing="1">HUMAN REVIEW</text>
+    <text x="844" y="226" fill="#f8fafc" font-size="22" font-weight="700">Dossier + source PDFs</text>
+    <text x="844" y="258" fill="#cbd5e1" font-size="15">Inspect citations and ask</text>
+    <text x="844" y="279" fill="#cbd5e1" font-size="15">questions in the review UI.</text>
+  </g>
+</svg>

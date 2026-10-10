@@ -1,0 +1,328 @@
+
+================================================================================
+[1mRIVERVIEW ADMISSIONS: INGESTION & COMPLETENESS GATE SUMMARY[0m
+================================================================================
+Batch Directory : D:\Users\miwi\git\MSA8770-Fall2026\batch_01
+Timestamp       : 2026-10-09 18:47:28 UTC
+--------------------------------------------------------------------------------
+[1mTotal Processed :[0m 10
+[32m[1mValid           :[0m 9  (Application packet complete -> READY_FOR_REVIEW)
+[33m[1mAwaiting Materials:[0m 1  (Missing required documents -> Applicant Packet Update)
+[33m[1mIncomplete      :[0m 0  (Missing required fields -> Applicant Packet Update)
+[31m[1mError           :[0m 0  (Corrupted/Magic Bytes/Size -> Human Review)
+--------------------------------------------------------------------------------
+Applicant ID   | Status             | Routing Target            | Docs   | Action Details                          
+---------------+--------------------+---------------------------+--------+-----------------------------------------
+APP_001        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 10     | Complete - Ready for handoff            
+APP_002        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 10     | Complete - Ready for handoff            
+APP_003        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 10     | Complete - Ready for handoff            
+APP_004        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 10     | Complete - Ready for handoff            
+APP_005        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 11     | Complete - Ready for handoff            
+APP_006        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 10     | Complete - Ready for handoff            
+APP_007        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 10     | Complete - Ready for handoff            
+APP_008        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 10     | Complete - Ready for handoff            
+APP_009        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 10     | Complete - Ready for handoff            
+APP_010        | [33mAWAITING_MATERIALS[0m | Applicant Packet Update   | 9      | Missing: transcript                     
+--------------------------------------------------------------------------------
+[1mAffected IDs (READY_FOR_REVIEW):[0m [36m['APP_001', 'APP_002', 'APP_003', 'APP_004', 'APP_005', 'APP_006', 'APP_007', 'APP_008', 'APP_009'][0m
+[1mExported Affected IDs File     :[0m D:\Users\miwi\git\MSA8770-Fall2026\output\integration_review_20261009\batch_01_affected_ids.json
+================================================================================
+
+Audit log successfully written to: D:\Users\miwi\git\MSA8770-Fall2026\output\integration_review_20261009\batch_01_report.txt
+
+================================================================================
+[HARD STOP] Ingestion and completeness check is complete.
+[HARD STOP] Audit report generated at: D:\Users\miwi\git\MSA8770-Fall2026\output\integration_review_20261009\batch_01_report.txt
+[HARD STOP] Affected IDs (9) exported to: D:\Users\miwi\git\MSA8770-Fall2026\output\integration_review_20261009\batch_01_affected_ids.json
+[HARD STOP] Pipeline execution halted prior to the summarizing agent.
+================================================================================
+
+
+================================================================================
+[1mRIVERVIEW ADMISSIONS: INGESTION & COMPLETENESS GATE SUMMARY[0m
+================================================================================
+Batch Directory : D:\Users\miwi\git\MSA8770-Fall2026\batch_02
+Timestamp       : 2026-10-09 18:47:28 UTC
+--------------------------------------------------------------------------------
+[1mTotal Processed :[0m 10
+[32m[1mValid           :[0m 7  (Application packet complete -> READY_FOR_REVIEW)
+[33m[1mAwaiting Materials:[0m 1  (Missing required documents -> Applicant Packet Update)
+[33m[1mIncomplete      :[0m 2  (Missing required fields -> Applicant Packet Update)
+[31m[1mError           :[0m 0  (Corrupted/Magic Bytes/Size -> Human Review)
+--------------------------------------------------------------------------------
+Applicant ID   | Status             | Routing Target            | Docs   | Action Details                          
+---------------+--------------------+---------------------------+--------+-----------------------------------------
+APP_011        | [33mAWAITING_MATERIALS[0m | Applicant Packet Update   | 4      | Missing: transcript                     
+APP_012        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 5      | Complete - Ready for handoff            
+APP_013        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 5      | Complete - Ready for handoff            
+APP_014        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 5      | Complete - Ready for handoff            
+APP_015        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 5      | Complete - Ready for handoff            
+APP_016        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 5      | Complete - Ready for handoff            
+APP_017        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 5      | Complete - Ready for handoff            
+APP_018        | [33mINCOMPLETE[0m         | Applicant Packet Update   | 5      | Missing: Email_Address                  
+APP_019        | [33mINCOMPLETE[0m         | Applicant Packet Update   | 5      | Missing: Last_Name                      
+APP_020        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 5      | Complete - Ready for handoff            
+--------------------------------------------------------------------------------
+[1mAffected IDs (READY_FOR_REVIEW):[0m [36m['APP_012', 'APP_013', 'APP_014', 'APP_015', 'APP_016', 'APP_017', 'APP_020'][0m
+[1mExported Affected IDs File     :[0m D:\Users\miwi\git\MSA8770-Fall2026\output\integration_review_20261009\batch_02_affected_ids.json
+================================================================================
+
+Audit log successfully written to: D:\Users\miwi\git\MSA8770-Fall2026\output\integration_review_20261009\batch_02_report.txt
+
+================================================================================
+[HARD STOP] Ingestion and completeness check is complete.
+[HARD STOP] Audit report generated at: D:\Users\miwi\git\MSA8770-Fall2026\output\integration_review_20261009\batch_02_report.txt
+[HARD STOP] Affected IDs (7) exported to: D:\Users\miwi\git\MSA8770-Fall2026\output\integration_review_20261009\batch_02_affected_ids.json
+[HARD STOP] Pipeline execution halted prior to the summarizing agent.
+================================================================================
+
+policy_chunks table is ready.
+Generating embeddings for 21 policy chunks...
+Stored 21 policy chunks (version 1.0).
+
+========================================
+PROCESSING APP_012
+========================================
+[1] Applicant APP_012, status READY_FOR_REVIEW
+[2] 5 documents: 5 for the model, 0 withheld
+[3] Rendering pages at 1.5x (memory only)
+    ✓ CommonApp.pdf                            2 page(s)
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+[4] RAG: retrieved 3 policies: POL-001, POL-002, POL-003
+[5] qwen3-vl:8b-instruct: one call per section (each validated, retried once if needed)
+    [1/2] academic (4 page image(s))  0s, 100 tokens  ✓
+    [1/2] engagement (2 page image(s))  0s, 100 tokens  ✓
+    [1/2] recommendation (2 page image(s))  0s, 100 tokens  ✓
+    [1/2] supplement (1 page image(s))  0s, 100 tokens  ✓
+    [1/2] policy (text only)  0s, 100 tokens  ✓
+    [1/2] synthesis (text only)  0s, 100 tokens  ✓
+[6] ✓ All sections passed validation (1 citations checked)
+[7] Dossier assembled: 0 review note(s)
+[8] Saved DOSSIER_READY → applicant_dossier + dossier_generation_runs, agent_results\APP_012_dossier.json
+    Total time 0.5s
+    ✓ activities_and_awards.pdf                2 page(s)
+    ✓ advanced_coursework_and_ap_scores.pdf    1 page(s)
+    ✓ application_form.pdf                     1 page(s)
+    ✓ recommendation_letter_1.pdf              1 page(s)
+    ✓ recommendation_letter_2.pdf              1 page(s)
+    ✓ standardized_test_score.pdf              1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+    ✓ university_supplement.pdf                1 page(s)
+    ✓ activities_and_awards.pdf                2 page(s)
+    ✓ advanced_coursework_and_ap_scores.pdf    2 page(s)
+    ✓ application_form.pdf                     1 page(s)
+    ✓ recommendation_letter_1.pdf              1 page(s)
+    ✓ recommendation_letter_2.pdf              1 page(s)
+    ✓ standardized_test_score.pdf              1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+    ✓ university_supplement.pdf                1 page(s)
+    ✓ activities_and_awards.pdf                2 page(s)
+    ✓ advanced_coursework_and_ap_scores.pdf    1 page(s)
+    ✓ application_form.pdf                     1 page(s)
+    ✓ exception_supporting_document.pdf        1 page(s)
+    ✓ recommendation_letter_1.pdf              1 page(s)
+    ✓ recommendation_letter_2.pdf              1 page(s)
+    ✓ standardized_test_score.pdf              1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+    ✓ university_supplement.pdf                1 page(s)
+    ✓ activities_and_awards.pdf                1 page(s)
+    ✓ advanced_coursework_and_ap_scores.pdf    2 page(s)
+    ✓ application_form.pdf                     1 page(s)
+    ✓ recommendation_letter_1.pdf              1 page(s)
+    ✓ recommendation_letter_2.pdf              1 page(s)
+    ✓ standardized_test_score.pdf              1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+    ✓ university_supplement.pdf                1 page(s)
+    ✓ activities_and_awards.pdf                1 page(s)
+    ✓ advanced_coursework_and_ap_scores.pdf    2 page(s)
+    ✓ application_form.pdf                     1 page(s)
+    ✓ recommendation_letter_1.pdf              1 page(s)
+    ✓ recommendation_letter_2.pdf              1 page(s)
+    ✓ standardized_test_score.pdf              1 page(s)
+    ✓ transcript.pdf                           1 page(s)
+    ✓ university_supplement.pdf                1 page(s)
+    ✓ activities_and_awards.pdf                2 page(s)
+    ✓ advanced_coursework_and_ap_scores.pdf    2 page(s)
+    ✓ application_form.pdf                     1 page(s)
+    ✓ recommendation_letter_1.pdf              1 page(s)
+    ✓ recommendation_letter_2.pdf              1 page(s)
+    ✓ standardized_test_score.pdf              1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+    ✓ university_supplement.pdf                1 page(s)
+    ✗ CommonApp.pdf: Hooks redaction verification failed
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+    ✓ activities_and_awards.pdf                2 page(s)
+    ✓ advanced_coursework_and_ap_scores.pdf    1 page(s)
+    ✓ application_form.pdf                     1 page(s)
+    ✓ recommendation_letter_1.pdf              1 page(s)
+    ✓ recommendation_letter_2.pdf              1 page(s)
+    ✓ standardized_test_score.pdf              1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+    ✓ university_supplement.pdf                1 page(s)
+    ✓ activities_and_awards.pdf                1 page(s)
+    ✓ advanced_coursework_and_ap_scores.pdf    1 page(s)
+    ✓ application_form.pdf                     1 page(s)
+    ✓ recommendation_letter_1.pdf              1 page(s)
+    ✓ recommendation_letter_2.pdf              1 page(s)
+    ✓ standardized_test_score.pdf              1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+    ✓ university_supplement.pdf                1 page(s)
+    ✓ activities_and_awards.pdf                1 page(s)
+    ✓ advanced_coursework_and_ap_scores.pdf    1 page(s)
+    ✓ application_form.pdf                     1 page(s)
+    ✓ recommendation_letter_1.pdf              1 page(s)
+    ✓ recommendation_letter_2.pdf              1 page(s)
+    ✓ standardized_test_score.pdf              1 page(s)
+    ✓ university_supplement.pdf                1 page(s)
+    ✓ CommonApp.pdf                            2 page(s)
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ transcript.pdf                           1 page(s)
+    ✗ CommonApp.pdf: Hooks redaction verification failed
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ transcript.pdf                           1 page(s)
+    ✓ CommonApp.pdf                            2 page(s)
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+    ✓ CommonApp.pdf                            2 page(s)
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ transcript.pdf                           1 page(s)
+    ✗ CommonApp.pdf: Hooks redaction verification failed
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ transcript.pdf                           1 page(s)
+    ✗ CommonApp.pdf: Hooks redaction verification failed
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ transcript.pdf                           1 page(s)
+    ✓ activities_and_awards.pdf                1 page(s)
+    ✓ advanced_coursework_and_ap_scores.pdf    1 page(s)
+    ✓ application_form.pdf                     1 page(s)
+    ✓ recommendation_letter_1.pdf              1 page(s)
+    ✓ recommendation_letter_2.pdf              1 page(s)
+    ✓ standardized_test_score.pdf              1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+    ✓ university_supplement.pdf                1 page(s)
+    ✓ CommonApp.pdf                            2 page(s)
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+    ✓ CommonApp.pdf                            2 page(s)
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ CommonApp.pdf                            2 page(s)
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+
+========================================
+PROCESSING APP_012
+========================================
+[1] Applicant APP_012, status READY_FOR_REVIEW
+[2] 5 documents: 5 for the model, 0 withheld
+[3] Rendering pages at 1.5x (memory only)
+    ✓ CommonApp.pdf                            2 page(s)
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+[4] RAG: retrieved 3 policies: POL-001, POL-002, POL-003
+[5] qwen3-vl:8b-instruct: one call per section (each validated, retried once if needed)
+    [1/2] academic (4 page image(s))  0s, 20 tokens  ✗ 1 problem(s)
+          - 'summary' is empty.
+    [2/2] academic (4 page image(s))  0s, 20 tokens  ✗ 1 problem(s)
+          - 'summary' is empty.
+    [1/2] engagement (2 page image(s))  0s, 20 tokens  ✓
+    [1/2] recommendation (2 page image(s))  0s, 20 tokens  ✓
+    [1/2] supplement (1 page image(s))  0s, 20 tokens  ✓
+[6] ✗ Section(s) failed validation twice: academic → human review
+[8] Saved AI_VALIDATION_FAILED → dossier_generation_runs only, agent_results\APP_012_dossier.json
+    Total time 0.5s
+
+========================================
+PROCESSING APP_013
+========================================
+[1] Applicant APP_013, status READY_FOR_REVIEW
+[2] 5 documents: 5 for the model, 0 withheld
+[3] Rendering pages at 1.5x (memory only)
+
+========================================
+PROCESSING APP_012
+========================================
+[1] Applicant APP_012, status READY_FOR_REVIEW
+[2] 5 documents: 5 for the model, 0 withheld
+[3] Rendering pages at 1.5x (memory only)
+    ✓ CommonApp.pdf                            2 page(s)
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+[4] RAG: retrieved 3 policies: POL-001, POL-002, POL-003
+[5] qwen3-vl:8b-instruct: one call per section (each validated, retried once if needed)
+    [1/2] academic (4 page image(s))  0s, 100 tokens  ✓
+    [1/2] engagement (2 page image(s))  0s, 100 tokens  ✓
+    [1/2] recommendation (2 page image(s))  0s, 100 tokens  ✓
+    [1/2] supplement (1 page image(s))  0s, 100 tokens  ✓
+    [1/2] policy (text only)  0s, 100 tokens  ✓
+    [1/2] synthesis (text only)  0s, 100 tokens  ✓
+[6] ✓ All sections passed validation (1 citations checked)
+[7] Dossier assembled: 0 review note(s)
+[8] Saved DOSSIER_READY → applicant_dossier + dossier_generation_runs, agent_results\APP_012_dossier.json
+    Total time 0.5s
+
+================================================================================
+[1mRIVERVIEW ADMISSIONS: INGESTION & COMPLETENESS GATE SUMMARY[0m
+================================================================================
+Batch Directory : D:\Users\miwi\git\MSA8770-Fall2026\batch_02
+Timestamp       : 2026-10-09 18:47:36 UTC
+--------------------------------------------------------------------------------
+[1mTotal Processed :[0m 10
+[32m[1mValid           :[0m 7  (Application packet complete -> READY_FOR_REVIEW)
+[33m[1mAwaiting Materials:[0m 1  (Missing required documents -> Applicant Packet Update)
+[33m[1mIncomplete      :[0m 2  (Missing required fields -> Applicant Packet Update)
+[31m[1mError           :[0m 0  (Corrupted/Magic Bytes/Size -> Human Review)
+--------------------------------------------------------------------------------
+Applicant ID   | Status             | Routing Target            | Docs   | Action Details                          
+---------------+--------------------+---------------------------+--------+-----------------------------------------
+APP_011        | [33mAWAITING_MATERIALS[0m | Applicant Packet Update   | 4      | Missing: transcript                     
+APP_012        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 5      | Complete - Ready for handoff            
+APP_013        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 5      | Complete - Ready for handoff            
+APP_014        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 5      | Complete - Ready for handoff            
+APP_015        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 5      | Complete - Ready for handoff            
+APP_016        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 5      | Complete - Ready for handoff            
+APP_017        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 5      | Complete - Ready for handoff            
+APP_018        | [33mINCOMPLETE[0m         | Applicant Packet Update   | 5      | Missing: Email_Address                  
+APP_019        | [33mINCOMPLETE[0m         | Applicant Packet Update   | 5      | Missing: Last_Name                      
+APP_020        | [32mREADY_FOR_REVIEW[0m   | READY_FOR_REVIEW          | 5      | Complete - Ready for handoff            
+--------------------------------------------------------------------------------
+[1mAffected IDs (READY_FOR_REVIEW):[0m [36m['APP_012', 'APP_013', 'APP_014', 'APP_015', 'APP_016', 'APP_017', 'APP_020'][0m
+[1mExported Affected IDs File     :[0m D:\Users\miwi\git\MSA8770-Fall2026\output\integration_review_20261009\replay_affected_ids.json
+================================================================================
+
+Audit log successfully written to: D:\Users\miwi\git\MSA8770-Fall2026\output\integration_review_20261009\replay_report.txt
+
+================================================================================
+[HARD STOP] Ingestion and completeness check is complete.
+[HARD STOP] Audit report generated at: D:\Users\miwi\git\MSA8770-Fall2026\output\integration_review_20261009\replay_report.txt
+[HARD STOP] Affected IDs (7) exported to: D:\Users\miwi\git\MSA8770-Fall2026\output\integration_review_20261009\replay_affected_ids.json
+[HARD STOP] Pipeline execution halted prior to the summarizing agent.
+================================================================================
+
