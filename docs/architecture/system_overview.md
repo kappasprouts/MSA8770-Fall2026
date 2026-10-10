@@ -2,7 +2,7 @@
 
 **Document Version**: 1.0  
 **Status**: APPROVED  
-**Related Reference**: [docs_architecture_section_4.md](../../docs_architecture_section_4.md)
+**Related Reference**: [Section 4 architecture plan](section_4.md)
 
 ---
 
@@ -40,7 +40,7 @@ sequenceDiagram
     Pipe->>Gate: Validate packet manifest
     Note over Gate: Trust Boundary 1 Perimeter Enforcement
     Gate->>Gate: Verify MIME, size <= 15MB, checksums
-    Gate->>Gate: Evaluate checklist completeness against policies.yaml
+    Gate->>Gate: Evaluate checklist completeness against policy/ingestion_rules.yaml
 
     alt Missing Documents
         Gate-->>Pipe: Status: AWAITING_MATERIALS
@@ -87,7 +87,7 @@ sequenceDiagram
   * **MIME Sniffing**: Inspects magic bytes and headers; permits only `application/pdf`, `image/png`, `image/jpeg`, and `image/tiff`.
   * **File Size Quotas**: Rejects files larger than 15 MB (`max_file_size_bytes: 15728640`) and packets larger than 50 MB (`max_packet_size_bytes: 52428800`). Rejects zero-byte or corrupt files under 1 KB (`min_file_size_bytes: 1024`).
   * **Path Sanitization**: Rejects paths containing directory traversal patterns (`..`, `/`, `\`).
-  * **Checklist Completeness**: Matches submitted document types against institutional checklists in `config/policies.yaml`.
+  * **Checklist Completeness**: Matches submitted document types against institutional checklists in `policy/ingestion_rules.yaml`.
   * **Deterministic Routing Matrix**:
     * If required documents are missing: Status `AWAITING_MATERIALS` $\rightarrow$ Target: **Applicant Packet Update**.
     * If required fields are missing: Status `INCOMPLETE` $\rightarrow$ Target: **Applicant Packet Update**. Fields take priority if both are missing.

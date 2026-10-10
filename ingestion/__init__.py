@@ -10,7 +10,7 @@ from ingestion.scheduler import (
     shutdown_scheduler,
     start_scheduler,
 )
-from ingestion.test_score_ingest import (
+from ingestion.score_ingest import (
     ScoreIngestResult,
     TestScoreIngestor,
     re_evaluate_applicant,

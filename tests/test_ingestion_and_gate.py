@@ -40,22 +40,22 @@ from ingestion.batch_ingest import (
 )
 from storage.models import Applicant, OrphanDocument
 from storage.storage_manager import StorageManager, normalize_applicant_id
-from validation.manifest_gate import (
+from ingestion.validation.manifest_gate import (
     GateRoutingDestination,
     GateStatus,
     ManifestValidationGate,
 )
-from run_ingestion_check import run_pipeline
+from ingestion.run_ingestion_check import run_pipeline
 
 
 @pytest.fixture
 def batch_dir():
-    return Path("batch_01")
+    return Path("data/batches/batch_01")
 
 
 @pytest.fixture
 def config_file():
-    return Path("config/policies.yaml")
+    return Path("policy/ingestion_rules.yaml")
 
 
 def _write_regression_batch(batch_path, app_id, first_name, document_names=()):
@@ -502,9 +502,9 @@ def test_hard_stop_enforcement_and_affected_ids_export(tmp_path):
     affected_ids_file = tmp_path / "affected_ids.json"
     cmd = [
         sys.executable,
-        "run_ingestion_check.py",
+        "ingestion/run_ingestion_check.py",
         "--input-dir",
-        "batch_01",
+        "data/batches/batch_01",
         "--output",
         str(report_file),
         "--affected-ids",
@@ -542,11 +542,11 @@ def test_no_downstream_agents_or_ocr_triggered(tmp_path):
     report_file = tmp_path / "test_report.txt"
     affected_file = tmp_path / "test_affected.json"
 
-    with patch("gateway.client.ModelGateway", side_effect=RuntimeError("Downstream ModelGateway must NOT be called")), \
-         patch("parsing.parser.DocumentParser", side_effect=RuntimeError("Downstream DocumentParser must NOT be called")):
+    with patch("ai_agent.gateway.client.ModelGateway", side_effect=RuntimeError("Downstream ModelGateway must NOT be called")), \
+         patch("ingestion.parsing.parser.DocumentParser", side_effect=RuntimeError("Downstream DocumentParser must NOT be called")):
         result = run_pipeline(
-            input_dir="batch_01",
-            config_file="config/policies.yaml",
+            input_dir="data/batches/batch_01",
+            config_file="policy/ingestion_rules.yaml",
             report_file=str(report_file),
             affected_ids_file=str(affected_file),
         )

@@ -2,7 +2,7 @@
 
 **Component**: Web Application (UI)  
 **Technology Stack**: Next.js 14 (App Router) + Tailwind CSS + FastAPI Backend  
-**Architecture Reference**: [docs_architecture_section_4.md](../../docs_architecture_section_4.md) (Component 8)
+**Architecture Reference**: [Section 4 architecture plan](../architecture/section_4.md) (Component 8)
 
 ---
 

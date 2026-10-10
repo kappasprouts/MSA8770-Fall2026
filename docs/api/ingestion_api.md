@@ -1,7 +1,7 @@
 # Ingestion API and overnight scheduler
 
 The API and overnight scheduler invoke the same two-pass ingestion and manifest
-gate as `run_ingestion_check.py`. Pass 1 upserts CSV-owned applicant fields; pass 2
+gate as `ingestion/run_ingestion_check.py`. Pass 1 upserts CSV-owned applicant fields; pass 2
 links new and late documents to the stored applicant. The gate persists each
 packet's status and writes an `affected_ids` JSON file containing IDs ready for
 the downstream AI summary agent. Ingestion stops there: it does not perform OCR,
@@ -29,7 +29,7 @@ supported date formats and stores a date; serialized applicant data uses ISO
 The source directory must be a two-pass batch directory: a CSV at its root and/or
 applicant document subdirectories. A document-only batch can link a late document
 to an applicant already in storage. The default source is the repository's
-`batch_01` directory. The old packet-directory scanner is no longer used.
+`data/batches/batch_01` directory. The old packet-directory scanner is no longer used.
 
 ### `POST /ingestion/batch/trigger`
 
@@ -49,7 +49,7 @@ and the affected IDs file are complete. The response is a JSON summary:
   },
   "affected_ids": ["APP_102"],
   "affected_ids_file": "/path/to/affected_ids_20261006T020015Z_ab12cd34.json",
-  "report_file": "/path/to/ingestion_batch_01_report_20261006T020015Z_ab12cd34.txt",
+  "report_file": "/path/to/output/ingestion/ingestion_batch_01_report_20261006T020015Z_ab12cd34.txt",
   "hard_stop": true,
   "storage_mode": "postgresql",
   "minio_available": true,
@@ -121,10 +121,10 @@ applicants returns HTTP 404. A strict object-storage failure returns HTTP 503.
 
 | Environment variable | Default | Purpose |
 | :--- | :--- | :--- |
-| `INGESTION_INPUT_DIR` | `<repo>/batch_01` | Two-pass batch root |
-| `INGESTION_CONFIG_PATH` | `<repo>/config/policies.yaml` | Manifest policy |
-| `INGESTION_REPORT_PATH` | `<repo>/ingestion_batch_01_report.txt` | Base path for uniquely named audit reports |
-| `INGESTION_AFFECTED_IDS_PATH` | `<repo>/affected_ids.json` | Base path for uniquely named affected ID files |
+| `INGESTION_INPUT_DIR` | `<repo>/data/batches/batch_01` | Two-pass batch root |
+| `INGESTION_CONFIG_PATH` | `<repo>/policy/ingestion_rules.yaml` | Manifest policy |
+| `INGESTION_REPORT_PATH` | `<repo>/output/ingestion/ingestion_batch_01_report.txt` | Base path for uniquely named audit reports |
+| `INGESTION_AFFECTED_IDS_PATH` | `<repo>/output/ingestion/affected_ids.json` | Base path for uniquely named affected ID files |
 | `INGESTION_REQUIRE_OBJECT_STORAGE` | `true` | Require live MinIO for a summary-agent handoff |
 | `INGESTION_REQUIRE_POSTGRESQL` | `true` | Require shared PostgreSQL for a summary-agent handoff |
 | `BATCH_CRON_HOUR` | `2` | Scheduled UTC hour |

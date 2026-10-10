@@ -28,7 +28,7 @@ from typing import Any, Dict, Iterator, List, Optional, Set, Tuple
 import csv
 from uuid import uuid4
 
-from config import derive_routing_destination, get_file_constraints, load_policies
+from policy import derive_routing_destination, get_file_constraints, load_policies
 from storage.date_utils import parse_date_of_birth
 from storage.storage_manager import StorageManager
 
@@ -361,7 +361,7 @@ class BatchIngestor:
     def gate(self):
         """Lazily load ManifestValidationGate to avoid circular import."""
         if self._gate is None:
-            from validation.manifest_gate import ManifestValidationGate
+            from ingestion.validation.manifest_gate import ManifestValidationGate
             self._gate = ManifestValidationGate(config_path=self.config_path)
         return self._gate
 

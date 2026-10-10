@@ -20,3 +20,5 @@ venv/
 *.log
 tmp/
 .local_dev_store.db*
+output/local_demo/
+/output/ai_agent/

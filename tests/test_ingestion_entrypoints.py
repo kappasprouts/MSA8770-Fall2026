@@ -9,7 +9,7 @@ from sqlalchemy import select
 
 from ingestion.pipeline import BatchIngestionPipeline
 from ingestion import scheduler
-from run_ingestion_check import run_pipeline
+from ingestion.run_ingestion_check import run_pipeline
 from storage.models import AuditLog
 from storage.storage_manager import StorageManager
 
@@ -21,7 +21,7 @@ REQUIRED_DOCUMENTS = (
     "recommendation_letter_1.pdf",
     "recommendation_letter_2.pdf",
 )
-CONFIG_PATH = Path(__file__).resolve().parent.parent / "config/policies.yaml"
+CONFIG_PATH = Path(__file__).resolve().parent.parent / "policy/ingestion_rules.yaml"
 
 
 def _write_batch(batch_dir: Path, missing_transcript_for_first: bool = False) -> None:

@@ -22,7 +22,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.types import JSON
 
 from storage.database import Base
-from config import derive_routing_destination
+from policy import derive_routing_destination
 
 # Use JSONB if on PostgreSQL, JSON generic fallback for SQLite testing
 JsonType = JSON().with_variant(JSONB, "postgresql")

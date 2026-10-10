@@ -19,14 +19,14 @@ import subprocess
 import sys
 import pytest
 
-from ingestion.test_score_ingest import (
+from ingestion.score_ingest import (
     ScoreIngestResult,
     TestScoreIngestor,
     re_evaluate_applicant,
 )
 from storage.models import Applicant, OrphanTestScore
 from storage.storage_manager import StorageManager
-from validation.manifest_gate import GateStatus, ManifestValidationGate
+from ingestion.validation.manifest_gate import GateStatus, ManifestValidationGate
 
 
 @pytest.fixture
@@ -456,7 +456,7 @@ def test_async_delta_ingestion(tmp_path, mock_storage):
 
 def test_cli_runner_college_board_and_act(tmp_path, temp_affected_ids):
     """Verify run_score_ingest.py CLI execution works for both college_board and act feeds."""
-    cli_path = Path("run_score_ingest.py").resolve()
+    cli_path = Path("ingestion/run_score_ingest.py").resolve()
 
     # College Board test CSV
     cb_csv = tmp_path / "cli_cb.csv"

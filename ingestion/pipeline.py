@@ -34,16 +34,16 @@ class BatchIngestionPipeline:
         require_postgresql: Optional[bool] = None,
     ) -> None:
         root = Path(__file__).resolve().parent.parent
-        self.source_dir = Path(source_dir or os.getenv("INGESTION_INPUT_DIR", root / "batch_01"))
-        self.config_path = Path(config_path or os.getenv("INGESTION_CONFIG_PATH", root / "config/policies.yaml"))
+        self.source_dir = Path(source_dir or os.getenv("INGESTION_INPUT_DIR", root / "data/batches/batch_01"))
+        self.config_path = Path(config_path or os.getenv("INGESTION_CONFIG_PATH", root / "policy/ingestion_rules.yaml"))
         configured_report = report_path or os.getenv("INGESTION_REPORT_PATH")
         configured_ids = affected_ids_path or os.getenv("INGESTION_AFFECTED_IDS_PATH")
         
         batch_name = self.source_dir.name
         self.report_path = Path(
-            configured_report or root / f"ingestion_{batch_name}_report.txt"
+            configured_report or root / "output/ingestion" / f"ingestion_{batch_name}_report.txt"
         )
-        self.affected_ids_path = Path(configured_ids or root / "affected_ids.json")
+        self.affected_ids_path = Path(configured_ids or root / "output/ingestion/affected_ids.json")
         self.storage_manager = storage_manager
         self.require_object_storage = (
             require_object_storage
@@ -120,7 +120,7 @@ class BatchIngestionPipeline:
         storage = self.storage_manager or StorageManager()
 
         # Import here to keep ingestion package initialization free of a cycle.
-        from run_ingestion_check import run_pipeline
+        from ingestion.run_ingestion_check import run_pipeline
 
         with _RUN_LOCK:
             gate_result = run_pipeline(

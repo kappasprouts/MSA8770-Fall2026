@@ -2,7 +2,7 @@
 
 Start with the repository already present at `D:\Users\miwi\git\MSA8770-Fall2026`. This walkthrough starts new PostgreSQL/pgvector and MinIO test services, downloads the two Ollama models, ingests the supplied synthetic Batch 02, generates APP_012, and opens the review UI.
 
-The Compose project is `rsu-live-test`. PostgreSQL uses host port **25432**, MinIO API **29000**, and the optional MinIO console **29001**. The UI will use **3001**. Ollama uses the existing Windows server on **11434**. The database is **rsu_live_test** and the MinIO bucket is **admissions-raw-docs**. Test data persists in this project's own Docker volumes. The full agent run writes its normal local snapshot under `summarizing_agent/results/`.
+The Compose project is `rsu-live-test`. PostgreSQL uses host port **25432**, MinIO API **29000**, and the optional MinIO console **29001**. The UI will use **3001**. Ollama uses the existing Windows server on **11434**. The database is **rsu_live_test** and the MinIO bucket is **admissions-raw-docs**. Test data persists in this project's own Docker volumes. The full agent run writes its normal local snapshot under `output/ai_agent/`.
 
 Application source is unchanged. The Compose configuration and PowerShell syntax were checked locally. The existing local image `quay.io/minio/aistor/minio:latest` was used. After correcting the license mount, live PostgreSQL/MinIO ingestion of Batch 02 succeeded: 10 applicants, 49 stored PDFs, 7 ready, 1 awaiting materials, and 2 incomplete. APP_012's downloaded transcript matched the source fixture's SHA-256 and opened as a two-page PDF. After setting Python's redirected output to UTF-8, the live Qwen academic test also completed: 4 pages, 1 attempt, 112.5 seconds of inference, 8 evidence items, no reported validation errors, and the expected GPA/SAT/ACT values. See `service_verification.json`, `academic_verification.json`, `TEST_RESULTS.md`, and `ingestion_report.txt` in this directory. The generated narrative says 12 AP courses while the course list contains 11 entries; schema/citation validation does not establish complete factual accuracy. The subsequent user-executed full APP_012 run reported DOSSIER_READY, six validated sections, 88 checked citations, and 520.3 seconds total; the UI also served the dossier, documents, and a chat response. See [TEST_RESULTS.md](TEST_RESULTS.md) for scope and limitations. All test services were stopped afterward.
 
@@ -55,9 +55,9 @@ This AIStor edition needs a valid license for S3 uploads and downloads. Your exi
 
 ```powershell
 Test-Path 'C:\Users\miwi\minio\minio.license' -PathType Leaf
-docker compose -f output/live_test_setup/compose.yaml config --quiet
-docker compose -f output/live_test_setup/compose.yaml up -d --pull never
-docker compose -f output/live_test_setup/compose.yaml ps
+docker compose -f tests/live_test_setup/compose.yaml config --quiet
+docker compose -f tests/live_test_setup/compose.yaml up -d --pull never
+docker compose -f tests/live_test_setup/compose.yaml ps
 ```
 
 The license check must return **True**. The local database image includes pgvector; see [pgvector Docker documentation](https://github.com/pgvector/pgvector#docker).
@@ -65,7 +65,7 @@ The license check must return **True**. The local database image includes pgvect
 Use `-PathType Leaf`: a directory named `minio.license` can make a plain `Test-Path` return True even though there is no license file. If the mount path changes after the container was created, apply it by recreating only MinIO:
 
 ```powershell
-docker compose -f output/live_test_setup/compose.yaml up -d --no-deps --force-recreate --pull never minio
+docker compose -f tests/live_test_setup/compose.yaml up -d --no-deps --force-recreate --pull never minio
 ```
 
 This reuses the existing MinIO data volume and does not restart PostgreSQL.
@@ -73,7 +73,7 @@ This reuses the existing MinIO data volume and does not restart PostgreSQL.
 Expect both services to be running and PostgreSQL to become healthy. If startup fails:
 
 ```powershell
-docker compose -f output/live_test_setup/compose.yaml logs --tail 80 postgres minio
+docker compose -f tests/live_test_setup/compose.yaml logs --tail 80 postgres minio
 ```
 
 If MinIO reports a missing, invalid, or expired license, resolve that before ingestion. A 200 health response does not prove S3 operations are enabled. You can instead use your teammates' already-running MinIO instance, but update `settings.ps1` to its exact endpoint and credentials before proceeding and start only the test PostgreSQL service.
@@ -81,7 +81,7 @@ If MinIO reports a missing, invalid, or expired license, resolve that before ing
 **4. Load the matching settings**
 
 ```powershell
-. .\output\live_test_setup\settings.ps1
+. .\tests\live_test_setup\settings.ps1
 ```
 
 The first dot and the following space are intentional: they load the settings into the current terminal. Repeat this in each new terminal before running the backend or UI. No root `.env` or UI `.env.local` needs to be overwritten. Both ingestion's `DATABASE_URL` and the agent/UI's `POSTGRES_*` settings point to the same test database.
@@ -92,13 +92,13 @@ If Windows explicitly blocks this local script because of execution policy, use 
 
 ```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-. .\output\live_test_setup\settings.ps1
+. .\tests\live_test_setup\settings.ps1
 ```
 
 **5. Verify the services and models**
 
 ```powershell
-docker compose -f output/live_test_setup/compose.yaml exec -T postgres pg_isready -U postgres -d rsu_live_test
+docker compose -f tests/live_test_setup/compose.yaml exec -T postgres pg_isready -U postgres -d rsu_live_test
 (Invoke-WebRequest "http://localhost:29000/minio/health/live" -UseBasicParsing -TimeoutSec 10).StatusCode
 (Invoke-RestMethod "http://localhost:11434/api/tags" -TimeoutSec 10).models.name
 ```
@@ -147,8 +147,8 @@ Expect **QWEN_OK**, **True**, and an embedding dimension of **768**, which the p
 **6. Ingest the supplied documents into the real test stores**
 
 ```powershell
-.\.venv\Scripts\python.exe run_ingestion_check.py `
-    --input-dir batch_02 `
+.\.venv\Scripts\python.exe ingestion/run_ingestion_check.py `
+    --input-dir data/batches/batch_02 `
     --require-postgresql `
     --require-object-storage `
     --output output/live_test_setup/ingestion_report.txt `
@@ -164,7 +164,7 @@ For the unchanged supplied Batch 02, the review observed **10 processed, 7 ready
 Verify the database record:
 
 ```powershell
-docker compose -f output/live_test_setup/compose.yaml exec -T postgres `
+docker compose -f tests/live_test_setup/compose.yaml exec -T postgres `
     psql -U postgres -d rsu_live_test -c "SELECT app_id, status, jsonb_array_length(documents) AS documents FROM applicants WHERE app_id = 'APP_012';"
 ```
 
@@ -175,7 +175,7 @@ Expect **READY_FOR_REVIEW** and **5 documents**. Verify an actual MinIO download
 import hashlib
 from pathlib import Path
 import pymupdf
-from summarizing_agent.summarizing_agent import connect_minio, MINIO_BUCKET
+from ai_agent.summarizing_agent import connect_minio, MINIO_BUCKET
 
 client = connect_minio()
 response = client.get_object(MINIO_BUCKET, "APP_012/transcript.pdf")
@@ -185,7 +185,7 @@ finally:
     response.close()
     response.release_conn()
 
-original = Path("batch_02/APP_012/transcript.pdf").read_bytes()
+original = Path("data/batches/batch_02/APP_012/transcript.pdf").read_bytes()
 if hashlib.sha256(downloaded).digest() != hashlib.sha256(original).digest():
     raise RuntimeError("Downloaded PDF differs from the source fixture")
 with pymupdf.open(stream=downloaded, filetype="pdf") as document:
@@ -200,8 +200,8 @@ Expect a matching SHA-256 and **2 pages**. This confirms ingestion uploaded real
 For the new test database, run:
 
 ```powershell
-.\.venv\Scripts\python.exe summarizing_agent/create_pgvector_once.py
-docker compose -f output/live_test_setup/compose.yaml exec -T postgres `
+.\.venv\Scripts\python.exe ai_agent/create_pgvector_once.py
+docker compose -f tests/live_test_setup/compose.yaml exec -T postgres `
     psql -U postgres -d rsu_live_test -c "SELECT count(*) AS policies, min(vector_dims(embedding)) AS min_dimensions, max(vector_dims(embedding)) AS max_dimensions FROM policy_chunks;"
 ```
 
@@ -210,7 +210,7 @@ Expect **21 policies**, with both dimension values **768**. This loader calls li
 **8. Run the focused live PDF/Qwen test**
 
 ```powershell
-.\.venv\Scripts\python.exe -m summarizing_agent.tests.test_academic_only `
+.\.venv\Scripts\python.exe tests/ai_agent/test_academic_only.py `
     2>&1 | Tee-Object output/live_test_setup/academic_run.log
 ```
 
@@ -224,7 +224,7 @@ Image-only evidence may be marked `UNVERIFIED_IMAGE_SOURCE`; manually compare th
 
 ```powershell
 $liveRunStartedAt = [DateTimeOffset]::UtcNow.ToString("o")
-.\.venv\Scripts\python.exe summarizing_agent/summarizing_agent.py APP_012 `
+.\.venv\Scripts\python.exe ai_agent/summarizing_agent.py APP_012 `
     2>&1 | Tee-Object output/live_test_setup/full_run.log
 ```
 
@@ -233,13 +233,13 @@ Use APP_012 explicitly: the default affected-ID lookup currently does not reliab
 Check the **new** database run:
 
 ```powershell
-docker compose -f output/live_test_setup/compose.yaml exec -T postgres `
+docker compose -f tests/live_test_setup/compose.yaml exec -T postgres `
     psql -U postgres -d rsu_live_test -c "SELECT id, app_id, run_status, validation->>'passed' AS validation_passed, created_at FROM dossier_generation_runs WHERE app_id = 'APP_012' AND created_at >= '$liveRunStartedAt'::timestamptz ORDER BY id DESC LIMIT 1;"
 
-docker compose -f output/live_test_setup/compose.yaml exec -T postgres `
+docker compose -f tests/live_test_setup/compose.yaml exec -T postgres `
     psql -U postgres -d rsu_live_test -c "SELECT app_id, status FROM applicants WHERE app_id = 'APP_012'; SELECT app_id, updated_at FROM applicant_dossier WHERE app_id = 'APP_012';"
 
-Get-Content summarizing_agent/results/APP_012_dossier.json -Raw |
+Get-Content output/ai_agent/APP_012_dossier.json -Raw |
     ConvertFrom-Json | Select-Object -ExpandProperty run |
     Select-Object run_status, validation
 ```
@@ -247,7 +247,7 @@ Get-Content summarizing_agent/results/APP_012_dossier.json -Raw |
 Pass requires a run created after the recorded start time with **DOSSIER_READY**, validation **true**, a saved dossier row, and applicant status **DOSSIER_READY**. If no fresh run appears, inspect `full_run.log` and the audit table:
 
 ```powershell
-docker compose -f output/live_test_setup/compose.yaml exec -T postgres `
+docker compose -f tests/live_test_setup/compose.yaml exec -T postgres `
     psql -U postgres -d rsu_live_test -c "SELECT event, created_at FROM summary_audit_log WHERE app_id = 'APP_012' ORDER BY id DESC LIMIT 5;"
 ```
 
@@ -259,11 +259,11 @@ Open a second PowerShell terminal and load the same settings:
 
 ```powershell
 Set-Location D:\Users\miwi\git\MSA8770-Fall2026
-. .\output\live_test_setup\settings.ps1
-Set-Location chat-ui
+. .\tests\live_test_setup\settings.ps1
+Set-Location ui
 ```
 
-The current UI is in root **chat-ui**, not `summarizing_agent/chat-ui`. If its dependencies are already installed, start it directly with the available Node executable:
+The current UI is in root **ui**. If its dependencies are already installed, start it directly with the available Node executable:
 
 ```powershell
 & "C:\Users\miwi\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" `
@@ -290,14 +290,14 @@ The applicant dropdown contains saved dossiers, not all ingested applicants. An 
 Stop the UI with Ctrl+C. From the repository root, stop just these test services:
 
 ```powershell
-docker compose -f output/live_test_setup/compose.yaml stop
+docker compose -f tests/live_test_setup/compose.yaml stop
 ```
 
 To resume later:
 
 ```powershell
-docker compose -f output/live_test_setup/compose.yaml up -d --pull never
-. .\output\live_test_setup\settings.ps1
+docker compose -f tests/live_test_setup/compose.yaml up -d --pull never
+. .\tests\live_test_setup\settings.ps1
 ```
 
 The test volumes retain applicant documents, policy vectors, and dossiers. You do not need to reseed or ingest again to view the previous successful dossier. Reingestion currently resets ready applicant statuses; use it deliberately when testing another ingestion run.

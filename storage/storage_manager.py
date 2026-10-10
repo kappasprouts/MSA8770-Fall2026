@@ -92,7 +92,7 @@ class StorageManager:
         if self.database_url.startswith("postgresql://") and not self.database_url.startswith("postgresql+"):
             self.database_url = self.database_url.replace("postgresql://", "postgresql+psycopg://", 1)
 
-        self.sqlite_store_path = sqlite_store_path or os.getenv("SQLITE_STORE_PATH", ".local_dev_store.db")
+        self.sqlite_store_path = sqlite_store_path or os.getenv("SQLITE_STORE_PATH", "data/local/.local_dev_store.db")
         self.use_sqlite_fallback = use_sqlite_fallback
         self.is_sqlite_fallback = False
 

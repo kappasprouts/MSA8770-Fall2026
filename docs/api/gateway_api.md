@@ -2,7 +2,7 @@
 
 **Component**: Model Gateway / LLM API  
 **Engine**: Local Ollama container (`qwen2.5:14b-instruct` or `gpt-oss-20b`)  
-**Implementation**: [`gateway/client.py`](../../gateway/client.py), [`gateway/grounding.py`](../../gateway/grounding.py)
+**Implementation**: [`ai_agent/gateway/client.py`](../../ai_agent/gateway/client.py), [`ai_agent/gateway/grounding.py`](../../ai_agent/gateway/grounding.py)
 
 ---
 
@@ -109,7 +109,7 @@ When evaluated, notice how `personal_statement.pdf` is excluded from LLM inferen
 
 ## 3. Policy Grounding System Prompt Specification
 
-The Policy Grounding Engine in [`gateway/grounding.py`](../../gateway/grounding.py) constructs the following system prompt for Ollama:
+The Policy Grounding Engine in [`ai_agent/gateway/grounding.py`](../../ai_agent/gateway/grounding.py) constructs the following system prompt for Ollama:
 
 ```text
 You are the Riverview State University Admissions Advisory AI assistant.

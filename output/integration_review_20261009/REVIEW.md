@@ -1,6 +1,6 @@
 # Integrated ingestion, summarizing agent, and review UI assessment
 
-Reviewed October 9, 2026, at commit `847ed1b7247257dc16d6394ec420f631f17bab81`.
+Reviewed October 9, 2026, at commit `847ed1b7247257dc16d6394ec420f631f17bab81`. Source links now point to the reorganized folders; findings describe the reviewed commit.
 
 **Verdict: the components can exchange data, but the integrated system does not yet work reliably as intended.** Ingestion can stage the supplied batches in PostgreSQL, and explicit applicant selection plus controlled model responses can produce a stored dossier that the UI reads. The default handoff, several supplied applicants, evidence validation, and failure visibility have reproducible defects. A successful APP_012 run does not establish success for the rest of the dataset.
 
@@ -34,19 +34,19 @@ Subsequent live APP_012 testing is recorded in [the live test results](../live_t
 
 ### 1. P1 — The default agent invocation does not consume ingestion's handoff
 
-[Agent handoff loader](../../summarizing_agent/summarizing_agent.py#L1838) reads `summarizing_agent/affected_ids.json`, while ingestion emits uniquely named files at the repository/configured output location. There is no `--affected-ids` file argument. With an ingestion artifact containing APP_012 and APP_013, the default loader returns **APP_001** instead. API and scheduler ingestion also deliberately stop before invoking the agent.
+[Agent handoff loader](../../ai_agent/summarizing_agent.py#L1838) reads `output/ingestion/affected_ids.json`, while ingestion emits uniquely named files at the repository/configured output location. There is no `--affected-ids` file argument. With an ingestion artifact containing APP_012 and APP_013, the default loader returns **APP_001** instead. API and scheduler ingestion also deliberately stop before invoking the agent.
 
 **Consequence:** ingestion success alone cannot generate the intended dossiers; a no-argument agent run may process the wrong applicant. Explicit positional applicant IDs work around selection, but do not repair the artifact contract. Provide a validated file-path input and a documented/manual or automatic orchestrator that passes the exact successful run artifact.
 
 ### 2. P1 — Supplied ready applicants fail Hooks redaction
 
-[Hooks verification](../../summarizing_agent/summarizing_agent.py#L611) checks whether the removed value occurs anywhere else on the page. **APP_013, APP_016, and APP_020** have `Hooks: Not provided`, with the same ordinary text in another field. Rendering raises `Hooks redaction verification failed` although ingestion marks them ready. APP_018 also has this rendering problem, but its missing metadata already prevents ordinary handoff.
+[Hooks verification](../../ai_agent/summarizing_agent.py#L611) checks whether the removed value occurs anywhere else on the page. **APP_013, APP_016, and APP_020** have `Hooks: Not provided`, with the same ordinary text in another field. Rendering raises `Hooks redaction verification failed` although ingestion marks them ready. APP_018 also has this rendering problem, but its missing metadata already prevents ordinary handoff.
 
 **Consequence:** three of Batch 02's seven ready applicants cannot reach model inference. Verify redaction of the identified field region; avoid treating another field's identical text as a privacy leak. Preserve conservative handling when actual sensitive material cannot be removed.
 
 ### 3. P1 — Separate activities and AP records never reach their model sections
 
-[Section document types](../../summarizing_agent/summarizing_agent.py#L122) allow only `application_form` for engagement, and `advanced_coursework` for AP material. Ingestion classifies the actual files as `activities_and_awards` and `advanced_coursework_and_ap_scores`; normalization does not reconcile these values.
+[Section document types](../../ai_agent/summarizing_agent.py#L122) allow only `application_form` for engagement, and `advanced_coursework` for AP material. Ingestion classifies the actual files as `activities_and_awards` and `advanced_coursework_and_ap_scores`; normalization does not reconcile these values.
 
 **Evidence:** both document-selection tests return an empty section input. Every Batch 01 packet's separate activities/AP files appear in the loaded-but-unused evidence. The allowed Batch 01 application form does not contain its separate activities record, and its Common App copy is withheld.
 
@@ -54,7 +54,7 @@ Subsequent live APP_012 testing is recorded in [the live test results](../live_t
 
 ### 4. P1 — Score-feed changes persist but are invisible to dossier generation
 
-[Image prompt construction](../../summarizing_agent/summarizing_agent.py#L945) uses the applicant record only for its ID. It does not include the updated SAT/ACT/AP values; policy and synthesis consume the generated document summaries rather than the score-feed record.
+[Image prompt construction](../../ai_agent/summarizing_agent.py#L945) uses the applicant record only for its ID. It does not include the updated SAT/ACT/AP values; policy and synthesis consume the generated document summaries rather than the score-feed record.
 
 **Evidence:** a real PostgreSQL delta raised APP_012's SAT to **1599**, added AP Biology 5, and exported APP_012 for regeneration. Neither new value appeared in the academic prompt. Existing PDFs still contain the earlier information.
 
@@ -62,33 +62,33 @@ Subsequent live APP_012 testing is recorded in [the live test results](../live_t
 
 ### 5. P1 — Incorrect factual claims can pass “verified” evidence checks
 
-[Quote verification](../../summarizing_agent/summarizing_agent.py#L1153) compares sets of words/numbers on a page, not the quoted passage or its field association. It accepts **“Unweighted GPA 4.40”** on a page that actually says **“Unweighted GPA 3.97 / Weighted GPA 4.40.”** [Section validation](../../summarizing_agent/summarizing_agent.py#L1345) also accepts `sat_superscore: 1600` with evidence saying **SAT Score 1200**. Unsupported nonnumeric policies can be marked aligned without evidence.
+[Quote verification](../../ai_agent/summarizing_agent.py#L1153) compares sets of words/numbers on a page, not the quoted passage or its field association. It accepts **“Unweighted GPA 4.40”** on a page that actually says **“Unweighted GPA 3.97 / Weighted GPA 4.40.”** [Section validation](../../ai_agent/summarizing_agent.py#L1345) also accepts `sat_superscore: 1600` with evidence saying **SAT Score 1200**. Unsupported nonnumeric policies can be marked aligned without evidence.
 
 **Consequence:** materially wrong metrics can enter a supposedly validated dossier. Check contiguous normalized quotations/field-value associations, validate facts against their supporting evidence, and require support or `unclear` for substantive policy findings.
 
 ### 6. P1 — Output schemas and admission-language guards are incomplete
 
-[Validator](../../summarizing_agent/summarizing_agent.py#L1345) checks top-level required keys, not the full schema. It accepts a string in place of `document_facts` and an invalid policy alignment. [Decision patterns](../../summarizing_agent/summarizing_agent.py#L159) miss **“Admit this applicant”** and **“I recommend admitting the applicant.”** Both passed the validator.
+[Validator](../../ai_agent/summarizing_agent.py#L1345) checks top-level required keys, not the full schema. It accepts a string in place of `document_facts` and an invalid policy alignment. [Decision patterns](../../ai_agent/summarizing_agent.py#L159) miss **“Admit this applicant”** and **“I recommend admitting the applicant.”** Both passed the validator.
 
 **Consequence:** malformed output and explicit admissions recommendations can be saved as validated. Validate nested types/enums and enforce the human-decision boundary before persistence.
 
 ### 7. P1 — Privacy filtering depends on one template and misses an ingestion field
 
-[Application rendering](../../summarizing_agent/summarizing_agent.py#L663) triggers contact redaction only for the exact case-sensitive heading `Applicant information`. A synthetic page headed `Applicant Information` retains its email address in both rendered content and extracted text. Multiline Hooks redaction removes only the first value line. [Restricted fields](../../summarizing_agent/summarizing_agent.py#L130) names `primary_phone_number`, whereas the active ingestion table stores `phone_number`.
+[Application rendering](../../ai_agent/summarizing_agent.py#L663) triggers contact redaction only for the exact case-sensitive heading `Applicant information`. A synthetic page headed `Applicant Information` retains its email address in both rendered content and extracted text. Multiline Hooks redaction removes only the first value line. [Restricted fields](../../ai_agent/summarizing_agent.py#L130) names `primary_phone_number`, whereas the active ingestion table stores `phone_number`.
 
 **Consequence:** a permitted application variant can send restricted material to the model, and the output guard does not recognize the stored phone number. Identify and verify restricted field regions reliably; withhold uncertain pages, handle multiline values, and align field names with the actual schema. The provided APP_012 template passed; that result does not cover other layouts or scanned forms.
 
 ### 8. P1 — Failed generation is not a reliable human-review workflow
 
-[Run persistence](../../summarizing_agent/summarizing_agent.py#L1593) stores an `AI_VALIDATION_FAILED` run but resets the applicant to `READY_FOR_REVIEW`. Document-loading/RAG errors happen before a complete run record exists. [CLI main](../../summarizing_agent/summarizing_agent.py#L1850) catches applicant errors and returns normally.
+[Run persistence](../../ai_agent/summarizing_agent.py#L1593) stores an `AI_VALIDATION_FAILED` run but resets the applicant to `READY_FOR_REVIEW`. Document-loading/RAG errors happen before a complete run record exists. [CLI main](../../ai_agent/summarizing_agent.py#L1850) catches applicant errors and returns normally.
 
-**Evidence:** APP_013's real rendering failure produced an `AGENT_ERROR` audit, **zero new generation runs**, and **exit code 0**, with applicant status still ready. A failed regeneration retained the old dossier. The [UI selector](../../chat-ui/src/lib/dossier.ts#L91) selects only `applicant_dossier`, so failed-only applicants are invisible. [Snapshot rendering](../../chat-ui/src/components/dossier/SnapshotCard.tsx#L24) labels sections “Complete” whenever an older dossier exists, even when the latest run failed. Unchanged ingestion replay also resets a previously `DOSSIER_READY` applicant to `READY_FOR_REVIEW` and exports it again.
+**Evidence:** APP_013's real rendering failure produced an `AGENT_ERROR` audit, **zero new generation runs**, and **exit code 0**, with applicant status still ready. A failed regeneration retained the old dossier. The [UI selector](../../ui/src/lib/dossier.ts#L91) selects only `applicant_dossier`, so failed-only applicants are invisible. [Snapshot rendering](../../ui/src/components/dossier/SnapshotCard.tsx#L24) labels sections “Complete” whenever an older dossier exists, even when the latest run failed. Unchanged ingestion replay also resets a previously `DOSSIER_READY` applicant to `READY_FOR_REVIEW` and exports it again.
 
 **Consequence:** monitoring reports success, failures may never reach reviewers, and stale dossiers can be paired with unrelated latest-run metadata. Persist every outcome with an explicit error/review state, return unsuccessful CLI status when required work fails, expose failed applicants, and link dossier content to its successful generation run/input version.
 
 ### 9. P1 — Chat accepts a caller-supplied system message
 
-[Chat route](../../chat-ui/src/app/api/chat/route.ts#L28) checks only that `messages` is a nonempty array, then forwards its objects verbatim after its own system prompt. TypeScript interfaces do not validate JSON at runtime.
+[Chat route](../../ui/src/app/api/chat/route.ts#L28) checks only that `messages` is a nonempty array, then forwards its objects verbatim after its own system prompt. TypeScript interfaces do not validate JSON at runtime.
 
 **Evidence:** a request containing `role: "system"` returned 200 and forwarded roles **system, system, user**. A controlled model reply **“Admit this applicant.”** was returned without rejection. The latter proves missing server-side output enforcement; it does not claim a real Qwen model produced that reply.
 
@@ -108,7 +108,7 @@ Subsequent live APP_012 testing is recorded in [the live test results](../live_t
 
 ### 12. P1 — Document bucket configuration disagrees across components
 
-Ingestion/agent use `admissions-raw-docs`; the [UI default](../../chat-ui/src/lib/dossier.ts#L25) and `.env.local.example` use `applicant-documents`. Agent normalization and UI document lookup discard each document's stored bucket and download using one global bucket.
+Ingestion/agent use `admissions-raw-docs`; the [UI default](../../ui/src/lib/dossier.ts#L25) and `.env.local.example` use `applicant-documents`. Agent normalization and UI document lookup discard each document's stored bucket and download using one global bucket.
 
 **Evidence:** the actual UI PDF route requested **applicant-documents** for metadata explicitly naming **admissions-raw-docs**. A contract test confirms the agent drops historical bucket metadata.
 
@@ -116,7 +116,7 @@ Ingestion/agent use `admissions-raw-docs`; the [UI default](../../chat-ui/src/li
 
 ### 13. P2 — The missing-score policy fallback is overwritten
 
-`validate_policy_evidence_match` is defined twice ([first definition](../../summarizing_agent/summarizing_agent.py#L1256), [second definition](../../summarizing_agent/summarizing_agent.py#L1305)). The second removes handling for absent evidence with an `unclear` alignment. Consequently a legitimately missing optional SAT/GPA/ACT metric can fail both attempts even when the model follows its correction instructions.
+`validate_policy_evidence_match` is defined twice ([first definition](../../ai_agent/summarizing_agent.py#L1256), [second definition](../../ai_agent/summarizing_agent.py#L1305)). The second removes handling for absent evidence with an `unclear` alignment. Consequently a legitimately missing optional SAT/GPA/ACT metric can fail both attempts even when the model follows its correction instructions.
 
 **Consequence:** test-optional packets can be rejected when those policies are retrieved. Keep one implementation and test empty evidence for each permitted alignment.
 
@@ -130,13 +130,13 @@ The handbook/`policy/policies.yaml`, gate configuration, and RAG TXT are differe
 
 ### 15. P2 — UI omits useful evidence and mangles review notes
 
-[Evidence card](../../chat-ui/src/components/dossier/EvidenceCard.tsx#L23) renders strength text but no document/page/quotation/verification status. Actual component rendering confirmed that source and quote were absent. [Chat context](../../chat-ui/src/lib/dossier.ts#L312) interpolates structured review-note objects as **`[object Object]`**; the agent emits `{category, note, section}`, while the UI type declares strings.
+[Evidence card](../../ui/src/components/dossier/EvidenceCard.tsx#L23) renders strength text but no document/page/quotation/verification status. Actual component rendering confirmed that source and quote were absent. [Chat context](../../ui/src/lib/dossier.ts#L312) interpolates structured review-note objects as **`[object Object]`**; the agent emits `{category, note, section}`, while the UI type declares strings.
 
 **Consequence:** officers cannot inspect the promised citations in that card, and the chatbot loses the substance of missing-information notes. Preserve the agent's note shape and display evidence/provenance, including image-only warnings.
 
 ### 16. P2 — Stream completion and scheduler time are unchecked
 
-[Model streaming](../../summarizing_agent/summarizing_agent.py#L1072) accepts a stream ending without an Ollama `done` marker if the accumulated text parses. The interrupted-stream contract test fails. [Scheduler construction](../../ingestion/scheduler.py#L64) does not specify UTC, although environment documentation/logs promise 02:00 UTC; APScheduler therefore uses the host timezone.
+[Model streaming](../../ai_agent/summarizing_agent.py#L1072) accepts a stream ending without an Ollama `done` marker if the accumulated text parses. The interrupted-stream contract test fails. [Scheduler construction](../../ingestion/scheduler.py#L64) does not specify UTC, although environment documentation/logs promise 02:00 UTC; APScheduler therefore uses the host timezone.
 
 **Consequence:** incomplete inference can look complete, and deployments outside UTC execute at a different time. Require a valid terminal model event and set the scheduler/trigger timezone explicitly.
 
@@ -145,8 +145,8 @@ The handbook/`policy/policies.yaml`, gate configuration, and RAG TXT are differe
 Run the original suite separately from the new diagnostic cases:
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest tests -q
-.\.venv\Scripts\python.exe -m pytest output/integration_review_20261009/test_integration_contracts.py -q --tb=short
+.\.venv\Scripts\python.exe -m pytest tests --ignore=tests/integration_review_20261009 -q
+.\.venv\Scripts\python.exe -m pytest tests/integration_review_20261009/test_integration_contracts.py -q --tb=short
 ```
 
 The second command currently fails by design against the reviewed implementation. Its positive controls distinguish functioning guardrails from the defects. The backend/UI/CLI reproducer scripts require the isolated review database, which was removed when the temporary `--rm` container stopped; review their explicit configuration before recreating it. They must not be pointed at a shared admissions database.
@@ -160,7 +160,7 @@ Evidence in this directory:
 - `ui_build_lint_notes.txt`: successful build/lint tool results, lockfile comparison, and observed scheduler timezone.
 - `cli_failure_results.json` / `cli_failure_output.txt`: APP_013's error, successful exit, audit-only failure, and unchanged ready state.
 - `inventory_checks.json`: Python syntax and all-PDF opening inventory.
-- `reproduce_backend.py`, `reproduce_ui.cjs`, `reproduce_cli_failure.py`: reproducible isolated checks.
+- [`tests/integration_review_20261009/`](../../tests/integration_review_20261009/): reproducible isolated checks and contract tests.
 
 The UI remains an unauthenticated local prototype, as its README acknowledges. Authentication/RBAC and the architecture's officer-decision workflow are not implemented; this assessment does not treat those documented prototype limits as newly introduced regressions.
 
