@@ -1,0 +1,16 @@
+requests
+SQLAlchemy>=2.0
+psycopg[binary]
+psycopg2-binary
+minio
+pymupdf
+pydantic>=2.0
+pyyaml>=6.0
+python-dotenv>=1.0,<2.0
+pandas>=2.0
+pytest>=7.0
+pytest-asyncio>=0.23
+httpx>=0.27,<1.0
+fastapi>=0.110,<1.0
+uvicorn>=0.30,<1.0
+APScheduler>=3.10,<4.0

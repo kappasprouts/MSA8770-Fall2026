@@ -1,0 +1,122 @@
+================================================================================
+RIVERVIEW STATE UNIVERSITY ADMISSIONS PIPELINE
+COMPONENT 2 (INGESTION) & COMPONENT 3 (MANIFEST VALIDATION GATE) AUDIT REPORT
+================================================================================
+Execution Timestamp : 2026-10-09T18:47:28.474586+00:00
+Run ID              : 20261009T184728474586Z_9bae3f75
+Target Input Batch  : D:\Users\miwi\git\MSA8770-Fall2026\batch_01
+Configuration File  : D:\Users\miwi\git\MSA8770-Fall2026\config\policies.yaml
+Trust Boundary Check: Trust Boundary 1 (Inbound Perimeter Constraints)
+Storage Persistence : PostgreSQL applicant records; MinIO raw documents
+--------------------------------------------------------------------------------
+
+BATCH PROCESSING SUMMARY
+------------------------
+Total Applications Processed : 10
+Valid Applications (Ready)   : 9 (-> Application packet complete, ready for handoff)
+Awaiting Materials           : 1 (-> Missing required documents)
+Incomplete Applications      : 0 (-> Missing required metadata fields)
+Error / Corrupted Packets    : 0 (-> Routed to 'Human Review')
+Orphan Documents Recorded    : 0 (-> Stored in OrphanDocument table & MinIO orphans/)
+Affected IDs (Ready)         : APP_001, APP_002, APP_003, APP_004, APP_005, APP_006, APP_007, APP_008, APP_009
+
+ROUTING DISPOSITION TABLE
+--------------------------------------------------------------------------------
+Applicant ID   | Status             | Routing Destination       | Documents  | Issues / Notes                          
+---------------+--------------------+---------------------------+------------+-----------------------------------------
+APP_001        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 10         | All checks passed                       
+APP_002        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 10         | All checks passed                       
+APP_003        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 10         | All checks passed                       
+APP_004        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 10         | All checks passed                       
+APP_005        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 11         | All checks passed                       
+APP_006        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 10         | All checks passed                       
+APP_007        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 10         | All checks passed                       
+APP_008        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 10         | All checks passed                       
+APP_009        | READY_FOR_REVIEW   | READY_FOR_REVIEW          | 10         | All checks passed                       
+APP_010        | AWAITING_MATERIALS | Applicant Packet Update   | 9          | Missing docs: transcript                
+--------------------------------------------------------------------------------
+
+DETAILED APPLICANT AUDIT TRAILS
+================================================================================
+[01] APPLICANT: APP_001
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[02] APPLICANT: APP_002
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[03] APPLICANT: APP_003
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[04] APPLICANT: APP_004
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[05] APPLICANT: APP_005
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 11
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, exception_supporting_document.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[06] APPLICANT: APP_006
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[07] APPLICANT: APP_007
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[08] APPLICANT: APP_008
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[09] APPLICANT: APP_009
+     Status              : READY_FOR_REVIEW
+     Routing Destination : READY_FOR_REVIEW
+     Valid for Pipeline  : True
+     Total Documents     : 10
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, transcript.pdf, university_supplement.pdf
+--------------------------------------------------------------------------------
+[10] APPLICANT: APP_010
+     Status              : AWAITING_MATERIALS
+     Routing Destination : Applicant Packet Update
+     Valid for Pipeline  : False
+     Total Documents     : 9
+     Documents Present   : activities_and_awards.pdf, advanced_coursework_and_ap_scores.pdf, application_form.pdf, common_app_application.pdf, personal_statement.pdf, recommendation_letter_1.pdf, recommendation_letter_2.pdf, standardized_test_score.pdf, university_supplement.pdf
+     Missing Documents   : transcript
+--------------------------------------------------------------------------------
+
+PIPELINE HALT ENFORCEMENT & HANDOFF
+================================================================================
+Affected IDs for Summarizing Agent: ['APP_001', 'APP_002', 'APP_003', 'APP_004', 'APP_005', 'APP_006', 'APP_007', 'APP_008', 'APP_009']
+Saved to: D:\Users\miwi\git\MSA8770-Fall2026\output\integration_review_20261009\batch_01_affected_ids.json
+Execution hard stop enforced immediately after Manifest Gate validation.
+No downstream OCR parsers, LLM gateways, VLM agents, or summarizers invoked.
+================================================================================
+
+END OF AUDIT LOG
+================================================================================

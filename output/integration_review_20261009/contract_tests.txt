@@ -1,0 +1,158 @@
+FFFFFFFFFFFFFFFF...FFF..F                                                [100%]
+================================== FAILURES ===================================
+________ test_agent_consumes_ingestion_handoff_in_repository_directory ________
+output\integration_review_20261009\test_integration_contracts.py:55: in test_agent_consumes_ingestion_handoff_in_repository_directory
+    assert agent.load_affected_ids([]) == ["APP_012", "APP_013"]
+E   AssertionError: assert ['APP_001'] == ['APP_012', 'APP_013']
+E     
+E     At index 0 diff: 'APP_001' != 'APP_012'
+E     Right contains one more item: 'APP_013'
+E     Use -v to get more diff
+_ test_ingested_document_types_reach_correct_model_section[activities_and_awards.pdf-engagement] _
+output\integration_review_20261009\test_integration_contracts.py:67: in test_ingested_document_types_reach_correct_model_section
+    assert agent.section_pages(pages, section) == pages
+E   AssertionError: assert [] == [{'document_t...e_number': 1}]
+E     
+E     Right contains one more item: {'document_type': 'activities_and_awards', 'filename': 'activities_and_awards.pdf', 'page_number': 1}
+E     Use -v to get more diff
+------------------------------ Captured log call ------------------------------
+WARNING  storage.storage_manager:storage_manager.py:248 MinIO endpoint 127.0.0.1:1 is not reachable. Operating in dry-run local mode for raw document archival.
+_ test_ingested_document_types_reach_correct_model_section[advanced_coursework_and_ap_scores.pdf-academic] _
+output\integration_review_20261009\test_integration_contracts.py:67: in test_ingested_document_types_reach_correct_model_section
+    assert agent.section_pages(pages, section) == pages
+E   AssertionError: assert [] == [{'document_t...e_number': 1}]
+E     
+E     Right contains one more item: {'document_type': 'advanced_coursework_and_ap_scores', 'filename': 'advanced_coursework_and_ap_scores.pdf', 'page_number': 1}
+E     Use -v to get more diff
+------------------------------ Captured log call ------------------------------
+WARNING  storage.storage_manager:storage_manager.py:248 MinIO endpoint 127.0.0.1:1 is not reachable. Operating in dry-run local mode for raw document archival.
+____________ test_current_score_feed_values_reach_academic_prompt _____________
+output\integration_review_20261009\test_integration_contracts.py:74: in test_current_score_feed_values_reach_academic_prompt
+    assert "1599" in prompt and "AP Biology" in prompt
+E   AssertionError: assert ('1599' in 'You are the document-understanding and summarization component of a\ncollege admissions review system. An admissions ...y or that are\nmissing on the pages. Use an empty list if there are none.\n\nReturn one JSON object only. No Markdown.')
+_____________ test_quote_verification_rejects_swapped_gpa_values ______________
+output\integration_review_20261009\test_integration_contracts.py:79: in test_quote_verification_rejects_swapped_gpa_values
+    assert not agent.quote_on_page("Unweighted GPA 4.40", page)
+E   AssertionError: assert not True
+E    +  where True = <function quote_on_page at 0x000001F683306C40>('Unweighted GPA 4.40', 'Unweighted GPA 3.97\nWeighted GPA 4.40')
+E    +    where <function quote_on_page at 0x000001F683306C40> = agent.quote_on_page
+____________ test_academic_numeric_fact_requires_matching_evidence ____________
+output\integration_review_20261009\test_integration_contracts.py:86: in test_academic_numeric_fact_requires_matching_evidence
+    assert agent.validate_section("academic", output, {("scores.pdf", 1): "SAT Score 1200"}, set(), GUARDS)
+E   AssertionError: assert []
+E    +  where [] = <function validate_section at 0x000001F683307060>('academic', {'document_facts': {'unweighted_gpa': None, 'weighted_gpa': None, 'class_rank': None, 'sat_superscore': 1600, ...}, 'ap_courses_on_transcript': [], 'ap_exam_scores': [], 'summary': 'Documented factual summary.', ...}, {('scores.pdf', 1): 'SAT Score 1200'}, set(), {'restricted': [], 'essay_shingles': set()})
+E    +    where <function validate_section at 0x000001F683307060> = agent.validate_section
+E    +    and   set() = set()
+_____________ test_schema_validation_rejects_invalid_nested_types _____________
+output\integration_review_20261009\test_integration_contracts.py:92: in test_schema_validation_rejects_invalid_nested_types
+    assert agent.validate_section("academic", output, {}, set(), GUARDS)
+E   AssertionError: assert []
+E    +  where [] = <function validate_section at 0x000001F683307060>('academic', {'document_facts': 'invalid instead of an object', 'ap_courses_on_transcript': [], 'ap_exam_scores': [], 'summary': 'Documented factual summary.', ...}, {}, set(), {'restricted': [], 'essay_shingles': set()})
+E    +    where <function validate_section at 0x000001F683307060> = agent.validate_section
+E    +    and   set() = set()
+__________________ test_unknown_policy_alignment_is_rejected __________________
+output\integration_review_20261009\test_integration_contracts.py:98: in test_unknown_policy_alignment_is_rejected
+    assert agent.validate_section("policy", output, {}, {"POL-001"}, GUARDS)
+E   AssertionError: assert []
+E    +  where [] = <function validate_section at 0x000001F683307060>('policy', {'policy_assessment': [{'policy_id': 'POL-001', 'criterion': 'Rigor', 'alignment': 'definitely_admit', 'findings': 'Prepared.', ...}]}, {}, {'POL-001'}, {'restricted': [], 'essay_shingles': set()})
+E    +    where <function validate_section at 0x000001F683307060> = agent.validate_section
+________ test_missing_optional_sat_can_remain_unclear_without_evidence ________
+output\integration_review_20261009\test_integration_contracts.py:104: in test_missing_optional_sat_can_remain_unclear_without_evidence
+    assert agent.validate_policy_evidence_match(entry, {}) == []
+E   AssertionError: assert ['POL-004: No...nt evidence.'] == []
+E     
+E     Left contains one more item: 'POL-004: No cited evidence directly supports the required sat metric. Select an evidence ID containing the correct metric, or report insufficient evidence.'
+E     Use -v to get more diff
+_____________ test_unsupported_non_numeric_policy_is_not_accepted _____________
+output\integration_review_20261009\test_integration_contracts.py:112: in test_unsupported_non_numeric_policy_is_not_accepted
+    assert errors
+E   assert []
+---------------------------- Captured stdout call -----------------------------
+    [1/2] policy (text only)  0s, 20 tokens  \u2713
+______ test_admissions_recommendation_is_rejected[Admit this applicant.] ______
+output\integration_review_20261009\test_integration_contracts.py:118: in test_admissions_recommendation_is_rejected
+    assert agent.validate_section("synthesis", output, {}, set(), GUARDS)
+E   AssertionError: assert []
+E    +  where [] = <function validate_section at 0x000001F683307060>('synthesis', {'strengths': [], 'holistic_assessment': 'Admit this applicant.'}, {}, set(), {'restricted': [], 'essay_shingles': set()})
+E    +    where <function validate_section at 0x000001F683307060> = agent.validate_section
+E    +    and   set() = set()
+_ test_admissions_recommendation_is_rejected[I recommend admitting the applicant.] _
+output\integration_review_20261009\test_integration_contracts.py:118: in test_admissions_recommendation_is_rejected
+    assert agent.validate_section("synthesis", output, {}, set(), GUARDS)
+E   AssertionError: assert []
+E    +  where [] = <function validate_section at 0x000001F683307060>('synthesis', {'strengths': [], 'holistic_assessment': 'I recommend admitting the applicant.'}, {}, set(), {'restricted': [], 'essay_shingles': set()})
+E    +    where <function validate_section at 0x000001F683307060> = agent.validate_section
+E    +    and   set() = set()
+_______ test_phone_number_is_in_restricted_values_from_ingestion_schema _______
+output\integration_review_20261009\test_integration_contracts.py:122: in test_phone_number_is_in_restricted_values_from_ingestion_schema
+    assert "555-867-5309" in agent.restricted_values({"phone_number": "555-867-5309"})
+E   AssertionError: assert '555-867-5309' in []
+E    +  where [] = <function restricted_values at 0x000001F683306FB0>({'phone_number': '555-867-5309'})
+E    +    where <function restricted_values at 0x000001F683306FB0> = agent.restricted_values
+_____ test_unrecognized_application_header_does_not_release_contact_data ______
+output\integration_review_20261009\test_integration_contracts.py:128: in test_unrecognized_application_header_does_not_release_contact_data
+    assert all("private@example.test" not in page["text"] for page in rendered)
+E   assert False
+E    +  where False = all(<generator object test_unrecognized_application_header_does_not_release_contact_data.<locals>.<genexpr> at 0x000001F68344DB60>)
+___________________ test_multiline_hooks_are_fully_redacted ___________________
+output\integration_review_20261009\test_integration_contracts.py:134: in test_multiline_hooks_are_fully_redacted
+    assert all("Legacy donor family" not in page["text"] for page in rendered)
+E   assert False
+E    +  where False = all(<generator object test_multiline_hooks_are_fully_redacted.<locals>.<genexpr> at 0x000001F68344E180>)
+_____________ test_model_stream_requires_final_completion_marker ______________
+output\integration_review_20261009\test_integration_contracts.py:141: in test_model_stream_requires_final_completion_marker
+    with pytest.raises(RuntimeError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE RuntimeError
+______ test_ready_batch_02_packets_with_absent_hooks_can_render[APP_013] ______
+output\integration_review_20261009\test_integration_contracts.py:180: in test_ready_batch_02_packets_with_absent_hooks_can_render
+    rendered = agent.render_pdf((ROOT / f"batch_02/{app_id}/CommonApp.pdf").read_bytes(), zoom=0.2,
+summarizing_agent\summarizing_agent.py:684: in render_pdf
+    redact_hooks(page)
+summarizing_agent\summarizing_agent.py:660: in redact_hooks
+    raise ValueError("Hooks redaction verification failed")
+E   ValueError: Hooks redaction verification failed
+______ test_ready_batch_02_packets_with_absent_hooks_can_render[APP_016] ______
+output\integration_review_20261009\test_integration_contracts.py:180: in test_ready_batch_02_packets_with_absent_hooks_can_render
+    rendered = agent.render_pdf((ROOT / f"batch_02/{app_id}/CommonApp.pdf").read_bytes(), zoom=0.2,
+summarizing_agent\summarizing_agent.py:684: in render_pdf
+    redact_hooks(page)
+summarizing_agent\summarizing_agent.py:660: in redact_hooks
+    raise ValueError("Hooks redaction verification failed")
+E   ValueError: Hooks redaction verification failed
+______ test_ready_batch_02_packets_with_absent_hooks_can_render[APP_020] ______
+output\integration_review_20261009\test_integration_contracts.py:180: in test_ready_batch_02_packets_with_absent_hooks_can_render
+    rendered = agent.render_pdf((ROOT / f"batch_02/{app_id}/CommonApp.pdf").read_bytes(), zoom=0.2,
+summarizing_agent\summarizing_agent.py:684: in render_pdf
+    redact_hooks(page)
+summarizing_agent\summarizing_agent.py:660: in redact_hooks
+    raise ValueError("Hooks redaction verification failed")
+E   ValueError: Hooks redaction verification failed
+_________ test_document_bucket_is_preserved_for_downstream_downloads __________
+output\integration_review_20261009\test_integration_contracts.py:200: in test_document_bucket_is_preserved_for_downstream_downloads
+    assert document.get("minio_bucket") == "prior-batch-bucket"
+E   AssertionError: assert None == 'prior-batch-bucket'
+E    +  where None = <built-in method get of dict object at 0x000001F6845CF940>('minio_bucket')
+E    +    where <built-in method get of dict object at 0x000001F6845CF940> = {'type': 'transcript', 'filename': 'transcript.pdf', 'object_key': 'APP_012/transcript.pdf'}.get
+=========================== short test summary info ===========================
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_agent_consumes_ingestion_handoff_in_repository_directory
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_ingested_document_types_reach_correct_model_section[activities_and_awards.pdf-engagement]
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_ingested_document_types_reach_correct_model_section[advanced_coursework_and_ap_scores.pdf-academic]
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_current_score_feed_values_reach_academic_prompt
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_quote_verification_rejects_swapped_gpa_values
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_academic_numeric_fact_requires_matching_evidence
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_schema_validation_rejects_invalid_nested_types
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_unknown_policy_alignment_is_rejected
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_missing_optional_sat_can_remain_unclear_without_evidence
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_unsupported_non_numeric_policy_is_not_accepted
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_admissions_recommendation_is_rejected[Admit this applicant.]
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_admissions_recommendation_is_rejected[I recommend admitting the applicant.]
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_phone_number_is_in_restricted_values_from_ingestion_schema
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_unrecognized_application_header_does_not_release_contact_data
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_multiline_hooks_are_fully_redacted
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_model_stream_requires_final_completion_marker
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_ready_batch_02_packets_with_absent_hooks_can_render[APP_013]
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_ready_batch_02_packets_with_absent_hooks_can_render[APP_016]
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_ready_batch_02_packets_with_absent_hooks_can_render[APP_020]
+FAILED output/integration_review_20261009/test_integration_contracts.py::test_document_bucket_is_preserved_for_downstream_downloads
+20 failed, 5 passed in 2.58s

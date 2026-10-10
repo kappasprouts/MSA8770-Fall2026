@@ -1,0 +1,17 @@
+UI validation performed on October 9, 2026 at commit 847ed1b7247257dc16d6394ec420f631f17bab81.
+Dependencies installed locally through bundled pnpm; application package.json and package-lock.json unchanged.
+The temporary pnpm workspace file was removed after testing.
+
+Command (working directory chat-ui): node node_modules/next/dist/bin/next build
+Result: process exit code 0.
+Output included: Next.js 16.4.0 (Turbopack); Compiled successfully; TypeScript finished;
+Generating static pages (4/4); routes /, /api/applicants, /api/chat, /api/documents, /api/dossier.
+
+Command (working directory chat-ui): node node_modules/eslint/bin/eslint.js .
+Result: process exit code 0; no lint diagnostics.
+
+Static comparison of package.json and package-lock.json direct dependency declarations and entries: no mismatches.
+Actual scheduler and cron-trigger timezone observed: America/New_York (documentation says UTC).
+
+These notes transcribe the successful tool results; they are not a rerun log.
+Runtime route/helper/component results are separately retained in ui_results.json.
