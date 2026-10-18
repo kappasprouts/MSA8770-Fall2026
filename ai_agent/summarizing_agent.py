@@ -1825,7 +1825,7 @@ def process_applicant(connection, minio_client, app_id, force=False):
     write_audit(connection, app_id, run["run_status"], {"attempts": attempts_total, "failed": list(failed)})
 
     target = "applicant_dossier + dossier_generation_runs" if dossier else "dossier_generation_runs only"
-    print(f"[8] Saved {run['run_status']} → {target}, {path.relative_to(ROOT)}")
+    print(f"[8] Saved {run['run_status']} → {target}, {path}")
     print(f"    Total time {run['runtime_seconds']}s")
 
     return run["run_status"]
