@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f5f7fb;
+  --foreground: #17213b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --color-app-bg: #f5f7fb;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f8f9fc;
+  --color-panel-header: #f2f0ff;
+  --color-border: #dde3ee;
+  --color-ink: #17213b;
+  --color-ink-muted: #68738b;
+
+  /* accent (links, buttons, focus) — Riverview purple */
+  --color-accent: #5145cd;
+  --color-accent-strong: #32278f;
+
+  /* AI summary — unified purple card family */
+  --color-card-green-bg: #effaf5;
+  --color-card-green-border: #c6ead9;
+  --color-card-green-text: #187554;
+
+  /* validation & policy snapshot */
+  --color-card-purple-bg: #f3f1ff;
+  --color-card-purple-border: #dcd7ff;
+  --color-card-purple-text: #5145cd;
+
+  /* policy checks */
+  --color-card-amber-bg: #fff8e8;
+  --color-card-amber-border: #f0dfb2;
+  --color-card-amber-text: #96630b;
+
+  /* evidence & citations */
+  --color-card-pink-bg: #fff1f6;
+  --color-card-pink-border: #f2ccd9;
+  --color-card-pink-text: #a63d68;
+
+  /* status — kept semantically green/amber/red regardless of brand color */
+  --color-status-pass: #2cac56;
+  --color-status-warn: #b8860b;
+  --color-status-fail: #e0514f;
+  --color-status-muted: #9aa5b6;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+select,
+textarea,
+input {
+  font: inherit;
+}
+
+::selection {
+  background: #dcd7ff;
+  color: #251a71;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c9cfdb;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
