@@ -1,0 +1,42 @@
+name: rsu-admissions-local
+
+# Local development services for the synthetic admissions demo.
+# MinIO AIStor requires a license file; set MINIO_LICENSE_FILE in .env.
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.7-pg18-trixie
+    environment:
+      POSTGRES_DB: riverview_admissions
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d riverview_admissions"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  minio:
+    image: quay.io/minio/aistor/minio:latest
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: ["minio", "server", "/data", "--console-address", ":9001", "--license", "/minio.license"]
+    ports:
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
+    volumes:
+      - minio-data:/data
+      - type: bind
+        source: ${MINIO_LICENSE_FILE:?Set MINIO_LICENSE_FILE in .env to the absolute path of your MinIO AIStor license}
+        target: /minio.license
+        read_only: true
+        bind:
+          create_host_path: false
+
+volumes:
+  postgres-data:
+  minio-data:

@@ -1,0 +1,1292 @@
+{
+  "commit": "847ed1b7247257dc16d6394ec420f631f17bab81",
+  "services": {
+    "postgresql": "real temporary PostgreSQL/pgvector",
+    "object_storage": "in-memory simulation; real MinIO unavailable",
+    "model": "deterministic mock; no real Qwen or embeddings"
+  },
+  "probes": {
+    "batch_01": {
+      "total_processed": 10,
+      "total_valid": 9,
+      "total_awaiting_materials": 1,
+      "total_incomplete": 0,
+      "total_error": 0,
+      "affected_ids": [
+        "APP_001",
+        "APP_002",
+        "APP_003",
+        "APP_004",
+        "APP_005",
+        "APP_006",
+        "APP_007",
+        "APP_008",
+        "APP_009"
+      ],
+      "evaluated_at": "2026-10-09T18:47:28.782444+00:00",
+      "routed_applicants": [
+        {
+          "applicant_id": "APP_001",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "activities_and_awards.pdf",
+            "advanced_coursework_and_ap_scores.pdf",
+            "application_form.pdf",
+            "common_app_application.pdf",
+            "personal_statement.pdf",
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf",
+            "university_supplement.pdf"
+          ],
+          "total_documents": 10,
+          "evaluated_at": "2026-10-09T18:47:28.782236+00:00",
+          "details": {
+            "metadata_fields_count": 30,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_01\\APP_001"
+          }
+        },
+        {
+          "applicant_id": "APP_002",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "activities_and_awards.pdf",
+            "advanced_coursework_and_ap_scores.pdf",
+            "application_form.pdf",
+            "common_app_application.pdf",
+            "personal_statement.pdf",
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf",
+            "university_supplement.pdf"
+          ],
+          "total_documents": 10,
+          "evaluated_at": "2026-10-09T18:47:28.782270+00:00",
+          "details": {
+            "metadata_fields_count": 28,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_01\\APP_002"
+          }
+        },
+        {
+          "applicant_id": "APP_003",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "activities_and_awards.pdf",
+            "advanced_coursework_and_ap_scores.pdf",
+            "application_form.pdf",
+            "common_app_application.pdf",
+            "personal_statement.pdf",
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf",
+            "university_supplement.pdf"
+          ],
+          "total_documents": 10,
+          "evaluated_at": "2026-10-09T18:47:28.782292+00:00",
+          "details": {
+            "metadata_fields_count": 29,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_01\\APP_003"
+          }
+        },
+        {
+          "applicant_id": "APP_004",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "activities_and_awards.pdf",
+            "advanced_coursework_and_ap_scores.pdf",
+            "application_form.pdf",
+            "common_app_application.pdf",
+            "personal_statement.pdf",
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf",
+            "university_supplement.pdf"
+          ],
+          "total_documents": 10,
+          "evaluated_at": "2026-10-09T18:47:28.782312+00:00",
+          "details": {
+            "metadata_fields_count": 31,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_01\\APP_004"
+          }
+        },
+        {
+          "applicant_id": "APP_005",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "activities_and_awards.pdf",
+            "advanced_coursework_and_ap_scores.pdf",
+            "application_form.pdf",
+            "common_app_application.pdf",
+            "exception_supporting_document.pdf",
+            "personal_statement.pdf",
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf",
+            "university_supplement.pdf"
+          ],
+          "total_documents": 11,
+          "evaluated_at": "2026-10-09T18:47:28.782332+00:00",
+          "details": {
+            "metadata_fields_count": 29,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_01\\APP_005"
+          }
+        },
+        {
+          "applicant_id": "APP_006",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "activities_and_awards.pdf",
+            "advanced_coursework_and_ap_scores.pdf",
+            "application_form.pdf",
+            "common_app_application.pdf",
+            "personal_statement.pdf",
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf",
+            "university_supplement.pdf"
+          ],
+          "total_documents": 10,
+          "evaluated_at": "2026-10-09T18:47:28.782351+00:00",
+          "details": {
+            "metadata_fields_count": 31,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_01\\APP_006"
+          }
+        },
+        {
+          "applicant_id": "APP_007",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "activities_and_awards.pdf",
+            "advanced_coursework_and_ap_scores.pdf",
+            "application_form.pdf",
+            "common_app_application.pdf",
+            "personal_statement.pdf",
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf",
+            "university_supplement.pdf"
+          ],
+          "total_documents": 10,
+          "evaluated_at": "2026-10-09T18:47:28.782371+00:00",
+          "details": {
+            "metadata_fields_count": 29,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_01\\APP_007"
+          }
+        },
+        {
+          "applicant_id": "APP_008",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "activities_and_awards.pdf",
+            "advanced_coursework_and_ap_scores.pdf",
+            "application_form.pdf",
+            "common_app_application.pdf",
+            "personal_statement.pdf",
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf",
+            "university_supplement.pdf"
+          ],
+          "total_documents": 10,
+          "evaluated_at": "2026-10-09T18:47:28.782390+00:00",
+          "details": {
+            "metadata_fields_count": 29,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_01\\APP_008"
+          }
+        },
+        {
+          "applicant_id": "APP_009",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "activities_and_awards.pdf",
+            "advanced_coursework_and_ap_scores.pdf",
+            "application_form.pdf",
+            "common_app_application.pdf",
+            "personal_statement.pdf",
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf",
+            "university_supplement.pdf"
+          ],
+          "total_documents": 10,
+          "evaluated_at": "2026-10-09T18:47:28.782409+00:00",
+          "details": {
+            "metadata_fields_count": 30,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_01\\APP_009"
+          }
+        },
+        {
+          "applicant_id": "APP_010",
+          "status": "AWAITING_MATERIALS",
+          "routing_destination": "Applicant Packet Update",
+          "is_valid": false,
+          "missing_documents": [
+            "transcript"
+          ],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "activities_and_awards.pdf",
+            "advanced_coursework_and_ap_scores.pdf",
+            "application_form.pdf",
+            "common_app_application.pdf",
+            "personal_statement.pdf",
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf",
+            "standardized_test_score.pdf",
+            "university_supplement.pdf"
+          ],
+          "total_documents": 9,
+          "evaluated_at": "2026-10-09T18:47:28.782428+00:00",
+          "details": {
+            "metadata_fields_count": 31,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_01\\APP_010"
+          }
+        }
+      ]
+    },
+    "batch_02": {
+      "total_processed": 10,
+      "total_valid": 7,
+      "total_awaiting_materials": 1,
+      "total_incomplete": 2,
+      "total_error": 0,
+      "affected_ids": [
+        "APP_012",
+        "APP_013",
+        "APP_014",
+        "APP_015",
+        "APP_016",
+        "APP_017",
+        "APP_020"
+      ],
+      "evaluated_at": "2026-10-09T18:47:29.102062+00:00",
+      "routed_applicants": [
+        {
+          "applicant_id": "APP_011",
+          "status": "AWAITING_MATERIALS",
+          "routing_destination": "Applicant Packet Update",
+          "is_valid": false,
+          "missing_documents": [
+            "transcript"
+          ],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "CommonApp.pdf",
+            "letter_rec1.pdf",
+            "letter_rec2.pdf",
+            "supplement.pdf"
+          ],
+          "total_documents": 4,
+          "evaluated_at": "2026-10-09T18:47:29.101887+00:00",
+          "details": {
+            "metadata_fields_count": 30,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_02\\APP_011"
+          }
+        },
+        {
+          "applicant_id": "APP_012",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "CommonApp.pdf",
+            "letter_rec1.pdf",
+            "letter_rec2.pdf",
+            "supplement.pdf",
+            "transcript.pdf"
+          ],
+          "total_documents": 5,
+          "evaluated_at": "2026-10-09T18:47:29.101920+00:00",
+          "details": {
+            "metadata_fields_count": 31,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_02\\APP_012"
+          }
+        },
+        {
+          "applicant_id": "APP_013",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "CommonApp.pdf",
+            "letter_rec1.pdf",
+            "letter_rec2.pdf",
+            "supplement.pdf",
+            "transcript.pdf"
+          ],
+          "total_documents": 5,
+          "evaluated_at": "2026-10-09T18:47:29.101937+00:00",
+          "details": {
+            "metadata_fields_count": 30,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_02\\APP_013"
+          }
+        },
+        {
+          "applicant_id": "APP_014",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "CommonApp.pdf",
+            "letter_rec1.pdf",
+            "letter_rec2.pdf",
+            "supplement.pdf",
+            "transcript.pdf"
+          ],
+          "total_documents": 5,
+          "evaluated_at": "2026-10-09T18:47:29.101954+00:00",
+          "details": {
+            "metadata_fields_count": 30,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_02\\APP_014"
+          }
+        },
+        {
+          "applicant_id": "APP_015",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "CommonApp.pdf",
+            "letter_rec1.pdf",
+            "letter_rec2.pdf",
+            "supplement.pdf",
+            "transcript.pdf"
+          ],
+          "total_documents": 5,
+          "evaluated_at": "2026-10-09T18:47:29.101969+00:00",
+          "details": {
+            "metadata_fields_count": 31,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_02\\APP_015"
+          }
+        },
+        {
+          "applicant_id": "APP_016",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "CommonApp.pdf",
+            "letter_rec1.pdf",
+            "letter_rec2.pdf",
+            "supplement.pdf",
+            "transcript.pdf"
+          ],
+          "total_documents": 5,
+          "evaluated_at": "2026-10-09T18:47:29.101984+00:00",
+          "details": {
+            "metadata_fields_count": 30,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_02\\APP_016"
+          }
+        },
+        {
+          "applicant_id": "APP_017",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "CommonApp.pdf",
+            "letter_rec1.pdf",
+            "letter_rec2.pdf",
+            "supplement.pdf",
+            "transcript.pdf"
+          ],
+          "total_documents": 5,
+          "evaluated_at": "2026-10-09T18:47:29.102000+00:00",
+          "details": {
+            "metadata_fields_count": 30,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_02\\APP_017"
+          }
+        },
+        {
+          "applicant_id": "APP_018",
+          "status": "INCOMPLETE",
+          "routing_destination": "Applicant Packet Update",
+          "is_valid": false,
+          "missing_documents": [],
+          "missing_fields": [
+            "Email_Address"
+          ],
+          "errors": [],
+          "documents_present": [
+            "CommonApp.pdf",
+            "letter_rec1.pdf",
+            "letter_rec2.pdf",
+            "supplement.pdf",
+            "transcript.pdf"
+          ],
+          "total_documents": 5,
+          "evaluated_at": "2026-10-09T18:47:29.102015+00:00",
+          "details": {
+            "metadata_fields_count": 30,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_02\\APP_018"
+          }
+        },
+        {
+          "applicant_id": "APP_019",
+          "status": "INCOMPLETE",
+          "routing_destination": "Applicant Packet Update",
+          "is_valid": false,
+          "missing_documents": [],
+          "missing_fields": [
+            "Last_Name"
+          ],
+          "errors": [],
+          "documents_present": [
+            "CommonApp.pdf",
+            "letter_rec1.pdf",
+            "letter_rec2.pdf",
+            "supplement.pdf",
+            "transcript.pdf"
+          ],
+          "total_documents": 5,
+          "evaluated_at": "2026-10-09T18:47:29.102034+00:00",
+          "details": {
+            "metadata_fields_count": 31,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_02\\APP_019"
+          }
+        },
+        {
+          "applicant_id": "APP_020",
+          "status": "READY_FOR_REVIEW",
+          "routing_destination": "READY_FOR_REVIEW",
+          "is_valid": true,
+          "missing_documents": [],
+          "missing_fields": [],
+          "errors": [],
+          "documents_present": [
+            "CommonApp.pdf",
+            "letter_rec1.pdf",
+            "letter_rec2.pdf",
+            "supplement.pdf",
+            "transcript.pdf"
+          ],
+          "total_documents": 5,
+          "evaluated_at": "2026-10-09T18:47:29.102053+00:00",
+          "details": {
+            "metadata_fields_count": 28,
+            "subfolder": "D:\\Users\\miwi\\git\\MSA8770-Fall2026\\batch_02\\APP_020"
+          }
+        }
+      ]
+    },
+    "schema": [
+      {
+        "column_name": "admission_term",
+        "data_type": "character varying",
+        "is_nullable": "NO",
+        "numeric_precision": null,
+        "numeric_scale": null
+      },
+      {
+        "column_name": "admission_year",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "numeric_precision": 32,
+        "numeric_scale": 0
+      },
+      {
+        "column_name": "unweighted_gpa",
+        "data_type": "numeric",
+        "is_nullable": "YES",
+        "numeric_precision": 3,
+        "numeric_scale": 2
+      },
+      {
+        "column_name": "weighted_gpa",
+        "data_type": "numeric",
+        "is_nullable": "YES",
+        "numeric_precision": 3,
+        "numeric_scale": 2
+      }
+    ],
+    "APP_090": {
+      "error_type": "IntegrityError",
+      "summary": "(psycopg.errors.NotNullViolation) null value in column \"admission_year\" of relation \"applicants\" violates not-null constraint"
+    },
+    "APP_091": {
+      "stored_gpa": "3.86"
+    },
+    "policy_storage": {
+      "stored": 21,
+      "retrieved": [
+        "POL-001",
+        "POL-002",
+        "POL-003"
+      ]
+    },
+    "dossier_success": {
+      "returned": "DOSSIER_READY",
+      "applicant": [
+        {
+          "app_id": "APP_012",
+          "status": "DOSSIER_READY"
+        }
+      ],
+      "run": [
+        {
+          "run_status": "DOSSIER_READY",
+          "attempts": 6,
+          "validation": {
+            "calls": [
+              {
+                "usage": {
+                  "seconds": 0,
+                  "output_tokens": 100,
+                  "prompt_tokens": 100
+                },
+                "errors": [],
+                "attempt": 1,
+                "section": "academic"
+              },
+              {
+                "usage": {
+                  "seconds": 0,
+                  "output_tokens": 100,
+                  "prompt_tokens": 100
+                },
+                "errors": [],
+                "attempt": 1,
+                "section": "engagement"
+              },
+              {
+                "usage": {
+                  "seconds": 0,
+                  "output_tokens": 100,
+                  "prompt_tokens": 100
+                },
+                "errors": [],
+                "attempt": 1,
+                "section": "recommendation"
+              },
+              {
+                "usage": {
+                  "seconds": 0,
+                  "output_tokens": 100,
+                  "prompt_tokens": 100
+                },
+                "errors": [],
+                "attempt": 1,
+                "section": "supplement"
+              },
+              {
+                "usage": {
+                  "seconds": 0,
+                  "output_tokens": 100,
+                  "prompt_tokens": 100
+                },
+                "errors": [],
+                "attempt": 1,
+                "section": "policy"
+              },
+              {
+                "usage": {
+                  "seconds": 0,
+                  "output_tokens": 100,
+                  "prompt_tokens": 100
+                },
+                "errors": [],
+                "attempt": 1,
+                "section": "synthesis"
+              }
+            ],
+            "passed": true,
+            "load_problems": [],
+            "failed_sections": {}
+          }
+        }
+      ]
+    },
+    "document_coverage": {
+      "APP_002": {
+        "load_problems": [],
+        "withheld": [
+          "common_app_application.pdf",
+          "personal_statement.pdf"
+        ],
+        "by_section": {
+          "academic": [
+            "application_form.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf"
+          ],
+          "engagement": [
+            "application_form.pdf"
+          ],
+          "recommendation": [
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf"
+          ],
+          "supplement": [
+            "university_supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": [
+          "activities_and_awards.pdf",
+          "advanced_coursework_and_ap_scores.pdf"
+        ]
+      },
+      "APP_003": {
+        "load_problems": [],
+        "withheld": [
+          "common_app_application.pdf",
+          "personal_statement.pdf"
+        ],
+        "by_section": {
+          "academic": [
+            "application_form.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf"
+          ],
+          "engagement": [
+            "application_form.pdf"
+          ],
+          "recommendation": [
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf"
+          ],
+          "supplement": [
+            "university_supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": [
+          "activities_and_awards.pdf",
+          "advanced_coursework_and_ap_scores.pdf"
+        ]
+      },
+      "APP_005": {
+        "load_problems": [],
+        "withheld": [
+          "common_app_application.pdf",
+          "personal_statement.pdf"
+        ],
+        "by_section": {
+          "academic": [
+            "application_form.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf"
+          ],
+          "engagement": [
+            "application_form.pdf"
+          ],
+          "recommendation": [
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf"
+          ],
+          "supplement": [
+            "university_supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": [
+          "activities_and_awards.pdf",
+          "advanced_coursework_and_ap_scores.pdf",
+          "exception_supporting_document.pdf"
+        ]
+      },
+      "APP_007": {
+        "load_problems": [],
+        "withheld": [
+          "common_app_application.pdf",
+          "personal_statement.pdf"
+        ],
+        "by_section": {
+          "academic": [
+            "application_form.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf"
+          ],
+          "engagement": [
+            "application_form.pdf"
+          ],
+          "recommendation": [
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf"
+          ],
+          "supplement": [
+            "university_supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": [
+          "activities_and_awards.pdf",
+          "advanced_coursework_and_ap_scores.pdf"
+        ]
+      },
+      "APP_008": {
+        "load_problems": [],
+        "withheld": [
+          "common_app_application.pdf",
+          "personal_statement.pdf"
+        ],
+        "by_section": {
+          "academic": [
+            "application_form.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf"
+          ],
+          "engagement": [
+            "application_form.pdf"
+          ],
+          "recommendation": [
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf"
+          ],
+          "supplement": [
+            "university_supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": [
+          "activities_and_awards.pdf",
+          "advanced_coursework_and_ap_scores.pdf"
+        ]
+      },
+      "APP_009": {
+        "load_problems": [],
+        "withheld": [
+          "common_app_application.pdf",
+          "personal_statement.pdf"
+        ],
+        "by_section": {
+          "academic": [
+            "application_form.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf"
+          ],
+          "engagement": [
+            "application_form.pdf"
+          ],
+          "recommendation": [
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf"
+          ],
+          "supplement": [
+            "university_supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": [
+          "activities_and_awards.pdf",
+          "advanced_coursework_and_ap_scores.pdf"
+        ]
+      },
+      "APP_018": {
+        "load_problems": [
+          {
+            "filename": "CommonApp.pdf",
+            "type": "application_form",
+            "error": "Hooks redaction verification failed"
+          }
+        ],
+        "withheld": [],
+        "by_section": {
+          "academic": [
+            "transcript.pdf"
+          ],
+          "engagement": [],
+          "recommendation": [
+            "letter_rec1.pdf",
+            "letter_rec2.pdf"
+          ],
+          "supplement": [
+            "supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": []
+      },
+      "APP_001": {
+        "load_problems": [],
+        "withheld": [
+          "common_app_application.pdf",
+          "personal_statement.pdf"
+        ],
+        "by_section": {
+          "academic": [
+            "application_form.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf"
+          ],
+          "engagement": [
+            "application_form.pdf"
+          ],
+          "recommendation": [
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf"
+          ],
+          "supplement": [
+            "university_supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": [
+          "activities_and_awards.pdf",
+          "advanced_coursework_and_ap_scores.pdf"
+        ]
+      },
+      "APP_006": {
+        "load_problems": [],
+        "withheld": [
+          "common_app_application.pdf",
+          "personal_statement.pdf"
+        ],
+        "by_section": {
+          "academic": [
+            "application_form.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf"
+          ],
+          "engagement": [
+            "application_form.pdf"
+          ],
+          "recommendation": [
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf"
+          ],
+          "supplement": [
+            "university_supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": [
+          "activities_and_awards.pdf",
+          "advanced_coursework_and_ap_scores.pdf"
+        ]
+      },
+      "APP_010": {
+        "load_problems": [],
+        "withheld": [
+          "common_app_application.pdf",
+          "personal_statement.pdf"
+        ],
+        "by_section": {
+          "academic": [
+            "application_form.pdf",
+            "standardized_test_score.pdf"
+          ],
+          "engagement": [
+            "application_form.pdf"
+          ],
+          "recommendation": [
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf"
+          ],
+          "supplement": [
+            "university_supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": [
+          "activities_and_awards.pdf",
+          "advanced_coursework_and_ap_scores.pdf"
+        ]
+      },
+      "APP_014": {
+        "load_problems": [],
+        "withheld": [],
+        "by_section": {
+          "academic": [
+            "CommonApp.pdf",
+            "transcript.pdf"
+          ],
+          "engagement": [
+            "CommonApp.pdf"
+          ],
+          "recommendation": [
+            "letter_rec1.pdf",
+            "letter_rec2.pdf"
+          ],
+          "supplement": [
+            "supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": []
+      },
+      "APP_016": {
+        "load_problems": [
+          {
+            "filename": "CommonApp.pdf",
+            "type": "application_form",
+            "error": "Hooks redaction verification failed"
+          }
+        ],
+        "withheld": [],
+        "by_section": {
+          "academic": [
+            "transcript.pdf"
+          ],
+          "engagement": [],
+          "recommendation": [
+            "letter_rec1.pdf",
+            "letter_rec2.pdf"
+          ],
+          "supplement": [
+            "supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": []
+      },
+      "APP_017": {
+        "load_problems": [],
+        "withheld": [],
+        "by_section": {
+          "academic": [
+            "CommonApp.pdf",
+            "transcript.pdf"
+          ],
+          "engagement": [
+            "CommonApp.pdf"
+          ],
+          "recommendation": [
+            "letter_rec1.pdf",
+            "letter_rec2.pdf"
+          ],
+          "supplement": [
+            "supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": []
+      },
+      "APP_019": {
+        "load_problems": [],
+        "withheld": [],
+        "by_section": {
+          "academic": [
+            "CommonApp.pdf",
+            "transcript.pdf"
+          ],
+          "engagement": [
+            "CommonApp.pdf"
+          ],
+          "recommendation": [
+            "letter_rec1.pdf",
+            "letter_rec2.pdf"
+          ],
+          "supplement": [
+            "supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": []
+      },
+      "APP_020": {
+        "load_problems": [
+          {
+            "filename": "CommonApp.pdf",
+            "type": "application_form",
+            "error": "Hooks redaction verification failed"
+          }
+        ],
+        "withheld": [],
+        "by_section": {
+          "academic": [
+            "transcript.pdf"
+          ],
+          "engagement": [],
+          "recommendation": [
+            "letter_rec1.pdf",
+            "letter_rec2.pdf"
+          ],
+          "supplement": [
+            "supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": []
+      },
+      "APP_013": {
+        "load_problems": [
+          {
+            "filename": "CommonApp.pdf",
+            "type": "application_form",
+            "error": "Hooks redaction verification failed"
+          }
+        ],
+        "withheld": [],
+        "by_section": {
+          "academic": [
+            "transcript.pdf"
+          ],
+          "engagement": [],
+          "recommendation": [
+            "letter_rec1.pdf",
+            "letter_rec2.pdf"
+          ],
+          "supplement": [
+            "supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": []
+      },
+      "APP_004": {
+        "load_problems": [],
+        "withheld": [
+          "common_app_application.pdf",
+          "personal_statement.pdf"
+        ],
+        "by_section": {
+          "academic": [
+            "application_form.pdf",
+            "standardized_test_score.pdf",
+            "transcript.pdf"
+          ],
+          "engagement": [
+            "application_form.pdf"
+          ],
+          "recommendation": [
+            "recommendation_letter_1.pdf",
+            "recommendation_letter_2.pdf"
+          ],
+          "supplement": [
+            "university_supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": [
+          "activities_and_awards.pdf",
+          "advanced_coursework_and_ap_scores.pdf"
+        ]
+      },
+      "APP_015": {
+        "load_problems": [],
+        "withheld": [],
+        "by_section": {
+          "academic": [
+            "CommonApp.pdf",
+            "transcript.pdf"
+          ],
+          "engagement": [
+            "CommonApp.pdf"
+          ],
+          "recommendation": [
+            "letter_rec1.pdf",
+            "letter_rec2.pdf"
+          ],
+          "supplement": [
+            "supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": []
+      },
+      "APP_011": {
+        "load_problems": [],
+        "withheld": [],
+        "by_section": {
+          "academic": [
+            "CommonApp.pdf"
+          ],
+          "engagement": [
+            "CommonApp.pdf"
+          ],
+          "recommendation": [
+            "letter_rec1.pdf",
+            "letter_rec2.pdf"
+          ],
+          "supplement": [
+            "supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": []
+      },
+      "APP_012": {
+        "load_problems": [],
+        "withheld": [],
+        "by_section": {
+          "academic": [
+            "CommonApp.pdf",
+            "transcript.pdf"
+          ],
+          "engagement": [
+            "CommonApp.pdf"
+          ],
+          "recommendation": [
+            "letter_rec1.pdf",
+            "letter_rec2.pdf"
+          ],
+          "supplement": [
+            "supplement.pdf"
+          ]
+        },
+        "loaded_but_unused": []
+      }
+    },
+    "delta_scores": {
+      "affected_ids": [
+        "APP_012"
+      ],
+      "stored_sat": 1599,
+      "new_sat_in_prompt": false,
+      "new_ap_in_prompt": false
+    },
+    "validation_failure_after_success": {
+      "returned": "AI_VALIDATION_FAILED",
+      "applicant": [
+        {
+          "app_id": "APP_012",
+          "status": "READY_FOR_REVIEW"
+        }
+      ],
+      "old_dossier_count": [
+        {
+          "count": 1
+        }
+      ],
+      "latest_run": [
+        {
+          "run_status": "AI_VALIDATION_FAILED",
+          "validation": {
+            "calls": [
+              {
+                "usage": {
+                  "seconds": 0,
+                  "output_tokens": 20
+                },
+                "errors": [
+                  "'summary' is empty."
+                ],
+                "attempt": 1,
+                "section": "academic"
+              },
+              {
+                "usage": {
+                  "seconds": 0,
+                  "output_tokens": 20
+                },
+                "errors": [
+                  "'summary' is empty."
+                ],
+                "attempt": 2,
+                "section": "academic"
+              },
+              {
+                "usage": {
+                  "seconds": 0,
+                  "output_tokens": 20
+                },
+                "errors": [],
+                "attempt": 1,
+                "section": "engagement"
+              },
+              {
+                "usage": {
+                  "seconds": 0,
+                  "output_tokens": 20
+                },
+                "errors": [],
+                "attempt": 1,
+                "section": "recommendation"
+              },
+              {
+                "usage": {
+                  "seconds": 0,
+                  "output_tokens": 20
+                },
+                "errors": [],
+                "attempt": 1,
+                "section": "supplement"
+              }
+            ],
+            "passed": false,
+            "load_problems": [],
+            "failed_sections": {
+              "academic": [
+                "'summary' is empty."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "document_outage": {
+      "error": "Document loading failed for APP_013: [{'error': 'controlled object outage'}]",
+      "new_generation_runs": 0
+    },
+    "unchanged_batch_replay": {
+      "affected_ids": [
+        "APP_012",
+        "APP_013",
+        "APP_014",
+        "APP_015",
+        "APP_016",
+        "APP_017",
+        "APP_020"
+      ],
+      "applicant": [
+        {
+          "status": "READY_FOR_REVIEW"
+        }
+      ]
+    }
+  },
+  "objects_simulated": 149,
+  "versions": {
+    "SQLAlchemy": "2.1.4",
+    "psycopg": "3.3.6",
+    "psycopg2-binary": "2.9.13",
+    "PyMuPDF": "1.28.2",
+    "pytest": "9.1.1"
+  }
+}

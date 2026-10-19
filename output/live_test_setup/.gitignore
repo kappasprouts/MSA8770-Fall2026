@@ -1,0 +1,5 @@
+minio.license
+*.license
+academic_output.json
+*.log
+fallback.db*

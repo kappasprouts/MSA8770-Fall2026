@@ -1,0 +1,2 @@
+Redirected stdout: cp1252
+Error handling: surrogateescape

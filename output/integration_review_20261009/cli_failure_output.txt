@@ -1,0 +1,26 @@
+
+========================================
+EAOS SUMMARIZING AGENT (RAG + QWEN3-VL)
+========================================
+Model: qwen3-vl:8b-instruct   Embeddings: nomic-embed-text
+Applicants: ['APP_013']
+
+========================================
+PROCESSING APP_013
+========================================
+[1] Applicant APP_013, status READY_FOR_REVIEW
+[2] 5 documents: 5 for the model, 0 withheld
+[3] Rendering pages at 1.5x (memory only)
+    ✗ CommonApp.pdf: Hooks redaction verification failed
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ transcript.pdf                           1 page(s)
+✗ APP_013 failed: Document loading failed for APP_013: [{'filename': 'CommonApp.pdf', 'type': 'application_form', 'error': 'Hooks redaction verification failed'}]
+
+========================================
+BATCH SUMMARY
+========================================
+  APP_013    AGENT_ERROR
+
+[HARD STOP] Dossiers are advisory. An admissions officer makes every decision.

@@ -1,0 +1,2 @@
+Redirected stdout: utf-8
+✓ Unicode output OK

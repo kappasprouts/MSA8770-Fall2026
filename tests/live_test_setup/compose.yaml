@@ -1,0 +1,41 @@
+name: rsu-live-test
+
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.1-pg18-trixie
+    environment:
+      POSTGRES_DB: rsu_live_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "127.0.0.1:25432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d rsu_live_test"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  minio:
+    image: quay.io/minio/aistor/minio:latest
+    pull_policy: never
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "127.0.0.1:29000:9000"
+      - "127.0.0.1:29001:9001"
+    volumes:
+      - minio-data:/data
+      - type: bind
+        source: ${MINIO_LICENSE_FILE:-C:/Users/miwi/minio/minio.license}
+        target: /minio.license
+        read_only: true
+        bind:
+          create_host_path: false
+    command: ["minio", "server", "/data", "--console-address", ":9001", "--license", "/minio.license"]
+
+volumes:
+  postgres-data:
+  minio-data:

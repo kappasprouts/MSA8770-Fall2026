@@ -1,0 +1,48 @@
+# RIVERVIEW STATE ADMISSIONS POLICY FRAMEWORK FOR VECTOR INGESTION
+
+## SECTION 1: ACADEMIC SCREENING FRAMEWORK & QUANTITATIVE BASELINES
+
+### Academic Rigor & Contextual GPA Evaluation
+* **Curriculum Rigor Evaluation:** Evaluation requires selecting the most challenging coursework available within the applicant's secondary school environment, specifically Advanced Placement (AP), International Baccalaureate (IB) Diploma Programme, or dual-enrollment institutional tracks.
+* **Grade Point Average (GPA) Standard:** Maintenance of an unweighted GPA between 3.8 and 4.0 on a 4.0 scale is established as the baseline threshold. GPA is analyzed contextually via the High School Profile to gauge relative class rank performance.
+* **Weighted vs. Unweighted Divergence:** The academic screening layer prioritizes internal school rankings and absolute course rigor over inflated weighted GPAs to normalize variations across global grading systems.
+
+### Standardized Testing Distributions
+* **Scholastic Aptitude Test (SAT) Threshold:** The middle 50% score band for admitted candidates resides between 1500 and 1600, with a critical focus on cross-section consistency.
+* **American College Testing (ACT) Threshold:** The middle 50% score band for admitted candidates resides between 34 and 36.
+* **Policy Flexibility:** Under test-optional or test-blind institutional variances, quantitative weight shifts dynamically to the Academic Index calculation and external validation metrics (e.g., AP exam scores of 5).
+
+### The Academic Index (AI) Formula
+* **AI Definition:** A numerical score ranging from 60 to 240, aggregating calculated GPA, class rank (where available), and standardized test components to create a unified academic baseline.
+* **Cohort Balancing Application:** Used to ensure recruited athlete cohorts and specialized institutional sub-populations remain within a statistically acceptable variance of the general student body's academic profile.
+
+---
+
+## SECTION 2: HOLISTIC REVIEW & QUALITATIVE RATING SCALES
+
+### Extracurricular Impact Tiers
+* **Tier 1 (National/International Distinction):** Includes elite milestones such as attending prestigious summer programs (e.g., RSI, TASP), winning national Olympiads, founding widely recognized organizations, or generating peer-reviewed academic publications.
+* **Tier 2 (Regional/State Leadership):** High-level execution within local ecosystems, including student body presidency, state-level athletic or artistic recognition, or founding impactful local initiatives.
+* **Tier 3 (School/Community Engagement):** Active participation in varsity sports, school clubs, or sustained local volunteerism showing reliable contribution without broad external scaling.
+
+### Intellectual Curiosity & Institutional Contribution
+* **Intellectual Curiosity:** The candidate demonstrates self-driven pursuit of knowledge beyond standard classroom requirements, as evidenced by academic coursework, extracurricular activities, awards, and teacher recommendations.
+* **Institutional Contribution:** The candidate's academic interests, leadership, extracurricular involvement, and community engagement are evaluated using available academic records, activities, awards, and recommendation letters.
+
+### Recommendation Weight & Letters of Evaluation
+* **Teacher Evaluations:** Requires two letters from core academic disciplines (STEM and Humanities) written by instructors who can explicitly benchmark the applicant against the top 1–2% of students in their teaching careers.
+* **Counselor Report:** Provides institutional context, confirming the student's character, disciplinary standing, and relative peer standing within the graduating cohort.
+
+---
+
+## SECTION 3: INSTITUTIONAL NEEDS, SELECTION COMMITTEES, & STRATEGIC HOOKS
+
+### The Regional Committee Advocacy System
+* **First-Round Review:** Applications are parsed by a dedicated Regional Admissions Officer who scores the file and drafts an advocacy summary based on geographic context.
+* **Full Committee Debate:** The Regional Officer presents the applicant's case to the full admissions committee, where a majority vote determines the final selection or rejection.
+
+### Institutional Balancing Acts (Cohort Sculpting)
+* **Recruited Athletes:** Candidates backed by varsity athletic coaches bypass traditional yield modeling, provided they pass basic Academic Index baseline parameters.
+* **Socioeconomic & Geographic Diversity:** Deliberate institutional sculpting to represent all US states, diverse international territories, first-generation college students, and underrepresented backgrounds.
+* **Legacy & Institutional Advancement:** Policy adjustments handle considerations for children of alumni or institutional donors, though individual university policies are subject to ongoing regulatory updates.
+* **Academic Major Distribution:** Caps are placed on oversaturated majors (e.g., Computer Science, Economics) to distribute the incoming cohort evenly across all academic departments.
