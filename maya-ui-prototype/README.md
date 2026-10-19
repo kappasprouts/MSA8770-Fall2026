@@ -1,188 +1,241 @@
-# Riverview State University — Applicant Review Chat
+# RiverView State Admissions Review UI
 
-A read-only Next.js interface for reviewing completed undergraduate admissions dossiers, viewing original applicant PDFs, and asking evidence-grounded follow-up questions through a local Ollama model.
+This folder contains the admissions-officer interface for the **AI-Assisted College Admissions Process** prototype developed for MSA 8770. The interface presents validated applicant dossiers, original source documents, policy guidance, grounded officer Q&A, and a simulated human review step.
 
-The UI supports human review; **it does not issue, recommend, or record admission decisions**. Dossiers are generated upstream by the Summarizing Agent pipeline. The Q&A assistant uses the selected applicant's stored dossier as its context, not direct analysis of the PDFs.
+The AI output is advisory. A human admissions officer remains responsible for every admissions decision.
 
-![Applicant Review Chat screenshot](public/readme-screenshot.png)
+## What the UI provides
 
-## Contents
+- Applicant queue for dossiers ready for human review
+- Plain-language applicant overview
+- Academic, engagement, recommendation, and supplemental summaries
+- Grounded Officer Q&A based only on the stored applicant dossier
+- Officer action workspace for simulated review handoff
+- Original PDF document list and embedded document preview
+- Policy guidance and supporting evidence
+- Separate IT Admin view with model, runtime, policy-retrieval, and validation details
 
-1. [Requirements](#requirements)
-2. [One-time setup](#one-time-setup)
-3. [Run the UI](#run-the-ui)
-4. [Using the interface](#using-the-interface)
-5. [Data flow and implementation](#data-flow-and-implementation)
-6. [Testing checklist](#testing-checklist)
-7. [Troubleshooting](#troubleshooting)
-8. [Limitations](#limitations)
+## Implemented workflow
 
-## Requirements
+1. The ingestion pipeline receives synthetic applicant records and PDFs.
+2. It validates document completeness and routes eligible applicants to `READY_FOR_REVIEW`.
+3. Applicant metadata is stored in PostgreSQL, while PDFs are stored in MinIO.
+4. The summarizing agent retrieves permitted documents and applicable policies.
+5. The model creates dossier sections that are checked by deterministic validation code.
+6. The UI reads the validated dossier and supporting metadata from PostgreSQL.
+7. Admissions officers review the summary, inspect source PDFs, ask grounded questions, and simulate a human action.
 
-- **Node.js 20 or newer** and npm.
-- **Docker** with the project's PostgreSQL and MinIO services available. In the tested local environment the containers are `eaos-postgres` and `eaos-minio`.
-- **Ollama** running locally with `qwen3-vl:8b-instruct` installed.
-- A populated PostgreSQL database (`riverview_admissions` in the tested environment) with generated dossier records and applicant document metadata.
-- Original PDF objects uploaded to the configured MinIO bucket (`admissions-raw-docs` in the tested environment).
+Personal statements and restricted Common App information are presented for authorized human review but are excluded from AI analysis according to the prototype policy.
 
-The UI does not ingest applicants, upload documents, generate dossiers, or seed databases. Those are responsibilities of the upstream pipeline.
+## Technology
 
-## One-time setup
+- Next.js and React
+- TypeScript
+- PostgreSQL with JSONB fields
+- MinIO object storage
+- GSU-hosted Ollama-compatible model endpoint
+- Python ingestion and summarization services maintained elsewhere in the repository
 
-From the **repository root**:
+## Prerequisites
 
-```bash
-cd ui
-npm install
-cp .env.local.example .env.local
-```
+Install the following before running the UI:
 
-Review `.env.local` and ensure the values match the services actually running on your computer. The following are the important settings (examples only; use the values appropriate to your environment):
+- Node.js and npm
+- Docker Desktop
+- PostgreSQL container named `riverview-postgres`
+- MinIO container named `riverview-minio`
+- A valid GSU Ollama API key
+- At least one applicant dossier in the `applicant_dossier` table
 
-```dotenv
-OLLAMA_CHAT_URL=http://localhost:11434/api/chat
-OLLAMA_MODEL=qwen3-vl:8b-instruct
+## Environment configuration
+
+Create a file named `.env.local` in this directory:
+
+```env
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=riverview_admissions
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+
 MINIO_ENDPOINT=localhost:9000
-MINIO_BUCKET=admissions-raw-docs
+MINIO_ACCESS_KEY=minioadmin
+MINIO_SECRET_KEY=minioadmin
+MINIO_BUCKET=applicant-documents
+
+OLLAMA_CHAT_URL=https://gpu-01.insight.gsu.edu:11443/api/chat
+OLLAMA_MODEL=gemma3:latest
+OLLAMA_API_KEY=PASTE_YOUR_CURRENT_KEY_HERE
 ```
 
-Also configure the `POSTGRES_*` connection settings and MinIO access credentials using the variable names in `.env.local.example`. The database name in the tested environment is `riverview_admissions`. **Do not commit `.env.local` or real credentials.** Keep `.env.local.example` free of secrets.
+Never commit `.env.local`, API keys, passwords, or other credentials. The repository's ignore rules should exclude this file.
 
-If `npm ci` fails because the lockfile is out of sync, run `npm install` to synchronize dependencies and the lockfile, then include the updated `package-lock.json` in the reviewed commit. For repeatable installs after synchronization, prefer `npm ci`.
+## Install and run
 
-## Run the UI
+From PowerShell:
 
-Start Docker Desktop and ensure the project's database and object-storage containers are running:
+```powershell
+cd C:\msa8770project\MSA8770-Fall2026\maya-ui-prototype
+npm install
+npm run dev -- --port 3002
+```
 
-```bash
+Open:
+
+```text
+http://localhost:3002
+```
+
+To stop the development server, press `Ctrl+C` in its terminal.
+
+## Verify supporting services
+
+Confirm PostgreSQL and MinIO are running:
+
+```powershell
 docker ps
-# If these existing containers are stopped:
-docker start eaos-postgres eaos-minio
 ```
 
-Check Ollama and the required model:
+Expected containers:
 
-```bash
-ollama list
-curl http://localhost:11434/api/tags
+- `riverview-postgres`
+- `riverview-minio`
+
+Confirm that a dossier exists:
+
+```powershell
+docker exec riverview-postgres `
+  psql -U postgres -d riverview_admissions `
+  -c "SELECT app_id, generated_at, updated_at FROM applicant_dossier ORDER BY app_id;"
 ```
 
-If Ollama is not running, start it using your local Ollama installation (for a terminal-managed instance, `ollama serve`). Do not start a second server if one is already listening on port 11434.
+Confirm that applicant document metadata exists:
 
-From `ui`:
-
-```bash
-npm run dev
+```powershell
+docker exec riverview-postgres `
+  psql -U postgres -d riverview_admissions `
+  -c "SELECT app_id, jsonb_array_length(documents) AS document_count FROM applicants ORDER BY app_id;"
 ```
 
-Open <http://localhost:3000> in a browser. Stop the development server with **Ctrl+C**. To use a different port:
+## Test the UI
 
-```bash
-npm run dev -- --port 3001
+### Applicant and dossier API
+
+```powershell
+$response = Invoke-RestMethod `
+  "http://localhost:3002/api/dossier?appId=APP_001"
+
+$response.documents.Count
+$response.documents | Format-Table file,label,access
 ```
 
-Before merging changes, verify the production build:
+For the current `APP_001` test packet, the expected document count is `10`.
 
-```bash
+### Source documents
+
+Open the **Documents** tab and verify that:
+
+- The source-document count is correct.
+- Selecting a document loads its PDF preview.
+- `Open full PDF` opens the original document.
+- Human-only files are labeled separately from AI-analyzed files.
+
+### Grounded Officer Q&A
+
+Example supported question:
+
+```text
+What are this applicant's GPA and standardized test scores?
+```
+
+Example unsupported question:
+
+```text
+What is this applicant's favorite food?
+```
+
+The second question should produce a clear statement that the dossier does not contain the requested information. The chatbot should not invent an answer or make an admissions decision.
+
+### IT Admin view
+
+Switch to **IT Admin View** and verify that the UI displays the available:
+
+- Model and run status
+- Processing time and attempts
+- Retrieved policy identifiers
+- Documents sent to and withheld from the model
+- Validation results and failure information
+
+## Validation commands
+
+Run these before committing UI changes:
+
+```powershell
+npm run lint
 npm run build
 ```
 
-## Using the interface
+## Important data behavior
 
-1. **Select an applicant** from the dropdown. Available IDs are read from `applicant_dossier`; an applicant must have a generated dossier to appear.
-2. **Applicant Dossier (left):** review applicant information, **Summary**, policy/validation checks, and supporting evidence. Expand cards as needed.
-3. **Original Documents (right):** browse the applicant's PDFs. Use **View Full** to open a document separately. The interface can mark documents as withheld from model processing based on saved generation-run metadata. *Withheld from the Summarizing Agent* does not mean hidden from the human reviewer.
-4. **Q&A Assistant (bottom):** ask questions about the selected applicant's dossier. The assistant is instructed to answer only from the available dossier evidence and not to make an admissions decision. The conversation panel scrolls vertically.
+The current ingestion implementation stores document metadata in the PostgreSQL `applicants.documents` JSONB array. The UI reads:
 
-Example question:
+- `filename`
+- `doc_type`
+- `minio_key`
+- document readability and error metadata when available
 
-> What do the recommendation letters say about this applicant's leadership? Cite the supporting evidence in the dossier.
-
-The assistant may lack information present only in an original PDF if that information was not included in the saved dossier. Review original documents yourself when needed.
-
-## Data flow and implementation
-
-| Component | Source / responsibility |
-|---|---|
-| `src/lib/dossier.ts` | PostgreSQL connection and dossier/document retrieval helpers |
-| `applicant_dossier` | Saved applicant dossier content |
-| `dossier_generation_runs` | Generation-run metadata, including document handling information |
-| `applicants.documents` | JSONB array of document metadata, including `filename`, `doc_type`, `minio_key`, and `minio_bucket` |
-| MinIO `admissions-raw-docs` | Original PDF objects; keys resemble `APP_013/transcript.pdf` |
-| `src/app/api/applicants` | Applicant dropdown data |
-| `src/app/api/dossier` | Selected dossier and document listing |
-| `src/app/api/documents` | Authorized lookup and streaming of a selected PDF from MinIO |
-| `src/app/api/chat` | Dossier-grounded system prompt, Ollama request, and response |
-| `src/components/` | UI panels, cards, and chat interface |
-| `src/app/globals.css` | UI styling and theme variables |
-
-### Document metadata compatibility
-
-The current ingestion pipeline stores original-document metadata in `applicants.documents`, **not** the older `simulated_applicant_data` table. The UI reads this JSONB array and maps each entry's `minio_key` to the internal `object_key` used by its document-serving helpers. The actual bucket in the tested environment is `admissions-raw-docs`.
-
-Example document entry (illustrative):
-
-```json
-{
-  "doc_type": "transcript",
-  "filename": "transcript.pdf",
-  "minio_key": "APP_013/transcript.pdf",
-  "minio_bucket": "admissions-raw-docs",
-  "exists": true,
-  "is_readable": true
-}
-```
-
-### Q&A model behavior
-
-The chat API sends the saved dossier context and conversation to the configured Ollama model. In the locally tested version, generation options were adjusted to:
-
-```typescript
-options: {
-  num_ctx: 8192,
-  num_predict: 2048,
-}
-```
-
-These values are not guarantees of complete answers; they increase the available context and output budget. Model runtime and memory use depend on local hardware. The server can log Ollama's `done_reason`, `eval_count`, and response length to help diagnose incomplete responses. Avoid logging sensitive dossier text unnecessarily.
-
-## Testing checklist
-
-Before sharing changes with teammates, verify:
-
-- [ ] `npm run build` succeeds.
-- [ ] Applicant dropdown loads generated dossiers.
-- [ ] Summary and policy/evidence cards display for a selected applicant.
-- [ ] Original Documents panel lists PDFs from `applicants.documents`.
-- [ ] **View Full** opens a real PDF from MinIO.
-- [ ] Q&A assistant answers a dossier-grounded question and does not suggest an admissions decision.
-- [ ] Longer answers finish without being cut off; check Ollama logs if they do not.
-- [ ] Switching applicants does not carry over the previous applicant's chat context.
-- [ ] `.env.local`, `.next/`, and `node_modules/` are not tracked by Git.
+Some ingested records do not contain an `exists` property. The UI therefore includes a document unless `exists` is explicitly `false`.
 
 ## Troubleshooting
 
-**No applicants in the dropdown:** Confirm PostgreSQL is running and `applicant_dossier` has rows. The UI does not create dossiers.
+### The UI displays zero source documents
 
-**Original Documents panel is empty:** Confirm the selected applicant has a nonempty `applicants.documents` JSONB array. The `document_records` table is not the document-list source in this integrated UI.
+1. Confirm `applicants.documents` contains an array for the selected applicant.
+2. Confirm each object contains `filename` and `minio_key`.
+3. Confirm the UI filter uses `document.exists !== false` rather than requiring `document.exists === true`.
+4. Restart the Next.js development server and request the dossier API again.
 
-**Document appears but PDF fails to open:** Check that MinIO is running, `MINIO_BUCKET` is set to `admissions-raw-docs` (or the bucket actually used by your pipeline), and the stored `minio_key` exists in that bucket. MinIO's health endpoint alone does not prove a specific object exists.
+### The PDF list appears but previews fail
 
-**Ollama connection error:** Check `OLLAMA_CHAT_URL`, confirm the server is running at `localhost:11434`, and verify the model with `ollama list`.
+Confirm that MinIO is running and that `.env.local` contains the correct bucket. Check which bucket contains the applicant objects:
 
-**Chat answer stops mid-sentence:** Inspect the development-server log for `done_reason` and `eval_count`. `done_reason: "length"` indicates generation or context limits were reached. If it happens after very few output tokens, inspect the dossier prompt size and available context rather than assuming a chat-scroll issue.
+```powershell
+python -c "from minio import Minio; c=Minio('localhost:9000', access_key='minioadmin', secret_key='minioadmin', secure=False); [print(b.name, [o.object_name for o in c.list_objects(b.name, prefix='APP_001/', recursive=True)]) for b in c.list_buckets()]"
+```
 
-**PDF preview is blank:** Use **View Full** to test the underlying PDF; browser embedded-PDF behavior varies.
+### Officer Q&A tries to use localhost port 11434
 
-**Port 3000 is occupied:** Stop the other process or use `npm run dev -- --port 3001`.
+The UI did not load the GSU model configuration. Confirm `.env.local` contains:
 
-**Database collation-version warning:** A warning may appear with the current PostgreSQL container. It is distinct from the UI's document lookup; do not change database collation or rebuild indexes as part of UI setup without a separate database maintenance plan.
+```env
+OLLAMA_CHAT_URL=https://gpu-01.insight.gsu.edu:11443/api/chat
+```
 
-## Limitations
+Stop and restart the Next.js server after changing `.env.local`.
 
-- Prototype UI; not an authenticated production admissions system.
-- Read-only; it does not approve, decline, waitlist, or save final decisions.
-- Chat responses are model-generated and require human verification against dossier evidence and original PDFs.
-- The chat uses the stored dossier context, not arbitrary direct retrieval across the original PDF files.
-- Local Docker and Ollama services must be running; performance depends on available machine resources.
-- This README documents the integrated local setup tested with the current database and MinIO configuration. Teammates should confirm their container names, credentials, and environment variables before running.
+### Port 3002 is already in use
+
+```powershell
+$nextPid = Get-NetTCPConnection -LocalPort 3002 -State Listen |
+  Select-Object -ExpandProperty OwningProcess -Unique
+
+Stop-Process -Id $nextPid -Force
+npm run dev -- --port 3002
+```
+
+### The summarizer returns `HUMAN_REVIEW_AI_FAILED`
+
+This means a generated section failed deterministic validation after its allowed retry. The run should stop and route the case for human review. This is an implemented safety and failure-handling path, not necessarily an infrastructure failure.
+
+## Prototype limitations
+
+- Officer actions are simulated and are not yet persisted as final admissions decisions.
+- Authentication and role-based access are planned but not implemented in this prototype.
+- The applicant queue currently focuses on records with generated dossiers.
+- External Common App and College Board integrations are simulated.
+- The system uses entirely synthetic applicant information for academic testing.
+
+## Human-in-the-loop safeguard
+
+The interface must never automatically admit, waitlist, or reject an applicant. Model summaries and classifications support review, while the admissions officer inspects the evidence and retains final authority.
+
