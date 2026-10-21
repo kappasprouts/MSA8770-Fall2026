@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import AppHeader from "@/components/AppHeader";
 import DossierPanel from "@/components/DossierPanel";
@@ -22,7 +23,17 @@ export default function Home() {
         setApplicants(data.applicants);
 
         if (data.applicants.length > 0) {
-          setSelectedAppId(data.applicants[0].id);
+          const requestedAppId = new URLSearchParams(
+            window.location.search
+          ).get("appId");
+
+          const matchingApplicant = data.applicants.find(
+            (applicant) => applicant.id === requestedAppId
+          );
+
+          setSelectedAppId(
+            matchingApplicant ? matchingApplicant.id : data.applicants[0].id
+          );
         }
       })
       .catch(() => setError("Could not load the list of applicants."));
@@ -90,6 +101,14 @@ export default function Home() {
         onSelect={setSelectedAppId}
         applicantName={applicantName}
       />
+      <div className="border-b border-border bg-surface px-4 py-2">
+        <Link
+          href="/review-queue"
+          className="inline-flex items-center rounded-lg border border-border px-4 py-2 text-sm font-medium text-ink hover:bg-app-bg"
+        >
+          ← Back to Processing Dashboard
+        </Link>
+      </div>
 
       <main className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4">
         {error && (
