@@ -1,0 +1,3 @@
+D:\Users\miwi\git\MSA8770-Fall2026\output\reorganization_check_20261018\live_preflight.json
+Verified PDFs: 149
+Render failures: {"APP_013": [{"filename": "CommonApp.pdf", "type": "application_form", "error": "Hooks redaction verification failed"}], "APP_016": [{"filename": "CommonApp.pdf", "type": "application_form", "error": "Hooks redaction verification failed"}], "APP_020": [{"filename": "CommonApp.pdf", "type": "application_form", "error": "Hooks redaction verification failed"}]}

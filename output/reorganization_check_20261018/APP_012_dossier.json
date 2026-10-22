@@ -1,0 +1,1687 @@
+{
+  "run": {
+    "app_id": "APP_012",
+    "documents_sent": {
+      "CommonApp.pdf": [
+        1,
+        2
+      ],
+      "letter_rec1.pdf": [
+        1
+      ],
+      "letter_rec2.pdf": [
+        1
+      ],
+      "supplement.pdf": [
+        1
+      ],
+      "transcript.pdf": [
+        1,
+        2
+      ]
+    },
+    "documents_withheld": {},
+    "policies_retrieved": [
+      {
+        "policy_id": "POL-001",
+        "title": "Academic Rigor & Contextual GPA Evaluation",
+        "similarity": 0.662,
+        "query": "academic rigor AP IB dual enrollment GPA class rank"
+      },
+      {
+        "policy_id": "POL-003",
+        "title": "Academic Rigor & Contextual GPA Evaluation",
+        "similarity": 0.674,
+        "query": "standardized testing SAT ACT test optional academic index"
+      },
+      {
+        "policy_id": "POL-006",
+        "title": "Standardized Testing Distributions",
+        "similarity": 0.726,
+        "query": "standardized testing SAT ACT test optional academic index"
+      },
+      {
+        "policy_id": "POL-007",
+        "title": "The Academic Index (AI) Formula",
+        "similarity": 0.652,
+        "query": "standardized testing SAT ACT test optional academic index"
+      },
+      {
+        "policy_id": "POL-009",
+        "title": "Extracurricular Impact Tiers",
+        "similarity": 0.608,
+        "query": "extracurricular activities awards leadership intellectual curiosity"
+      },
+      {
+        "policy_id": "POL-012",
+        "title": "Intellectual Curiosity & Institutional Contribution",
+        "similarity": 0.624,
+        "query": "extracurricular activities awards leadership intellectual curiosity"
+      },
+      {
+        "policy_id": "POL-013",
+        "title": "Intellectual Curiosity & Institutional Contribution",
+        "similarity": 0.658,
+        "query": "extracurricular activities awards leadership intellectual curiosity"
+      },
+      {
+        "policy_id": "POL-014",
+        "title": "Recommendation Weight & Letters of Evaluation",
+        "similarity": 0.609,
+        "query": "academic rigor AP IB dual enrollment GPA class rank"
+      },
+      {
+        "policy_id": "POL-015",
+        "title": "Recommendation Weight & Letters of Evaluation",
+        "similarity": 0.575,
+        "query": "holistic academic review institutional contribution"
+      }
+    ],
+    "attempts": 7,
+    "runtime_seconds": 531.6,
+    "validation": {
+      "passed": true,
+      "failed_sections": {},
+      "load_problems": [],
+      "calls": [
+        {
+          "section": "academic",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 5071,
+            "output_tokens": 1194,
+            "seconds": 116.2
+          },
+          "errors": [
+            "output: quote \"Weighted GPA 4.4\" is not on CommonApp.pdf page 1.",
+            "output: quote \"Unweighted GPA 3.97\" is not on CommonApp.pdf page 1."
+          ]
+        },
+        {
+          "section": "academic",
+          "attempt": 2,
+          "usage": {
+            "prompt_tokens": 5178,
+            "output_tokens": 1019,
+            "seconds": 77.7
+          },
+          "errors": []
+        },
+        {
+          "section": "engagement",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 2803,
+            "output_tokens": 768,
+            "seconds": 47.6
+          },
+          "errors": []
+        },
+        {
+          "section": "recommendation",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 2612,
+            "output_tokens": 1110,
+            "seconds": 68.1
+          },
+          "errors": []
+        },
+        {
+          "section": "supplement",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 1469,
+            "output_tokens": 516,
+            "seconds": 29.7
+          },
+          "errors": []
+        },
+        {
+          "section": "policy",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 7388,
+            "output_tokens": 1270,
+            "seconds": 111.8
+          },
+          "errors": []
+        },
+        {
+          "section": "synthesis",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 7426,
+            "output_tokens": 709,
+            "seconds": 63.4
+          },
+          "errors": []
+        }
+      ]
+    },
+    "run_status": "DOSSIER_READY"
+  },
+  "applicant_dossier": {
+    "app_id": "APP_012",
+    "applicant_demographics": {
+      "first_name": "Drew",
+      "last_name": "Young",
+      "name_of_hs": "Madison High School",
+      "country": "USA",
+      "region": "Midwest",
+      "intended_major": "Biomedical Engineering",
+      "admission_year": 2026,
+      "admission_term": "F"
+    },
+    "academic_profile": {
+      "document_facts": {
+        "unweighted_gpa": 3.97,
+        "weighted_gpa": 4.4,
+        "class_rank": null,
+        "sat_superscore": 1530,
+        "act_superscore": 35,
+        "intended_major": "Biomedical Engineering",
+        "high_school": "Madison High School",
+        "expected_graduation": "2026"
+      },
+      "ap_courses_on_transcript": [
+        {
+          "course": "AP Human Geography",
+          "grade_level": "11",
+          "final_grade": "A-"
+        },
+        {
+          "course": "AP Chemistry",
+          "grade_level": "11",
+          "final_grade": "A"
+        },
+        {
+          "course": "AP Comparative Government",
+          "grade_level": "11",
+          "final_grade": "A"
+        },
+        {
+          "course": "AP Computer Science A",
+          "grade_level": "11",
+          "final_grade": "A-"
+        },
+        {
+          "course": "AP Physics C Electricity and Magnetism",
+          "grade_level": "11",
+          "final_grade": "B"
+        },
+        {
+          "course": "AP Macroeconomics",
+          "grade_level": "11",
+          "final_grade": "A-"
+        },
+        {
+          "course": "AP Seminar",
+          "grade_level": "12",
+          "final_grade": "B"
+        },
+        {
+          "course": "AP Art History",
+          "grade_level": "12",
+          "final_grade": "B"
+        },
+        {
+          "course": "AP Physics 1",
+          "grade_level": "12",
+          "final_grade": "B"
+        },
+        {
+          "course": "AP French Language",
+          "grade_level": "12",
+          "final_grade": "A"
+        },
+        {
+          "course": "AP English Literature",
+          "grade_level": "12",
+          "final_grade": "A-"
+        }
+      ],
+      "ap_exam_scores": [],
+      "summary": "The applicant, Drew Young, has a weighted GPA of 4.4 and an unweighted GPA of 3.97. They are applying for Biomedical Engineering and have taken 12 AP courses, including AP Human Geography, AP Chemistry, AP Comparative Government, AP Computer Science A, AP Physics C Electricity and Magnetism, AP Macroeconomics, AP Seminar, AP Art History, AP Physics 1, AP French Language, and AP English Literature. Their SAT superscore is 1530 and ACT superscore is 35. The transcript shows grades for these AP courses, with most receiving grades of A or A-.",
+      "course_rigor": "The applicant has taken 12 AP courses, which indicates a high level of academic rigor. The courses span multiple disciplines including science, mathematics, humanities, and languages.",
+      "performance_patterns": "The applicant's performance is generally strong, with most AP courses receiving grades of A or A-. The grades are consistent across different subjects and grade levels, indicating a steady academic performance.",
+      "strengths": [
+        "High weighted GPA (4.4)",
+        "Strong standardized test scores (SAT 1530, ACT 35)",
+        "Extensive AP course load (12 courses)",
+        "Consistent high grades in AP courses"
+      ],
+      "concerns": [],
+      "evidence": [
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Weighted GPA 4.4",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Unweighted GPA 3.97",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Superscored SAT Score 1530",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Superscored ACT Score 35",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP Human Geography A-",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP Chemistry A",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP Comparative Government A",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP Computer Science A A-",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        }
+      ]
+    },
+    "engagement_profile": {
+      "activities": [
+        {
+          "activity": "Varsity soccer player",
+          "role_and_description": "Varsity soccer player",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        },
+        {
+          "activity": "School art club member",
+          "role_and_description": "School art club member",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        },
+        {
+          "activity": "Environmental club volunteer",
+          "role_and_description": "Environmental club volunteer",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        },
+        {
+          "activity": "Youth orchestra musician",
+          "role_and_description": "Youth orchestra musician",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        },
+        {
+          "activity": "Science club member",
+          "role_and_description": "Science club member",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        },
+        {
+          "activity": "Community food bank volunteer",
+          "role_and_description": "Community food bank volunteer",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        },
+        {
+          "activity": "Library volunteer",
+          "role_and_description": "Library volunteer",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        },
+        {
+          "activity": "Animal shelter volunteer",
+          "role_and_description": "Animal shelter volunteer",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        }
+      ],
+      "awards": [
+        "MVP"
+      ],
+      "summary": "The applicant, Drew Young, is involved in a variety of activities including being a varsity soccer player, a member of the school art club, an environmental club volunteer, a youth orchestra musician, a science club member, and volunteers at a community food bank, library, and animal shelter. The applicant has received an MVP award.",
+      "leadership_service_employment": "",
+      "themes": [],
+      "assessment": "The applicant has documented involvement in multiple extracurricular activities, including sports, arts, and community service. The applicant has also received an MVP award, indicating recognition for athletic performance.",
+      "evidence": [
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Varsity soccer player",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "School art club member",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Environmental club volunteer",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Youth orchestra musician",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Science club member",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Community food bank volunteer",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Library volunteer",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Animal shelter volunteer",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "MVP",
+          "verification_status": "TEXT_VERIFIED"
+        }
+      ]
+    },
+    "recommendation_profile": {
+      "recommenders": [
+        {
+          "name": "Finley Nguyen",
+          "role": "School counselor",
+          "document": "letter_rec1.pdf",
+          "relationship": "I write as a school counselor at Madison High School. This letter offers a fictional classroom or advising perspective for a simulated application; its narrative observations are not verified records.",
+          "key_observations": [
+            "The supplied academic record lists an unweighted GPA of 3.97 and a weighted GPA of 4.4.",
+            "Drew intends to explore Biomedical Engineering.",
+            "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "The reported awards are: MVP.",
+            "I recommend Drew Young for thoughtful consideration.",
+            "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development."
+          ]
+        },
+        {
+          "name": "Jamie Patel",
+          "role": "Classroom teacher (fictional recommender)",
+          "document": "letter_rec2.pdf",
+          "relationship": "I write as a classroom teacher (fictional recommender) at Madison High School. This letter offers a fictional classroom or advising perspective for a simulated application; its narrative observations are not verified records.",
+          "key_observations": [
+            "In a simulated classroom exercise, Drew initially approached a difficult question with a confident hypothesis.",
+            "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+            "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+            "The resulting conversation showed persistence and consideration for classmates.",
+            "I recommend Drew Young for thoughtful consideration.",
+            "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development."
+          ]
+        }
+      ],
+      "summary": "Both letters are fictional and for a simulated application. They highlight Drew Young\u2019s academic performance (GPA 3.97 unweighted, 4.4 weighted) and his interest in Biomedical Engineering. The letters emphasize his willingness to consider feedback, revise his thinking, and engage thoughtfully in group discussions. Both recommenders suggest a college environment that invites questions and offers constructive feedback would support his continued development.",
+      "common_themes": [
+        "Willingness to consider feedback and revise answers",
+        "Persistence and critical thinking in academic settings",
+        "Consideration for classmates in group discussions",
+        "Recommendation for thoughtful consideration",
+        "Expectation of a college environment that invites questions and offers constructive feedback"
+      ],
+      "strengths_identified": [
+        "Willingness to consider feedback and explain choices",
+        "Ability to revise responses based on evidence",
+        "Persistence in problem-solving",
+        "Consideration for classmates in group settings"
+      ],
+      "evidence": [
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "The supplied academic record lists an unweighted GPA of 3.97 and a weighted GPA of 4.4.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "Drew intends to explore Biomedical Engineering.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "The reported awards are: MVP.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "I recommend Drew Young for thoughtful consideration.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "In a simulated classroom exercise, Drew initially approached a difficult question with a confident hypothesis.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "The resulting conversation showed persistence and consideration for classmates.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "I recommend Drew Young for thoughtful consideration.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+          "verification_status": "TEXT_VERIFIED"
+        }
+      ]
+    },
+    "supplemental_essay_profile": {
+      "responses": [
+        {
+          "prompt": "Academic interest statement",
+          "summary": "The applicant states their academic interest is Biomedical Engineering and expresses interest in coursework that involves explaining methods, examining evidence, and revising interpretations. They also mention a desire to contribute through collaborative work, clear reasoning, and learning from peers."
+        },
+        {
+          "prompt": "Applicant-reported activities",
+          "summary": "The applicant lists several activities including being a varsity soccer player, member of the school art club, environmental club volunteer, youth orchestra musician, science club member, community food bank volunteer, library volunteer, and animal shelter volunteer."
+        },
+        {
+          "prompt": "Applicant-reported awards",
+          "summary": "The applicant reports receiving an MVP award."
+        },
+        {
+          "prompt": "Additional applicant context",
+          "summary": "The applicant is noted as an international student on visa."
+        }
+      ],
+      "summary": "The applicant is interested in Biomedical Engineering and values collaborative learning and evidence-based reasoning. They are involved in a variety of extracurricular activities including sports, arts, volunteering, and clubs. They have received an MVP award and are an international student on visa.",
+      "major_themes": [
+        "Interest in Biomedical Engineering",
+        "Preference for collaborative and evidence-based learning",
+        "Extensive extracurricular involvement",
+        "Recognition through MVP award",
+        "International student status"
+      ],
+      "evidence": [
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "My stated academic interest is Biomedical Engineering.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "Varsity soccer player, School art club member, Environmental club volunteer, Youth orchestra musician, Science club member, Community food bank volunteer, Library volunteer, Animal shelter volunteer",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "MVP",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "international student on visa",
+          "verification_status": "TEXT_VERIFIED"
+        }
+      ]
+    },
+    "strengths": [
+      {
+        "strength": "High academic rigor through 12 AP courses",
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 4.4",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Unweighted GPA 3.97",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Human Geography A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Chemistry A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          }
+        ]
+      },
+      {
+        "strength": "Strong standardized test performance",
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Superscored SAT Score 1530",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Superscored ACT Score 35",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "strength": "Willingness to revise thinking based on evidence",
+        "evidence": [
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "strength": "Engagement in diverse extracurricular activities",
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Varsity soccer player",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "School art club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Community food bank volunteer",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "strength": "Interest in Biomedical Engineering with evidence-based learning preference",
+        "evidence": [
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "My stated academic interest is Biomedical Engineering.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      }
+    ],
+    "policy_assessment": [
+      {
+        "policy_id": "POL-001",
+        "criterion": "Curriculum Rigor Evaluation: Evaluation requires selecting the most challenging coursework available within the applicant's secondary school environment, specifically Advanced Placement (AP), International Baccalaureate (IB) Diploma Programme, or dual-enrollment institutional tracks.",
+        "alignment": "aligned",
+        "findings": "The applicant has taken 12 AP courses, which indicates a high level of academic rigor. The courses span multiple disciplines including science, mathematics, humanities, and languages.",
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003",
+          "E004",
+          "E005",
+          "E006",
+          "E007",
+          "E008"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 4.4",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Unweighted GPA 3.97",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Superscored SAT Score 1530",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Superscored ACT Score 35",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Human Geography A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Chemistry A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Comparative Government A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Computer Science A A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-003",
+        "criterion": "Weighted vs. Unweighted Divergence: The academic screening layer prioritizes internal school rankings and absolute course rigor over inflated weighted GPAs to normalize variations across global grading systems.",
+        "alignment": "aligned",
+        "findings": "The applicant's weighted GPA is 4.4 and unweighted GPA is 3.97, but the academic screening framework prioritizes course rigor and internal context over inflated weighted GPAs.",
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E005",
+          "E006",
+          "E007",
+          "E008"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 4.4",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Unweighted GPA 3.97",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Human Geography A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Chemistry A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Comparative Government A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Computer Science A A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-006",
+        "criterion": "Policy Flexibility: Under test-optional or test-blind institutional variances, quantitative weight shifts dynamically to the Academic Index calculation and external validation metrics (e.g., AP exam scores of 5).",
+        "alignment": "not_applicable",
+        "findings": "The applicant has submitted standardized test scores (SAT 1530, ACT 35), but no AP exam scores are listed, and the policy does not require AP scores for evaluation under test-optional conditions.",
+        "evidence_ids": [
+          "E003",
+          "E004"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Superscored SAT Score 1530",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Superscored ACT Score 35",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-007",
+        "criterion": "AI Definition: A numerical score ranging from 60 to 240, aggregating calculated GPA, class rank (where available), and standardized test components to create a unified academic baseline.",
+        "alignment": "not_applicable",
+        "findings": "The Academic Index is not calculated or provided in the documents. The applicant's GPA and test scores are documented, but no AI score is generated or referenced.",
+        "evidence_ids": [],
+        "evidence": []
+      },
+      {
+        "policy_id": "POL-009",
+        "criterion": "Tier 1 (National/International Distinction): Includes elite milestones such as attending prestigious summer programs (e.g., RSI, TASP), winning national Olympiads, founding widely recognized organizations, or generating peer-reviewed academic publications.",
+        "alignment": "not_applicable",
+        "findings": "The applicant has no documented elite milestones such as prestigious summer programs, national Olympiads, founded organizations, or peer-reviewed publications.",
+        "evidence_ids": [],
+        "evidence": []
+      },
+      {
+        "policy_id": "POL-012",
+        "criterion": "Intellectual Curiosity: The candidate demonstrates self-driven pursuit of knowledge beyond standard classroom requirements, as evidenced by academic coursework, extracurricular activities, awards, and teacher recommendations.",
+        "alignment": "aligned",
+        "findings": "The applicant demonstrates intellectual curiosity through extensive AP coursework, interest in Biomedical Engineering, and documented persistence in revising interpretations and engaging in group discussions.",
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003",
+          "E004",
+          "E005",
+          "E006",
+          "E007",
+          "E008",
+          "E018",
+          "E020",
+          "E025",
+          "E030",
+          "E031"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 4.4",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Unweighted GPA 3.97",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Superscored SAT Score 1530",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Superscored ACT Score 35",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Human Geography A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Chemistry A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Comparative Government A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Computer Science A A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The supplied academic record lists an unweighted GPA of 3.97 and a weighted GPA of 4.4.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "My stated academic interest is Biomedical Engineering.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-013",
+        "criterion": "Institutional Contribution: The candidate's academic interests, leadership, extracurricular involvement, and community engagement are evaluated using available academic records, activities, awards, and recommendation letters.",
+        "alignment": "aligned",
+        "findings": "The applicant is involved in multiple extracurricular activities including sports, arts, volunteering, and clubs, and has received an MVP award, indicating institutional contribution.",
+        "evidence_ids": [
+          "E009",
+          "E010",
+          "E011",
+          "E012",
+          "E013",
+          "E014",
+          "E015",
+          "E016",
+          "E017",
+          "E020",
+          "E027",
+          "E032"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Varsity soccer player",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "School art club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Environmental club volunteer",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Youth orchestra musician",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Science club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Community food bank volunteer",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Library volunteer",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Animal shelter volunteer",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "MVP",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "The resulting conversation showed persistence and consideration for classmates.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "Varsity soccer player, School art club member, Environmental club volunteer, Youth orchestra musician, Science club member, Community food bank volunteer, Library volunteer, Animal shelter volunteer",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-014",
+        "criterion": "Teacher Evaluations: Requires two letters from core academic disciplines (STEM and Humanities) written by instructors who can explicitly benchmark the applicant against the top 1\u20132% of students in their teaching careers.",
+        "alignment": "not_applicable",
+        "findings": "The recommender letters are fictional and do not provide benchmarks against the top 1\u20132% of students in their teaching careers.",
+        "evidence_ids": [],
+        "evidence": []
+      },
+      {
+        "policy_id": "POL-015",
+        "criterion": "Counselor Report: Provides institutional context, confirming the student's character, disciplinary standing, and relative peer standing within the graduating cohort.",
+        "alignment": "not_applicable",
+        "findings": "The counselor letter is fictional and does not provide institutional context or peer standing within the graduating cohort.",
+        "evidence_ids": [],
+        "evidence": []
+      }
+    ],
+    "review_notes": [],
+    "holistic_assessment": "The applicant demonstrates strong academic performance with a weighted GPA of 4.4, an unweighted GPA of 3.97, and high standardized test scores (SAT 1530, ACT 35). They have taken 12 AP courses across multiple disciplines, indicating significant academic rigor. Their engagement includes varsity soccer, art club, environmental volunteering, and library work, showing broad interests. Recommender letters highlight their ability to revise interpretations and engage thoughtfully in group discussions. The supplement confirms interest in Biomedical Engineering and a preference for evidence-based, collaborative learning. All documents are consistent in portraying a well-rounded, intellectually curious student with documented involvement and academic strength.",
+    "evidence_map": [
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.4",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.97",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored SAT Score 1530",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored ACT Score 35",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Human Geography A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Chemistry A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Comparative Government A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Computer Science A A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Varsity soccer player",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "School art club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Environmental club volunteer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Youth orchestra musician",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Science club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Community food bank volunteer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Library volunteer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Animal shelter volunteer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "MVP",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The supplied academic record lists an unweighted GPA of 3.97 and a weighted GPA of 4.4.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "Drew intends to explore Biomedical Engineering.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The reported awards are: MVP.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I recommend Drew Young for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "In a simulated classroom exercise, Drew initially approached a difficult question with a confident hypothesis.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "The resulting conversation showed persistence and consideration for classmates.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I recommend Drew Young for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "My stated academic interest is Biomedical Engineering.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "Varsity soccer player, School art club member, Environmental club volunteer, Youth orchestra musician, Science club member, Community food bank volunteer, Library volunteer, Animal shelter volunteer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "MVP",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "international student on visa",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.4",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.97",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Human Geography A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "strengths",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Chemistry A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored SAT Score 1530",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored ACT Score 35",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Varsity soccer player",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "School art club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Community food bank volunteer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "My stated academic interest is Biomedical Engineering.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.4",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.97",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored SAT Score 1530",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored ACT Score 35",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Human Geography A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Chemistry A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Comparative Government A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Computer Science A A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.4",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.97",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Human Geography A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Chemistry A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Comparative Government A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Computer Science A A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored SAT Score 1530",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored ACT Score 35",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.4",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.97",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored SAT Score 1530",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored ACT Score 35",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Human Geography A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Chemistry A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Comparative Government A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Computer Science A A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The supplied academic record lists an unweighted GPA of 3.97 and a weighted GPA of 4.4.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "My stated academic interest is Biomedical Engineering.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Varsity soccer player",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "School art club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Environmental club volunteer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Youth orchestra musician",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Science club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Community food bank volunteer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Library volunteer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Animal shelter volunteer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "MVP",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "The resulting conversation showed persistence and consideration for classmates.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "Varsity soccer player, School art club member, Environmental club volunteer, Youth orchestra musician, Science club member, Community food bank volunteer, Library volunteer, Animal shelter volunteer",
+        "verification_status": "TEXT_VERIFIED"
+      }
+    ],
+    "generated_at": "2026-10-09 20:44:26.923811+00:00",
+    "updated_at": "2026-10-18 22:43:16.030460+00:00"
+  }
+}

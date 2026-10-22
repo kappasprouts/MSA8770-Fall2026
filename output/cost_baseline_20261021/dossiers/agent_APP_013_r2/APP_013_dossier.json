@@ -1,0 +1,1978 @@
+{
+  "run": {
+    "app_id": "APP_013",
+    "documents_sent": {
+      "CommonApp.pdf": [
+        1,
+        2
+      ],
+      "letter_rec1.pdf": [
+        1
+      ],
+      "letter_rec2.pdf": [
+        1
+      ],
+      "supplement.pdf": [
+        1
+      ],
+      "transcript.pdf": [
+        1
+      ]
+    },
+    "documents_withheld": {},
+    "policies_retrieved": [
+      {
+        "policy_id": "POL-001",
+        "title": "Academic Rigor & Contextual GPA Evaluation",
+        "similarity": 0.662,
+        "query": "academic rigor AP IB dual enrollment GPA class rank"
+      },
+      {
+        "policy_id": "POL-003",
+        "title": "Academic Rigor & Contextual GPA Evaluation",
+        "similarity": 0.674,
+        "query": "standardized testing SAT ACT test optional academic index"
+      },
+      {
+        "policy_id": "POL-006",
+        "title": "Standardized Testing Distributions",
+        "similarity": 0.726,
+        "query": "standardized testing SAT ACT test optional academic index"
+      },
+      {
+        "policy_id": "POL-007",
+        "title": "The Academic Index (AI) Formula",
+        "similarity": 0.652,
+        "query": "standardized testing SAT ACT test optional academic index"
+      },
+      {
+        "policy_id": "POL-009",
+        "title": "Extracurricular Impact Tiers",
+        "similarity": 0.608,
+        "query": "extracurricular activities awards leadership intellectual curiosity"
+      },
+      {
+        "policy_id": "POL-012",
+        "title": "Intellectual Curiosity & Institutional Contribution",
+        "similarity": 0.624,
+        "query": "extracurricular activities awards leadership intellectual curiosity"
+      },
+      {
+        "policy_id": "POL-013",
+        "title": "Intellectual Curiosity & Institutional Contribution",
+        "similarity": 0.658,
+        "query": "extracurricular activities awards leadership intellectual curiosity"
+      },
+      {
+        "policy_id": "POL-014",
+        "title": "Recommendation Weight & Letters of Evaluation",
+        "similarity": 0.609,
+        "query": "academic rigor AP IB dual enrollment GPA class rank"
+      },
+      {
+        "policy_id": "POL-015",
+        "title": "Recommendation Weight & Letters of Evaluation",
+        "similarity": 0.575,
+        "query": "holistic academic review institutional contribution"
+      }
+    ],
+    "attempts": 7,
+    "runtime_seconds": 494.3,
+    "validation": {
+      "passed": true,
+      "failed_sections": {},
+      "load_problems": [],
+      "calls": [
+        {
+          "section": "academic",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 3958,
+            "output_tokens": 840,
+            "seconds": 70.4
+          },
+          "errors": [
+            "output: quote \"Weighted GPA 3.69\" is not on CommonApp.pdf page 1.",
+            "output: quote \"Unweighted GPA 3.47\" is not on CommonApp.pdf page 1."
+          ]
+        },
+        {
+          "section": "academic",
+          "attempt": 2,
+          "usage": {
+            "prompt_tokens": 4066,
+            "output_tokens": 759,
+            "seconds": 57.1
+          },
+          "errors": []
+        },
+        {
+          "section": "engagement",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 2803,
+            "output_tokens": 289,
+            "seconds": 18.7
+          },
+          "errors": []
+        },
+        {
+          "section": "recommendation",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 2612,
+            "output_tokens": 1192,
+            "seconds": 81.9
+          },
+          "errors": []
+        },
+        {
+          "section": "supplement",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 1469,
+            "output_tokens": 621,
+            "seconds": 37.8
+          },
+          "errors": []
+        },
+        {
+          "section": "policy",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 7080,
+            "output_tokens": 1452,
+            "seconds": 147.7
+          },
+          "errors": []
+        },
+        {
+          "section": "synthesis",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 8511,
+            "output_tokens": 709,
+            "seconds": 78.6
+          },
+          "errors": []
+        }
+      ]
+    },
+    "run_status": "DOSSIER_READY"
+  },
+  "applicant_dossier": {
+    "app_id": "APP_013",
+    "applicant_demographics": {
+      "first_name": "Parker",
+      "last_name": "Lopez",
+      "name_of_hs": "Portland High School",
+      "country": "USA",
+      "region": "West",
+      "intended_major": "Accounting",
+      "admission_year": 2026,
+      "admission_term": "F"
+    },
+    "academic_profile": {
+      "document_facts": {
+        "unweighted_gpa": 3.47,
+        "weighted_gpa": 3.69,
+        "class_rank": null,
+        "sat_superscore": null,
+        "act_superscore": 31,
+        "intended_major": "Accounting",
+        "high_school": "Portland High School",
+        "expected_graduation": "2026"
+      },
+      "ap_courses_on_transcript": [
+        {
+          "course": "AP US History",
+          "grade_level": "11",
+          "final_grade": "A"
+        },
+        {
+          "course": "AP Macroeconomics",
+          "grade_level": "11",
+          "final_grade": "A"
+        },
+        {
+          "course": "AP Chemistry",
+          "grade_level": "12",
+          "final_grade": "A-"
+        },
+        {
+          "course": "AP Art History",
+          "grade_level": "12",
+          "final_grade": "A"
+        },
+        {
+          "course": "AP Research",
+          "grade_level": "12",
+          "final_grade": "A-"
+        }
+      ],
+      "ap_exam_scores": [],
+      "summary": "The applicant, Parker Lopez, has a weighted GPA of 3.69 and an unweighted GPA of 3.47. They are applying for Accounting and have taken five AP courses, including AP US History, AP Macroeconomics, AP Chemistry, AP Art History, and AP Research. Their ACT score is 31. The transcript shows grades for these AP courses, with grades ranging from A to A-.",
+      "course_rigor": "The applicant has taken five AP courses, which indicates a high level of academic rigor. The courses include AP US History, AP Macroeconomics, AP Chemistry, AP Art History, and AP Research.",
+      "performance_patterns": "The applicant's grades are generally strong, with most courses earning grades of A or A-. The grades are consistent across different subjects and grade levels.",
+      "strengths": [
+        "Strong academic performance with a weighted GPA of 3.69.",
+        "High level of course rigor with five AP courses.",
+        "Excellent ACT score of 31."
+      ],
+      "concerns": [],
+      "evidence": [
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Weighted GPA 3.69",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Unweighted GPA 3.47",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Superscored ACT Score 31",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP US History A",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP Macroeconomics A",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP Chemistry A-",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP Art History A",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP Research A-",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        }
+      ]
+    },
+    "engagement_profile": {
+      "activities": [
+        {
+          "activity": "School art club member",
+          "role_and_description": "School art club member",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        }
+      ],
+      "awards": [
+        "Community service recognition",
+        "School leadership award",
+        "Robotics competition team award"
+      ],
+      "summary": "The applicant is a school art club member and has received three awards: Community service recognition, School leadership award, and Robotics competition team award.",
+      "leadership_service_employment": "",
+      "themes": [],
+      "assessment": "The applicant has participated in one activity and received three awards, indicating involvement in school and extracurricular activities.",
+      "evidence": [
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "School art club member",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Community service recognition",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "School leadership award",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Robotics competition team award",
+          "verification_status": "TEXT_VERIFIED"
+        }
+      ]
+    },
+    "recommendation_profile": {
+      "recommenders": [
+        {
+          "name": "Blair Kim",
+          "role": "School counselor",
+          "document": "letter_rec1.pdf",
+          "relationship": "I write as a school counselor at Portland High School.",
+          "key_observations": [
+            "The supplied academic record lists an unweighted GPA of 3.47 and a weighted GPA of 3.69.",
+            "Parker intends to explore Accounting.",
+            "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "I recommend Parker Lopez for thoughtful consideration.",
+            "The admissions committee should review the complete packet and its own requirements before reaching a decision.",
+            "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development."
+          ]
+        },
+        {
+          "name": "Avery Reed",
+          "role": "Classroom teacher (fictional recommender)",
+          "document": "letter_rec2.pdf",
+          "relationship": "I write as a classroom teacher (fictional recommender) at Portland High School.",
+          "key_observations": [
+            "In a simulated classroom exercise, Parker initially approached a difficult question with a confident hypothesis.",
+            "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+            "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+            "Parker asked the group to state the assumption and check it against the task.",
+            "The resulting conversation showed persistence and consideration for classmates.",
+            "I recommend Parker Lopez for thoughtful consideration.",
+            "The admissions committee should review the complete packet and its own requirements before reaching a decision.",
+            "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development."
+          ]
+        }
+      ],
+      "summary": "Both letters recommend Parker Lopez for undergraduate study. The school counselor highlights Parker\u2019s academic record (unweighted GPA 3.47, weighted GPA 3.69) and willingness to consider feedback. The classroom teacher describes Parker\u2019s ability to revise hypotheses and seek clarification in group discussions. Both recommend thoughtful consideration and state that a college environment inviting questions and constructive feedback would support Parker\u2019s development.",
+      "common_themes": [
+        "Willingness to consider feedback",
+        "Persistence in revising ideas",
+        "Seeking clarification",
+        "Desire for constructive feedback",
+        "Recommendation for thoughtful consideration"
+      ],
+      "strengths_identified": [
+        "Willingness to consider feedback and explain choices",
+        "Ability to revise hypotheses based on evidence",
+        "Persistence in group discussions",
+        "Consideration for classmates",
+        "Ability to identify and check assumptions"
+      ],
+      "evidence": [
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "The supplied academic record lists an unweighted GPA of 3.47 and a weighted GPA of 3.69.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "Parker intends to explore Accounting.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "I recommend Parker Lopez for thoughtful consideration.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "The admissions committee should review the complete packet and its own requirements before reaching a decision.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "In a simulated classroom exercise, Parker initially approached a difficult question with a confident hypothesis.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "Parker asked the group to state the assumption and check it against the task.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "The resulting conversation showed persistence and consideration for classmates.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "I recommend Parker Lopez for thoughtful consideration.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "The admissions committee should review the complete packet and its own requirements before reaching a decision.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+          "verification_status": "TEXT_VERIFIED"
+        }
+      ]
+    },
+    "supplemental_essay_profile": {
+      "responses": [
+        {
+          "prompt": "Academic interest statement",
+          "summary": "The applicant states their academic interest is Accounting and expresses interest in coursework that involves explaining methods, examining evidence, and revising interpretations. They also mention a willingness to listen, make reasoning understandable, and learn from classmates."
+        },
+        {
+          "prompt": "Applicant-reported activities",
+          "summary": "The applicant reports being a member of the school art club."
+        },
+        {
+          "prompt": "Applicant-reported awards",
+          "summary": "The applicant received a Community service recognition, a School leadership award, and a Robotics competition team award."
+        },
+        {
+          "prompt": "Additional applicant context",
+          "summary": "The applicant did not provide additional context."
+        }
+      ],
+      "summary": "The applicant's stated academic interest is Accounting, with a focus on practical application and collaborative learning. They report involvement in the school art club and received three awards: Community service recognition, School leadership award, and Robotics competition team award. No additional context was provided.",
+      "major_themes": [
+        "Interest in Accounting and practical application of classroom concepts",
+        "Willingness to collaborate and learn from peers",
+        "Involvement in extracurricular activities (art club)",
+        "Recognition for leadership and community service (awards)"
+      ],
+      "evidence": [
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "My stated academic interest is Accounting.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "School art club member",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "Community service recognition, School leadership award, Robotics competition team award",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "Not provided",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "Narrative responses are fictional. Structured entries reproduce the supplied CSV; missing information has not been inferred. No college-specific prompt was supplied.",
+          "verification_status": "TEXT_VERIFIED"
+        }
+      ]
+    },
+    "strengths": [
+      {
+        "strength": "Strong academic performance with a weighted GPA of 3.69.",
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 3.69",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "strength": "High level of course rigor with five AP courses.",
+        "evidence": [
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP US History A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Macroeconomics A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Chemistry A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Art History A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Research A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          }
+        ]
+      },
+      {
+        "strength": "Willingness to consider feedback and explain choices.",
+        "evidence": [
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "strength": "Ability to revise hypotheses based on evidence.",
+        "evidence": [
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "strength": "Interest in Accounting and practical application of classroom concepts.",
+        "evidence": [
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "My stated academic interest is Accounting.",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "strength": "Willingness to learn from classmates and collaborate.",
+        "evidence": [
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      }
+    ],
+    "policy_assessment": [
+      {
+        "policy_id": "POL-001",
+        "criterion": "Curriculum Rigor Evaluation: Evaluation requires selecting the most challenging coursework available within the applicant's secondary school environment, specifically Advanced Placement (AP), International Baccalaureate (IB) Diploma Programme, or dual-enrollment institutional tracks.",
+        "alignment": "aligned",
+        "findings": "The applicant has taken five AP courses, including AP US History, AP Macroeconomics, AP Chemistry, AP Art History, and AP Research, indicating a high level of academic rigor.",
+        "evidence_ids": [
+          "E004",
+          "E005",
+          "E006",
+          "E007",
+          "E008"
+        ],
+        "evidence": [
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP US History A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Macroeconomics A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Chemistry A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Art History A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Research A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-003",
+        "criterion": "Weighted vs. Unweighted Divergence: The academic screening layer prioritizes internal school rankings and absolute course rigor over inflated weighted GPAs to normalize variations across global grading systems.",
+        "alignment": "aligned",
+        "findings": "The applicant\u2019s weighted GPA is 3.69 and unweighted GPA is 3.47, with five AP courses demonstrating course rigor, which aligns with prioritizing absolute course rigor over inflated weighted GPAs.",
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E004",
+          "E005",
+          "E006",
+          "E007",
+          "E008"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 3.69",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Unweighted GPA 3.47",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP US History A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Macroeconomics A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Chemistry A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Art History A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Research A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-006",
+        "criterion": "Policy Flexibility: Under test-optional or test-blind institutional variances, quantitative weight shifts dynamically to the Academic Index calculation and external validation metrics (e.g., AP exam scores of 5).",
+        "alignment": "aligned",
+        "findings": "The applicant has an ACT score of 31 and five AP courses, which may be considered external validation metrics under test-optional policies.",
+        "evidence_ids": [
+          "E003",
+          "E004",
+          "E005",
+          "E006",
+          "E007",
+          "E008"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Superscored ACT Score 31",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP US History A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Macroeconomics A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Chemistry A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Art History A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Research A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-007",
+        "criterion": "AI Definition: A numerical score ranging from 60 to 240, aggregating calculated GPA, class rank (where available), and standardized test components to create a unified academic baseline.",
+        "alignment": "aligned",
+        "findings": "The applicant has a weighted GPA of 3.69, an unweighted GPA of 3.47, and an ACT score of 31, which are components used to calculate the Academic Index.",
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 3.69",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Unweighted GPA 3.47",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Superscored ACT Score 31",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-009",
+        "criterion": "Tier 1 (National/International Distinction): Includes elite milestones such as attending prestigious summer programs (e.g., RSI, TASP), winning national Olympiads, founding widely recognized organizations, or generating peer-reviewed academic publications.",
+        "alignment": "not_applicable",
+        "findings": "The applicant has no evidence of Tier 1 distinctions such as prestigious summer programs, national Olympiads, founding organizations, or peer-reviewed publications.",
+        "evidence_ids": [],
+        "evidence": []
+      },
+      {
+        "policy_id": "POL-012",
+        "criterion": "Intellectual Curiosity: The candidate demonstrates self-driven pursuit of knowledge beyond standard classroom requirements, as evidenced by academic coursework, extracurricular activities, awards, and teacher recommendations.",
+        "alignment": "aligned",
+        "findings": "The applicant\u2019s stated interest in Accounting, desire to test classroom ideas against practical questions, and willingness to learn from peers demonstrate intellectual curiosity. Teacher recommendations also highlight persistence and consideration for classmates.",
+        "evidence_ids": [
+          "E027",
+          "E028",
+          "E029",
+          "E030",
+          "E015",
+          "E019",
+          "E020",
+          "E022",
+          "E023"
+        ],
+        "evidence": [
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "My stated academic interest is Accounting.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "In a simulated classroom exercise, Parker initially approached a difficult question with a confident hypothesis.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "Parker asked the group to state the assumption and check it against the task.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "The resulting conversation showed persistence and consideration for classmates.",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-013",
+        "criterion": "Institutional Contribution: The candidate's academic interests, leadership, extracurricular involvement, and community engagement are evaluated using available academic records, activities, awards, and recommendation letters.",
+        "alignment": "aligned",
+        "findings": "The applicant has academic records, extracurricular involvement (art club), awards (community service, leadership, robotics), and recommendation letters that evaluate their academic interests, leadership, and community engagement.",
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003",
+          "E004",
+          "E005",
+          "E006",
+          "E007",
+          "E008",
+          "E009",
+          "E010",
+          "E011",
+          "E012",
+          "E013",
+          "E014",
+          "E015",
+          "E016",
+          "E017",
+          "E018",
+          "E019",
+          "E020",
+          "E021",
+          "E022",
+          "E023",
+          "E024",
+          "E025",
+          "E026",
+          "E027",
+          "E028",
+          "E029",
+          "E030",
+          "E031",
+          "E032"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 3.69",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Unweighted GPA 3.47",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Superscored ACT Score 31",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP US History A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Macroeconomics A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Chemistry A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Art History A",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Research A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "School art club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Community service recognition",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "School leadership award",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Robotics competition team award",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The supplied academic record lists an unweighted GPA of 3.47 and a weighted GPA of 3.69.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "Parker intends to explore Accounting.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I recommend Parker Lopez for thoughtful consideration.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The admissions committee should review the complete packet and its own requirements before reaching a decision.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "In a simulated classroom exercise, Parker initially approached a difficult question with a confident hypothesis.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "Parker asked the group to state the assumption and check it against the task.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "The resulting conversation showed persistence and consideration for classmates.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "I recommend Parker Lopez for thoughtful consideration.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "The admissions committee should review the complete packet and its own requirements before reaching a decision.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "My stated academic interest is Accounting.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "School art club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "Community service recognition, School leadership award, Robotics competition team award",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-014",
+        "criterion": "Teacher Evaluations: Requires two letters from core academic disciplines (STEM and Humanities) written by instructors who can explicitly benchmark the applicant against the top 1\u20132% of students in their teaching careers.",
+        "alignment": "not_applicable",
+        "findings": "The recommender letters do not explicitly benchmark the applicant against the top 1\u20132% of students in their teaching careers.",
+        "evidence_ids": [],
+        "evidence": []
+      },
+      {
+        "policy_id": "POL-015",
+        "criterion": "Counselor Report: Provides institutional context, confirming the student's character, disciplinary standing, and relative peer standing within the graduating cohort.",
+        "alignment": "aligned",
+        "findings": "The school counselor\u2019s letter confirms the applicant\u2019s academic record, character, and willingness to consider feedback, which provides institutional context.",
+        "evidence_ids": [
+          "E013",
+          "E014",
+          "E015",
+          "E016",
+          "E017",
+          "E018"
+        ],
+        "evidence": [
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The supplied academic record lists an unweighted GPA of 3.47 and a weighted GPA of 3.69.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "Parker intends to explore Accounting.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I recommend Parker Lopez for thoughtful consideration.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The admissions committee should review the complete packet and its own requirements before reaching a decision.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      }
+    ],
+    "review_notes": [],
+    "holistic_assessment": "The applicant, Parker Lopez, has a weighted GPA of 3.69 and an unweighted GPA of 3.47, with an ACT score of 31, and has taken five AP courses including AP US History, AP Macroeconomics, AP Chemistry, AP Art History, and AP Research. They are applying for Accounting and express interest in coursework that involves explaining methods, examining evidence, and revising interpretations. The applicant is a school art club member and has received awards for community service, school leadership, and robotics competition. Both recommendation letters highlight the applicant\u2019s willingness to consider feedback, persistence in revising ideas, and consideration for classmates. The applicant\u2019s stated interest in practical application and collaborative learning aligns with their academic record and extracurricular involvement.",
+    "evidence_map": [
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 3.69",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.47",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored ACT Score 31",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP US History A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Macroeconomics A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Chemistry A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Art History A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Research A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "School art club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Community service recognition",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "School leadership award",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Robotics competition team award",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The supplied academic record lists an unweighted GPA of 3.47 and a weighted GPA of 3.69.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "Parker intends to explore Accounting.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I recommend Parker Lopez for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The admissions committee should review the complete packet and its own requirements before reaching a decision.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "In a simulated classroom exercise, Parker initially approached a difficult question with a confident hypothesis.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Parker asked the group to state the assumption and check it against the task.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "The resulting conversation showed persistence and consideration for classmates.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I recommend Parker Lopez for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "The admissions committee should review the complete packet and its own requirements before reaching a decision.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "My stated academic interest is Accounting.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "School art club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "Community service recognition, School leadership award, Robotics competition team award",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "Not provided",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "Narrative responses are fictional. Structured entries reproduce the supplied CSV; missing information has not been inferred. No college-specific prompt was supplied.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 3.69",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP US History A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "strengths",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Macroeconomics A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "strengths",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Chemistry A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "strengths",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Art History A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "strengths",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Research A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "strengths",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "My stated academic interest is Accounting.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP US History A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Macroeconomics A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Chemistry A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Art History A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Research A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 3.69",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.47",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP US History A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Macroeconomics A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Chemistry A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Art History A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Research A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored ACT Score 31",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP US History A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Macroeconomics A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Chemistry A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Art History A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Research A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 3.69",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.47",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored ACT Score 31",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "My stated academic interest is Accounting.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "In a simulated classroom exercise, Parker initially approached a difficult question with a confident hypothesis.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Parker asked the group to state the assumption and check it against the task.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "The resulting conversation showed persistence and consideration for classmates.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 3.69",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.47",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored ACT Score 31",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP US History A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Macroeconomics A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Chemistry A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Art History A",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Research A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "School art club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Community service recognition",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "School leadership award",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Robotics competition team award",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The supplied academic record lists an unweighted GPA of 3.47 and a weighted GPA of 3.69.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "Parker intends to explore Accounting.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I recommend Parker Lopez for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The admissions committee should review the complete packet and its own requirements before reaching a decision.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "In a simulated classroom exercise, Parker initially approached a difficult question with a confident hypothesis.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Parker asked the group to state the assumption and check it against the task.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "The resulting conversation showed persistence and consideration for classmates.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I recommend Parker Lopez for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "The admissions committee should review the complete packet and its own requirements before reaching a decision.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "My stated academic interest is Accounting.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "School art club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "Community service recognition, School leadership award, Robotics competition team award",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The supplied academic record lists an unweighted GPA of 3.47 and a weighted GPA of 3.69.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "Parker intends to explore Accounting.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I recommend Parker Lopez for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The admissions committee should review the complete packet and its own requirements before reaching a decision.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+        "verification_status": "TEXT_VERIFIED"
+      }
+    ],
+    "generated_at": "2026-10-22 01:05:17.509803+00:00",
+    "updated_at": "2026-10-22 01:05:17.509803+00:00"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "commit": "2383eb2e328a3d901c55bb87d6b0d87910fc14ba",
+  "date": "2026-10-18",
+  "application_source_fix": "ai_agent/summarizing_agent.py completion logging uses output path directly",
+  "fresh_dossier_status": "DOSSIER_READY",
+  "fresh_run_id": 2,
+  "runtime_seconds": 531.6,
+  "uploaded_pdf_hashes_matched": 149,
+  "api_checks_passed": 14,
+  "standard_ui_build": "Turbopack passed; styles verified",
+  "webpack_fallback": "compiles without required Tailwind utilities",
+  "service_cleanup": "UI and two test containers stopped; volumes retained; APP_014 fixture removed",
+  "python": {
+    "tests": 61,
+    "failures": 9,
+    "errors": 0,
+    "skipped": 0
+  },
+  "contracts": {
+    "tests": 25,
+    "failures": 19,
+    "errors": 0,
+    "skipped": 0
+  }
+}

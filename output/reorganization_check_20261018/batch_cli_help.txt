@@ -1,0 +1,28 @@
+usage: python.exe -m ingestion.run_ingestion_check [-h]
+                                                   [--input-dir INPUT_DIR]
+                                                   [--config CONFIG]
+                                                   [--output OUTPUT]
+                                                   [--affected-ids AFFECTED_IDS]
+                                                   [--require-object-storage]
+                                                   [--require-postgresql]
+
+Run Admissions Two-Pass Ingestion & Manifest Completeness Gate across an
+applicant batch.
+
+options:
+  -h, --help            show this help message and exit
+  --input-dir, -i INPUT_DIR
+                        Path to the input batch directory containing applicant
+                        subfolders and/or CSV (default: data/batches/batch_01)
+  --config, -c CONFIG   Path to ingestion rules YAML file (default:
+                        policy/ingestion_rules.yaml)
+  --output, -o OUTPUT   Path to output audit log report file (default: derived
+                        from input batch directory)
+  --affected-ids, -a AFFECTED_IDS
+                        Exact output path for this run (default: unique
+                        affected_ids_<timestamp>_<id>.json)
+  --require-object-storage
+                        Fail instead of exporting a handoff when MinIO is
+                        unavailable.
+  --require-postgresql  Fail instead of exporting a handoff when PostgreSQL
+                        falls back to SQLite.

@@ -1,0 +1,3038 @@
+{
+  "facts": [
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "field": "unweighted_gpa",
+      "fixture_csv_expected": 3.97,
+      "dossier_value": 3.97,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "field": "weighted_gpa",
+      "fixture_csv_expected": 4.4,
+      "dossier_value": 4.4,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "field": "sat_superscore",
+      "fixture_csv_expected": 1530.0,
+      "dossier_value": 1530,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "field": "act_superscore",
+      "fixture_csv_expected": 35.0,
+      "dossier_value": 35,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "field": "unweighted_gpa",
+      "fixture_csv_expected": 3.97,
+      "dossier_value": 3.97,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "field": "weighted_gpa",
+      "fixture_csv_expected": 4.4,
+      "dossier_value": 4.4,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "field": "sat_superscore",
+      "fixture_csv_expected": 1530.0,
+      "dossier_value": 1530,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "field": "act_superscore",
+      "fixture_csv_expected": 35.0,
+      "dossier_value": 35,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "field": "unweighted_gpa",
+      "fixture_csv_expected": 3.47,
+      "dossier_value": 3.47,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "field": "weighted_gpa",
+      "fixture_csv_expected": 3.89,
+      "dossier_value": 3.89,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "field": "sat_superscore",
+      "fixture_csv_expected": 31.0,
+      "dossier_value": 31,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "field": "act_superscore",
+      "fixture_csv_expected": null,
+      "dossier_value": null,
+      "matches_fixture": null,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "field": "unweighted_gpa",
+      "fixture_csv_expected": 4.0,
+      "dossier_value": 4,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "field": "weighted_gpa",
+      "fixture_csv_expected": 4.48,
+      "dossier_value": 4.48,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "field": "sat_superscore",
+      "fixture_csv_expected": null,
+      "dossier_value": null,
+      "matches_fixture": null,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "field": "act_superscore",
+      "fixture_csv_expected": 34.0,
+      "dossier_value": 34,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "field": "unweighted_gpa",
+      "fixture_csv_expected": 3.92,
+      "dossier_value": 3.92,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "field": "weighted_gpa",
+      "fixture_csv_expected": 4.7,
+      "dossier_value": 4.7,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "field": "sat_superscore",
+      "fixture_csv_expected": null,
+      "dossier_value": null,
+      "matches_fixture": null,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "field": "act_superscore",
+      "fixture_csv_expected": null,
+      "dossier_value": null,
+      "matches_fixture": null,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "field": "unweighted_gpa",
+      "fixture_csv_expected": 3.47,
+      "dossier_value": 3.47,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "field": "weighted_gpa",
+      "fixture_csv_expected": 3.69,
+      "dossier_value": 3.69,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "field": "sat_superscore",
+      "fixture_csv_expected": null,
+      "dossier_value": null,
+      "matches_fixture": null,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "field": "act_superscore",
+      "fixture_csv_expected": 31.0,
+      "dossier_value": 31,
+      "matches_fixture": true,
+      "scope": "CSV fixture consistency; not a full narrative accuracy assessment"
+    }
+  ],
+  "citations": [
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Unweighted GPA 3.97",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Weighted GPA 4.4",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Superscored SAT Score 1530",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Superscored ACT Score 35",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Human Geography A-",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Chemistry A",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Comparative Government A",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Computer Science A A-",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Varsity soccer player",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "School art club member",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Environmental club volunteer",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Youth orchestra musician",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Science club member",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Community food bank volunteer",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Library volunteer",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Animal shelter volunteer",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "MVP",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "The supplied academic record lists an unweighted GPA of 3.97 and a weighted GPA of 4.4.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "Drew intends to explore Biomedical Engineering.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "The reported awards are: MVP.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I recommend Drew Young for thoughtful consideration.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "In a simulated classroom exercise, Drew initially approached a difficult question with a confident hypothesis.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "The resulting conversation showed persistence and consideration for classmates.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "I recommend Drew Young for thoughtful consideration.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "My stated academic interest is Biomedical Engineering.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "Varsity soccer player, School art club member, Environmental club volunteer, Youth orchestra musician, Science club member, Community food bank volunteer, Library volunteer, Animal shelter volunteer",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "MVP",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "international student on visa",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Unweighted GPA 3.97",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Weighted GPA 4.4",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Superscored SAT Score 1530",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Superscored ACT Score 35",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Human Geography A-",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Chemistry A",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Comparative Government A",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Computer Science A A-",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Varsity soccer player",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "School art club member",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Environmental club volunteer",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Youth orchestra musician",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Science club member",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Community food bank volunteer",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Library volunteer",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Animal shelter volunteer",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "MVP",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "The supplied academic record lists an unweighted GPA of 3.97 and a weighted GPA of 4.4.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "Drew intends to explore Biomedical Engineering.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "The reported awards are: MVP.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I recommend Drew Young for thoughtful consideration.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "In a simulated classroom exercise, Drew initially approached a difficult question with a confident hypothesis.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "The resulting conversation showed persistence and consideration for classmates.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "I recommend Drew Young for thoughtful consideration.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "My stated academic interest is Biomedical Engineering.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "Varsity soccer player, School art club member, Environmental club volunteer, Youth orchestra musician, Science club member, Community food bank volunteer, Library volunteer, Animal shelter volunteer",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "MVP",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "international student on visa",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Unweighted GPA 3.47",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Weighted GPA 3.89",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Superscored SAT Score 31",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "English 9 A",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "Algebra I A-",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "Biology A-",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "World Geography B",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "English 10 B+",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Debate team member, Coding club member, Drama club performer, Animal shelter volunteer",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Community service recognition",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "The supplied academic record lists an unweighted GPA of 3.47 and a weighted GPA of 3.89.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "Reese intends to explore Philosophy.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I recommend Reese Carter for thoughtful consideration.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "In a simulated classroom exercise, Reese initially approached a difficult question with a confident hypothesis.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "The resulting conversation showed persistence and consideration for classmates.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "I recommend Reese Carter for thoughtful consideration.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "My stated academic interest is Philosophy.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "Debate team member, Coding club member, Drama club performer, Animal shelter volunteer",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "Community service recognition",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "First-Gen",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "Narrative responses are fictional. Structured entries reproduce the supplied CSV; missing information has not been inferred. No college-specific prompt was supplied.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Unweighted GPA 4",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Weighted GPA 4.48",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Rank 32/397",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Superscored ACT Score 34",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Physics C Electricity and Magnetism B+",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Calculus AB A-",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Environmental Science B",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Physics 2 A-",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Concert band musician",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Robotics club member",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "School newspaper editor",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Science club member",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Youth orchestra musician",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "Rowan intends to explore Undecided.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "The application lists these activities: Concert band musician, Robotics club member, School newspaper editor, Science club member, Youth orchestra musician.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I recommend Rowan Foster for thoughtful consideration.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "Rowan initially approached a difficult question with a confident hypothesis.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "That willingness to reconsider is a useful foundation for college work.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "Rowan asked the group to state the assumption and check it against the task.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "I would encourage continued growth in presenting an argument concisely and seeking clarification early.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "I recommend Rowan Foster for thoughtful consideration.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "My stated academic interest is Undecided.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "Concert band musician, Robotics club member, School newspaper editor, Science club member, Youth orchestra musician",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "Not provided",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "None really, gonna do marching band",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "strengths",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "AP Physics C Electricity and Magnetism B+",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "no_exact_normalized_match_requires_review"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "strengths",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "AP Calculus AB A-",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "no_exact_normalized_match_requires_review"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "strengths",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "AP Environmental Science B",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "no_exact_normalized_match_requires_review"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "section": "strengths",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "AP Physics 2 A-",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "no_exact_normalized_match_requires_review"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Unweighted GPA 3.92",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Weighted GPA 4.7",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Intended Major Environmental Science",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Name of HS Columbus High School",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Admission Year 2026",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP English Literature A-",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Research A-",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Computer Science A B+",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Science club member",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Drama club performer",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Coding club member",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Yearbook photographer",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Chess club member",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "School academic honor roll",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "The supplied academic record lists an unweighted GPA of 3.92 and a weighted GPA of 4.7.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "Emerson intends to explore Environmental Science.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "The application lists these activities: Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "The reported awards are: School academic honor roll.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "In a simulated classroom exercise, Emerson initially approached a difficult question with a confident hypothesis.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "Emerson asked the group to state the assumption and check it against the task.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "The resulting conversation showed persistence and consideration for classmates.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "I would encourage continued growth in presenting an argument concisely and seeking clarification early.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "My stated academic interest is Environmental Science.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "School academic honor roll",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "First gen",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "strengths",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Psychology A-",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "strengths",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP US History A-",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "section": "strengths",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Statistics A-",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Weighted GPA 3.69",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Unweighted GPA 3.47",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "academic_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Superscored ACT Score 31",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP US History A",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Macroeconomics A",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Chemistry A-",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Art History A",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "academic_profile",
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Research A-",
+      "agent_verification": "UNVERIFIED_IMAGE_SOURCE",
+      "independent_text_check": "image_only_requires_visual_review"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "School art club member",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Community service recognition",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "School leadership award",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "engagement_profile",
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Robotics competition team award",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "The supplied academic record lists an unweighted GPA of 3.47 and a weighted GPA of 3.69.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "Parker intends to explore Accounting.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I recommend Parker Lopez for thoughtful consideration.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "The admissions committee should review the complete packet and its own requirements before reaching a decision.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "recommendation_profile",
+      "document": "letter_rec1.pdf",
+      "page": 1,
+      "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "In a simulated classroom exercise, Parker initially approached a difficult question with a confident hypothesis.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "Parker asked the group to state the assumption and check it against the task.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "The resulting conversation showed persistence and consideration for classmates.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "I recommend Parker Lopez for thoughtful consideration.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "The admissions committee should review the complete packet and its own requirements before reaching a decision.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "recommendation_profile",
+      "document": "letter_rec2.pdf",
+      "page": 1,
+      "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "My stated academic interest is Accounting.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "School art club member",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "Community service recognition, School leadership award, Robotics competition team award",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "Not provided",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "section": "supplemental_essay_profile",
+      "document": "supplement.pdf",
+      "page": 1,
+      "quote": "Narrative responses are fictional. Structured entries reproduce the supplied CSV; missing information has not been inferred. No college-specific prompt was supplied.",
+      "agent_verification": "TEXT_VERIFIED",
+      "independent_text_check": "normalized_quote_found"
+    }
+  ],
+  "privacy": [
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "restricted_field": "Hooks",
+      "exact_value_matches_in_output": 5,
+      "matching_paths": ".supplemental_essay_profile.responses[3].summary; .supplemental_essay_profile.summary; .supplemental_essay_profile.evidence[6].quote; .holistic_assessment; .evidence_map[35].quote",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "restricted_field": "Gender",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "restricted_field": "Ethnicity",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "restricted_field": "Date_Of_Birth",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "restricted_field": "Mailing_Address",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "restricted_field": "Primary_Phone_Number",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "restricted_field": "Email_Address",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "restricted_field": "Hooks",
+      "exact_value_matches_in_output": 5,
+      "matching_paths": ".supplemental_essay_profile.responses[3].summary; .supplemental_essay_profile.summary; .supplemental_essay_profile.evidence[6].quote; .holistic_assessment; .evidence_map[35].quote",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "restricted_field": "Gender",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "restricted_field": "Ethnicity",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "restricted_field": "Date_Of_Birth",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "restricted_field": "Mailing_Address",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "restricted_field": "Primary_Phone_Number",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "restricted_field": "Email_Address",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "restricted_field": "Hooks",
+      "exact_value_matches_in_output": 8,
+      "matching_paths": ".supplemental_essay_profile.responses[3].summary; .supplemental_essay_profile.summary; .supplemental_essay_profile.evidence[6].quote; .policy_assessment[6].findings; .policy_assessment[6].evidence[3].quote; .holistic_assessment; .evidence_map[26].quote; .evidence_map[47].quote",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "restricted_field": "Gender",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "restricted_field": "Ethnicity",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "restricted_field": "Date_Of_Birth",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "restricted_field": "Mailing_Address",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "restricted_field": "Primary_Phone_Number",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "restricted_field": "Email_Address",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "restricted_field": "Hooks",
+      "exact_value_matches_in_output": 3,
+      "matching_paths": ".supplemental_essay_profile.responses[3].summary; .supplemental_essay_profile.evidence[6].quote; .evidence_map[28].quote",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "restricted_field": "Gender",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "restricted_field": "Ethnicity",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "restricted_field": "Date_Of_Birth",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "restricted_field": "Mailing_Address",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "restricted_field": "Primary_Phone_Number",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "restricted_field": "Email_Address",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "restricted_field": "Hooks",
+      "exact_value_matches_in_output": 7,
+      "matching_paths": ".supplemental_essay_profile.responses[3].summary; .supplemental_essay_profile.evidence[6].quote; .policy_assessment[5].evidence[32].quote; .policy_assessment[6].evidence[27].quote; .evidence_map[35].quote; .evidence_map[106].quote; .evidence_map[134].quote",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "restricted_field": "Ethnicity",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "restricted_field": "Date_Of_Birth",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "restricted_field": "Mailing_Address",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "restricted_field": "Primary_Phone_Number",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "restricted_field": "Email_Address",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "restricted_field": "Gender",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "restricted_field": "Ethnicity",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "restricted_field": "Date_Of_Birth",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "restricted_field": "Mailing_Address",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "restricted_field": "Primary_Phone_Number",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "restricted_field": "Email_Address",
+      "exact_value_matches_in_output": 0,
+      "matching_paths": "",
+      "scope": "Exact fixture-value scan only; absence does not prove privacy"
+    }
+  ],
+  "source_documents": [
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "document": "CommonApp.pdf",
+      "bytes": 6710,
+      "pages": 3,
+      "native_text_pages": 3,
+      "sha256": "7647808bd006ec0daf564995236fbe5e6ec10f5305b83b90ae35c706cbbf60da"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "document": "letter_rec1.pdf",
+      "bytes": 2815,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "ac674ac02e9c0a4243222406d2ab6404cdef693922e73324decf165faf488701"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "document": "letter_rec2.pdf",
+      "bytes": 2764,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "260e97409d272765652bcbd84aa042077e249343a18d3394b71c7793d056e754"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "document": "supplement.pdf",
+      "bytes": 2607,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "5df3787f2d6fa4e665ed3748997cad4a94f3586b24ebaabe968a72a7a5218368"
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "document": "transcript.pdf",
+      "bytes": 385836,
+      "pages": 2,
+      "native_text_pages": 0,
+      "sha256": "9286d92d9f540da37bc56aafbeae7d07e07aa6539d50e7daa58c0351d77ba3bb"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "document": "CommonApp.pdf",
+      "bytes": 6710,
+      "pages": 3,
+      "native_text_pages": 3,
+      "sha256": "7647808bd006ec0daf564995236fbe5e6ec10f5305b83b90ae35c706cbbf60da"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "document": "letter_rec1.pdf",
+      "bytes": 2815,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "ac674ac02e9c0a4243222406d2ab6404cdef693922e73324decf165faf488701"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "document": "letter_rec2.pdf",
+      "bytes": 2764,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "260e97409d272765652bcbd84aa042077e249343a18d3394b71c7793d056e754"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "document": "supplement.pdf",
+      "bytes": 2607,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "5df3787f2d6fa4e665ed3748997cad4a94f3586b24ebaabe968a72a7a5218368"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "document": "transcript.pdf",
+      "bytes": 385836,
+      "pages": 2,
+      "native_text_pages": 0,
+      "sha256": "9286d92d9f540da37bc56aafbeae7d07e07aa6539d50e7daa58c0351d77ba3bb"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "document": "CommonApp.pdf",
+      "bytes": 6413,
+      "pages": 3,
+      "native_text_pages": 3,
+      "sha256": "0ab4c10d456165847297307df45fc8d1e509b92ddeab9ee102da61a3af4e14b7"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "document": "letter_rec1.pdf",
+      "bytes": 2765,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "870ed7c36da8f19e99a5dbaaf755d5bf9c9b6286554698a71d43977dfa6d94a5"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "document": "letter_rec2.pdf",
+      "bytes": 2780,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "56ea5518a14f7c45fba556023cedef9b48849245f9f4bdf5eb2ee84c145ff8ac"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "document": "supplement.pdf",
+      "bytes": 2530,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "f890ac52ef52b153d2d33ecd1fd12e6e9f7fcc71c092139f0f8a992779df6ffc"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "document": "transcript.pdf",
+      "bytes": 227242,
+      "pages": 1,
+      "native_text_pages": 0,
+      "sha256": "3d689642b8ef4ca91f3c26480d93ecd7bf26732698d7ca96d8d78ffde2e7071f"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "document": "CommonApp.pdf",
+      "bytes": 6604,
+      "pages": 3,
+      "native_text_pages": 3,
+      "sha256": "eb8f539858fd8de5c75d17c7e50bf33b5fcea4b8505c311acaf93a8db6fe246b"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "document": "letter_rec1.pdf",
+      "bytes": 2745,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "5f6d490979be28cd16ae41f7e21f881ddf8ddd58a4e7cf48f6a3fe4334c4aaba"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "document": "letter_rec2.pdf",
+      "bytes": 2763,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "d25b1f274d5fd502a3afefd785e7b43ff07d706a707f04dc811cacc15ad14f8b"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "document": "supplement.pdf",
+      "bytes": 2558,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "0f1e203745f0589e076893b2ba36c44d26800da0b738cb1002dc5f380b996f3d"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "document": "transcript.pdf",
+      "bytes": 368591,
+      "pages": 2,
+      "native_text_pages": 0,
+      "sha256": "02b0a98306c6e562464fc05dd3f982e8c8c3a3bb112fce8be02b5757400bf8f1"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "document": "CommonApp.pdf",
+      "bytes": 6562,
+      "pages": 3,
+      "native_text_pages": 3,
+      "sha256": "66d151d218e14001530b73c7f7c9e6c043ac1eabda7fd6a7c1e1c15f54b99a6b"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "document": "letter_rec1.pdf",
+      "bytes": 2777,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "b4ed021400818acf6b222003c1c3d00fd4b7649c1f335bc00fd01ba684ce50a0"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "document": "letter_rec2.pdf",
+      "bytes": 2788,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "f167c615d96daf2e2b348e4d72e1e903a334fdcfd2f55a323dcedd67b5c660e5"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "document": "supplement.pdf",
+      "bytes": 2543,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "2c845545bf6a04ec43d81eae16988630f5706373bcf5e455ffda1595dbe9e583"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "document": "transcript.pdf",
+      "bytes": 372530,
+      "pages": 2,
+      "native_text_pages": 0,
+      "sha256": "871ef14402186a97216803893a105f6abcb3922bd9eb9e942c8f9fe9faaeea2e"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "document": "CommonApp.pdf",
+      "bytes": 6513,
+      "pages": 3,
+      "native_text_pages": 3,
+      "sha256": "86b4268a44205deddef8af3a63208286c2b8b13706ff92b7e0284c1039bf5fd3"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "document": "letter_rec1.pdf",
+      "bytes": 2753,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "bd5506aae99ea31c2ab94c6909071f61b3b48b90a5fd8e93eec9263787f1f05e"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "document": "letter_rec2.pdf",
+      "bytes": 2782,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "544bc957843ff734fe701ecd4f635c0aa7feabd545495c928a8e2dfbfa5f14dd"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "document": "supplement.pdf",
+      "bytes": 2528,
+      "pages": 1,
+      "native_text_pages": 1,
+      "sha256": "de63876e8eee9cb81ef7c277518adf2081fda6ec6912c15486905de7223c1bbf"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "document": "transcript.pdf",
+      "bytes": 245837,
+      "pages": 1,
+      "native_text_pages": 0,
+      "sha256": "5c1b40e6bef94257bcd3687e9d97a779ae9630813d7735ebcc24e68dcd6cea94"
+    }
+  ],
+  "human_review": [
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "run_status": "DOSSIER_READY",
+      "human_reviewer": null,
+      "review_mode_manual_or_assisted": null,
+      "human_review_minutes": null,
+      "facts_checked": null,
+      "factual_errors": null,
+      "citations_checked": null,
+      "citation_errors": null,
+      "correction_minutes": null,
+      "notes": null
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "run_status": "DOSSIER_READY",
+      "human_reviewer": null,
+      "review_mode_manual_or_assisted": null,
+      "human_review_minutes": null,
+      "facts_checked": null,
+      "factual_errors": null,
+      "citations_checked": null,
+      "citation_errors": null,
+      "correction_minutes": null,
+      "notes": null
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "run_status": "DOSSIER_READY",
+      "human_reviewer": null,
+      "review_mode_manual_or_assisted": null,
+      "human_review_minutes": null,
+      "facts_checked": null,
+      "factual_errors": null,
+      "citations_checked": null,
+      "citation_errors": null,
+      "correction_minutes": null,
+      "notes": null
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "run_status": "DOSSIER_READY",
+      "human_reviewer": null,
+      "review_mode_manual_or_assisted": null,
+      "human_review_minutes": null,
+      "facts_checked": null,
+      "factual_errors": null,
+      "citations_checked": null,
+      "citation_errors": null,
+      "correction_minutes": null,
+      "notes": null
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "run_status": "DOSSIER_READY",
+      "human_reviewer": null,
+      "review_mode_manual_or_assisted": null,
+      "human_review_minutes": null,
+      "facts_checked": null,
+      "factual_errors": null,
+      "citations_checked": null,
+      "citation_errors": null,
+      "correction_minutes": null,
+      "notes": null
+    },
+    {
+      "stage": "agent_APP_002_r1",
+      "app_id": "APP_002",
+      "run_status": "AI_VALIDATION_FAILED",
+      "human_reviewer": null,
+      "review_mode_manual_or_assisted": null,
+      "human_review_minutes": null,
+      "facts_checked": null,
+      "factual_errors": null,
+      "citations_checked": null,
+      "citation_errors": null,
+      "correction_minutes": null,
+      "notes": null
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "run_status": "DOSSIER_READY",
+      "human_reviewer": null,
+      "review_mode_manual_or_assisted": null,
+      "human_review_minutes": null,
+      "facts_checked": null,
+      "factual_errors": null,
+      "citations_checked": null,
+      "citation_errors": null,
+      "correction_minutes": null,
+      "notes": null
+    }
+  ],
+  "course_coverage": [
+    {
+      "stage": "agent_APP_012_r1",
+      "app_id": "APP_012",
+      "fixture_ap_courses": 12,
+      "extracted_ap_courses": 11,
+      "fixture_courses_matched": 11,
+      "missing_fixture_courses": "AP Calculus AB",
+      "scope": "Course-name match against fixture CSV; confirm PDF source before treating as an extraction error"
+    },
+    {
+      "stage": "agent_APP_012_r2",
+      "app_id": "APP_012",
+      "fixture_ap_courses": 12,
+      "extracted_ap_courses": 11,
+      "fixture_courses_matched": 11,
+      "missing_fixture_courses": "AP Calculus AB",
+      "scope": "Course-name match against fixture CSV; confirm PDF source before treating as an extraction error"
+    },
+    {
+      "stage": "agent_APP_014_r1",
+      "app_id": "APP_014",
+      "fixture_ap_courses": 0,
+      "extracted_ap_courses": 0,
+      "fixture_courses_matched": 0,
+      "missing_fixture_courses": "",
+      "scope": "Course-name match against fixture CSV; confirm PDF source before treating as an extraction error"
+    },
+    {
+      "stage": "agent_APP_015_r1",
+      "app_id": "APP_015",
+      "fixture_ap_courses": 8,
+      "extracted_ap_courses": 8,
+      "fixture_courses_matched": 8,
+      "missing_fixture_courses": "",
+      "scope": "Course-name match against fixture CSV; confirm PDF source before treating as an extraction error"
+    },
+    {
+      "stage": "agent_APP_017_r1",
+      "app_id": "APP_017",
+      "fixture_ap_courses": 7,
+      "extracted_ap_courses": 7,
+      "fixture_courses_matched": 7,
+      "missing_fixture_courses": "",
+      "scope": "Course-name match against fixture CSV; confirm PDF source before treating as an extraction error"
+    },
+    {
+      "stage": "agent_APP_013_r2",
+      "app_id": "APP_013",
+      "fixture_ap_courses": 5,
+      "extracted_ap_courses": 5,
+      "fixture_courses_matched": 5,
+      "missing_fixture_courses": "",
+      "scope": "Course-name match against fixture CSV; confirm PDF source before treating as an extraction error"
+    }
+  ],
+  "limitations": [
+    "Four numeric academic fields checked against CSV fixtures; CSV and PDFs can disagree.",
+    "Citation matching checks quotation text/location, not claim entailment.",
+    "Scanned-page citations need visual inspection.",
+    "Human reviewer time is not measured. Automated and assistant review do not substitute for it."
+  ]
+}

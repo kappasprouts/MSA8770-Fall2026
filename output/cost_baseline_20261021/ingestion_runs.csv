@@ -1,0 +1,3 @@
+﻿stage,batch,timestamp_utc,applicants_processed,ready,awaiting,incomplete,gate_errors,wall_seconds,upload_attempts,upload_failed_attempts,unique_uploaded_documents,successful_upload_bytes,application_upload_retry_attempts,sdk_internal_retries,postgres_growth_bytes,minio_growth_bytes
+ingestion_batch_01,batch_01,2026-10-22T00:10:06.454508+00:00,10,9,1,0,0,1.6613665000186302,100,0,100,4518220,0,,24576,44628
+ingestion_batch_02,batch_02,2026-10-22T00:10:08.187572+00:00,10,7,1,2,0,0.9525982000050135,49,0,49,2830680,0,,0,0

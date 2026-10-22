@@ -1,0 +1,11 @@
+usage: summarizing_agent.py [-h] [--force] [app_ids ...]
+
+EAOS summarizing agent (RAG + Qwen3-VL) → applicant dossier
+
+positional arguments:
+  app_ids     Applicant IDs (default: output/ingestion/affected_ids.json, else
+              APP_001)
+
+options:
+  -h, --help  show this help message and exit
+  --force     Summarize even if status is not COMPLETE

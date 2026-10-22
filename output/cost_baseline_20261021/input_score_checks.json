@@ -1,0 +1,402 @@
+[
+  {
+    "batch": "batch_01",
+    "app_id": "APP_001",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "1500.0",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_001",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_002",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "1430.0",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_002",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_003",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "1570.0",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_003",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_004",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_004",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "31.0",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_005",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_005",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "32.0",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_006",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "1320.0",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_006",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "31.0",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_007",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_007",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "36.0",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_008",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "1460.0",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_008",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_009",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_009",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "31.0",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_010",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_01",
+    "app_id": "APP_010",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "35.0",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_011",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "1420",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_011",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_012",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "1530",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_012",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "35",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_013",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_013",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "31",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_014",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "31",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "invalid_range_or_type",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_014",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_015",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_015",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "34",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_016",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "1400",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_016",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_017",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_017",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_018",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "1550",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_018",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_019",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "1270",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_019",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "26",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_020",
+    "field": "Superscored_SAT_Score",
+    "fixture_value": "1500",
+    "minimum": 400,
+    "maximum": 1600,
+    "status": "valid",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  },
+  {
+    "batch": "batch_02",
+    "app_id": "APP_020",
+    "field": "Superscored_ACT_Score",
+    "fixture_value": "",
+    "minimum": 1,
+    "maximum": 36,
+    "status": "missing_optional_score",
+    "rule_source": "Existing agent's SAT/ACT validity ranges; optional missing scores are separate"
+  }
+]

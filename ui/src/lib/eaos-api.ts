@@ -1,8 +1,7 @@
-/**
- * EAOS frontend API adapter.
- * These are PROPOSED contracts, not claims about the existing FastAPI routes.
- * Align the three functions below with your actual backend before deployment.
- */
+import { requestJson } from "./http";
+import { parseDecisionTotals, type DecisionTotals } from "./review-state";
+
+/** Next.js API adapter; optional URL overrides support external deployments. */
 export type ApplicationStatus = string;
 export type FinalDecision = 'ACCEPT' | 'WAITLIST' | 'DECLINE';
 
@@ -53,36 +52,32 @@ export function normalizeApplicant(raw: unknown): ApplicantRow {
 }
 
 async function request(path: string, init?: RequestInit): Promise<unknown> {
-  let response: Response;
-  try {
-    response = await fetch(`${BASE_URL}${path}`, { cache: 'no-store', ...init, headers: { 'Accept': 'application/json', ...(init?.body ? { 'Content-Type': 'application/json' } : {}), ...init?.headers } });
-  } catch {
-    throw new Error('Cannot connect to FastAPI. Check that the backend is running and CORS permits this frontend.');
-  }
-  if (!response.ok) {
-    const body = await response.text();
-    throw new Error(`FastAPI returned ${response.status}${body ? `: ${body.slice(0, 240)}` : ''}`);
-  }
-  if (response.status === 204) return null;
-  return response.json();
+  return requestJson<unknown>(`${BASE_URL}${path}`, { ...init, headers: { ...(init?.body ? { 'Content-Type': 'application/json' } : {}), ...init?.headers } });
 }
 function extractRows(payload: unknown): ApplicantRow[] {
   const list = Array.isArray(payload) ? payload : get(asObject(payload), 'applicants', 'items', 'results', 'queue');
   if (!Array.isArray(list)) throw new Error('Expected an array of applicants, or an object with applicants/items/results/queue.');
   return list.map(normalizeApplicant);
 }
-export async function getReviewQueue(): Promise<ApplicantRow[]> {
-  return extractRows(await request(QUEUE_PATH));
+export async function getReviewQueue(signal?: AbortSignal): Promise<ApplicantRow[]> {
+  return extractRows(await request(QUEUE_PATH, { signal }));
 }
 export async function getFinalDecisionQueue(): Promise<ApplicantRow[]> {
-  return extractRows(await request(FINAL_QUEUE_PATH));
+  return (await getFinalDecisionData()).applicants;
+}
+export async function getFinalDecisionData(signal?: AbortSignal): Promise<{ applicants: ApplicantRow[]; totals: DecisionTotals | null }> {
+  const data = await request(FINAL_QUEUE_PATH, { signal });
+  return {
+    applicants: extractRows(data),
+    totals: parseDecisionTotals(Array.isArray(data) ? null : asObject(data).totals),
+  };
 }
 export async function submitFinalDecision(appId: string, decision: FinalDecision): Promise<void> {
   const path = FINAL_DECISION_PATH.replace('{id}', encodeURIComponent(appId));
   await request(path, { method: 'PUT', body: JSON.stringify({ final_decision: decision }) });
 }
 
-/** UI #2 route is configurable to preserve the existing implementation. */
+/** Canonical applicant dossier route; the home page redirects legacy bookmarks. */
 export function dossierHref(appId: string): string {
-  return `/?appId=${encodeURIComponent(appId)}`;
+  return `/applicant-review?appId=${encodeURIComponent(appId)}`;
 }

@@ -1,0 +1,9 @@
+[
+  {
+    "app_id": "APP_012",
+    "runs": 2,
+    "content_identical_excluding_timestamps": true,
+    "minimum_wall_seconds": 531.0464847999974,
+    "maximum_wall_seconds": 541.2667314999853
+  }
+]

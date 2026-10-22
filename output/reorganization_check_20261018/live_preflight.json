@@ -1,0 +1,1591 @@
+{
+  "database": {
+    "name": "rsu_live_test"
+  },
+  "policies": {
+    "count": 21,
+    "dimensions": 768
+  },
+  "documents": [
+    {
+      "app_id": "APP_001",
+      "file": "activities_and_awards.pdf",
+      "bytes": 46518,
+      "sha256": "bde711d53d3192a1fc2075b523475d3541ad571b199032877a96c4a9c4446c4d",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_001",
+      "file": "advanced_coursework_and_ap_scores.pdf",
+      "bytes": 44702,
+      "sha256": "80c234e028891c75f8a2dd2b4e194cff21c820bab6a606eee0de57d9b26a3ff2",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_001",
+      "file": "application_form.pdf",
+      "bytes": 44563,
+      "sha256": "b78146262669979f899250d7fd79c6948f408768ba3f7d02c50b8f44d8c73e8c",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_001",
+      "file": "common_app_application.pdf",
+      "bytes": 46165,
+      "sha256": "96420676308e33b88a0037ac7959a0dfc81594bbb9d311c3455d072a96bf19ae",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_001",
+      "file": "personal_statement.pdf",
+      "bytes": 45343,
+      "sha256": "9089ae25f327c1dbde7abfc9c823c8e571d19c911e99d71426901d229dceb4f0",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_001",
+      "file": "recommendation_letter_1.pdf",
+      "bytes": 44985,
+      "sha256": "9e1897c528758b3f4c554452025ac245af19b817e75d8b37ea22081b06dc7e2e",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_001",
+      "file": "recommendation_letter_2.pdf",
+      "bytes": 44987,
+      "sha256": "1c21df58a46b98eecce7a2711c2fecbee773c543403c4c91af52409d5868d335",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_001",
+      "file": "standardized_test_score.pdf",
+      "bytes": 44378,
+      "sha256": "7494e7c39d8cff3418da2b2a57151680450713783c52736dffc9ffd2ad01142d",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_001",
+      "file": "transcript.pdf",
+      "bytes": 46637,
+      "sha256": "36e1f8b4c4dd557ae50cab6f30486bf99a703b074232af618deaf60156b0cf02",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_001",
+      "file": "university_supplement.pdf",
+      "bytes": 44709,
+      "sha256": "713794766a7f1335a9d6596a6fcab7a73665c018e7cfa3efa1cd30635ec88d11",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_002",
+      "file": "activities_and_awards.pdf",
+      "bytes": 46331,
+      "sha256": "359e2ec346caa6a67b06b810aef847c0d680421907eb73315594bf7ceda71131",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_002",
+      "file": "advanced_coursework_and_ap_scores.pdf",
+      "bytes": 44386,
+      "sha256": "834ec27756bb833a9eed74b47d6b57843bcbe65b911edea0fc3dcd860126e5b8",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_002",
+      "file": "application_form.pdf",
+      "bytes": 44570,
+      "sha256": "962910d18b680a1b7ea6ae96d39dd7b4c2df144f96ae8fff28c59d29ca91698f",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_002",
+      "file": "common_app_application.pdf",
+      "bytes": 46110,
+      "sha256": "80bad437dce84fec7fc6a036a17a5da5152fe0d08036af8c435c6f4cb9901050",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_002",
+      "file": "personal_statement.pdf",
+      "bytes": 45339,
+      "sha256": "10ee1648b808543ff814475ae7ad5399a48de2bc80599ff04f7dc05fc6547f46",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_002",
+      "file": "recommendation_letter_1.pdf",
+      "bytes": 44999,
+      "sha256": "4957a54b109704439060d817fa69ec861c50fb707b37f32c540f91d7471baa7d",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_002",
+      "file": "recommendation_letter_2.pdf",
+      "bytes": 45004,
+      "sha256": "94b27b0439bc95d0117d55918728835b18dbb91b8ff5c994e20f50c921bd8b7c",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_002",
+      "file": "standardized_test_score.pdf",
+      "bytes": 44378,
+      "sha256": "8418bbfbf116e7ca8db5a29f85c5f977a831e765526cdffe4db91c3608df38cd",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_002",
+      "file": "transcript.pdf",
+      "bytes": 46578,
+      "sha256": "301f8e02dd50cd23e5daf2cb7b98a6c060731d014a3eaa2b562dea7e8e6a370b",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_002",
+      "file": "university_supplement.pdf",
+      "bytes": 44747,
+      "sha256": "ce2f26c25aae37135af79d4597e2b08b9f642dd362eb6e7093d055470fdca980",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_003",
+      "file": "activities_and_awards.pdf",
+      "bytes": 46471,
+      "sha256": "fb8edef71e4f933f47c2abc32c3c92bcd0a452abbff7665261b972e8b3662b7f",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_003",
+      "file": "advanced_coursework_and_ap_scores.pdf",
+      "bytes": 45617,
+      "sha256": "6debe08623ad5eec049098c457755abf45631fc01f97dd9ca7fb227c8db3c5bb",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_003",
+      "file": "application_form.pdf",
+      "bytes": 44574,
+      "sha256": "39d53510221d4d7c87515a01a5e5bce07ccc20220b6cd1263f6266e2a8646127",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_003",
+      "file": "common_app_application.pdf",
+      "bytes": 46117,
+      "sha256": "5bc8bc4428b160926a57db6b5defe8fef802f834300d763b2e9f7ba1ecd6b2aa",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_003",
+      "file": "personal_statement.pdf",
+      "bytes": 45336,
+      "sha256": "ca3db6986406bf30253e47cda214eebd5987c8c2cea015e10f59c430f9990002",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_003",
+      "file": "recommendation_letter_1.pdf",
+      "bytes": 44974,
+      "sha256": "e442669a2193dda92f2b88297623ebfac6223c2d9c4e8c1fb253528089b07f35",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_003",
+      "file": "recommendation_letter_2.pdf",
+      "bytes": 44974,
+      "sha256": "e2814c266349580e58d66755e416c2d8d5acfad4c872bc5f19e7e1181637c2e5",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_003",
+      "file": "standardized_test_score.pdf",
+      "bytes": 44378,
+      "sha256": "88c82ca7f8a308c9c2ca91fc9922b6c67e2d148800672fcd78469a34293db609",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_003",
+      "file": "transcript.pdf",
+      "bytes": 46596,
+      "sha256": "ff28a6476188376e455935996455d57ec7e8879d22b992261d2f95a7d8ae82f1",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_003",
+      "file": "university_supplement.pdf",
+      "bytes": 44753,
+      "sha256": "12e991728b01012897eb04f3b4dc9b4f0d3cf56f74e4fa79c02f92c8c212a5cc",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_004",
+      "file": "activities_and_awards.pdf",
+      "bytes": 44516,
+      "sha256": "a97c8471b9bbd2f06923675dbd5cfa8c01f4f8cb8cd251663748cadd323c1f8e",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_004",
+      "file": "advanced_coursework_and_ap_scores.pdf",
+      "bytes": 44659,
+      "sha256": "2406488035bf36b1e7ab24b498bebb4b3d68e1e10bc48483c4d17dc3428c857d",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_004",
+      "file": "application_form.pdf",
+      "bytes": 44558,
+      "sha256": "01194f0c1818df873c644ecf27a95ba72b868ea9f738e9d1bc0b07d0cea62c83",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_004",
+      "file": "common_app_application.pdf",
+      "bytes": 45978,
+      "sha256": "09959665d6b152fff66bbed947dd138dd51e1bd9ed05fd15442e4e29417eff8d",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_004",
+      "file": "personal_statement.pdf",
+      "bytes": 45324,
+      "sha256": "af3625b3b12bd02952341d4de031f2fd29466e51e01c12f740519297e134ee3f",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_004",
+      "file": "recommendation_letter_1.pdf",
+      "bytes": 44974,
+      "sha256": "5ff8171e4d5b0a395ad8c8923d320b9f6eb40ac664bc596fbce887a54d1459cc",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_004",
+      "file": "recommendation_letter_2.pdf",
+      "bytes": 44975,
+      "sha256": "e57099b5f825b874ca4e8f2d03b8a277cb810a4eb6696dee0142d66a1be84d1d",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_004",
+      "file": "standardized_test_score.pdf",
+      "bytes": 44381,
+      "sha256": "9a50f0916f6487e3a3795018a2f309fd752687117805c2b8fdcc59178796f282",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_004",
+      "file": "transcript.pdf",
+      "bytes": 46584,
+      "sha256": "d2fa575dcd6a62646e642269ba6c70995e3e2438e7e81ea18c9abb84c751efc3",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_004",
+      "file": "university_supplement.pdf",
+      "bytes": 44709,
+      "sha256": "d1a961d805cb267a54ce85e70aa6c1363b00a644f2a1e4497d22231093ba30eb",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_005",
+      "file": "activities_and_awards.pdf",
+      "bytes": 46313,
+      "sha256": "2fe979e10f3b4459208448221967caf4d3b0ec58874cc86c09a4f3687824a544",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_005",
+      "file": "advanced_coursework_and_ap_scores.pdf",
+      "bytes": 44683,
+      "sha256": "5f9a3f155ec60db63c54ea3bd8d0abf98cf21629b34a57fc1c2cde400c7c12c8",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_005",
+      "file": "application_form.pdf",
+      "bytes": 44557,
+      "sha256": "802c602ebb52a00465d70339a00b92b4f786ec8c8e7a4192ad74c5149bd243f5",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_005",
+      "file": "common_app_application.pdf",
+      "bytes": 46101,
+      "sha256": "28428ee973d63082c5da6cbb6079db727f4e23073ed15b82005c0530cd6aba54",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_005",
+      "file": "exception_supporting_document.pdf",
+      "bytes": 44540,
+      "sha256": "22bb4195ed7cab8ab808bfe6006513778871ec12719fe766240c958e93e7c518",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_005",
+      "file": "personal_statement.pdf",
+      "bytes": 45336,
+      "sha256": "313eff4bb5113379407f5017378ac980cd62bea788cda0f1b05b543e48fdd246",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_005",
+      "file": "recommendation_letter_1.pdf",
+      "bytes": 44967,
+      "sha256": "161d6075b9e46f785e5dae234ea51ec857546875aa1168398fff7a8f8f74770a",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_005",
+      "file": "recommendation_letter_2.pdf",
+      "bytes": 44969,
+      "sha256": "78aba323bf8ea56ecd38ce55cbb11384644629c6d6816417fd7090c54dbb585a",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_005",
+      "file": "standardized_test_score.pdf",
+      "bytes": 44382,
+      "sha256": "3db68b64fe512923d7d7d542ce5d02b0827ffd2e3dc932a4b25c2c3c28c19784",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_005",
+      "file": "transcript.pdf",
+      "bytes": 46554,
+      "sha256": "1b5abd9deebc703827b5835fec7d13ff652fd17dd6c83d93043f8f3ab4551fa2",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_005",
+      "file": "university_supplement.pdf",
+      "bytes": 44756,
+      "sha256": "fcdb5c4d461085efbbef3d3c884f1bd37f86cb342519da08dad72c6ab56f2634",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_006",
+      "file": "activities_and_awards.pdf",
+      "bytes": 44659,
+      "sha256": "887d084224d3aa033f95c2ce9ad37f3c47cb80976b0f4db823ef814b8244bf91",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_006",
+      "file": "advanced_coursework_and_ap_scores.pdf",
+      "bytes": 44614,
+      "sha256": "de9e98319b29e56220e39faf87376c131cf493fca91de335218d7ec952be86e7",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_006",
+      "file": "application_form.pdf",
+      "bytes": 44560,
+      "sha256": "be3cf2daad2875632674a54915904f60da31ef809aee08a1923ee53420e2c364",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_006",
+      "file": "common_app_application.pdf",
+      "bytes": 45994,
+      "sha256": "3c0ad47d6d08943e191cfeacfaa8ba0aa2175c18896ec19ad247d68eed6f8de4",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_006",
+      "file": "personal_statement.pdf",
+      "bytes": 45338,
+      "sha256": "2bffb50731bf49f2f87185fec13f6d4493f69ebb8edabe8199dab8709b14730a",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_006",
+      "file": "recommendation_letter_1.pdf",
+      "bytes": 44997,
+      "sha256": "f28b8b06104d78fe26a566e0eb6b30f4b5b7834b2e614c4435f7850320bf3feb",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_006",
+      "file": "recommendation_letter_2.pdf",
+      "bytes": 45002,
+      "sha256": "c9e5bf9ea0940f98f084b18dd54ddfe25a493aaf4d47b7d807f955dcc7bc1d30",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_006",
+      "file": "standardized_test_score.pdf",
+      "bytes": 44412,
+      "sha256": "b3de29650c9afbf913a7223ebbaffb74466dcfc621097b0846635c3617678ede",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_006",
+      "file": "transcript.pdf",
+      "bytes": 46595,
+      "sha256": "a19b4f5740090036cc0596e6e03460f51270295de84f218f4ec786a702006f09",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_006",
+      "file": "university_supplement.pdf",
+      "bytes": 44717,
+      "sha256": "f52f70500f103aa02d6fbf228a43ba6b933dd6e3d5f405adf9b1e57cafc15e45",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_007",
+      "file": "activities_and_awards.pdf",
+      "bytes": 44834,
+      "sha256": "0275c945575fcb1e965c88d3745aa09edfe7d088ded13aa3e2eecf8f64b75c41",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_007",
+      "file": "advanced_coursework_and_ap_scores.pdf",
+      "bytes": 45620,
+      "sha256": "901973d483e41ed15b7dc179dde8980db403158426e360a8446e1bd261686080",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_007",
+      "file": "application_form.pdf",
+      "bytes": 44549,
+      "sha256": "4e53b041107641e671be6a3790cc9fe449071c5f24ea8dd03534bd8f0266fc59",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_007",
+      "file": "common_app_application.pdf",
+      "bytes": 46043,
+      "sha256": "bf51e4c3ef85c2986c7f24699efcaa688e75cb811ace909c9798e094f3484c35",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_007",
+      "file": "personal_statement.pdf",
+      "bytes": 45318,
+      "sha256": "5e368c993dc21551099352dc6b29aedfd0882e1e42bc5d78351aedf5a6481f44",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_007",
+      "file": "recommendation_letter_1.pdf",
+      "bytes": 44987,
+      "sha256": "c02c2c3a47979bc3b695753dee625cc03da92d615b2c65ea5d3a3707e379cc0f",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_007",
+      "file": "recommendation_letter_2.pdf",
+      "bytes": 44989,
+      "sha256": "0015c228fe67ef62fcf367e79fc39b86104a485abd5a14461b38c646c3d8aa20",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_007",
+      "file": "standardized_test_score.pdf",
+      "bytes": 44380,
+      "sha256": "20cf2870e49af14de1cb93e5f5e5a1fe3d407a3715c1e6271a6a33b4b1e9626f",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_007",
+      "file": "transcript.pdf",
+      "bytes": 46810,
+      "sha256": "a6fb02cfa3e3089353c2c622c9129500704b30daf94698bbb0e6163717bc954f",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_007",
+      "file": "university_supplement.pdf",
+      "bytes": 44701,
+      "sha256": "7b82a3bf59066e478202ae0e07fe6b39f08361ae37bd0681ba33bbfbd45ab431",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_008",
+      "file": "activities_and_awards.pdf",
+      "bytes": 44857,
+      "sha256": "0cd3d038bfabaf7835855a5ec07b0c9c5898854bf20cf0f05cba243433979989",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_008",
+      "file": "advanced_coursework_and_ap_scores.pdf",
+      "bytes": 45683,
+      "sha256": "bd91cda1fdbcb13f7b90fa2f6cad361c4d22ba226b8ee4ae6e5ce22ba7085510",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_008",
+      "file": "application_form.pdf",
+      "bytes": 44558,
+      "sha256": "360d8b5eebfd08c67dcba482d00715a41b221749ba0728a6d3204fc3a5a6c598",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_008",
+      "file": "common_app_application.pdf",
+      "bytes": 46081,
+      "sha256": "92965685e609878b4364cbc53ad4da77bb34dd417bbbfb5085bb4a68d7dbfaf8",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_008",
+      "file": "personal_statement.pdf",
+      "bytes": 45326,
+      "sha256": "7bd0deef5332aade94b48dcc65bc859c2f73947e6bfdf0604053eeffe9dbe92b",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_008",
+      "file": "recommendation_letter_1.pdf",
+      "bytes": 44995,
+      "sha256": "bc3cf70e2f7008c55713b1798be7f6e5365659ab3a3ed0c2ce0b05a2dd07f41e",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_008",
+      "file": "recommendation_letter_2.pdf",
+      "bytes": 44997,
+      "sha256": "80c069daac9d651abc28325b81259d3b4e739817664fb5d340d90a840cba6b45",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_008",
+      "file": "standardized_test_score.pdf",
+      "bytes": 44377,
+      "sha256": "2d75fe4bcbd3701f9b441cacdcbba92a8331a2c700e5c73587c1b4d60bee8e7f",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_008",
+      "file": "transcript.pdf",
+      "bytes": 44370,
+      "sha256": "e725f436b15ca65ff77f89bb37e9f2354d72eac7ed1c2b321d22981a8b3fce4e",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_008",
+      "file": "university_supplement.pdf",
+      "bytes": 44706,
+      "sha256": "75b28e488619b48ceddc9cef4dd749ee703afa1bde70cb9196aa417fb6bfab6f",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_009",
+      "file": "activities_and_awards.pdf",
+      "bytes": 46487,
+      "sha256": "d9340c7c3d165b2c583a546d108dab4ec42e956e6d6224be262b9c48b08da79c",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_009",
+      "file": "advanced_coursework_and_ap_scores.pdf",
+      "bytes": 45742,
+      "sha256": "057d8ba82016ff713ff73f6675cbe1af5167edc0e171cec9971de10be14cfce4",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_009",
+      "file": "application_form.pdf",
+      "bytes": 44572,
+      "sha256": "73f1e26b8fab8961abf690f28c98f2bcfe6163489fed56175c0b95064b6e41c2",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_009",
+      "file": "common_app_application.pdf",
+      "bytes": 46135,
+      "sha256": "bf63c017349c0435605f813b20e298d7308b01eb232a2a71c146568f335a9cf9",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_009",
+      "file": "personal_statement.pdf",
+      "bytes": 45340,
+      "sha256": "b1ec8727d86e40333177b1fe24bcd3de6704cc98b2105f5749eddbce689f0149",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_009",
+      "file": "recommendation_letter_1.pdf",
+      "bytes": 44965,
+      "sha256": "91f936c87d6ee2ab0fcf86a41d2cc64debd1105e76fe3c0e1ea9b1ffd00b9b67",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_009",
+      "file": "recommendation_letter_2.pdf",
+      "bytes": 44970,
+      "sha256": "b3ffd495e628aee83d7609f5decbc25ab56328faeac53c1a8a27682b665475a8",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_009",
+      "file": "standardized_test_score.pdf",
+      "bytes": 44380,
+      "sha256": "d973d3122d7f5eb91ed75fd3964b1ecb97934a286588732526e11ca998ec225e",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_009",
+      "file": "transcript.pdf",
+      "bytes": 46583,
+      "sha256": "e8ccb38e90a8b9bd123ad60d243e5fdf967e7eef02de338ed1042d73b3aab88e",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_009",
+      "file": "university_supplement.pdf",
+      "bytes": 44724,
+      "sha256": "ddf2476129d429df9624e43b6f1b38f5ab55997a9323063e764f221788d67ab5",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_010",
+      "file": "activities_and_awards.pdf",
+      "bytes": 44601,
+      "sha256": "5a408ba8b74116e23fb373f2edf2961ff6c10e8b4353dbf8d60d75142cf8684c",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_010",
+      "file": "advanced_coursework_and_ap_scores.pdf",
+      "bytes": 44773,
+      "sha256": "0b654902bfcda6cac2ce6a6b079208834cd7bdae6f5a32e50dbc49b844824df1",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_010",
+      "file": "application_form.pdf",
+      "bytes": 44558,
+      "sha256": "1f10ba884b5a729d2284356a3035557fce3c27ffc75857f028b2d299b50adca2",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_010",
+      "file": "common_app_application.pdf",
+      "bytes": 45946,
+      "sha256": "fca652fdb4878a483a072df0cff02144f8c12f8b79cf1dc86abb7bf7cf18afb4",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_010",
+      "file": "personal_statement.pdf",
+      "bytes": 45325,
+      "sha256": "d44317022940d28c7f86bab49844c10b715dfcd525246443eef0add28fc908ac",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_010",
+      "file": "recommendation_letter_1.pdf",
+      "bytes": 44958,
+      "sha256": "e3d6dc1294c35a932d2289bb91fd33ee60c64eb856e3788f2419f7575eea0053",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_010",
+      "file": "recommendation_letter_2.pdf",
+      "bytes": 44964,
+      "sha256": "597cea831ed5ae197cc21813df53e8fad95f24b726d40966c97df3a7785b2f8e",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_010",
+      "file": "standardized_test_score.pdf",
+      "bytes": 44381,
+      "sha256": "9c2e730cd9bdc24a480bafc16c47cee303a87fc82242b9700fcd32008d86806c",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_010",
+      "file": "university_supplement.pdf",
+      "bytes": 44712,
+      "sha256": "799c4dafc608836e172cdfc2ec63e3a2ca9f36734042e7850d45af859c0ab07e",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_011",
+      "file": "CommonApp.pdf",
+      "bytes": 6557,
+      "sha256": "6702e314b19f926a12b94a99b0ab26555180455f6e2e05316cb46aa900cbea7d",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_011",
+      "file": "letter_rec1.pdf",
+      "bytes": 2715,
+      "sha256": "8d98f831676711311fd31637b9f5fe26442618ac1add7616357d704472ddb04b",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_011",
+      "file": "letter_rec2.pdf",
+      "bytes": 2764,
+      "sha256": "763f8e7f97f3c052e5ea99c776228ee5e86b177a9721208856c2512ba4e04deb",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_011",
+      "file": "supplement.pdf",
+      "bytes": 2494,
+      "sha256": "cc3380cdd7808d57a055a66b1f544701b190351cb649a758611153098adec15c",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_012",
+      "file": "CommonApp.pdf",
+      "bytes": 6710,
+      "sha256": "7647808bd006ec0daf564995236fbe5e6ec10f5305b83b90ae35c706cbbf60da",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_012",
+      "file": "letter_rec1.pdf",
+      "bytes": 2815,
+      "sha256": "ac674ac02e9c0a4243222406d2ab6404cdef693922e73324decf165faf488701",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_012",
+      "file": "letter_rec2.pdf",
+      "bytes": 2764,
+      "sha256": "260e97409d272765652bcbd84aa042077e249343a18d3394b71c7793d056e754",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_012",
+      "file": "supplement.pdf",
+      "bytes": 2607,
+      "sha256": "5df3787f2d6fa4e665ed3748997cad4a94f3586b24ebaabe968a72a7a5218368",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_012",
+      "file": "transcript.pdf",
+      "bytes": 385836,
+      "sha256": "9286d92d9f540da37bc56aafbeae7d07e07aa6539d50e7daa58c0351d77ba3bb",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_013",
+      "file": "CommonApp.pdf",
+      "bytes": 6513,
+      "sha256": "86b4268a44205deddef8af3a63208286c2b8b13706ff92b7e0284c1039bf5fd3",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_013",
+      "file": "letter_rec1.pdf",
+      "bytes": 2753,
+      "sha256": "bd5506aae99ea31c2ab94c6909071f61b3b48b90a5fd8e93eec9263787f1f05e",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_013",
+      "file": "letter_rec2.pdf",
+      "bytes": 2782,
+      "sha256": "544bc957843ff734fe701ecd4f635c0aa7feabd545495c928a8e2dfbfa5f14dd",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_013",
+      "file": "supplement.pdf",
+      "bytes": 2528,
+      "sha256": "de63876e8eee9cb81ef7c277518adf2081fda6ec6912c15486905de7223c1bbf",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_013",
+      "file": "transcript.pdf",
+      "bytes": 245837,
+      "sha256": "5c1b40e6bef94257bcd3687e9d97a779ae9630813d7735ebcc24e68dcd6cea94",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_014",
+      "file": "CommonApp.pdf",
+      "bytes": 6413,
+      "sha256": "0ab4c10d456165847297307df45fc8d1e509b92ddeab9ee102da61a3af4e14b7",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_014",
+      "file": "letter_rec1.pdf",
+      "bytes": 2765,
+      "sha256": "870ed7c36da8f19e99a5dbaaf755d5bf9c9b6286554698a71d43977dfa6d94a5",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_014",
+      "file": "letter_rec2.pdf",
+      "bytes": 2780,
+      "sha256": "56ea5518a14f7c45fba556023cedef9b48849245f9f4bdf5eb2ee84c145ff8ac",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_014",
+      "file": "supplement.pdf",
+      "bytes": 2530,
+      "sha256": "f890ac52ef52b153d2d33ecd1fd12e6e9f7fcc71c092139f0f8a992779df6ffc",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_014",
+      "file": "transcript.pdf",
+      "bytes": 227242,
+      "sha256": "3d689642b8ef4ca91f3c26480d93ecd7bf26732698d7ca96d8d78ffde2e7071f",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_015",
+      "file": "CommonApp.pdf",
+      "bytes": 6604,
+      "sha256": "eb8f539858fd8de5c75d17c7e50bf33b5fcea4b8505c311acaf93a8db6fe246b",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_015",
+      "file": "letter_rec1.pdf",
+      "bytes": 2745,
+      "sha256": "5f6d490979be28cd16ae41f7e21f881ddf8ddd58a4e7cf48f6a3fe4334c4aaba",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_015",
+      "file": "letter_rec2.pdf",
+      "bytes": 2763,
+      "sha256": "d25b1f274d5fd502a3afefd785e7b43ff07d706a707f04dc811cacc15ad14f8b",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_015",
+      "file": "supplement.pdf",
+      "bytes": 2558,
+      "sha256": "0f1e203745f0589e076893b2ba36c44d26800da0b738cb1002dc5f380b996f3d",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_015",
+      "file": "transcript.pdf",
+      "bytes": 368591,
+      "sha256": "02b0a98306c6e562464fc05dd3f982e8c8c3a3bb112fce8be02b5757400bf8f1",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_016",
+      "file": "CommonApp.pdf",
+      "bytes": 6479,
+      "sha256": "cb97f4b8a31d3e459085fa7e78acc807c8e00737838df2ca38844da561c02e5b",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_016",
+      "file": "letter_rec1.pdf",
+      "bytes": 2772,
+      "sha256": "0f2d3db50101921f0d060c80f4abed70695999a1b1367ab96ee1bab5df3d1503",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_016",
+      "file": "letter_rec2.pdf",
+      "bytes": 2760,
+      "sha256": "11ebf5a7294539cb3e73e81ada1e25e90b58563285d3b7cae6574be752f48f1b",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_016",
+      "file": "supplement.pdf",
+      "bytes": 2539,
+      "sha256": "c15203ecb7241c32fbc74b057f97df7767c199dd725b106330be2d164f36772a",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_016",
+      "file": "transcript.pdf",
+      "bytes": 241563,
+      "sha256": "ba6d344dc8d95894ceab6d708d3127501052311e5adbf45c9bff70afb0ebbee4",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_017",
+      "file": "CommonApp.pdf",
+      "bytes": 6562,
+      "sha256": "66d151d218e14001530b73c7f7c9e6c043ac1eabda7fd6a7c1e1c15f54b99a6b",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_017",
+      "file": "letter_rec1.pdf",
+      "bytes": 2777,
+      "sha256": "b4ed021400818acf6b222003c1c3d00fd4b7649c1f335bc00fd01ba684ce50a0",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_017",
+      "file": "letter_rec2.pdf",
+      "bytes": 2788,
+      "sha256": "f167c615d96daf2e2b348e4d72e1e903a334fdcfd2f55a323dcedd67b5c660e5",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_017",
+      "file": "supplement.pdf",
+      "bytes": 2543,
+      "sha256": "2c845545bf6a04ec43d81eae16988630f5706373bcf5e455ffda1595dbe9e583",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_017",
+      "file": "transcript.pdf",
+      "bytes": 372530,
+      "sha256": "871ef14402186a97216803893a105f6abcb3922bd9eb9e942c8f9fe9faaeea2e",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_018",
+      "file": "CommonApp.pdf",
+      "bytes": 6643,
+      "sha256": "f995607b9e39e340bf2c26acac52cba152a066e35fdddc22c7cbc786536a1df8",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_018",
+      "file": "letter_rec1.pdf",
+      "bytes": 2849,
+      "sha256": "de535ec4fa4d62ef1eb7e6af1bf2cd4c121e12c64dffe28973adf716b39f4b4a",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_018",
+      "file": "letter_rec2.pdf",
+      "bytes": 2763,
+      "sha256": "825d8c63565d2045d2abe8412d993b0a1f83246b111be516bce294cc8b8717b6",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_018",
+      "file": "supplement.pdf",
+      "bytes": 2615,
+      "sha256": "81bd936024c9d7fe6911b83c7fcea95e7d3fa069ae3eee77f78388e7206e233f",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_018",
+      "file": "transcript.pdf",
+      "bytes": 370388,
+      "sha256": "1531ad0aad919924b062ebec5380c49ec6b7b8df4df9a49668675a64539143c0",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_019",
+      "file": "CommonApp.pdf",
+      "bytes": 6455,
+      "sha256": "e04c0b4201e9ae2ad3eb863a8705e61e47535de884ee6534c160b647f9bfe209",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_019",
+      "file": "letter_rec1.pdf",
+      "bytes": 2699,
+      "sha256": "56f2942c17ffcc4b5081c8a6e60bbffe122da53d54502f89890372ce82ba5ab6",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_019",
+      "file": "letter_rec2.pdf",
+      "bytes": 2754,
+      "sha256": "da8edbffde777ce1d2ab4c8b30157a9909ef328b0834af612261e4bb444b0ecc",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_019",
+      "file": "supplement.pdf",
+      "bytes": 2492,
+      "sha256": "de8ad1c5e386c8c43fc7984e0c3c455d3a74c984d341c4aaa1e232e17788bd49",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_019",
+      "file": "transcript.pdf",
+      "bytes": 246885,
+      "sha256": "c4f408c569f908f04bdbc1949c56740e949aeed2bafe7d87bb6a052a19cda362",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_020",
+      "file": "CommonApp.pdf",
+      "bytes": 6328,
+      "sha256": "a68c5a54d19ffaafc9166eb385d237f6f5f8736029f8a7dc3ec77e5d5a982103",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_020",
+      "file": "letter_rec1.pdf",
+      "bytes": 2675,
+      "sha256": "8d6c0cdb82fe501400b601402a143f34d4c564e29493b9d666c5715449e5db0a",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_020",
+      "file": "letter_rec2.pdf",
+      "bytes": 2765,
+      "sha256": "f5cb5741e99ce485a35e5544a223e71b708e8f5198b9f9eb1922d6ee4d8a4b27",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_020",
+      "file": "supplement.pdf",
+      "bytes": 2445,
+      "sha256": "7727db3dc2116846fe0087759383c90efe9c93c76c3d6480c50c7cf70a1580ea",
+      "matches_source": true
+    },
+    {
+      "app_id": "APP_020",
+      "file": "transcript.pdf",
+      "bytes": 225945,
+      "sha256": "17e8191066ce137d1f4900fefd8a22ea33dfd42bf340f8014243184c69caca67",
+      "matches_source": true
+    }
+  ],
+  "ready_applicants": {
+    "APP_001": {
+      "load_problems": [],
+      "withheld": [
+        "common_app_application.pdf",
+        "personal_statement.pdf"
+      ],
+      "section_documents": {
+        "academic": [
+          "application_form.pdf",
+          "standardized_test_score.pdf",
+          "transcript.pdf"
+        ],
+        "engagement": [
+          "application_form.pdf"
+        ],
+        "recommendation": [
+          "recommendation_letter_1.pdf",
+          "recommendation_letter_2.pdf"
+        ],
+        "supplement": [
+          "university_supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": [
+        "activities_and_awards.pdf",
+        "advanced_coursework_and_ap_scores.pdf"
+      ]
+    },
+    "APP_002": {
+      "load_problems": [],
+      "withheld": [
+        "common_app_application.pdf",
+        "personal_statement.pdf"
+      ],
+      "section_documents": {
+        "academic": [
+          "application_form.pdf",
+          "standardized_test_score.pdf",
+          "transcript.pdf"
+        ],
+        "engagement": [
+          "application_form.pdf"
+        ],
+        "recommendation": [
+          "recommendation_letter_1.pdf",
+          "recommendation_letter_2.pdf"
+        ],
+        "supplement": [
+          "university_supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": [
+        "activities_and_awards.pdf",
+        "advanced_coursework_and_ap_scores.pdf"
+      ]
+    },
+    "APP_003": {
+      "load_problems": [],
+      "withheld": [
+        "common_app_application.pdf",
+        "personal_statement.pdf"
+      ],
+      "section_documents": {
+        "academic": [
+          "application_form.pdf",
+          "standardized_test_score.pdf",
+          "transcript.pdf"
+        ],
+        "engagement": [
+          "application_form.pdf"
+        ],
+        "recommendation": [
+          "recommendation_letter_1.pdf",
+          "recommendation_letter_2.pdf"
+        ],
+        "supplement": [
+          "university_supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": [
+        "activities_and_awards.pdf",
+        "advanced_coursework_and_ap_scores.pdf"
+      ]
+    },
+    "APP_004": {
+      "load_problems": [],
+      "withheld": [
+        "common_app_application.pdf",
+        "personal_statement.pdf"
+      ],
+      "section_documents": {
+        "academic": [
+          "application_form.pdf",
+          "standardized_test_score.pdf",
+          "transcript.pdf"
+        ],
+        "engagement": [
+          "application_form.pdf"
+        ],
+        "recommendation": [
+          "recommendation_letter_1.pdf",
+          "recommendation_letter_2.pdf"
+        ],
+        "supplement": [
+          "university_supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": [
+        "activities_and_awards.pdf",
+        "advanced_coursework_and_ap_scores.pdf"
+      ]
+    },
+    "APP_005": {
+      "load_problems": [],
+      "withheld": [
+        "common_app_application.pdf",
+        "personal_statement.pdf"
+      ],
+      "section_documents": {
+        "academic": [
+          "application_form.pdf",
+          "standardized_test_score.pdf",
+          "transcript.pdf"
+        ],
+        "engagement": [
+          "application_form.pdf"
+        ],
+        "recommendation": [
+          "recommendation_letter_1.pdf",
+          "recommendation_letter_2.pdf"
+        ],
+        "supplement": [
+          "university_supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": [
+        "activities_and_awards.pdf",
+        "advanced_coursework_and_ap_scores.pdf",
+        "exception_supporting_document.pdf"
+      ]
+    },
+    "APP_006": {
+      "load_problems": [],
+      "withheld": [
+        "common_app_application.pdf",
+        "personal_statement.pdf"
+      ],
+      "section_documents": {
+        "academic": [
+          "application_form.pdf",
+          "standardized_test_score.pdf",
+          "transcript.pdf"
+        ],
+        "engagement": [
+          "application_form.pdf"
+        ],
+        "recommendation": [
+          "recommendation_letter_1.pdf",
+          "recommendation_letter_2.pdf"
+        ],
+        "supplement": [
+          "university_supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": [
+        "activities_and_awards.pdf",
+        "advanced_coursework_and_ap_scores.pdf"
+      ]
+    },
+    "APP_007": {
+      "load_problems": [],
+      "withheld": [
+        "common_app_application.pdf",
+        "personal_statement.pdf"
+      ],
+      "section_documents": {
+        "academic": [
+          "application_form.pdf",
+          "standardized_test_score.pdf",
+          "transcript.pdf"
+        ],
+        "engagement": [
+          "application_form.pdf"
+        ],
+        "recommendation": [
+          "recommendation_letter_1.pdf",
+          "recommendation_letter_2.pdf"
+        ],
+        "supplement": [
+          "university_supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": [
+        "activities_and_awards.pdf",
+        "advanced_coursework_and_ap_scores.pdf"
+      ]
+    },
+    "APP_008": {
+      "load_problems": [],
+      "withheld": [
+        "common_app_application.pdf",
+        "personal_statement.pdf"
+      ],
+      "section_documents": {
+        "academic": [
+          "application_form.pdf",
+          "standardized_test_score.pdf",
+          "transcript.pdf"
+        ],
+        "engagement": [
+          "application_form.pdf"
+        ],
+        "recommendation": [
+          "recommendation_letter_1.pdf",
+          "recommendation_letter_2.pdf"
+        ],
+        "supplement": [
+          "university_supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": [
+        "activities_and_awards.pdf",
+        "advanced_coursework_and_ap_scores.pdf"
+      ]
+    },
+    "APP_009": {
+      "load_problems": [],
+      "withheld": [
+        "common_app_application.pdf",
+        "personal_statement.pdf"
+      ],
+      "section_documents": {
+        "academic": [
+          "application_form.pdf",
+          "standardized_test_score.pdf",
+          "transcript.pdf"
+        ],
+        "engagement": [
+          "application_form.pdf"
+        ],
+        "recommendation": [
+          "recommendation_letter_1.pdf",
+          "recommendation_letter_2.pdf"
+        ],
+        "supplement": [
+          "university_supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": [
+        "activities_and_awards.pdf",
+        "advanced_coursework_and_ap_scores.pdf"
+      ]
+    },
+    "APP_012": {
+      "load_problems": [],
+      "withheld": [],
+      "section_documents": {
+        "academic": [
+          "CommonApp.pdf",
+          "transcript.pdf"
+        ],
+        "engagement": [
+          "CommonApp.pdf"
+        ],
+        "recommendation": [
+          "letter_rec1.pdf",
+          "letter_rec2.pdf"
+        ],
+        "supplement": [
+          "supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": []
+    },
+    "APP_013": {
+      "load_problems": [
+        {
+          "filename": "CommonApp.pdf",
+          "type": "application_form",
+          "error": "Hooks redaction verification failed"
+        }
+      ],
+      "withheld": [],
+      "section_documents": {
+        "academic": [
+          "transcript.pdf"
+        ],
+        "engagement": [],
+        "recommendation": [
+          "letter_rec1.pdf",
+          "letter_rec2.pdf"
+        ],
+        "supplement": [
+          "supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": []
+    },
+    "APP_014": {
+      "load_problems": [],
+      "withheld": [],
+      "section_documents": {
+        "academic": [
+          "CommonApp.pdf",
+          "transcript.pdf"
+        ],
+        "engagement": [
+          "CommonApp.pdf"
+        ],
+        "recommendation": [
+          "letter_rec1.pdf",
+          "letter_rec2.pdf"
+        ],
+        "supplement": [
+          "supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": []
+    },
+    "APP_015": {
+      "load_problems": [],
+      "withheld": [],
+      "section_documents": {
+        "academic": [
+          "CommonApp.pdf",
+          "transcript.pdf"
+        ],
+        "engagement": [
+          "CommonApp.pdf"
+        ],
+        "recommendation": [
+          "letter_rec1.pdf",
+          "letter_rec2.pdf"
+        ],
+        "supplement": [
+          "supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": []
+    },
+    "APP_016": {
+      "load_problems": [
+        {
+          "filename": "CommonApp.pdf",
+          "type": "application_form",
+          "error": "Hooks redaction verification failed"
+        }
+      ],
+      "withheld": [],
+      "section_documents": {
+        "academic": [
+          "transcript.pdf"
+        ],
+        "engagement": [],
+        "recommendation": [
+          "letter_rec1.pdf",
+          "letter_rec2.pdf"
+        ],
+        "supplement": [
+          "supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": []
+    },
+    "APP_017": {
+      "load_problems": [],
+      "withheld": [],
+      "section_documents": {
+        "academic": [
+          "CommonApp.pdf",
+          "transcript.pdf"
+        ],
+        "engagement": [
+          "CommonApp.pdf"
+        ],
+        "recommendation": [
+          "letter_rec1.pdf",
+          "letter_rec2.pdf"
+        ],
+        "supplement": [
+          "supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": []
+    },
+    "APP_020": {
+      "load_problems": [
+        {
+          "filename": "CommonApp.pdf",
+          "type": "application_form",
+          "error": "Hooks redaction verification failed"
+        }
+      ],
+      "withheld": [],
+      "section_documents": {
+        "academic": [
+          "transcript.pdf"
+        ],
+        "engagement": [],
+        "recommendation": [
+          "letter_rec1.pdf",
+          "letter_rec2.pdf"
+        ],
+        "supplement": [
+          "supplement.pdf"
+        ]
+      },
+      "loaded_but_unused": []
+    }
+  },
+  "applicants": [
+    {
+      "app_id": "APP_001",
+      "status": "READY_FOR_REVIEW"
+    },
+    {
+      "app_id": "APP_002",
+      "status": "READY_FOR_REVIEW"
+    },
+    {
+      "app_id": "APP_003",
+      "status": "READY_FOR_REVIEW"
+    },
+    {
+      "app_id": "APP_004",
+      "status": "READY_FOR_REVIEW"
+    },
+    {
+      "app_id": "APP_005",
+      "status": "READY_FOR_REVIEW"
+    },
+    {
+      "app_id": "APP_006",
+      "status": "READY_FOR_REVIEW"
+    },
+    {
+      "app_id": "APP_007",
+      "status": "READY_FOR_REVIEW"
+    },
+    {
+      "app_id": "APP_008",
+      "status": "READY_FOR_REVIEW"
+    },
+    {
+      "app_id": "APP_009",
+      "status": "READY_FOR_REVIEW"
+    },
+    {
+      "app_id": "APP_010",
+      "status": "AWAITING_MATERIALS"
+    },
+    {
+      "app_id": "APP_011",
+      "status": "AWAITING_MATERIALS"
+    },
+    {
+      "app_id": "APP_012",
+      "status": "READY_FOR_REVIEW"
+    },
+    {
+      "app_id": "APP_013",
+      "status": "READY_FOR_REVIEW"
+    },
+    {
+      "app_id": "APP_014",
+      "status": "READY_FOR_REVIEW"
+    },
+    {
+      "app_id": "APP_015",
+      "status": "READY_FOR_REVIEW"
+    },
+    {
+      "app_id": "APP_016",
+      "status": "READY_FOR_REVIEW"
+    },
+    {
+      "app_id": "APP_017",
+      "status": "READY_FOR_REVIEW"
+    },
+    {
+      "app_id": "APP_018",
+      "status": "INCOMPLETE"
+    },
+    {
+      "app_id": "APP_019",
+      "status": "INCOMPLETE"
+    },
+    {
+      "app_id": "APP_020",
+      "status": "READY_FOR_REVIEW"
+    }
+  ],
+  "actual_default_agent_ids": [
+    "APP_001",
+    "APP_002",
+    "APP_003",
+    "APP_004",
+    "APP_005",
+    "APP_006",
+    "APP_007",
+    "APP_008",
+    "APP_009"
+  ],
+  "batch_02_ready_handoff": [
+    "APP_012",
+    "APP_013",
+    "APP_014",
+    "APP_015",
+    "APP_016",
+    "APP_017",
+    "APP_020"
+  ],
+  "uploaded_files_verified": 149,
+  "render_failures": {
+    "APP_013": [
+      {
+        "filename": "CommonApp.pdf",
+        "type": "application_form",
+        "error": "Hooks redaction verification failed"
+      }
+    ],
+    "APP_016": [
+      {
+        "filename": "CommonApp.pdf",
+        "type": "application_form",
+        "error": "Hooks redaction verification failed"
+      }
+    ],
+    "APP_020": [
+      {
+        "filename": "CommonApp.pdf",
+        "type": "application_form",
+        "error": "Hooks redaction verification failed"
+      }
+    ]
+  }
+}

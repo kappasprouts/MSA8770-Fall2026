@@ -1,0 +1,7 @@
+﻿stage,app_id,fixture_ap_courses,extracted_ap_courses,fixture_courses_matched,missing_fixture_courses,scope
+agent_APP_012_r1,APP_012,12,11,11,AP Calculus AB,Course-name match against fixture CSV; confirm PDF source before treating as an extraction error
+agent_APP_012_r2,APP_012,12,11,11,AP Calculus AB,Course-name match against fixture CSV; confirm PDF source before treating as an extraction error
+agent_APP_014_r1,APP_014,0,0,0,,Course-name match against fixture CSV; confirm PDF source before treating as an extraction error
+agent_APP_015_r1,APP_015,8,8,8,,Course-name match against fixture CSV; confirm PDF source before treating as an extraction error
+agent_APP_017_r1,APP_017,7,7,7,,Course-name match against fixture CSV; confirm PDF source before treating as an extraction error
+agent_APP_013_r2,APP_013,5,5,5,,Course-name match against fixture CSV; confirm PDF source before treating as an extraction error

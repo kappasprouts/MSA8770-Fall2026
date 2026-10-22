@@ -1,0 +1,464 @@
+{
+  "run": {
+    "app_id": "APP_002",
+    "documents_sent": {
+      "activities_and_awards.pdf": [
+        1,
+        2
+      ],
+      "advanced_coursework_and_ap_scores.pdf": [
+        1
+      ],
+      "application_form.pdf": [
+        1
+      ],
+      "recommendation_letter_1.pdf": [
+        1
+      ],
+      "recommendation_letter_2.pdf": [
+        1
+      ],
+      "standardized_test_score.pdf": [
+        1
+      ],
+      "transcript.pdf": [
+        1,
+        2
+      ],
+      "university_supplement.pdf": [
+        1
+      ]
+    },
+    "documents_withheld": {
+      "common_app_application.pdf": "restricted demographic/contact data",
+      "personal_statement.pdf": "POL-ESSAY-01 personal statement (humans only)"
+    },
+    "policies_retrieved": [
+      {
+        "policy_id": "POL-001",
+        "title": "Academic Rigor & Contextual GPA Evaluation",
+        "similarity": 0.662,
+        "query": "academic rigor AP IB dual enrollment GPA class rank"
+      },
+      {
+        "policy_id": "POL-003",
+        "title": "Academic Rigor & Contextual GPA Evaluation",
+        "similarity": 0.674,
+        "query": "standardized testing SAT ACT test optional academic index"
+      },
+      {
+        "policy_id": "POL-006",
+        "title": "Standardized Testing Distributions",
+        "similarity": 0.726,
+        "query": "standardized testing SAT ACT test optional academic index"
+      },
+      {
+        "policy_id": "POL-007",
+        "title": "The Academic Index (AI) Formula",
+        "similarity": 0.652,
+        "query": "standardized testing SAT ACT test optional academic index"
+      },
+      {
+        "policy_id": "POL-009",
+        "title": "Extracurricular Impact Tiers",
+        "similarity": 0.608,
+        "query": "extracurricular activities awards leadership intellectual curiosity"
+      },
+      {
+        "policy_id": "POL-012",
+        "title": "Intellectual Curiosity & Institutional Contribution",
+        "similarity": 0.624,
+        "query": "extracurricular activities awards leadership intellectual curiosity"
+      },
+      {
+        "policy_id": "POL-013",
+        "title": "Intellectual Curiosity & Institutional Contribution",
+        "similarity": 0.658,
+        "query": "extracurricular activities awards leadership intellectual curiosity"
+      },
+      {
+        "policy_id": "POL-014",
+        "title": "Recommendation Weight & Letters of Evaluation",
+        "similarity": 0.609,
+        "query": "academic rigor AP IB dual enrollment GPA class rank"
+      },
+      {
+        "policy_id": "POL-015",
+        "title": "Recommendation Weight & Letters of Evaluation",
+        "similarity": 0.575,
+        "query": "holistic academic review institutional contribution"
+      }
+    ],
+    "attempts": 5,
+    "runtime_seconds": 256.6,
+    "validation": {
+      "passed": false,
+      "failed_sections": {
+        "academic": [
+          "output: cites Official Academic Transcript page 1, which was not provided.",
+          "output: cites Standardized Test Score Report page 1, which was not provided.",
+          "output: cites Official Academic Transcript page 1, which was not provided.",
+          "output: cites Official Academic Transcript page 2, which was not provided.",
+          "output: cites Undergraduate Application Record page 1, which was not provided.",
+          "output: cites Undergraduate Application Record page 1, which was not provided.",
+          "output: cites Undergraduate Application Record page 1, which was not provided.",
+          "output: cites Official Academic Transcript page 1, which was not provided."
+        ]
+      },
+      "load_problems": [],
+      "calls": [
+        {
+          "section": "academic",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 5075,
+            "output_tokens": 647,
+            "seconds": 62.0
+          },
+          "errors": [
+            "output: cites Official Academic Transcript page 1, which was not provided.",
+            "output: cites Standardized Test Score Report page 1, which was not provided.",
+            "output: cites Official Academic Transcript page 1, which was not provided.",
+            "output: cites Official Academic Transcript page 2, which was not provided.",
+            "output: cites Undergraduate Application Record page 1, which was not provided.",
+            "output: cites Undergraduate Application Record page 1, which was not provided.",
+            "output: cites Undergraduate Application Record page 1, which was not provided.",
+            "output: cites Official Academic Transcript page 1, which was not provided."
+          ]
+        },
+        {
+          "section": "academic",
+          "attempt": 2,
+          "usage": {
+            "prompt_tokens": 5268,
+            "output_tokens": 752,
+            "seconds": 62.9
+          },
+          "errors": [
+            "output: cites Official Academic Transcript page 1, which was not provided.",
+            "output: cites Standardized Test Score Report page 1, which was not provided.",
+            "output: cites Official Academic Transcript page 1, which was not provided.",
+            "output: cites Official Academic Transcript page 2, which was not provided.",
+            "output: cites Undergraduate Application Record page 1, which was not provided.",
+            "output: cites Undergraduate Application Record page 1, which was not provided.",
+            "output: cites Undergraduate Application Record page 1, which was not provided.",
+            "output: cites Official Academic Transcript page 1, which was not provided."
+          ]
+        },
+        {
+          "section": "engagement",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 1690,
+            "output_tokens": 63,
+            "seconds": 4.2
+          },
+          "errors": []
+        },
+        {
+          "section": "recommendation",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 2616,
+            "output_tokens": 1221,
+            "seconds": 84.5
+          },
+          "errors": []
+        },
+        {
+          "section": "supplement",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 1471,
+            "output_tokens": 674,
+            "seconds": 40.9
+          },
+          "errors": []
+        }
+      ]
+    },
+    "run_status": "AI_VALIDATION_FAILED",
+    "failed_output": {
+      "completed_sections": {
+        "engagement": {
+          "activities": [],
+          "awards": [],
+          "summary": "No activities or awards could be established from the available CommonApp pages.",
+          "leadership_service_employment": "",
+          "themes": [],
+          "assessment": "",
+          "notes": [],
+          "evidence": []
+        },
+        "recommendation": {
+          "recommenders": [
+            {
+              "name": "Quinn Lane",
+              "role": "School Counselor, Madison High School",
+              "document": "recommendation_letter_1.pdf",
+              "relationship": "known for three years through academic planning, course selection, and school activities",
+              "key_observations": [
+                "I have known Jordan for three years through academic planning, course selection, and school activities.",
+                "Jordan helped the group move from broad intentions to a workable plan, checked that responsibilities were understood, and followed up when deadlines changed.",
+                "Academically, Jordan approaches difficult material with persistence.",
+                "Questions are specific, revision is taken seriously, and connections are made between classroom ideas and an emerging interest in Theatre, Political Science, Business.",
+                "I recommend Jordan Ellis with confidence. The student will bring reliability, curiosity, and a collaborative spirit to a university community."
+              ]
+            },
+            {
+              "name": "Patricia Gomez",
+              "role": "Teacher, Madison High School",
+              "document": "recommendation_letter_2.pdf",
+              "relationship": "known for two semesters in an advanced seminar and a collaborative capstone project",
+              "key_observations": [
+                "I have known Jordan for two semesters in an advanced seminar and a collaborative capstone project.",
+                "Jordan helped the group move from broad intentions to a workable plan, checked that responsibilities were understood, and followed up when deadlines changed.",
+                "Academically, Jordan approaches difficult material with persistence.",
+                "Questions are specific, revision is taken seriously, and connections are made between classroom ideas and an emerging interest in Theatre, Political Science, Business.",
+                "I recommend Jordan Ellis with confidence. The student will bring reliability, curiosity, and a collaborative spirit to a university community."
+              ]
+            }
+          ],
+          "summary": "Both recommenders, a school counselor and a teacher, independently state that they have known Jordan Ellis for a significant period (three years and two semesters, respectively) and that Jordan is a thoughtful student who prepares carefully, responds constructively to feedback, and contributes to the learning of others. Both highlight Jordan\u2019s ability to help a group move from broad intentions to a workable plan, check responsibilities, and follow up on changes. Academically, both note Jordan\u2019s persistence with difficult material, specific questions, serious revision, and connections between classroom ideas and interests in Theatre, Political Science, and Business. Both recommend Jordan with confidence, stating the student will bring reliability, curiosity, and a collaborative spirit to a university community.",
+          "common_themes": [
+            "Thoughtful student who prepares carefully",
+            "Responds constructively to feedback",
+            "Contributes to the learning of others",
+            "Ability to help a group move from broad intentions to a workable plan",
+            "Persistence with difficult material",
+            "Specific questions and serious revision",
+            "Connections between classroom ideas and interests",
+            "Reliability, curiosity, and collaborative spirit"
+          ],
+          "strengths_identified": [
+            "Thoughtful student who prepares carefully",
+            "Responds constructively to feedback",
+            "Contributes to the learning of others",
+            "Ability to help a group move from broad intentions to a workable plan",
+            "Persistence with difficult material",
+            "Specific questions and serious revision",
+            "Connections between classroom ideas and interests",
+            "Reliability, curiosity, and collaborative spirit"
+          ],
+          "notes": [],
+          "evidence": [
+            {
+              "document": "recommendation_letter_1.pdf",
+              "page": 1,
+              "quote": "I have known Jordan for three years through academic planning, course selection, and school activities.",
+              "verification_status": "TEXT_VERIFIED"
+            },
+            {
+              "document": "recommendation_letter_1.pdf",
+              "page": 1,
+              "quote": "Jordan helped the group move from broad intentions to a workable plan, checked that responsibilities were understood, and followed up when deadlines changed.",
+              "verification_status": "TEXT_VERIFIED"
+            },
+            {
+              "document": "recommendation_letter_1.pdf",
+              "page": 1,
+              "quote": "Academically, Jordan approaches difficult material with persistence.",
+              "verification_status": "TEXT_VERIFIED"
+            },
+            {
+              "document": "recommendation_letter_1.pdf",
+              "page": 1,
+              "quote": "Questions are specific, revision is taken seriously, and connections are made between classroom ideas and an emerging interest in Theatre, Political Science, Business.",
+              "verification_status": "TEXT_VERIFIED"
+            },
+            {
+              "document": "recommendation_letter_1.pdf",
+              "page": 1,
+              "quote": "I recommend Jordan Ellis with confidence. The student will bring reliability, curiosity, and a collaborative spirit to a university community.",
+              "verification_status": "TEXT_VERIFIED"
+            },
+            {
+              "document": "recommendation_letter_2.pdf",
+              "page": 1,
+              "quote": "I have known Jordan for two semesters in an advanced seminar and a collaborative capstone project.",
+              "verification_status": "TEXT_VERIFIED"
+            },
+            {
+              "document": "recommendation_letter_2.pdf",
+              "page": 1,
+              "quote": "Jordan helped the group move from broad intentions to a workable plan, checked that responsibilities were understood, and followed up when deadlines changed.",
+              "verification_status": "TEXT_VERIFIED"
+            },
+            {
+              "document": "recommendation_letter_2.pdf",
+              "page": 1,
+              "quote": "Academically, Jordan approaches difficult material with persistence.",
+              "verification_status": "TEXT_VERIFIED"
+            },
+            {
+              "document": "recommendation_letter_2.pdf",
+              "page": 1,
+              "quote": "Questions are specific, revision is taken seriously, and connections are made between classroom ideas and an emerging interest in Theatre, Political Science, Business.",
+              "verification_status": "TEXT_VERIFIED"
+            },
+            {
+              "document": "recommendation_letter_2.pdf",
+              "page": 1,
+              "quote": "I recommend Jordan Ellis with confidence. The student will bring reliability, curiosity, and a collaborative spirit to a university community.",
+              "verification_status": "TEXT_VERIFIED"
+            }
+          ]
+        },
+        "supplement": {
+          "responses": [
+            {
+              "prompt": "Why Riverview State University?",
+              "summary": "The applicant wants to connect Theatre, Political Science, and Business through project-based learning, learn from diverse peers, use faculty feedback, and contribute to evidence-based, clear-communication teams."
+            },
+            {
+              "prompt": "Community Contribution",
+              "summary": "As a varsity soccer player, the applicant learned to identify group obstacles, and plans to apply this by listening first, clarifying goals, volunteering for concrete tasks, and documenting group learning."
+            },
+            {
+              "prompt": "Academic Curiosity",
+              "summary": "The applicant wants to explore how tools from Theatre, Political Science, and Business can be responsibly applied with incomplete information, especially in courses combining analysis, writing, and collaborative problem solving."
+            }
+          ],
+          "summary": "The applicant is drawn to Riverview State University\u2019s project-based curriculum to integrate Theatre, Political Science, and Business with real-world questions. They aim to learn from diverse peers, use faculty feedback, and contribute to evidence-based teams. Their community contribution stems from varsity soccer experience, where they learned to identify group obstacles and plan to apply this by listening, clarifying goals, volunteering, and documenting learning. Academically, they are curious about responsibly applying interdisciplinary tools with incomplete information, especially in courses combining analysis, writing, and collaborative problem solving.",
+          "major_themes": [
+            "Project-based learning integration across disciplines",
+            "Learning from diverse peers and faculty feedback",
+            "Community contribution through problem-solving and documentation",
+            "Academic curiosity in interdisciplinary application with incomplete information"
+          ],
+          "notes": [],
+          "evidence": [
+            {
+              "document": "university_supplement.pdf",
+              "page": 1,
+              "quote": "I am interested in Riverview State University because its project-based curriculum would let me connect Theatre, Political Science, Business with questions that matter outside a single classroom.",
+              "verification_status": "TEXT_VERIFIED"
+            },
+            {
+              "document": "university_supplement.pdf",
+              "page": 1,
+              "quote": "I hope to learn from students with different experiences, use faculty feedback to improve my work, and contribute to teams that value both evidence and clear communication.",
+              "verification_status": "TEXT_VERIFIED"
+            },
+            {
+              "document": "university_supplement.pdf",
+              "page": 1,
+              "quote": "Through varsity soccer player, I learned to notice which tasks are preventing a group from moving forward.",
+              "verification_status": "TEXT_VERIFIED"
+            },
+            {
+              "document": "university_supplement.pdf",
+              "page": 1,
+              "quote": "I would bring that practical habit to campus organizations: listen first, clarify the goal, volunteer for concrete work, and help the group document what it learns.",
+              "verification_status": "TEXT_VERIFIED"
+            },
+            {
+              "document": "university_supplement.pdf",
+              "page": 1,
+              "quote": "A question I want to explore is how tools and methods from Theatre, Political Science, Business can be applied responsibly when information is incomplete.",
+              "verification_status": "TEXT_VERIFIED"
+            },
+            {
+              "document": "university_supplement.pdf",
+              "page": 1,
+              "quote": "I am especially interested in courses that combine analysis, writing, and collaborative problem solving.",
+              "verification_status": "TEXT_VERIFIED"
+            }
+          ]
+        }
+      },
+      "failed_sections": {
+        "academic": {
+          "errors": [
+            "output: cites Official Academic Transcript page 1, which was not provided.",
+            "output: cites Standardized Test Score Report page 1, which was not provided.",
+            "output: cites Official Academic Transcript page 1, which was not provided.",
+            "output: cites Official Academic Transcript page 2, which was not provided.",
+            "output: cites Undergraduate Application Record page 1, which was not provided.",
+            "output: cites Undergraduate Application Record page 1, which was not provided.",
+            "output: cites Undergraduate Application Record page 1, which was not provided.",
+            "output: cites Official Academic Transcript page 1, which was not provided."
+          ],
+          "output": {
+            "document_facts": {
+              "unweighted_gpa": 3.3,
+              "weighted_gpa": null,
+              "class_rank": null,
+              "sat_superscore": 1430,
+              "act_superscore": null,
+              "intended_major": "Theatre, Political Science, Business",
+              "high_school": "Madison High School",
+              "expected_graduation": "June 2026"
+            },
+            "ap_courses_on_transcript": [
+              {
+                "course": "AP English Language",
+                "grade_level": "11",
+                "final_grade": "B+"
+              },
+              {
+                "course": "AP Government",
+                "grade_level": "11",
+                "final_grade": "A"
+              }
+            ],
+            "ap_exam_scores": [],
+            "summary": "The applicant, Jordan Ellis, has a cumulative unweighted GPA of 3.30 and an SAT score of 1430. The transcript shows coursework from grades 9 through 12, including AP courses in English Language and Government, with grades of B+ and A, respectively. The applicant is expected to graduate in June 2026.",
+            "course_rigor": "The applicant took a range of courses including AP-level classes in English Language and Government, indicating a commitment to advanced coursework. All courses were taken at the Regular/Honors level, with no AP courses listed as 'AP' in the transcript beyond the two mentioned.",
+            "performance_patterns": "The applicant's grades show a consistent pattern of strong performance, with most grades being A or B+. The grades are distributed across grades 9 through 12, with no significant dips in performance. The applicant's final grades in the 11th and 12th grades are generally strong, with a B+ in AP English Language and an A in AP Government.",
+            "strengths": [
+              "Strong academic performance with a cumulative unweighted GPA of 3.30.",
+              "High SAT score of 1430, indicating strong standardized test performance.",
+              "Enrollment in advanced coursework, including AP English Language and AP Government, with strong grades."
+            ],
+            "concerns": [],
+            "notes": [],
+            "evidence": [
+              {
+                "document": "Official Academic Transcript",
+                "page": 1,
+                "quote": "Cumulative unweighted GPA 3.30"
+              },
+              {
+                "document": "Standardized Test Score Report",
+                "page": 1,
+                "quote": "SAT 1430"
+              },
+              {
+                "document": "Official Academic Transcript",
+                "page": 1,
+                "quote": "AP English Language"
+              },
+              {
+                "document": "Official Academic Transcript",
+                "page": 2,
+                "quote": "AP Government"
+              },
+              {
+                "document": "Undergraduate Application Record",
+                "page": 1,
+                "quote": "Self-reported GPA 3.30"
+              },
+              {
+                "document": "Undergraduate Application Record",
+                "page": 1,
+                "quote": "Intended major Theatre, Political Science, Business"
+              },
+              {
+                "document": "Undergraduate Application Record",
+                "page": 1,
+                "quote": "Expected graduation June 2026"
+              },
+              {
+                "document": "Official Academic Transcript",
+                "page": 1,
+                "quote": "Cumulative weighted GPA Not reported"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "applicant_dossier": null
+}

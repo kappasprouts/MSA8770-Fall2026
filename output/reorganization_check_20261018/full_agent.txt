@@ -1,0 +1,40 @@
+
+========================================
+EAOS SUMMARIZING AGENT (RAG + QWEN3-VL)
+========================================
+Model: qwen3-vl:8b-instruct   Embeddings: nomic-embed-text
+Applicants: ['APP_012']
+
+========================================
+PROCESSING APP_012
+========================================
+[1] Applicant APP_012, status READY_FOR_REVIEW
+[2] 5 documents: 5 for the model, 0 withheld
+[3] Rendering pages at 1.5x (memory only)
+    ✓ CommonApp.pdf                            2 page(s)
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+[4] RAG: retrieved 9 policies: POL-001, POL-003, POL-006, POL-007, POL-009, POL-012, POL-013, POL-014, POL-015
+[5] qwen3-vl:8b-instruct: one call per section (each validated, retried once if needed)
+    [1/2] academic (4 page image(s)) ..... 116.2s, 1194 tokens  ✗ 2 problem(s)
+          - output: quote "Weighted GPA 4.4" is not on CommonApp.pdf page 1.
+          - output: quote "Unweighted GPA 3.97" is not on CommonApp.pdf page 1.
+    [2/2] academic (4 page image(s)) .... 77.7s, 1019 tokens  ✓
+    [1/2] engagement (2 page image(s)) ... 47.6s, 768 tokens  ✓
+    [1/2] recommendation (2 page image(s)) .... 68.1s, 1110 tokens  ✓
+    [1/2] supplement (1 page image(s)) .. 29.7s, 516 tokens  ✓
+    [1/2] policy (text only) ..... 111.8s, 1270 tokens  ✓
+    [1/2] synthesis (text only) .. 63.4s, 709 tokens  ✓
+[6] ✓ All sections passed validation (87 citations checked)
+[7] Dossier assembled: 0 review note(s)
+[8] Saved DOSSIER_READY → applicant_dossier + dossier_generation_runs, D:\Users\miwi\git\MSA8770-Fall2026\output\ai_agent\APP_012_dossier.json
+    Total time 531.6s
+
+========================================
+BATCH SUMMARY
+========================================
+  APP_012    DOSSIER_READY
+
+[HARD STOP] Dossiers are advisory. An admissions officer makes every decision.

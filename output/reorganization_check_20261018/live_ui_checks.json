@@ -1,0 +1,323 @@
+{
+  "fresh_run": {
+    "id": 2,
+    "app_id": "APP_012",
+    "run_status": "DOSSIER_READY",
+    "validation": {
+      "calls": [
+        {
+          "usage": {
+            "seconds": 116.2,
+            "output_tokens": 1194,
+            "prompt_tokens": 5071
+          },
+          "errors": [
+            "output: quote \"Weighted GPA 4.4\" is not on CommonApp.pdf page 1.",
+            "output: quote \"Unweighted GPA 3.97\" is not on CommonApp.pdf page 1."
+          ],
+          "attempt": 1,
+          "section": "academic"
+        },
+        {
+          "usage": {
+            "seconds": 77.7,
+            "output_tokens": 1019,
+            "prompt_tokens": 5178
+          },
+          "errors": [],
+          "attempt": 2,
+          "section": "academic"
+        },
+        {
+          "usage": {
+            "seconds": 47.6,
+            "output_tokens": 768,
+            "prompt_tokens": 2803
+          },
+          "errors": [],
+          "attempt": 1,
+          "section": "engagement"
+        },
+        {
+          "usage": {
+            "seconds": 68.1,
+            "output_tokens": 1110,
+            "prompt_tokens": 2612
+          },
+          "errors": [],
+          "attempt": 1,
+          "section": "recommendation"
+        },
+        {
+          "usage": {
+            "seconds": 29.7,
+            "output_tokens": 516,
+            "prompt_tokens": 1469
+          },
+          "errors": [],
+          "attempt": 1,
+          "section": "supplement"
+        },
+        {
+          "usage": {
+            "seconds": 111.8,
+            "output_tokens": 1270,
+            "prompt_tokens": 7388
+          },
+          "errors": [],
+          "attempt": 1,
+          "section": "policy"
+        },
+        {
+          "usage": {
+            "seconds": 63.4,
+            "output_tokens": 709,
+            "prompt_tokens": 7426
+          },
+          "errors": [],
+          "attempt": 1,
+          "section": "synthesis"
+        }
+      ],
+      "passed": true,
+      "load_problems": [],
+      "failed_sections": {}
+    },
+    "created_at": "2026-10-18 22:43:16.068054+00:00"
+  },
+  "applicant": {
+    "status": "DOSSIER_READY"
+  },
+  "checks": [
+    {
+      "check": "page",
+      "status": 200
+    },
+    {
+      "check": "applicants",
+      "status": 200
+    },
+    {
+      "check": "fresh dossier",
+      "status": 200
+    },
+    {
+      "check": "CommonApp.pdf",
+      "status": 200
+    },
+    {
+      "check": "letter_rec1.pdf",
+      "status": 200
+    },
+    {
+      "check": "letter_rec2.pdf",
+      "status": 200
+    },
+    {
+      "check": "supplement.pdf",
+      "status": 200
+    },
+    {
+      "check": "transcript.pdf",
+      "status": 200
+    },
+    {
+      "check": "unknown dossier",
+      "status": 404
+    },
+    {
+      "check": "missing document",
+      "status": 404
+    },
+    {
+      "check": "invalid document",
+      "status": 400
+    },
+    {
+      "check": "missing chat fields",
+      "status": 400
+    },
+    {
+      "check": "empty messages",
+      "status": 400
+    },
+    {
+      "check": "unknown chat applicant",
+      "status": 404
+    }
+  ],
+  "academic": {
+    "summary": "The applicant, Drew Young, has a weighted GPA of 4.4 and an unweighted GPA of 3.97. They are applying for Biomedical Engineering and have taken 12 AP courses, including AP Human Geography, AP Chemistry, AP Comparative Government, AP Computer Science A, AP Physics C Electricity and Magnetism, AP Macroeconomics, AP Seminar, AP Art History, AP Physics 1, AP French Language, and AP English Literature. Their SAT superscore is 1530 and ACT superscore is 35. The transcript shows grades for these AP courses, with most receiving grades of A or A-.",
+    "concerns": [],
+    "evidence": [
+      {
+        "page": 2,
+        "quote": "Weighted GPA 4.4",
+        "document": "CommonApp.pdf",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "page": 2,
+        "quote": "Unweighted GPA 3.97",
+        "document": "CommonApp.pdf",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "page": 2,
+        "quote": "Superscored SAT Score 1530",
+        "document": "CommonApp.pdf",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "page": 2,
+        "quote": "Superscored ACT Score 35",
+        "document": "CommonApp.pdf",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "page": 1,
+        "quote": "AP Human Geography A-",
+        "document": "transcript.pdf",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "page": 1,
+        "quote": "AP Chemistry A",
+        "document": "transcript.pdf",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "page": 1,
+        "quote": "AP Comparative Government A",
+        "document": "transcript.pdf",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "page": 1,
+        "quote": "AP Computer Science A A-",
+        "document": "transcript.pdf",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      }
+    ],
+    "strengths": [
+      "High weighted GPA (4.4)",
+      "Strong standardized test scores (SAT 1530, ACT 35)",
+      "Extensive AP course load (12 courses)",
+      "Consistent high grades in AP courses"
+    ],
+    "course_rigor": "The applicant has taken 12 AP courses, which indicates a high level of academic rigor. The courses span multiple disciplines including science, mathematics, humanities, and languages.",
+    "ap_exam_scores": [],
+    "document_facts": {
+      "class_rank": null,
+      "high_school": "Madison High School",
+      "weighted_gpa": 4.4,
+      "act_superscore": 35,
+      "intended_major": "Biomedical Engineering",
+      "sat_superscore": 1530,
+      "unweighted_gpa": 3.97,
+      "expected_graduation": "2026"
+    },
+    "performance_patterns": "The applicant's performance is generally strong, with most AP courses receiving grades of A or A-. The grades are consistent across different subjects and grade levels, indicating a steady academic performance.",
+    "ap_courses_on_transcript": [
+      {
+        "course": "AP Human Geography",
+        "final_grade": "A-",
+        "grade_level": "11"
+      },
+      {
+        "course": "AP Chemistry",
+        "final_grade": "A",
+        "grade_level": "11"
+      },
+      {
+        "course": "AP Comparative Government",
+        "final_grade": "A",
+        "grade_level": "11"
+      },
+      {
+        "course": "AP Computer Science A",
+        "final_grade": "A-",
+        "grade_level": "11"
+      },
+      {
+        "course": "AP Physics C Electricity and Magnetism",
+        "final_grade": "B",
+        "grade_level": "11"
+      },
+      {
+        "course": "AP Macroeconomics",
+        "final_grade": "A-",
+        "grade_level": "11"
+      },
+      {
+        "course": "AP Seminar",
+        "final_grade": "B",
+        "grade_level": "12"
+      },
+      {
+        "course": "AP Art History",
+        "final_grade": "B",
+        "grade_level": "12"
+      },
+      {
+        "course": "AP Physics 1",
+        "final_grade": "B",
+        "grade_level": "12"
+      },
+      {
+        "course": "AP French Language",
+        "final_grade": "A",
+        "grade_level": "12"
+      },
+      {
+        "course": "AP English Literature",
+        "final_grade": "A-",
+        "grade_level": "12"
+      }
+    ]
+  },
+  "documents": [
+    {
+      "file": "CommonApp.pdf",
+      "label": "CommonApp",
+      "pages": [
+        1,
+        2
+      ],
+      "access": "sent"
+    },
+    {
+      "file": "letter_rec1.pdf",
+      "label": "Letter Rec1",
+      "pages": [
+        1
+      ],
+      "access": "sent"
+    },
+    {
+      "file": "letter_rec2.pdf",
+      "label": "Letter Rec2",
+      "pages": [
+        1
+      ],
+      "access": "sent"
+    },
+    {
+      "file": "supplement.pdf",
+      "label": "Supplement",
+      "pages": [
+        1
+      ],
+      "access": "sent"
+    },
+    {
+      "file": "transcript.pdf",
+      "label": "Transcript",
+      "pages": [
+        1,
+        2
+      ],
+      "access": "sent"
+    }
+  ]
+}

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "node --test tests/first-pass.test.mjs"
   },
   "dependencies": {
     "minio": "^8.0.7",

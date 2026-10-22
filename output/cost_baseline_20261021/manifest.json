@@ -1,0 +1,308 @@
+{
+  "run_id": "cost_baseline_20261021",
+  "started_at_utc": "2026-10-22T00:08:35.756308+00:00",
+  "client_date": "2026-10-21",
+  "timezone": "America/New_York",
+  "protocol": "Both ingestion batches; five eligible applicants, APP_012 repeated, APP_013 failure probe; fixed chat set; sequential inference.",
+  "planned_applicants": [
+    "APP_012",
+    "APP_014",
+    "APP_015",
+    "APP_017",
+    "APP_002"
+  ],
+  "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.19045-SP0",
+  "logical_cpus": 16,
+  "human_reviewer_minutes": null,
+  "manual_review_baseline_minutes": null,
+  "whole_system_kwh": null,
+  "notes": [
+    "Human reviewer time is not measured by an AI agent.",
+    "GPU power samples exclude CPU/RAM/storage and are not whole-system electricity.",
+    "MinIO bytes are current logical objects, excluding filesystem overhead, backups, and noncurrent versions.",
+    "Database growth on reused/upserted fixtures is not fresh-applicant storage cost.",
+    "SDK internal upload retries are unobserved; application-level attempts are counted.",
+    "Proxy records usage before application parsing/validation. Model inputs and embeddings are not logged.",
+    "Nested operation timings overlap; do not sum parent and child operations."
+  ],
+  "git_head": "361bf783dba796405661a9d7337cd1ebdcc96e66",
+  "git_status": "M ui/README.md\n M ui/package.json\n M ui/src/app/api/applicants/final-decision-queue/route.ts\n M ui/src/app/api/applicants/route.ts\n M ui/src/app/api/dossier/route.ts\n M ui/src/app/api/ingestion/batch-status/route.ts\n M ui/src/app/final-decisions/page.tsx\n M ui/src/app/globals.css\n M ui/src/app/layout.tsx\n M ui/src/app/page.tsx\n M ui/src/app/review-queue/page.tsx\n M ui/src/components/AppHeader.tsx\n M ui/src/components/ChatPanel.tsx\n M ui/src/components/DocumentsPanel.tsx\n M ui/src/components/EaosShell.tsx\n M ui/src/components/dossier/SnapshotCard.tsx\n M ui/src/components/eaos.module.css\n M ui/src/lib/dossier.ts\n M ui/src/lib/eaos-api.ts\n M ui/src/lib/types.ts\n?? chat-ui/\n?? output/cost_baseline_20261021/\n?? output/reorganization_check_20261018/\n?? summarizing_agent/\n?? tests/cost_baseline/\n?? tests/reorganization_check_20261018/\n?? ui/docs/first-pass.md\n?? ui/src/app/applicant-review/\n?? ui/src/app/home.module.css\n?? ui/src/components/ApplicantReview.tsx\n?? ui/src/components/RequestState.tsx\n?? ui/src/components/StatusBadge.tsx\n?? ui/src/components/WorkspaceIcon.tsx\n?? ui/src/lib/http.ts\n?? ui/src/lib/review-state.ts\n?? ui/tests/",
+  "source_sha256": {
+    "ai_agent/__init__.py": "9e600efecdac1f3236f56f07a9c3ed9fba2a9923444fd7079e0cd843dfb825a6",
+    "ai_agent/create_pgvector_once.py": "c5fae1d029b4c7d3b54a53e487b49d6ee7165843fd9a25accb0cdc28b93fbe2c",
+    "ai_agent/gateway/__init__.py": "54ffce78cbe798a80132a503299cff11c573f86ef20e41da7616c07b5bb533b4",
+    "ai_agent/gateway/client.py": "ca378b1799bb1acd1854f749100a12235bd8b5696578bb17e0f10f86661500b5",
+    "ai_agent/gateway/grounding.py": "202d120b0c03d41cc8ef59682c10e782cb72a38d32be078c11a85fb2b971ae78",
+    "ai_agent/gateway/models.py": "de46276c5769c83072a7a0977e36a32971d8f6448acb16a1a57d697304a2dee4",
+    "ai_agent/summarizing_agent.py": "c645cbb25abafc915c303d849ef1291720c72fc9fa3879c5edb94ec3c9a86c06",
+    "compose.yaml": "1b09ffe37a54dd919f16cf994d8dcc7385430ccdcf0e14373a805915d22b5da3",
+    "ingestion/__init__.py": "91774171a8553e5508642913d8486fc6e382b01f21400d9ecff948114e6fd8df",
+    "ingestion/app.py": "733bae8b382638f0822da0446aee297f67b9e227fa2c480b5255aa94aa733edb",
+    "ingestion/batch_ingest.py": "745b1bc9a5bc5077d9bdbc16d8bbb4badb00af30e50fea7539fa0b8d129cd6a9",
+    "ingestion/parsing/__init__.py": "0d3d28a4684c019428d05d6e47a7526901b750592f81c4693613451b7f11ec0a",
+    "ingestion/parsing/models.py": "994beb9502afe6cf9526666fd751559f4bfd55ff1b58a58bdd41f604c94b99f9",
+    "ingestion/parsing/parser.py": "5ee4ddf2bf516878175d78e057ce279bbc7dab8797a5ab4a04d008f03c492313",
+    "ingestion/pipeline.py": "3d6efd679fb983c0061747bfec25d0929beb1a1517df450758579b74e81ac11b",
+    "ingestion/run_ingestion_check.py": "399b347de35f5d3e3edd92cf404eae921b2d90332d70c566340fee4df67257c7",
+    "ingestion/run_score_ingest.py": "d118ced55874656d2b090c097dd9bee4913f63f4cca699622effad5117384d15",
+    "ingestion/scheduler.py": "17911614448818049adc082dcc77d60585d625829e09e773e88e76eb4f604e0a",
+    "ingestion/score_ingest.py": "ba14ea99d4c859e3b275fb30c7a8c62df76f89e64268c5483ce181fd3625b2f8",
+    "ingestion/validation/__init__.py": "dfeec4bc56ef74fa33e4d8e91fdb4a840feb13828a3c754f4953cc3042b680fc",
+    "ingestion/validation/manifest_gate.py": "d45cf28c00f1a716ae8750e8728c5d49b52a56c504317cb975b0154a392646e6",
+    "ingestion/validation/manifest_validator.py": "b6d9fbf190188a2971c4e1c7263fd2ac41af9e446140e09ecc178717f1d48f2c",
+    "ingestion/validation/models.py": "15773c26bc6335a86fc4848d7cfc3bd78da5bd6424059818a918c2fb84cb899f",
+    "output/ingestion/affected_ids.json": "ff7b00fd336dd4b1fc4879047d7937c4a5965fe523660529a536349d1ef2155c",
+    "output/ingestion/affected_ids_20261006T184511388980Z_146a385e.json": "ff7b00fd336dd4b1fc4879047d7937c4a5965fe523660529a536349d1ef2155c",
+    "output/ingestion/ingestion_batch_01_report.txt": "31a50561a18310ea55c7f42bdbe91bec6319418b9a10d5bf6dfb60a9240877ef",
+    "output/ingestion/ingestion_batch_01_report_20261006T184511388980Z_146a385e.txt": "8f2cef8d073db04315caff8ccd6a9ea0c527b5cdb7e37e15ab473d53c4b3883c",
+    "output/ingestion/ingestion_batch_02_report_10062026.txt": "54e233f705c6cc50a721e9f3932f41113be4014eeae8f2153439ffebe59af417",
+    "output/ingestion/smoke_run_2_ids.json": "047432dcd4c7b2970901125861052a1333182d1916cadc49483e80194dae8d96",
+    "output/ingestion/smoke_run_2_report.txt": "1b02222f4e522bbf4b120ee073072a6842bc13546b22d91df19c81b81ee9c8eb",
+    "output/integration_review_20261009/backend_execution.txt": "d68e26c15a3dcdeac052c64df5b4533353598d40568e5986f689af389254ddd1",
+    "output/integration_review_20261009/backend_results.json": "19d75d2550b8a0aebcc2e8a44b96e43f23458abb95332907cdb78a87150548f1",
+    "output/integration_review_20261009/batch_01_affected_ids.json": "1a424676015be325e098c7be291ab4176ba3791e4e57c0769300505589276419",
+    "output/integration_review_20261009/batch_01_report.txt": "1cc978aea3cfd8a294f32f44ddbfb50eaa618e3e0c9a123b56a5c8378fa078b2",
+    "output/integration_review_20261009/batch_02_affected_ids.json": "43f096d2bfd7804653fd524adc7c0bed484851b29d8d0ad1f4885c0df7f10dbd",
+    "output/integration_review_20261009/batch_02_report.txt": "1670496cfc83cd482ca3ab547338156eae0cd0fbdcb20cc4ad6b427cec3d46f2",
+    "output/integration_review_20261009/cli_failure_output.txt": "e45ac108a7ccec8c6b520391ec9708be35e6337cb11a50103b5b941e3ba838d5",
+    "output/integration_review_20261009/cli_failure_results.json": "c571b1be20ad5bb3c47ec05650d044c45834d2159acbfcdbd2bb69fba8c26dcf",
+    "output/integration_review_20261009/contract_tests.txt": "0c3282a5777a119d692207338590c0635827c76b50a521539a53eb16a948a209",
+    "output/integration_review_20261009/existing_tests.txt": "ee86b5cf448922acbf315ce61033a876aa32ece52385c44fd569e85dbf87cce5",
+    "output/integration_review_20261009/inventory_checks.json": "5694a3922bdcc90565b4d3d0bd21392d655301e66542a088060c03caff2e5b5a",
+    "output/integration_review_20261009/replay_affected_ids.json": "43f096d2bfd7804653fd524adc7c0bed484851b29d8d0ad1f4885c0df7f10dbd",
+    "output/integration_review_20261009/replay_report.txt": "a392f9978be5d6d3aa166323868c661b7b813e836547c0a83b48b9e6e7d509a7",
+    "output/integration_review_20261009/score_ids_college_board_20261009T184735903952Z_5de14ffa.json": "f6f50cf7b3379bc36b7bf872c82964e67638c68c46d35a00c85a19056c8d2b82",
+    "output/integration_review_20261009/ui_build_lint_notes.txt": "f45e7d654cbc5883294eaa24b25de3e49a3d9b507afba7db6cbc1d696f68d4e6",
+    "output/integration_review_20261009/ui_results.json": "285d7e40296efd84ef80616eb11b4fecadcf499841e719fdc081c23cf6cf7b1a",
+    "output/live_test_setup/academic_verification.json": "8ed022f72abbeaf934b74f47df353a9f282fe0a7b1716c2a47503c0b568e275f",
+    "output/live_test_setup/affected_ids.json": "43f096d2bfd7804653fd524adc7c0bed484851b29d8d0ad1f4885c0df7f10dbd",
+    "output/live_test_setup/encoding_after.txt": "d54d1fcbdfb9e31eb6beaaf95cd95b911dcbee4db63f5ea7c89afb7dbf5d2042",
+    "output/live_test_setup/encoding_before.txt": "f8dbeaf5f2a3ada97dfc613cc524ba560c524b944fd5797c1b0e26e3609c8ca2",
+    "output/live_test_setup/ingestion_report.txt": "acef6a42e4a344af50e9b390714817211bb6552b76e67e68e1bf8e3722599a03",
+    "output/live_test_setup/service_verification.json": "e4c96c61e98ea58302c3673c58ef2d290658f7a438eaa51f0426ec01c9fd3748",
+    "policy/__init__.py": "95a612d194d0c60295d35b9b5b4fb9ed12ab48a97ba1450ebe55712c0297ff84",
+    "policy/ingestion_rules.yaml": "bae7bcb273b5e089cb4851af92e2ab9dfd3e506bad0b1998bd00e1e9d9d65c3f",
+    "policy/riverview_admissions_policy.txt": "3eff54dc594514168be8369949c20b87ab5af4084569fca4c2f7a48fea59b7ff",
+    "requirements.txt": "e603ec07db266ab7cdec896e1129c374c564e13dc7417784bbed3a5e252ce740",
+    "storage/__init__.py": "7f8ddadb0664454a7adba86dcc8d8410d4d9ac0a08e1f60618f1e0e2a6c2f440",
+    "storage/database.py": "b41f10973682d25cf9127ee9c8eb9af9afa3224d2c4bc0b7a822ed886a873749",
+    "storage/date_utils.py": "2ec9c9c8541d40219fdb393c98739254a407f0abb700d5d2dd34d00ff9209e75",
+    "storage/minio_client.py": "9a500541b1ed0b457649adf98013175fd6433dcba5056383f14c5d21d61176c2",
+    "storage/models.py": "99d6a5d556c1df9c480f0b9b8e44ab72ffa9e79aaa64c809ac111f2163a2a9a5",
+    "storage/storage_manager.py": "f509faf6630b0856190a36898dad5c348fe6f88386704ba29f38c5c008fe6231",
+    "tests/ai_agent/test_academic_only.py": "fa41251fc591f02adbe1d1be7db061672d2f4b977e0147dd46744778ed61a356",
+    "tests/ai_agent/test_policy_assessment.py": "00289d15d9d347c90e8a95839876a9c34506fe917efd7b593bd4c134dadbceaa",
+    "tests/conftest.py": "e52d3f7444ec4ea771cc0c28766e2535a6c588c059ef24d4dd23bcc8676f67de",
+    "tests/integration_review_20261009/reproduce_backend.py": "531c366e41369ed066b6740233d7ed8450bec1c3db2af15a9973eee4887c2122",
+    "tests/integration_review_20261009/reproduce_cli_failure.py": "149469a16c5de52274afec14ec80393f576b6beeac775fa1047bd7287666c2d8",
+    "tests/integration_review_20261009/test_integration_contracts.py": "3c4d53c8601031a4be17512368df69bd7b765c638af0aef1bf72b174211499cb",
+    "tests/live_test_setup/compose.yaml": "6bcde890d3d1d14c8f64ba5270c9061fe0049bb0194f58a9d09ce61f01dd6399",
+    "tests/test_date_of_birth_schema.py": "8bbd5fe7018c9f6d3c6d157a4cd15e2ff056be3118a98bae677e9cd60b3026c3",
+    "tests/test_gpa_numeric_schema.py": "9cee7af9feee38096062ca87688bdbc224bb55497fbf2058370e9fcd3edbcf8f",
+    "tests/test_ingestion_and_gate.py": "5f2a8bc98044a900a7c21f6c73147a835e8e5ab83c97728d20330f222c214ad2",
+    "tests/test_ingestion_entrypoints.py": "54596539314ba763fce089fe98a24170cf2c079523447143ce80164089e6387b",
+    "tests/test_score_ingest.py": "08fa9eacc8594a373274f79b95d41e5ab80c65acd3a0cb3439a0da1d8f37bdf1",
+    "tests/test_status_only_schema.py": "5ecac681c9b2c53de8d94a93e7975e0557bc72df4ab27734768adc903469d5ce",
+    "ui/next.config.ts": "ab4c61f6ee100ae43610a18512f1ebcec842bb2405431e1009266173f21cf772",
+    "ui/package-lock.json": "577a91302192c6583db67e8f13568edb2dc89fb6121498600caefa60d9e65140",
+    "ui/package.json": "78dda6facba17241afadac291b59d6c9bc6681d4f1299da16b24144cfe52c396",
+    "ui/src/app/api/applicants/[id]/final-decision/route.ts": "5238c5812d444feaa71141432b671375fc7ca8b0fcf6b67f836c863c68ef972f",
+    "ui/src/app/api/applicants/final-decision-queue/route.ts": "de35739de614fec854a9e615ec66e3dd232875deccbaa912a8eb5a6f969d4ae6",
+    "ui/src/app/api/applicants/review-queue/route.ts": "be2aaf2b73b1cb42cec58b6cce72626c1e8fb4057455bf28baa7df6164028558",
+    "ui/src/app/api/applicants/route.ts": "8a139a71a23af39a03513a189787fb04364130af4800f277652f0802a4a1bbac",
+    "ui/src/app/api/chat/route.ts": "74f2113e556d00ddeb7aea9b46993431c12b26ffe25971e4371db75e2f285afc",
+    "ui/src/app/api/documents/route.ts": "6a564f1a0bc42bb189229d65444f88edda62b914c05ceb87666886a3ed4f2548",
+    "ui/src/app/api/dossier/route.ts": "4bf079658615c1bd40c426eb394715021b61bc1a725236eaa45cd113398a96db",
+    "ui/src/app/api/ingestion/batch-status/route.ts": "4437a299edda93611bcd6377692f2c385195687c1b1d9c54c6ce73b81726d288",
+    "ui/src/app/final-decisions/page.tsx": "8431f35771ed5a98fd0c02f835c42fa53663292d8be6191500b3ac3a29a3370d",
+    "ui/src/app/layout.tsx": "4368e97a8d094c796a9bb8d420c068d07a12d18ea487b25922ef5d0a747747d5",
+    "ui/src/app/page.tsx": "3b192e2aeacab3f3e3b7c48d357f4aaccfb9ce83ef5d2138f7b3243cfeda04f2",
+    "ui/src/app/review-queue/page.tsx": "e0fd51d9672a0440d03b84aa6a7d52f9e30b060040e6d87c5df4fa4c234a7cfa",
+    "ui/src/components/AppHeader.tsx": "30fa1d6ca862038f0aefd3ca3b54c4629ca76b4085129a77e07fb0658d23e5af",
+    "ui/src/components/ChatPanel.tsx": "99384a11c5b8ac9e7b76086dc6a1a9d057825b9726145ab9bc746db42a4d3bc5",
+    "ui/src/components/DocumentsPanel.tsx": "59f20e66f6ca580522162b630cf050f15ebe41a59eb8577569537ff0d5d7a233",
+    "ui/src/components/DossierPanel.tsx": "54320e5782ccfa886136968371e8a0dc0b2c458520d731e1744c359d3411bf61",
+    "ui/src/components/EaosShell.tsx": "51793960475cdae7eddfc01c2fb08b12668a2db1097b6ff7a9a61fe1534a7ea3",
+    "ui/src/components/Logo.tsx": "ce07ffc798705f9ba1801b1c7898556415b10a3b6b8f37b51cec9526841b4c4a",
+    "ui/src/components/dossier/ApplicantInfoCard.tsx": "baf0a55f84c81d20eb9a312a3600769fdd4a14c9801fccd5434c1abd9c20ece7",
+    "ui/src/components/dossier/EvidenceCard.tsx": "c784e461d92e183031da7d3b7651c8b24f49884390b013b3aa9fa76427cec12b",
+    "ui/src/components/dossier/PolicyChecksCard.tsx": "3ee74e9bad592c793468de281e21956325969f541b97e929588b1d2ef707c5d9",
+    "ui/src/components/dossier/SnapshotCard.tsx": "8b6286df7277a3917b81d2351ed56ed1edb793a92be42bc8b62bf58fd99703bd",
+    "ui/src/components/dossier/SummaryCard.tsx": "f1a3e7198d0af8b95beb2ebc4a9e947076d47cdb02478afbad1402173d3b7734",
+    "ui/src/lib/dossier.ts": "b503e453559da4df06b8f20ba0f813bad6c1d454e0403b4902cfdea86f38a25f",
+    "ui/src/lib/eaos-api.ts": "c910958e4f0bc9d6b8a115ef167ba9a19ae9d67925456b23d3f29a139448cc36",
+    "ui/src/lib/types.ts": "944fe46002d07b2c2428e08be2ba27ca61e047ad5e4c14325305fb94381cfa64",
+    "ui/tsconfig.json": "5c51df4c59f4510d8c7dadf07a5c32132228826a3b331da5e286207b4df7ef9c"
+  },
+  "machine_specs": {
+    "exit_code": 0,
+    "stdout": "{\n    \"CPU\":  {\n                \"Name\":  \"AMD Ryzen 7 3700X 8-Core Processor             \",\n                \"NumberOfCores\":  8,\n                \"NumberOfLogicalProcessors\":  16\n            },\n    \"RAM\":  {\n                \"TotalPhysicalMemory\":  34269982720\n            }\n}",
+    "stderr": ""
+  },
+  "gpu_specs": {
+    "exit_code": 0,
+    "stdout": "NVIDIA GeForce RTX 3070 Ti, 8192 MiB, 610.62",
+    "stderr": ""
+  },
+  "ollama_version": {
+    "version": "0.17.4"
+  },
+  "ollama_models": {
+    "models": [
+      {
+        "name": "nomic-embed-text:latest",
+        "model": "nomic-embed-text:latest",
+        "modified_at": "2026-10-09T15:36:16.5177105-04:00",
+        "size": 274302450,
+        "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "nomic-bert",
+          "families": [
+            "nomic-bert"
+          ],
+          "parameter_size": "137M",
+          "quantization_level": "F16"
+        }
+      },
+      {
+        "name": "qwen3-vl:8b-instruct",
+        "model": "qwen3-vl:8b-instruct",
+        "modified_at": "2026-10-09T15:35:20.787691-04:00",
+        "size": 6140415975,
+        "digest": "0533d74300e4f9bc367d675d4e64ffd073d50ff16a2b4096cc2e8a1cf8c96319",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen3vl",
+          "families": [
+            "qwen3vl"
+          ],
+          "parameter_size": "8.8B",
+          "quantization_level": "Q4_K_M"
+        }
+      },
+      {
+        "name": "llama3-chatqa:8b",
+        "model": "llama3-chatqa:8b",
+        "modified_at": "2026-04-20T20:01:12.6082221-04:00",
+        "size": 4661224261,
+        "digest": "b37a98d204b2e65ef41a6eda9ad4714b88f3f5b0e9d52b0235cb3ea42e7d3a77",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "llama",
+          "families": [
+            "llama"
+          ],
+          "parameter_size": "8B",
+          "quantization_level": "Q4_0"
+        }
+      },
+      {
+        "name": "llama3.2:3b",
+        "model": "llama3.2:3b",
+        "modified_at": "2026-04-20T18:52:40.0411332-04:00",
+        "size": 2019393189,
+        "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "llama",
+          "families": [
+            "llama"
+          ],
+          "parameter_size": "3.2B",
+          "quantization_level": "Q4_K_M"
+        }
+      },
+      {
+        "name": "qwen2.5:3b",
+        "model": "qwen2.5:3b",
+        "modified_at": "2026-04-20T18:51:00.614236-04:00",
+        "size": 1929912432,
+        "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen2",
+          "families": [
+            "qwen2"
+          ],
+          "parameter_size": "3.1B",
+          "quantization_level": "Q4_K_M"
+        }
+      },
+      {
+        "name": "gpt-oss:120b",
+        "model": "gpt-oss:120b",
+        "modified_at": "2026-03-03T20:20:57.2958581-05:00",
+        "size": 65369818941,
+        "digest": "a951a23b46a1f6093dafee2ea481d634b4e31ac720a8a16f3f91e04f5a40ecd9",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "gptoss",
+          "families": [
+            "gptoss"
+          ],
+          "parameter_size": "116.8B",
+          "quantization_level": "MXFP4"
+        }
+      },
+      {
+        "name": "gpt-oss:120b-cloud",
+        "model": "gpt-oss:120b-cloud",
+        "remote_model": "gpt-oss:120b",
+        "remote_host": "https://ollama.com:443",
+        "modified_at": "2026-03-03T18:55:27.4356186-05:00",
+        "size": 384,
+        "digest": "569662207105c69bb0eca2f79a3fdf8691ad6301def477a5ec66f8e8bae237e3",
+        "details": {
+          "parent_model": "",
+          "format": "",
+          "family": "gptoss",
+          "families": [
+            "gptoss"
+          ],
+          "parameter_size": "116.8B",
+          "quantization_level": "MXFP4"
+        }
+      },
+      {
+        "name": "llama3.1:latest",
+        "model": "llama3.1:latest",
+        "modified_at": "2026-03-03T18:39:53.5493972-05:00",
+        "size": 4920753328,
+        "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "llama",
+          "families": [
+            "llama"
+          ],
+          "parameter_size": "8.0B",
+          "quantization_level": "Q4_K_M"
+        }
+      }
+    ]
+  },
+  "agent_settings": {
+    "model": "qwen3-vl:8b-instruct",
+    "embedding_model": "nomic-embed-text",
+    "num_ctx": 16384,
+    "render_zoom": 1.5,
+    "max_section_attempts": 2,
+    "num_predict": {
+      "academic": 3500,
+      "engagement": 3000,
+      "recommendation": 2500,
+      "supplement": 1500,
+      "policy": 3000,
+      "synthesis": 2000
+    }
+  }
+}

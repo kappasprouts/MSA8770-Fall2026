@@ -1,0 +1,96 @@
+- banner:
+  - paragraph: Riverview State University
+  - paragraph: Applicant Review
+  - heading "APP_012 | Drew Young" [level=1]:
+    - text: APP_012
+    - generic: "| Drew Young"
+  - text: Applicant
+  - combobox "Applicant":
+    - option "APP_012" [selected]
+    - option "APP_014"
+- main:
+  - heading "Applicant Dossier" [level=2]
+  - generic: ↕ Scroll
+  - heading "Applicant Information" [level=3]
+  - generic: Name
+  - generic: Drew Young
+  - generic: High School
+  - generic: Madison High School
+  - generic: Intended Major
+  - generic: Biomedical Engineering
+  - generic: Unweighted GPA
+  - generic: "3.97"
+  - generic: Weighted GPA
+  - generic: "4.4"
+  - generic: SAT (Superscore)
+  - generic: "1530"
+  - button "View more ↓"
+  - heading "Summary" [level=3]
+  - paragraph: The applicant demonstrates strong academic performance with a weighted GPA of 4.4, an unweighted GPA of 3.97, and high standardized test scores (SAT 1530, ACT 35). They have taken 12 AP courses across multiple disciplines, indicating significant academic rigor. Their engagement includes varsity soccer, art club, environmental volunteering, and library work, showing broad interests. Recommender letters highlight their ability to revise interpretations and engage thoughtfully in group discussions. The supplement confirms interest in Biomedical Engineering and a preference for evidence-based, collaborative learning. All documents are consistent in portraying a well-rounded, intellectually curious student with documented involvement and academic strength.
+  - heading "Validation & Policy Snapshot" [level=3]
+  - generic: Validated sections
+  - generic: Complete
+  - generic: Policy alignment
+  - generic: 4/9 aligned
+  - generic: Full dossier validation
+  - generic: Passed
+  - paragraph: Advisory only — this is a factual status summary, not an admission recommendation.
+  - heading "Policy Checks" [level=3]
+  - generic: ✅
+  - generic: "POL-001 Curriculum Rigor Evaluation: Evaluation requires selecting the most challenging coursework available within the applicant's secondary school environment, specifically Advanced Placement (AP), International Baccalaureate (IB) Diploma Programme, or dual-enrollment institutional tracks."
+  - generic: Aligned
+  - generic: ✅
+  - generic: "POL-003 Weighted vs. Unweighted Divergence: The academic screening layer prioritizes internal school rankings and absolute course rigor over inflated weighted GPAs to normalize variations across global grading systems."
+  - generic: Aligned
+  - generic: ➖
+  - generic: "POL-006 Policy Flexibility: Under test-optional or test-blind institutional variances, quantitative weight shifts dynamically to the Academic Index calculation and external validation metrics (e.g., AP exam scores of 5)."
+  - generic: not_applicable
+  - generic: ➖
+  - generic: "POL-007 AI Definition: A numerical score ranging from 60 to 240, aggregating calculated GPA, class rank (where available), and standardized test components to create a unified academic baseline."
+  - generic: not_applicable
+  - button "View all 9 checks ↓"
+  - heading "Key Evidence & Citations" [level=3]
+  - list:
+    - listitem: High academic rigor through 12 AP courses
+    - listitem: Strong standardized test performance
+    - listitem: Willingness to revise thinking based on evidence
+    - listitem: Engagement in diverse extracurricular activities
+  - button "View all evidence (5) ↓"
+  - heading "Original Documents" [level=2]
+  - generic: ↕ Scroll
+  - generic: PDF
+  - paragraph: CommonApp
+  - paragraph: 2 pages
+  - link "View Full ↗":
+    - /url: /api/documents?appId=APP_012&file=CommonApp.pdf
+  - iframe
+  - generic: PDF
+  - paragraph: Letter Rec1
+  - paragraph: 1 page
+  - link "View Full ↗":
+    - /url: /api/documents?appId=APP_012&file=letter_rec1.pdf
+  - iframe
+  - generic: PDF
+  - paragraph: Letter Rec2
+  - paragraph: 1 page
+  - link "View Full ↗":
+    - /url: /api/documents?appId=APP_012&file=letter_rec2.pdf
+  - iframe
+  - generic: PDF
+  - paragraph: Supplement
+  - paragraph: 1 page
+  - link "View Full ↗":
+    - /url: /api/documents?appId=APP_012&file=supplement.pdf
+  - iframe
+  - generic: PDF
+  - paragraph: Transcript
+  - paragraph: 2 pages
+  - link "View Full ↗":
+    - /url: /api/documents?appId=APP_012&file=transcript.pdf
+  - iframe
+  - heading "Q&A Assistant" [level=2]
+  - generic: ↕ Scroll
+  - paragraph: Ask about this applicant's academics, activities, recommendations, essay, or policy alignment. Answers are grounded in the validated dossier only.
+  - textbox "Ask about this applicant (e.g., \"What do the recommendation letters say?\")"
+  - button "Send ➤" [disabled]
+- alert

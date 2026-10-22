@@ -1,0 +1,55 @@
+{
+  "stage": "agent_APP_002_r1",
+  "app_id": "APP_002",
+  "repetition": 1,
+  "timestamp_utc": "2026-10-22T00:52:43.775693+00:00",
+  "models_before": {
+    "models": [
+      {
+        "name": "qwen3-vl:8b-instruct",
+        "model": "qwen3-vl:8b-instruct",
+        "size": 9547841472,
+        "digest": "0533d74300e4f9bc367d675d4e64ffd073d50ff16a2b4096cc2e8a1cf8c96319",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen3vl",
+          "families": [
+            "qwen3vl"
+          ],
+          "parameter_size": "8.8B",
+          "quantization_level": "Q4_K_M"
+        },
+        "expires_at": "2026-10-21T20:57:43.7215154-04:00",
+        "size_vram": 6121681920,
+        "context_length": 16384
+      }
+    ]
+  },
+  "status": "AI_VALIDATION_FAILED",
+  "wall_seconds": 256.60930729995016,
+  "llm_vlm_calls": 5,
+  "embedding_calls": 1,
+  "known_input_tokens": 16120,
+  "known_output_tokens": 3357,
+  "chat_calls_missing_token_usage": 0,
+  "embedding_input_tokens": 69,
+  "embedding_calls_missing_input_usage": 0,
+  "model_reported_seconds": 254.5115593,
+  "embedding_reported_seconds": 1.6374919,
+  "image_page_submissions": 12,
+  "transport_or_api_failed_calls": 0,
+  "snapshot": "dossiers\\agent_APP_002_r1\\APP_002_dossier.json",
+  "unique_documents": 8,
+  "unique_pdf_pages": 10,
+  "section_attempts": 5,
+  "section_retry_attempts": 1,
+  "validation_rejected_attempts": 2,
+  "validation_passed": false,
+  "agent_reported_seconds": 256.6,
+  "withheld_documents": {
+    "common_app_application.pdf": "restricted demographic/contact data",
+    "personal_statement.pdf": "POL-ESSAY-01 personal statement (humans only)"
+  },
+  "policies_retrieved": 9
+}

@@ -1,0 +1,66 @@
+{
+  "validation_passed": true,
+  "csv_hook_fields": {
+    "Hooks": "international student on visa"
+  },
+  "supplement": {
+    "responses": [
+      {
+        "prompt": "Academic interest statement",
+        "summary": "The applicant states their academic interest is Biomedical Engineering and expresses interest in coursework that involves explaining methods, examining evidence, and revising interpretations. They also mention a desire to contribute through collaborative work, clear reasoning, and learning from peers."
+      },
+      {
+        "prompt": "Applicant-reported activities",
+        "summary": "The applicant lists several activities including being a varsity soccer player, member of the school art club, environmental club volunteer, youth orchestra musician, science club member, community food bank volunteer, library volunteer, and animal shelter volunteer."
+      },
+      {
+        "prompt": "Applicant-reported awards",
+        "summary": "The applicant reports receiving an MVP award."
+      },
+      {
+        "prompt": "Additional applicant context",
+        "summary": "The applicant is noted as an international student on visa."
+      }
+    ],
+    "summary": "The applicant is interested in Biomedical Engineering and values collaborative learning and evidence-based reasoning. They are involved in a variety of extracurricular activities including sports, arts, volunteering, and clubs. They have received an MVP award and are an international student on visa.",
+    "major_themes": [
+      "Interest in Biomedical Engineering",
+      "Preference for collaborative and evidence-based learning",
+      "Extensive extracurricular involvement",
+      "Recognition through MVP award",
+      "International student status"
+    ],
+    "evidence": [
+      {
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "My stated academic interest is Biomedical Engineering.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "Varsity soccer player, School art club member, Environmental club volunteer, Youth orchestra musician, Science club member, Community food bank volunteer, Library volunteer, Animal shelter volunteer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "MVP",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "international student on visa",
+        "verification_status": "TEXT_VERIFIED"
+      }
+    ]
+  }
+}

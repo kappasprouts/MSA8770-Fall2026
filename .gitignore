@@ -13,6 +13,12 @@ __pycache__/
 .venv/
 venv/
 
+# Node dependencies and Next.js generated files
+node_modules/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+
 # Local configuration and temporary output
 .env
 .env.*

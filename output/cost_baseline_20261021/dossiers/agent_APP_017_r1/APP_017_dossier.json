@@ -1,0 +1,2402 @@
+{
+  "run": {
+    "app_id": "APP_017",
+    "documents_sent": {
+      "CommonApp.pdf": [
+        1,
+        2
+      ],
+      "letter_rec1.pdf": [
+        1
+      ],
+      "letter_rec2.pdf": [
+        1
+      ],
+      "supplement.pdf": [
+        1
+      ],
+      "transcript.pdf": [
+        1,
+        2
+      ]
+    },
+    "documents_withheld": {},
+    "policies_retrieved": [
+      {
+        "policy_id": "POL-001",
+        "title": "Academic Rigor & Contextual GPA Evaluation",
+        "similarity": 0.662,
+        "query": "academic rigor AP IB dual enrollment GPA class rank"
+      },
+      {
+        "policy_id": "POL-003",
+        "title": "Academic Rigor & Contextual GPA Evaluation",
+        "similarity": 0.674,
+        "query": "standardized testing SAT ACT test optional academic index"
+      },
+      {
+        "policy_id": "POL-006",
+        "title": "Standardized Testing Distributions",
+        "similarity": 0.726,
+        "query": "standardized testing SAT ACT test optional academic index"
+      },
+      {
+        "policy_id": "POL-007",
+        "title": "The Academic Index (AI) Formula",
+        "similarity": 0.652,
+        "query": "standardized testing SAT ACT test optional academic index"
+      },
+      {
+        "policy_id": "POL-009",
+        "title": "Extracurricular Impact Tiers",
+        "similarity": 0.608,
+        "query": "extracurricular activities awards leadership intellectual curiosity"
+      },
+      {
+        "policy_id": "POL-012",
+        "title": "Intellectual Curiosity & Institutional Contribution",
+        "similarity": 0.624,
+        "query": "extracurricular activities awards leadership intellectual curiosity"
+      },
+      {
+        "policy_id": "POL-013",
+        "title": "Intellectual Curiosity & Institutional Contribution",
+        "similarity": 0.658,
+        "query": "extracurricular activities awards leadership intellectual curiosity"
+      },
+      {
+        "policy_id": "POL-014",
+        "title": "Recommendation Weight & Letters of Evaluation",
+        "similarity": 0.609,
+        "query": "academic rigor AP IB dual enrollment GPA class rank"
+      },
+      {
+        "policy_id": "POL-015",
+        "title": "Recommendation Weight & Letters of Evaluation",
+        "similarity": 0.575,
+        "query": "holistic academic review institutional contribution"
+      }
+    ],
+    "attempts": 6,
+    "runtime_seconds": 559.4,
+    "validation": {
+      "passed": true,
+      "failed_sections": {},
+      "load_problems": [],
+      "calls": [
+        {
+          "section": "academic",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 5071,
+            "output_tokens": 904,
+            "seconds": 93.2
+          },
+          "errors": []
+        },
+        {
+          "section": "engagement",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 2803,
+            "output_tokens": 527,
+            "seconds": 38.7
+          },
+          "errors": []
+        },
+        {
+          "section": "recommendation",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 2612,
+            "output_tokens": 1325,
+            "seconds": 97.9
+          },
+          "errors": []
+        },
+        {
+          "section": "supplement",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 1469,
+            "output_tokens": 601,
+            "seconds": 40.6
+          },
+          "errors": []
+        },
+        {
+          "section": "policy",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 7681,
+            "output_tokens": 1538,
+            "seconds": 180.0
+          },
+          "errors": []
+        },
+        {
+          "section": "synthesis",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 10190,
+            "output_tokens": 800,
+            "seconds": 106.7
+          },
+          "errors": []
+        }
+      ]
+    },
+    "run_status": "DOSSIER_READY"
+  },
+  "applicant_dossier": {
+    "app_id": "APP_017",
+    "applicant_demographics": {
+      "first_name": "Emerson",
+      "last_name": "Nguyen",
+      "name_of_hs": "Columbus High School",
+      "country": "USA",
+      "region": "Midwest",
+      "intended_major": "Environmental Science",
+      "admission_year": 2026,
+      "admission_term": "F"
+    },
+    "academic_profile": {
+      "document_facts": {
+        "unweighted_gpa": 3.92,
+        "weighted_gpa": 4.7,
+        "class_rank": null,
+        "sat_superscore": null,
+        "act_superscore": null,
+        "intended_major": "Environmental Science",
+        "high_school": "Columbus High School",
+        "expected_graduation": "2026"
+      },
+      "ap_courses_on_transcript": [
+        {
+          "course": "AP English Literature",
+          "grade_level": "11",
+          "final_grade": "A-"
+        },
+        {
+          "course": "AP Research",
+          "grade_level": "11",
+          "final_grade": "A-"
+        },
+        {
+          "course": "AP Seminar",
+          "grade_level": "11",
+          "final_grade": "A-"
+        },
+        {
+          "course": "AP Psychology",
+          "grade_level": "12",
+          "final_grade": "A-"
+        },
+        {
+          "course": "AP US History",
+          "grade_level": "12",
+          "final_grade": "A-"
+        },
+        {
+          "course": "AP Statistics",
+          "grade_level": "12",
+          "final_grade": "A-"
+        },
+        {
+          "course": "AP Computer Science A",
+          "grade_level": "12",
+          "final_grade": "B+"
+        }
+      ],
+      "ap_exam_scores": [],
+      "summary": "The applicant, Emerson Nguyen, has a weighted GPA of 4.7 and an unweighted GPA of 3.92. They are applying to Environmental Science and have completed 7 AP courses, including AP English Literature, AP Research, AP Seminar, AP Psychology, AP US History, AP Statistics, and AP Computer Science A. The transcript shows grades ranging from A- to B+ for these AP courses. The applicant is also listed as a member of several school clubs and has been on the school academic honor roll.",
+      "course_rigor": "The applicant has taken 7 AP courses, which indicates a high level of academic rigor. The courses include AP English Literature, AP Research, AP Seminar, AP Psychology, AP US History, AP Statistics, and AP Computer Science A, all of which are advanced-level courses.",
+      "performance_patterns": "The applicant's performance is consistent across both regular and AP courses. In grades 9-10, they received grades ranging from B to B+. In grades 11-12, they received grades ranging from A- to B+. The applicant's performance in AP courses is strong, with grades ranging from A- to B+.",
+      "strengths": [
+        "High weighted GPA of 4.7",
+        "Completion of 7 AP courses",
+        "Strong performance in AP courses (A- to B+)",
+        "Membership in multiple school clubs"
+      ],
+      "concerns": [],
+      "evidence": [
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Unweighted GPA 3.92",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Weighted GPA 4.7",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Intended Major Environmental Science",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Name of HS Columbus High School",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Admission Year 2026",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP English Literature A-",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP Research A-",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP Computer Science A B+",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        }
+      ]
+    },
+    "engagement_profile": {
+      "activities": [
+        {
+          "activity": "Science club member",
+          "role_and_description": "Science club member",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        },
+        {
+          "activity": "Drama club performer",
+          "role_and_description": "Drama club performer",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        },
+        {
+          "activity": "Coding club member",
+          "role_and_description": "Coding club member",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        },
+        {
+          "activity": "Yearbook photographer",
+          "role_and_description": "Yearbook photographer",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        },
+        {
+          "activity": "Chess club member",
+          "role_and_description": "Chess club member",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        }
+      ],
+      "awards": [
+        "School academic honor roll"
+      ],
+      "summary": "The applicant is involved in five activities: Science club member, Drama club performer, Coding club member, Yearbook photographer, and Chess club member. The applicant has received the award: School academic honor roll.",
+      "leadership_service_employment": "",
+      "themes": [],
+      "assessment": "The applicant is engaged in a variety of extracurricular activities including science, drama, coding, yearbook, and chess. The applicant has received an academic honor roll award.",
+      "evidence": [
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Science club member",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Drama club performer",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Coding club member",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Yearbook photographer",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Chess club member",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "School academic honor roll",
+          "verification_status": "TEXT_VERIFIED"
+        }
+      ]
+    },
+    "recommendation_profile": {
+      "recommenders": [
+        {
+          "name": "Taylor Wilson",
+          "role": "School counselor",
+          "document": "letter_rec1.pdf",
+          "relationship": "I write as a school counselor at Columbus High School. This letter offers a fictional classroom or advising perspective for a simulated application; its narrative observations are not verified records.",
+          "key_observations": [
+            "The supplied academic record lists an unweighted GPA of 3.92 and a weighted GPA of 4.7.",
+            "Emerson intends to explore Environmental Science.",
+            "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "The application lists these activities: Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member.",
+            "The reported awards are: School academic honor roll.",
+            "I recommend Emerson Nguyen for thoughtful consideration.",
+            "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development."
+          ]
+        },
+        {
+          "name": "Casey Morgan",
+          "role": "Classroom teacher (fictional recommender)",
+          "document": "letter_rec2.pdf",
+          "relationship": "I write as a classroom teacher (fictional recommender) at Columbus High School. This letter offers a fictional classroom or advising perspective for a simulated application; its narrative observations are not verified records.",
+          "key_observations": [
+            "In a simulated classroom exercise, Emerson initially approached a difficult question with a confident hypothesis.",
+            "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+            "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+            "Emerson asked the group to state the assumption and check it against the task.",
+            "The resulting conversation showed persistence and consideration for classmates.",
+            "I would encourage continued growth in presenting an argument concisely and seeking clarification early.",
+            "I recommend Emerson Nguyen for thoughtful consideration.",
+            "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development."
+          ]
+        }
+      ],
+      "summary": "Both letters are fictional and state that the applicant, Emerson Nguyen, is recommended for thoughtful consideration. The first letter, from a school counselor, highlights the applicant's academic record (GPA 3.92 unweighted, 4.7 weighted), intended major (Environmental Science), and willingness to consider feedback. The second letter, from a classroom teacher, describes the applicant's behavior in simulated classroom scenarios, including revising hypotheses and seeking clarification in group discussions. Both recommenders expect a college environment that invites questions and offers constructive feedback.",
+      "common_themes": [
+        "Willingness to consider feedback",
+        "Persistence in revising answers",
+        "Seeking clarification",
+        "Desire for constructive feedback in a college environment"
+      ],
+      "strengths_identified": [
+        "Willingness to consider feedback and explain choices",
+        "Ability to revise hypotheses based on evidence",
+        "Persistence and consideration for classmates in group discussions",
+        "Ability to identify and check assumptions"
+      ],
+      "evidence": [
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "The supplied academic record lists an unweighted GPA of 3.92 and a weighted GPA of 4.7.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "Emerson intends to explore Environmental Science.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "The application lists these activities: Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "The reported awards are: School academic honor roll.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "In a simulated classroom exercise, Emerson initially approached a difficult question with a confident hypothesis.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "Emerson asked the group to state the assumption and check it against the task.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "The resulting conversation showed persistence and consideration for classmates.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "I would encourage continued growth in presenting an argument concisely and seeking clarification early.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+          "verification_status": "TEXT_VERIFIED"
+        }
+      ]
+    },
+    "supplemental_essay_profile": {
+      "responses": [
+        {
+          "prompt": "Academic interest statement",
+          "summary": "The applicant states their interest in Environmental Science and wants to explore how classroom ideas can be tested against practical questions. They are interested in coursework that asks students to explain methods, examine evidence, and revise interpretations. They also want to contribute by listening during collaborative work, making reasoning understandable, and learning from classmates with different experiences."
+        },
+        {
+          "prompt": "Applicant-reported activities",
+          "summary": "The applicant is involved in multiple clubs and activities: Science club member, Drama club performer, Coding club member, Yearbook photographer, and Chess club member."
+        },
+        {
+          "prompt": "Applicant-reported awards",
+          "summary": "The applicant was on the School academic honor roll."
+        },
+        {
+          "prompt": "Additional applicant context",
+          "summary": "The applicant is identified as first gen."
+        }
+      ],
+      "summary": "The applicant expresses interest in Environmental Science and values collaborative learning and evidence-based reasoning. They are involved in diverse extracurricular activities including science, drama, coding, yearbook, and chess. They have received academic recognition and are first generation in their family to attend college.",
+      "major_themes": [
+        "Interest in Environmental Science",
+        "Preference for evidence-based and collaborative learning",
+        "Involvement in diverse extracurricular activities",
+        "Academic recognition",
+        "First-generation college applicant"
+      ],
+      "evidence": [
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "My stated academic interest is Environmental Science.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "School academic honor roll",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "First gen",
+          "verification_status": "TEXT_VERIFIED"
+        }
+      ]
+    },
+    "strengths": [
+      {
+        "strength": "High academic rigor through completion of 7 AP courses",
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Intended Major Environmental Science",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP English Literature A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Research A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Computer Science A B+",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          }
+        ]
+      },
+      {
+        "strength": "Consistent academic performance with strong grades in AP courses",
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 4.7",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Psychology A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP US History A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Statistics A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          }
+        ]
+      },
+      {
+        "strength": "Demonstrated intellectual curiosity and evidence-based reasoning",
+        "evidence": [
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "strength": "Engaged in diverse extracurricular activities",
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Science club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Drama club performer",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Coding club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Yearbook photographer",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      }
+    ],
+    "policy_assessment": [
+      {
+        "policy_id": "POL-001",
+        "criterion": "Curriculum Rigor Evaluation: Evaluation requires selecting the most challenging coursework available within the applicant's secondary school environment, specifically Advanced Placement (AP), International Baccalaureate (IB) Diploma Programme, or dual-enrollment institutional tracks.",
+        "alignment": "aligned",
+        "findings": "The applicant has completed 7 AP courses, including AP English Literature, AP Research, AP Seminar, AP Psychology, AP US History, AP Statistics, and AP Computer Science A, indicating high curriculum rigor.",
+        "evidence_ids": [
+          "E006",
+          "E007",
+          "E008",
+          "E001",
+          "E002",
+          "E003",
+          "E004",
+          "E005"
+        ],
+        "evidence": [
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP English Literature A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Research A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Computer Science A B+",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Unweighted GPA 3.92",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 4.7",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Intended Major Environmental Science",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Name of HS Columbus High School",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Admission Year 2026",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-003",
+        "criterion": "Weighted vs. Unweighted Divergence: The academic screening layer prioritizes internal school rankings and absolute course rigor over inflated weighted GPAs to normalize variations across global grading systems.",
+        "alignment": "aligned",
+        "findings": "The applicant\u2019s unweighted GPA is 3.92 and weighted GPA is 4.7, but the evaluation prioritizes course rigor (AP courses) over inflated weighted GPA.",
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E006",
+          "E007",
+          "E008"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Unweighted GPA 3.92",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 4.7",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP English Literature A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Research A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Computer Science A B+",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-006",
+        "criterion": "Policy Flexibility: Under test-optional or test-blind institutional variances, quantitative weight shifts dynamically to the Academic Index calculation and external validation metrics (e.g., AP exam scores of 5).",
+        "alignment": "aligned",
+        "findings": "The applicant has no standardized test scores, but has completed AP courses, which serve as external validation metrics.",
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E006",
+          "E007",
+          "E008"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Unweighted GPA 3.92",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 4.7",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP English Literature A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Research A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Computer Science A B+",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-007",
+        "criterion": "AI Definition: A numerical score ranging from 60 to 240, aggregating calculated GPA, class rank (where available), and standardized test components to create a unified academic baseline.",
+        "alignment": "aligned",
+        "findings": "The applicant has a weighted GPA of 4.7 and unweighted GPA of 3.92, which contribute to the Academic Index calculation, though class rank and test scores are unavailable.",
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E006",
+          "E007",
+          "E008"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Unweighted GPA 3.92",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 4.7",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP English Literature A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Research A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Computer Science A B+",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-009",
+        "criterion": "Tier 1 (National/International Distinction): Includes elite milestones such as attending prestigious summer programs (e.g., RSI, TASP), winning national Olympiads, founding widely recognized organizations, or generating peer-reviewed academic publications.",
+        "alignment": "not_applicable",
+        "findings": "The applicant has no Tier 1 distinctions such as prestigious summer programs, national Olympiads, or peer-reviewed publications.",
+        "evidence_ids": [],
+        "evidence": []
+      },
+      {
+        "policy_id": "POL-012",
+        "criterion": "Intellectual Curiosity: The candidate demonstrates self-driven pursuit of knowledge beyond standard classroom requirements, as evidenced by academic coursework, extracurricular activities, awards, and teacher recommendations.",
+        "alignment": "aligned",
+        "findings": "The applicant is engaged in diverse extracurricular activities, received academic honors, and demonstrates intellectual curiosity through coursework and activities.",
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003",
+          "E004",
+          "E005",
+          "E009",
+          "E010",
+          "E011",
+          "E012",
+          "E013",
+          "E014",
+          "E015",
+          "E016",
+          "E017",
+          "E018",
+          "E019",
+          "E020",
+          "E021",
+          "E022",
+          "E023",
+          "E024",
+          "E025",
+          "E026",
+          "E027",
+          "E028",
+          "E029",
+          "E030",
+          "E031",
+          "E032",
+          "E033",
+          "E034",
+          "E035",
+          "E036"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Unweighted GPA 3.92",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 4.7",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Intended Major Environmental Science",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Name of HS Columbus High School",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Admission Year 2026",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Science club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Drama club performer",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Coding club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Yearbook photographer",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Chess club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "School academic honor roll",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The supplied academic record lists an unweighted GPA of 3.92 and a weighted GPA of 4.7.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "Emerson intends to explore Environmental Science.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The application lists these activities: Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The reported awards are: School academic honor roll.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "In a simulated classroom exercise, Emerson initially approached a difficult question with a confident hypothesis.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "Emerson asked the group to state the assumption and check it against the task.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "The resulting conversation showed persistence and consideration for classmates.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "I would encourage continued growth in presenting an argument concisely and seeking clarification early.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "My stated academic interest is Environmental Science.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "School academic honor roll",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "First gen",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-013",
+        "criterion": "Institutional Contribution: The candidate's academic interests, leadership, extracurricular involvement, and community engagement are evaluated using available academic records, activities, awards, and recommendation letters.",
+        "alignment": "aligned",
+        "findings": "The applicant is involved in multiple clubs, received academic honors, and has letters of recommendation that highlight their engagement and contributions.",
+        "evidence_ids": [
+          "E009",
+          "E010",
+          "E011",
+          "E012",
+          "E013",
+          "E014",
+          "E015",
+          "E016",
+          "E017",
+          "E018",
+          "E019",
+          "E020",
+          "E021",
+          "E022",
+          "E023",
+          "E024",
+          "E025",
+          "E026",
+          "E027",
+          "E028",
+          "E029",
+          "E030",
+          "E031",
+          "E032",
+          "E033",
+          "E034",
+          "E035",
+          "E036"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Science club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Drama club performer",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Coding club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Yearbook photographer",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Chess club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "School academic honor roll",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The supplied academic record lists an unweighted GPA of 3.92 and a weighted GPA of 4.7.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "Emerson intends to explore Environmental Science.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The application lists these activities: Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The reported awards are: School academic honor roll.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "In a simulated classroom exercise, Emerson initially approached a difficult question with a confident hypothesis.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "Emerson asked the group to state the assumption and check it against the task.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "The resulting conversation showed persistence and consideration for classmates.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "I would encourage continued growth in presenting an argument concisely and seeking clarification early.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "My stated academic interest is Environmental Science.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "School academic honor roll",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "First gen",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-014",
+        "criterion": "Teacher Evaluations: Requires two letters from core academic disciplines (STEM and Humanities) written by instructors who can explicitly benchmark the applicant against the top 1\u20132% of students in their teaching careers.",
+        "alignment": "unclear",
+        "findings": "The recommendation letters are fictional and do not provide benchmarks against the top 1\u20132% of students.",
+        "evidence_ids": [],
+        "evidence": []
+      },
+      {
+        "policy_id": "POL-015",
+        "criterion": "Counselor Report: Provides institutional context, confirming the student's character, disciplinary standing, and relative peer standing within the graduating cohort.",
+        "alignment": "aligned",
+        "findings": "The counselor letter confirms the applicant\u2019s academic record, intended major, and character, though it does not explicitly state peer standing.",
+        "evidence_ids": [
+          "E015",
+          "E016",
+          "E017",
+          "E018",
+          "E019",
+          "E020",
+          "E021"
+        ],
+        "evidence": [
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The supplied academic record lists an unweighted GPA of 3.92 and a weighted GPA of 4.7.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "Emerson intends to explore Environmental Science.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The application lists these activities: Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The reported awards are: School academic honor roll.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      }
+    ],
+    "review_notes": [],
+    "holistic_assessment": "The applicant, Emerson Nguyen, has a weighted GPA of 4.7 and unweighted GPA of 3.92, and has completed 7 AP courses including AP English Literature, AP Research, AP Seminar, AP Psychology, AP US History, AP Statistics, and AP Computer Science A. They are applying to Environmental Science and are involved in multiple extracurricular activities including Science club, Drama club, Coding club, Yearbook, and Chess club. The applicant has received academic honors and is identified as first generation. Recommendation letters highlight their intellectual curiosity, willingness to consider feedback, and persistence in revising answers. The applicant expresses interest in evidence-based and collaborative learning, and values listening during group work. The applicant\u2019s academic record and engagement are consistent across documents, with no discrepancies noted.",
+    "evidence_map": [
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.92",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.7",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Intended Major Environmental Science",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Name of HS Columbus High School",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Admission Year 2026",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP English Literature A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Research A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Computer Science A B+",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Science club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Drama club performer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Coding club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Yearbook photographer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Chess club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "School academic honor roll",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The supplied academic record lists an unweighted GPA of 3.92 and a weighted GPA of 4.7.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "Emerson intends to explore Environmental Science.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The application lists these activities: Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The reported awards are: School academic honor roll.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "In a simulated classroom exercise, Emerson initially approached a difficult question with a confident hypothesis.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Emerson asked the group to state the assumption and check it against the task.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "The resulting conversation showed persistence and consideration for classmates.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I would encourage continued growth in presenting an argument concisely and seeking clarification early.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "My stated academic interest is Environmental Science.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "School academic honor roll",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "First gen",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Intended Major Environmental Science",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP English Literature A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "strengths",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Research A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "strengths",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Computer Science A B+",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.7",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Psychology A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "strengths",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP US History A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "strengths",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Statistics A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "strengths",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Science club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Drama club performer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Coding club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Yearbook photographer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP English Literature A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Research A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Computer Science A B+",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.92",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.7",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Intended Major Environmental Science",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Name of HS Columbus High School",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Admission Year 2026",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.92",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.7",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP English Literature A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Research A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Computer Science A B+",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.92",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.7",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP English Literature A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Research A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Computer Science A B+",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.92",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.7",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP English Literature A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Research A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Computer Science A B+",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.92",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.7",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Intended Major Environmental Science",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Name of HS Columbus High School",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Admission Year 2026",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Science club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Drama club performer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Coding club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Yearbook photographer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Chess club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "School academic honor roll",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The supplied academic record lists an unweighted GPA of 3.92 and a weighted GPA of 4.7.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "Emerson intends to explore Environmental Science.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The application lists these activities: Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The reported awards are: School academic honor roll.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "In a simulated classroom exercise, Emerson initially approached a difficult question with a confident hypothesis.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Emerson asked the group to state the assumption and check it against the task.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "The resulting conversation showed persistence and consideration for classmates.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I would encourage continued growth in presenting an argument concisely and seeking clarification early.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "My stated academic interest is Environmental Science.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "School academic honor roll",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "First gen",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Science club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Drama club performer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Coding club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Yearbook photographer",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Chess club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "School academic honor roll",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The supplied academic record lists an unweighted GPA of 3.92 and a weighted GPA of 4.7.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "Emerson intends to explore Environmental Science.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The application lists these activities: Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The reported awards are: School academic honor roll.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "In a simulated classroom exercise, Emerson initially approached a difficult question with a confident hypothesis.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Emerson asked the group to state the assumption and check it against the task.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "The resulting conversation showed persistence and consideration for classmates.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I would encourage continued growth in presenting an argument concisely and seeking clarification early.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "My stated academic interest is Environmental Science.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "School academic honor roll",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "First gen",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The supplied academic record lists an unweighted GPA of 3.92 and a weighted GPA of 4.7.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "Emerson intends to explore Environmental Science.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The application lists these activities: Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The reported awards are: School academic honor roll.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I recommend Emerson Nguyen for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.",
+        "verification_status": "TEXT_VERIFIED"
+      }
+    ],
+    "generated_at": "2026-10-22 00:52:43.729080+00:00",
+    "updated_at": "2026-10-22 00:52:43.729080+00:00"
+  }
+}

@@ -1,0 +1,40 @@
+
+====================================
+EAOS - POLICY VECTOR STORE
+====================================
+
+Reading policy file:
+D:\Users\miwi\git\MSA8770-Fall2026\policy\riverview_admissions_policy.txt
+
+Loaded 21 policy chunks from D:\Users\miwi\git\MSA8770-Fall2026\policy\riverview_admissions_policy.txt
+
+policy_chunks table is ready.
+Generating embeddings for 21 policy chunks...
+Stored 21 policy chunks (version 1.0).
+
+Policies stored in pgvector:
+
+  POL-001      Academic Rigor & Contextual GPA Evaluation
+  POL-002      Academic Rigor & Contextual GPA Evaluation
+  POL-003      Academic Rigor & Contextual GPA Evaluation
+  POL-004      Standardized Testing Distributions
+  POL-005      Standardized Testing Distributions
+  POL-006      Standardized Testing Distributions
+  POL-007      The Academic Index (AI) Formula
+  POL-008      The Academic Index (AI) Formula
+  POL-009      Extracurricular Impact Tiers
+  POL-010      Extracurricular Impact Tiers
+  POL-011      Extracurricular Impact Tiers
+  POL-012      Intellectual Curiosity & Institutional Contribution
+  POL-013      Intellectual Curiosity & Institutional Contribution
+  POL-014      Recommendation Weight & Letters of Evaluation
+  POL-015      Recommendation Weight & Letters of Evaluation
+  POL-016      The Regional Committee Advocacy System
+  POL-017      The Regional Committee Advocacy System
+  POL-018      Institutional Balancing Acts (Cohort Sculpting)
+  POL-019      Institutional Balancing Acts (Cohort Sculpting)
+  POL-020      Institutional Balancing Acts (Cohort Sculpting)
+  POL-021      Institutional Balancing Acts (Cohort Sculpting)
+
+Policy vector store creation complete.
+

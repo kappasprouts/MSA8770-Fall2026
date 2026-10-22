@@ -1,141 +1,59 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import AppHeader from "@/components/AppHeader";
-import DossierPanel from "@/components/DossierPanel";
-import DocumentsPanel from "@/components/DocumentsPanel";
-import ChatPanel from "@/components/ChatPanel";
-import type { ApplicantSummary, DossierPayload, OriginalDocument } from "@/lib/types";
+import { redirect } from "next/navigation";
+import EaosShell from "@/components/EaosShell";
+import WorkspaceIcon from "@/components/WorkspaceIcon";
+import { dossierHref } from "@/lib/eaos-api";
+import styles from "./home.module.css";
 
-export default function Home() {
-  const [applicants, setApplicants] = useState<ApplicantSummary[]>([]);
-  const [selectedAppId, setSelectedAppId] = useState("");
-  const [payload, setPayload] = useState<DossierPayload | null>(null);
-  const [documents, setDocuments] = useState<OriginalDocument[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+const destinations = [
+  {
+    href: "/review-queue",
+    icon: "processing",
+    title: "Processing dashboard",
+    description: "Application statuses, batch processing, and dossier availability.",
+  },
+  {
+    href: "/applicant-review",
+    icon: "review",
+    title: "Applicant review",
+    description: "Saved dossiers, original documents, and dossier Q&A.",
+  },
+  {
+    href: "/final-decisions",
+    icon: "decisions",
+    title: "Final decisions",
+    description: "Pending decision queue and recording of authorized admissions decisions.",
+  },
+] as const;
 
-  useEffect(() => {
-    fetch("/api/applicants")
-      .then((res) => res.json())
-      .then((data: { applicants: ApplicantSummary[] }) => {
-        setApplicants(data.applicants);
-
-        if (data.applicants.length > 0) {
-          const requestedAppId = new URLSearchParams(
-            window.location.search
-          ).get("appId");
-
-          const matchingApplicant = data.applicants.find(
-            (applicant) => applicant.id === requestedAppId
-          );
-
-          setSelectedAppId(
-            matchingApplicant ? matchingApplicant.id : data.applicants[0].id
-          );
-        }
-      })
-      .catch(() => setError("Could not load the list of applicants."));
-  }, []);
-
-  useEffect(() => {
-    if (!selectedAppId) {
-      return;
-    }
-
-    let cancelled = false;
-
-    async function loadDossier() {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const res = await fetch(`/api/dossier?appId=${encodeURIComponent(selectedAppId)}`);
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error ?? "Failed to load dossier.");
-        }
-
-        if (!cancelled) {
-          setPayload(data.data);
-          setDocuments(data.documents ?? []);
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setPayload(null);
-          setDocuments([]);
-          setError(err instanceof Error ? err.message : "Failed to load dossier.");
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    }
-
-    loadDossier();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [selectedAppId]);
-
-  const applicantName = (() => {
-    const demo = payload?.applicant_dossier?.applicant_demographics;
-
-    if (!demo) {
-      return null;
-    }
-
-    const name = [demo.first_name, demo.last_name].filter(Boolean).join(" ");
-    return name || null;
-  })();
+export default async function Home({ searchParams }: PageProps<"/">) {
+  const params = await searchParams;
+  const appId = Array.isArray(params.appId) ? params.appId[0] : params.appId;
+  // Keep saved dossier bookmarks working after introducing the home page.
+  if (appId) redirect(dossierHref(appId));
 
   return (
-    <div className="flex h-screen flex-col bg-app-bg text-ink">
-      <AppHeader
-        applicants={applicants}
-        selectedAppId={selectedAppId}
-        onSelect={setSelectedAppId}
-        applicantName={applicantName}
-      />
-      <div className="border-b border-border bg-surface px-4 py-2">
-        <Link
-          href="/review-queue"
-          className="inline-flex items-center rounded-lg border border-border px-4 py-2 text-sm font-medium text-ink hover:bg-app-bg"
-        >
-          ← Back to Processing Dashboard
-        </Link>
-      </div>
-
-      <main className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4">
-        {error && (
-          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-            {error}
-          </div>
-        )}
-
-        {loading && !payload && (
-          <div className="rounded-lg border border-border bg-surface px-4 py-3 text-sm text-ink-muted">
-            Loading applicant dossier…
-          </div>
-        )}
-
-        {payload && (
-          <>
-            <div className="grid grid-cols-1 gap-4 lg:h-[52vh] lg:grid-cols-2">
-              <DossierPanel payload={payload} />
-              <DocumentsPanel appId={selectedAppId} documents={documents} />
-            </div>
-
-            <div className="h-[50vh] shrink-0">
-              <ChatPanel key={selectedAppId} appId={selectedAppId} />
-            </div>
-          </>
-        )}
-      </main>
-    </div>
+    <EaosShell
+      title="Admissions workspace"
+      subtitle="Application processing, applicant review, and decision recording."
+      role="Home"
+    >
+      <nav aria-label="Admissions workspaces" className={styles.workspaces}>
+        <ul className={styles.destinations}>
+          {destinations.map(destination => (
+            <li key={destination.href}>
+              <Link href={destination.href} className={styles.destination}>
+                <span className={styles.icon}><WorkspaceIcon name={destination.icon} /></span>
+                <div className={styles.details}>
+                  <h2>{destination.title}</h2>
+                  <p>{destination.description}</p>
+                </div>
+                <span className={styles.arrow} aria-hidden="true">→</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </EaosShell>
   );
 }

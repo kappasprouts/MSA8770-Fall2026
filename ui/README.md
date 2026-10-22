@@ -1,8 +1,10 @@
-# Riverview State University — Applicant Review Chat
+# Riverview State University — Admissions Workspace
 
-A read-only Next.js interface for reviewing completed undergraduate admissions dossiers, viewing original applicant PDFs, and asking evidence-grounded follow-up questions through a local Ollama model.
+A Next.js workspace for tracking applicant processing, reviewing saved dossiers and source PDFs, asking dossier-grounded questions, and recording a human-approved final decision.
 
-The UI supports human review; **it does not issue, recommend, or record admission decisions**. Dossiers are generated upstream by the Summarizing Agent pipeline. The Q&A assistant uses the selected applicant's stored dossier as its context, not direct analysis of the PDFs.
+The AI assistant is advisory and must not make admission decisions. The final-decisions page records a decision supplied by a human reviewer. Dossiers are generated upstream; Q&A uses the selected saved dossier, not direct analysis of the PDFs. Authentication is still simulated in the prototype's decision endpoint.
+
+The home page (`/`) is an internal navigation directory for the processing dashboard (`/review-queue`), applicant review (`/applicant-review?appId=APP_012`), and final decisions (`/final-decisions`). Every page shares navigation and theme components. Previous dossier bookmarks such as `/?appId=APP_012` redirect to the selected applicant's review page. See [the first-pass implementation notes](docs/first-pass.md) for validation provenance, counts, request handling, and regression checks.
 
 ![Applicant Review Chat screenshot](public/readme-screenshot.png)
 
@@ -88,6 +90,8 @@ npm run build
 ```
 
 ## Using the interface
+
+Start at **Home** and choose a workspace. The processing dashboard shows application and batch statuses; applicant review provides saved dossiers and source documents; final decisions records human-approved decisions. The Home link and university logo return to the landing page from any workspace. The landing page itself does not depend on database or model requests.
 
 1. **Select an applicant** from the dropdown. Available IDs are read from `applicant_dossier`; an applicant must have a generated dossier to appear.
 2. **Applicant Dossier (left):** review applicant information, **Summary**, policy/validation checks, and supporting evidence. Expand cards as needed.
@@ -181,7 +185,7 @@ Before sharing changes with teammates, verify:
 ## Limitations
 
 - Prototype UI; not an authenticated production admissions system.
-- Read-only; it does not approve, decline, waitlist, or save final decisions.
+- Dossier and document review are read-only. The final-decision endpoint writes the human-supplied decision and an audit event, with a simulated actor until authentication is implemented.
 - Chat responses are model-generated and require human verification against dossier evidence and original PDFs.
 - The chat uses the stored dossier context, not arbitrary direct retrieval across the original PDF files.
 - Local Docker and Ollama services must be running; performance depends on available machine resources.

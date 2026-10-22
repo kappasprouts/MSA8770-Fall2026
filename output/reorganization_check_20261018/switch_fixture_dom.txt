@@ -1,0 +1,75 @@
+- banner:
+  - paragraph: Riverview State University
+  - paragraph: Applicant Review
+  - heading "APP_014 | Temporary UI fixture" [level=1]:
+    - text: APP_014
+    - generic: "| Temporary UI fixture"
+  - text: Applicant
+  - combobox "Applicant":
+    - option "APP_012"
+    - option "APP_014" [selected]
+- main:
+  - heading "Applicant Dossier" [level=2]
+  - generic: ↕ Scroll
+  - heading "Applicant Information" [level=3]
+  - generic: Name
+  - generic: Temporary UI fixture
+  - generic: High School
+  - generic: —
+  - generic: Intended Major
+  - generic: —
+  - generic: Unweighted GPA
+  - generic: —
+  - generic: Weighted GPA
+  - generic: —
+  - generic: SAT (Superscore)
+  - generic: —
+  - button "View more ↓"
+  - heading "Summary" [level=3]
+  - paragraph: TEMPORARY UI SWITCH TEST FIXTURE - no model-generated findings
+  - heading "Validation & Policy Snapshot" [level=3]
+  - generic: Validated sections
+  - generic: Complete
+  - generic: Policy alignment
+  - generic: —
+  - generic: Full dossier validation
+  - generic: —
+  - paragraph: Advisory only — this is a factual status summary, not an admission recommendation.
+  - heading "Original Documents" [level=2]
+  - generic: ↕ Scroll
+  - generic: PDF
+  - paragraph: CommonApp
+  - paragraph: —
+  - link "View Full ↗":
+    - /url: /api/documents?appId=APP_014&file=CommonApp.pdf
+  - iframe
+  - generic: PDF
+  - paragraph: Letter Rec1
+  - paragraph: —
+  - link "View Full ↗":
+    - /url: /api/documents?appId=APP_014&file=letter_rec1.pdf
+  - iframe
+  - generic: PDF
+  - paragraph: Letter Rec2
+  - paragraph: —
+  - link "View Full ↗":
+    - /url: /api/documents?appId=APP_014&file=letter_rec2.pdf
+  - iframe
+  - generic: PDF
+  - paragraph: Supplement
+  - paragraph: —
+  - link "View Full ↗":
+    - /url: /api/documents?appId=APP_014&file=supplement.pdf
+  - iframe
+  - generic: PDF
+  - paragraph: Transcript
+  - paragraph: —
+  - link "View Full ↗":
+    - /url: /api/documents?appId=APP_014&file=transcript.pdf
+  - iframe
+  - heading "Q&A Assistant" [level=2]
+  - generic: ↕ Scroll
+  - paragraph: Ask about this applicant's academics, activities, recommendations, essay, or policy alignment. Answers are grounded in the validated dossier only.
+  - textbox "Ask about this applicant (e.g., \"What do the recommendation letters say?\")"
+  - button "Send ➤" [disabled]
+- alert

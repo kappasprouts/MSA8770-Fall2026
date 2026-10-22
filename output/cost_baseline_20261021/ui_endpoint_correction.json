@@ -1,0 +1,30 @@
+{
+  "identified_at_utc": "2026-10-22T00:49:19.515186+00:00",
+  "old_benchmark_ui": {
+    "ProcessId": 28292,
+    "ParentProcessId": 28660,
+    "CommandLine": "C:\\Users\\miwi\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.EXE D:\\Users\\miwi\\git\\MSA8770-Fall2026\\ui\\node_modules\\next\\dist\\bin\\next start -p 3002",
+    "CreationDate": "/Date(1792627785244)/"
+  },
+  "old_benchmark_parent": {
+    "ProcessId": 28660,
+    "ParentProcessId": 29300,
+    "CommandLine": "\"D:\\Users\\miwi\\git\\MSA8770-Fall2026\\.venv\\Scripts\\python.exe\" ./tests/cost_baseline/run_baseline.py --output output\\cost_baseline_20261021",
+    "CreationDate": "/Date(1792627715222)/"
+  },
+  "reason": "Existing user listener at 127.0.0.1:3002 took precedence over benchmark wildcard listener. Dossier calls use the separate metering proxy and are unaffected.",
+  "new_port": 31023,
+  "user_ui_pid_preserved": 24144,
+  "boundary_observed": {
+    "timestamp_utc": "2026-10-22T00:57:00.397930+00:00",
+    "stage": "agent_APP_013_r1",
+    "app_id": "APP_013",
+    "section": null
+  },
+  "stopped_at_utc": "2026-10-22T00:57:00.406531+00:00",
+  "checkpointed_dossier_runs": 6,
+  "checkpointed_chat_requests": 0,
+  "any_legacy_chat_started": false,
+  "new_ui_pid": 29704,
+  "identity_verified_at_utc": "2026-10-22T00:57:03.186010+00:00"
+}

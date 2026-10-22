@@ -1,0 +1,50 @@
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 589ms
+
+  Creating an optimized production build ...
+connect EACCES 74.125.21.95:443
+
+Retrying 1/3...
+connect EACCES 74.125.21.95:443
+
+Retrying 1/3...
+connect EACCES 74.125.21.95:443
+
+Retrying 2/3...
+connect EACCES 74.125.21.95:443
+
+Retrying 2/3...
+connect EACCES 74.125.21.95:443
+
+Retrying 3/3...
+connect EACCES 74.125.21.95:443
+
+Retrying 3/3...
+Error: connect EACCES 74.125.21.95:443
+    at ignore-listed frames {
+  errno: -4092,
+  code: 'EACCES',
+  syscall: 'connect',
+  address: '74.125.21.95',
+  port: 443
+}
+Error: connect EACCES 74.125.21.95:443
+    at ignore-listed frames {
+  errno: -4092,
+  code: 'EACCES',
+  syscall: 'connect',
+  address: '74.125.21.95',
+  port: 443
+}
+Failed to compile.
+
+src\app\layout.tsx
+`next/font` error:
+Failed to fetch `Geist` from Google Fonts.
+
+src\app\layout.tsx
+`next/font` error:
+Failed to fetch `Geist Mono` from Google Fonts.
+
+
+> Build failed because of webpack errors

@@ -1,0 +1,5 @@
+Ollama chat result: { done_reason: 'stop', eval_count: 131, reply_length: 440 }
+Ollama chat result: { done_reason: 'stop', eval_count: 221, reply_length: 1154 }
+Ollama chat result: { done_reason: 'stop', eval_count: 126, reply_length: 635 }
+Ollama chat result: { done_reason: 'stop', eval_count: 5, reply_length: 19 }
+

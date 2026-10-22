@@ -1,0 +1,25 @@
+usage: python.exe -m ingestion.run_score_ingest [-h]
+                                                --source {college_board,act,COLLEGE_BOARD,ACT}
+                                                --file FILE [--config CONFIG]
+                                                [--affected-ids AFFECTED_IDS]
+                                                [--require-object-storage]
+                                                [--require-postgresql]
+
+Ingest College Board or ACT test scores as delta feeds and re-evaluate
+manifest gates.
+
+options:
+  -h, --help            show this help message and exit
+  --source, -s {college_board,act,COLLEGE_BOARD,ACT}
+                        Test score feed source: 'college_board' or 'act'
+  --file, -f FILE       Path to the input CSV file containing score records
+  --config, -c CONFIG   Path to ingestion rules YAML file (default:
+                        policy/ingestion_rules.yaml)
+  --affected-ids, -a AFFECTED_IDS
+                        Base path for a uniquely named per-run handoff
+                        (default: output/ingestion/affected_ids.json)
+  --require-object-storage
+                        Require live MinIO and verify linked objects before a
+                        ready-ID handoff.
+  --require-postgresql  Require shared PostgreSQL rather than local SQLite
+                        fallback.

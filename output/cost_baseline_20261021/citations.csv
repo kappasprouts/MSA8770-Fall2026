@@ -1,0 +1,207 @@
+﻿stage,app_id,section,document,page,quote,agent_verification,independent_text_check
+agent_APP_012_r1,APP_012,academic_profile,CommonApp.pdf,2,Unweighted GPA 3.97,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,academic_profile,CommonApp.pdf,2,Weighted GPA 4.4,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,academic_profile,CommonApp.pdf,2,Superscored SAT Score 1530,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,academic_profile,CommonApp.pdf,2,Superscored ACT Score 35,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,academic_profile,transcript.pdf,1,AP Human Geography A-,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_012_r1,APP_012,academic_profile,transcript.pdf,1,AP Chemistry A,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_012_r1,APP_012,academic_profile,transcript.pdf,1,AP Comparative Government A,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_012_r1,APP_012,academic_profile,transcript.pdf,1,AP Computer Science A A-,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_012_r1,APP_012,engagement_profile,CommonApp.pdf,2,Varsity soccer player,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,engagement_profile,CommonApp.pdf,2,School art club member,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,engagement_profile,CommonApp.pdf,2,Environmental club volunteer,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,engagement_profile,CommonApp.pdf,2,Youth orchestra musician,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,engagement_profile,CommonApp.pdf,2,Science club member,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,engagement_profile,CommonApp.pdf,2,Community food bank volunteer,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,engagement_profile,CommonApp.pdf,2,Library volunteer,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,engagement_profile,CommonApp.pdf,2,Animal shelter volunteer,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,engagement_profile,CommonApp.pdf,2,MVP,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,recommendation_profile,letter_rec1.pdf,1,The supplied academic record lists an unweighted GPA of 3.97 and a weighted GPA of 4.4.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,recommendation_profile,letter_rec1.pdf,1,Drew intends to explore Biomedical Engineering.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,recommendation_profile,letter_rec1.pdf,1,I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,recommendation_profile,letter_rec1.pdf,1,The reported awards are: MVP.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,recommendation_profile,letter_rec1.pdf,1,I recommend Drew Young for thoughtful consideration.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,recommendation_profile,letter_rec1.pdf,1,I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,recommendation_profile,letter_rec2.pdf,1,"In a simulated classroom exercise, Drew initially approached a difficult question with a confident hypothesis.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,recommendation_profile,letter_rec2.pdf,1,"When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,recommendation_profile,letter_rec2.pdf,1,Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,recommendation_profile,letter_rec2.pdf,1,The resulting conversation showed persistence and consideration for classmates.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,recommendation_profile,letter_rec2.pdf,1,I recommend Drew Young for thoughtful consideration.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,recommendation_profile,letter_rec2.pdf,1,I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,supplemental_essay_profile,supplement.pdf,1,My stated academic interest is Biomedical Engineering.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,supplemental_essay_profile,supplement.pdf,1,I would like to explore how classroom ideas can be tested against practical questions.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,supplemental_essay_profile,supplement.pdf,1,"I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,supplemental_essay_profile,supplement.pdf,1,"I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,supplemental_essay_profile,supplement.pdf,1,"Varsity soccer player, School art club member, Environmental club volunteer, Youth orchestra musician, Science club member, Community food bank volunteer, Library volunteer, Animal shelter volunteer",TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,supplemental_essay_profile,supplement.pdf,1,MVP,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r1,APP_012,supplemental_essay_profile,supplement.pdf,1,international student on visa,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,academic_profile,CommonApp.pdf,2,Unweighted GPA 3.97,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,academic_profile,CommonApp.pdf,2,Weighted GPA 4.4,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,academic_profile,CommonApp.pdf,2,Superscored SAT Score 1530,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,academic_profile,CommonApp.pdf,2,Superscored ACT Score 35,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,academic_profile,transcript.pdf,1,AP Human Geography A-,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_012_r2,APP_012,academic_profile,transcript.pdf,1,AP Chemistry A,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_012_r2,APP_012,academic_profile,transcript.pdf,1,AP Comparative Government A,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_012_r2,APP_012,academic_profile,transcript.pdf,1,AP Computer Science A A-,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_012_r2,APP_012,engagement_profile,CommonApp.pdf,2,Varsity soccer player,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,engagement_profile,CommonApp.pdf,2,School art club member,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,engagement_profile,CommonApp.pdf,2,Environmental club volunteer,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,engagement_profile,CommonApp.pdf,2,Youth orchestra musician,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,engagement_profile,CommonApp.pdf,2,Science club member,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,engagement_profile,CommonApp.pdf,2,Community food bank volunteer,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,engagement_profile,CommonApp.pdf,2,Library volunteer,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,engagement_profile,CommonApp.pdf,2,Animal shelter volunteer,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,engagement_profile,CommonApp.pdf,2,MVP,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,recommendation_profile,letter_rec1.pdf,1,The supplied academic record lists an unweighted GPA of 3.97 and a weighted GPA of 4.4.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,recommendation_profile,letter_rec1.pdf,1,Drew intends to explore Biomedical Engineering.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,recommendation_profile,letter_rec1.pdf,1,I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,recommendation_profile,letter_rec1.pdf,1,The reported awards are: MVP.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,recommendation_profile,letter_rec1.pdf,1,I recommend Drew Young for thoughtful consideration.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,recommendation_profile,letter_rec1.pdf,1,I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,recommendation_profile,letter_rec2.pdf,1,"In a simulated classroom exercise, Drew initially approached a difficult question with a confident hypothesis.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,recommendation_profile,letter_rec2.pdf,1,"When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,recommendation_profile,letter_rec2.pdf,1,Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,recommendation_profile,letter_rec2.pdf,1,The resulting conversation showed persistence and consideration for classmates.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,recommendation_profile,letter_rec2.pdf,1,I recommend Drew Young for thoughtful consideration.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,recommendation_profile,letter_rec2.pdf,1,I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,supplemental_essay_profile,supplement.pdf,1,My stated academic interest is Biomedical Engineering.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,supplemental_essay_profile,supplement.pdf,1,I would like to explore how classroom ideas can be tested against practical questions.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,supplemental_essay_profile,supplement.pdf,1,"I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,supplemental_essay_profile,supplement.pdf,1,"I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,supplemental_essay_profile,supplement.pdf,1,"Varsity soccer player, School art club member, Environmental club volunteer, Youth orchestra musician, Science club member, Community food bank volunteer, Library volunteer, Animal shelter volunteer",TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,supplemental_essay_profile,supplement.pdf,1,MVP,TEXT_VERIFIED,normalized_quote_found
+agent_APP_012_r2,APP_012,supplemental_essay_profile,supplement.pdf,1,international student on visa,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,academic_profile,CommonApp.pdf,2,Unweighted GPA 3.47,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,academic_profile,CommonApp.pdf,2,Weighted GPA 3.89,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,academic_profile,CommonApp.pdf,2,Superscored SAT Score 31,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,academic_profile,transcript.pdf,1,English 9 A,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_014_r1,APP_014,academic_profile,transcript.pdf,1,Algebra I A-,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_014_r1,APP_014,academic_profile,transcript.pdf,1,Biology A-,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_014_r1,APP_014,academic_profile,transcript.pdf,1,World Geography B,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_014_r1,APP_014,academic_profile,transcript.pdf,1,English 10 B+,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_014_r1,APP_014,engagement_profile,CommonApp.pdf,2,"Debate team member, Coding club member, Drama club performer, Animal shelter volunteer",TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,engagement_profile,CommonApp.pdf,2,Community service recognition,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,recommendation_profile,letter_rec1.pdf,1,The supplied academic record lists an unweighted GPA of 3.47 and a weighted GPA of 3.89.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,recommendation_profile,letter_rec1.pdf,1,Reese intends to explore Philosophy.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,recommendation_profile,letter_rec1.pdf,1,I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,recommendation_profile,letter_rec1.pdf,1,I recommend Reese Carter for thoughtful consideration.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,recommendation_profile,letter_rec1.pdf,1,I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,recommendation_profile,letter_rec2.pdf,1,"In a simulated classroom exercise, Reese initially approached a difficult question with a confident hypothesis.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,recommendation_profile,letter_rec2.pdf,1,"When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,recommendation_profile,letter_rec2.pdf,1,The resulting conversation showed persistence and consideration for classmates.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,recommendation_profile,letter_rec2.pdf,1,I recommend Reese Carter for thoughtful consideration.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,recommendation_profile,letter_rec2.pdf,1,I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,supplemental_essay_profile,supplement.pdf,1,My stated academic interest is Philosophy.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,supplemental_essay_profile,supplement.pdf,1,I would like to explore how classroom ideas can be tested against practical questions.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,supplemental_essay_profile,supplement.pdf,1,"I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,supplemental_essay_profile,supplement.pdf,1,"I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,supplemental_essay_profile,supplement.pdf,1,"Debate team member, Coding club member, Drama club performer, Animal shelter volunteer",TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,supplemental_essay_profile,supplement.pdf,1,Community service recognition,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,supplemental_essay_profile,supplement.pdf,1,First-Gen,TEXT_VERIFIED,normalized_quote_found
+agent_APP_014_r1,APP_014,supplemental_essay_profile,supplement.pdf,1,Narrative responses are fictional. Structured entries reproduce the supplied CSV; missing information has not been inferred. No college-specific prompt was supplied.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,academic_profile,CommonApp.pdf,2,Unweighted GPA 4,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,academic_profile,CommonApp.pdf,2,Weighted GPA 4.48,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,academic_profile,CommonApp.pdf,2,Rank 32/397,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,academic_profile,CommonApp.pdf,2,Superscored ACT Score 34,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,academic_profile,transcript.pdf,1,AP Physics C Electricity and Magnetism B+,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_015_r1,APP_015,academic_profile,transcript.pdf,1,AP Calculus AB A-,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_015_r1,APP_015,academic_profile,transcript.pdf,1,AP Environmental Science B,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_015_r1,APP_015,academic_profile,transcript.pdf,1,AP Physics 2 A-,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_015_r1,APP_015,engagement_profile,CommonApp.pdf,2,Concert band musician,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,engagement_profile,CommonApp.pdf,2,Robotics club member,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,engagement_profile,CommonApp.pdf,2,School newspaper editor,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,engagement_profile,CommonApp.pdf,2,Science club member,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,engagement_profile,CommonApp.pdf,2,Youth orchestra musician,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,recommendation_profile,letter_rec1.pdf,1,Rowan intends to explore Undecided.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,recommendation_profile,letter_rec1.pdf,1,I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,recommendation_profile,letter_rec1.pdf,1,"The application lists these activities: Concert band musician, Robotics club member, School newspaper editor, Science club member, Youth orchestra musician.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,recommendation_profile,letter_rec1.pdf,1,I recommend Rowan Foster for thoughtful consideration.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,recommendation_profile,letter_rec2.pdf,1,Rowan initially approached a difficult question with a confident hypothesis.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,recommendation_profile,letter_rec2.pdf,1,That willingness to reconsider is a useful foundation for college work.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,recommendation_profile,letter_rec2.pdf,1,Rowan asked the group to state the assumption and check it against the task.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,recommendation_profile,letter_rec2.pdf,1,I would encourage continued growth in presenting an argument concisely and seeking clarification early.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,recommendation_profile,letter_rec2.pdf,1,I recommend Rowan Foster for thoughtful consideration.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,supplemental_essay_profile,supplement.pdf,1,My stated academic interest is Undecided.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,supplemental_essay_profile,supplement.pdf,1,I would like to explore how classroom ideas can be tested against practical questions.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,supplemental_essay_profile,supplement.pdf,1,"I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,supplemental_essay_profile,supplement.pdf,1,"I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,supplemental_essay_profile,supplement.pdf,1,"Concert band musician, Robotics club member, School newspaper editor, Science club member, Youth orchestra musician",TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,supplemental_essay_profile,supplement.pdf,1,Not provided,TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,supplemental_essay_profile,supplement.pdf,1,"None really, gonna do marching band",TEXT_VERIFIED,normalized_quote_found
+agent_APP_015_r1,APP_015,strengths,CommonApp.pdf,2,AP Physics C Electricity and Magnetism B+,TEXT_VERIFIED,no_exact_normalized_match_requires_review
+agent_APP_015_r1,APP_015,strengths,CommonApp.pdf,2,AP Calculus AB A-,TEXT_VERIFIED,no_exact_normalized_match_requires_review
+agent_APP_015_r1,APP_015,strengths,CommonApp.pdf,2,AP Environmental Science B,TEXT_VERIFIED,no_exact_normalized_match_requires_review
+agent_APP_015_r1,APP_015,strengths,CommonApp.pdf,2,AP Physics 2 A-,TEXT_VERIFIED,no_exact_normalized_match_requires_review
+agent_APP_017_r1,APP_017,academic_profile,CommonApp.pdf,2,Unweighted GPA 3.92,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,academic_profile,CommonApp.pdf,2,Weighted GPA 4.7,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,academic_profile,CommonApp.pdf,2,Intended Major Environmental Science,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,academic_profile,CommonApp.pdf,2,Name of HS Columbus High School,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,academic_profile,CommonApp.pdf,2,Admission Year 2026,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,academic_profile,transcript.pdf,1,AP English Literature A-,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_017_r1,APP_017,academic_profile,transcript.pdf,1,AP Research A-,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_017_r1,APP_017,academic_profile,transcript.pdf,1,AP Computer Science A B+,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_017_r1,APP_017,engagement_profile,CommonApp.pdf,2,Science club member,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,engagement_profile,CommonApp.pdf,2,Drama club performer,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,engagement_profile,CommonApp.pdf,2,Coding club member,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,engagement_profile,CommonApp.pdf,2,Yearbook photographer,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,engagement_profile,CommonApp.pdf,2,Chess club member,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,engagement_profile,CommonApp.pdf,2,School academic honor roll,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,recommendation_profile,letter_rec1.pdf,1,The supplied academic record lists an unweighted GPA of 3.92 and a weighted GPA of 4.7.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,recommendation_profile,letter_rec1.pdf,1,Emerson intends to explore Environmental Science.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,recommendation_profile,letter_rec1.pdf,1,I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,recommendation_profile,letter_rec1.pdf,1,"The application lists these activities: Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,recommendation_profile,letter_rec1.pdf,1,The reported awards are: School academic honor roll.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,recommendation_profile,letter_rec1.pdf,1,I recommend Emerson Nguyen for thoughtful consideration.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,recommendation_profile,letter_rec1.pdf,1,I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,recommendation_profile,letter_rec2.pdf,1,"In a simulated classroom exercise, Emerson initially approached a difficult question with a confident hypothesis.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,recommendation_profile,letter_rec2.pdf,1,"When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,recommendation_profile,letter_rec2.pdf,1,Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,recommendation_profile,letter_rec2.pdf,1,Emerson asked the group to state the assumption and check it against the task.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,recommendation_profile,letter_rec2.pdf,1,The resulting conversation showed persistence and consideration for classmates.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,recommendation_profile,letter_rec2.pdf,1,I would encourage continued growth in presenting an argument concisely and seeking clarification early.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,recommendation_profile,letter_rec2.pdf,1,I recommend Emerson Nguyen for thoughtful consideration.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,recommendation_profile,letter_rec2.pdf,1,I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,supplemental_essay_profile,supplement.pdf,1,My stated academic interest is Environmental Science.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,supplemental_essay_profile,supplement.pdf,1,I would like to explore how classroom ideas can be tested against practical questions.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,supplemental_essay_profile,supplement.pdf,1,"I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,supplemental_essay_profile,supplement.pdf,1,"I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,supplemental_essay_profile,supplement.pdf,1,"Science club member, Drama club performer, Coding club member, Yearbook photographer, Chess club member",TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,supplemental_essay_profile,supplement.pdf,1,School academic honor roll,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,supplemental_essay_profile,supplement.pdf,1,First gen,TEXT_VERIFIED,normalized_quote_found
+agent_APP_017_r1,APP_017,strengths,transcript.pdf,1,AP Psychology A-,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_017_r1,APP_017,strengths,transcript.pdf,1,AP US History A-,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_017_r1,APP_017,strengths,transcript.pdf,1,AP Statistics A-,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_013_r2,APP_013,academic_profile,CommonApp.pdf,2,Weighted GPA 3.69,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,academic_profile,CommonApp.pdf,2,Unweighted GPA 3.47,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,academic_profile,CommonApp.pdf,2,Superscored ACT Score 31,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,academic_profile,transcript.pdf,1,AP US History A,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_013_r2,APP_013,academic_profile,transcript.pdf,1,AP Macroeconomics A,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_013_r2,APP_013,academic_profile,transcript.pdf,1,AP Chemistry A-,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_013_r2,APP_013,academic_profile,transcript.pdf,1,AP Art History A,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_013_r2,APP_013,academic_profile,transcript.pdf,1,AP Research A-,UNVERIFIED_IMAGE_SOURCE,image_only_requires_visual_review
+agent_APP_013_r2,APP_013,engagement_profile,CommonApp.pdf,2,School art club member,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,engagement_profile,CommonApp.pdf,2,Community service recognition,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,engagement_profile,CommonApp.pdf,2,School leadership award,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,engagement_profile,CommonApp.pdf,2,Robotics competition team award,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,recommendation_profile,letter_rec1.pdf,1,The supplied academic record lists an unweighted GPA of 3.47 and a weighted GPA of 3.69.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,recommendation_profile,letter_rec1.pdf,1,Parker intends to explore Accounting.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,recommendation_profile,letter_rec1.pdf,1,I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,recommendation_profile,letter_rec1.pdf,1,I recommend Parker Lopez for thoughtful consideration.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,recommendation_profile,letter_rec1.pdf,1,The admissions committee should review the complete packet and its own requirements before reaching a decision.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,recommendation_profile,letter_rec1.pdf,1,I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,recommendation_profile,letter_rec2.pdf,1,"In a simulated classroom exercise, Parker initially approached a difficult question with a confident hypothesis.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,recommendation_profile,letter_rec2.pdf,1,"When the evidence did not support it, the student returned to the source material, compared explanations, and revised the response.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,recommendation_profile,letter_rec2.pdf,1,Another fictional example concerned a group discussion in which the first proposed answer left an important assumption unexplained.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,recommendation_profile,letter_rec2.pdf,1,Parker asked the group to state the assumption and check it against the task.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,recommendation_profile,letter_rec2.pdf,1,The resulting conversation showed persistence and consideration for classmates.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,recommendation_profile,letter_rec2.pdf,1,I recommend Parker Lopez for thoughtful consideration.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,recommendation_profile,letter_rec2.pdf,1,The admissions committee should review the complete packet and its own requirements before reaching a decision.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,recommendation_profile,letter_rec2.pdf,1,I expect a college environment that invites questions and offers constructive feedback would support this student's continued development.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,supplemental_essay_profile,supplement.pdf,1,My stated academic interest is Accounting.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,supplemental_essay_profile,supplement.pdf,1,I would like to explore how classroom ideas can be tested against practical questions.,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,supplemental_essay_profile,supplement.pdf,1,"I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,supplemental_essay_profile,supplement.pdf,1,"I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,supplemental_essay_profile,supplement.pdf,1,School art club member,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,supplemental_essay_profile,supplement.pdf,1,"Community service recognition, School leadership award, Robotics competition team award",TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,supplemental_essay_profile,supplement.pdf,1,Not provided,TEXT_VERIFIED,normalized_quote_found
+agent_APP_013_r2,APP_013,supplemental_essay_profile,supplement.pdf,1,Narrative responses are fictional. Structured entries reproduce the supplied CSV; missing information has not been inferred. No college-specific prompt was supplied.,TEXT_VERIFIED,normalized_quote_found
