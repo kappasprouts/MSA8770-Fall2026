@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import AppHeader from "@/components/AppHeader";
 import type { WorkspaceMode } from "@/components/AppHeader";
 import ApplicantSidebar, { type SidebarSection } from "@/components/ApplicantSidebar";
+import ExceptionTriagePanel from "@/components/ExceptionTriagePanel";
 import ReviewWorkspace, { type TabId } from "@/components/ReviewWorkspace";
 import type { ApplicantSummary, DossierPayload, OriginalDocument } from "@/lib/types";
 
@@ -97,6 +98,7 @@ export default function Home() {
     const tabBySection: Record<SidebarSection, TabId> = {
       dashboard: "review",
       queue: "review",
+      exceptions: "review",
       policies: "policies",
       documents: "documents",
       reports: "validation",
@@ -145,37 +147,51 @@ export default function Home() {
           generatedAt={payload?.applicant_dossier?.generated_at}
           workspaceMode={workspaceMode}
           onWorkspaceModeChange={selectWorkspaceMode}
+          titleOverride={activeSection === "exceptions" ? "Exception Triage" : undefined}
+          eyebrowOverride={activeSection === "exceptions" ? "Admissions operations" : undefined}
+          descriptionOverride={activeSection === "exceptions" ? "Review incomplete, failed, and unmatched records that need human follow-up." : undefined}
         />
 
         <main className="mx-auto w-full max-w-[1600px] p-4 sm:p-6 lg:p-8">
-          {error && (
-            <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-              {error}
-            </div>
-          )}
-
-          {loading && !payload && (
-            <div className="rounded-xl border border-border bg-surface px-5 py-12 text-center text-sm text-ink-muted shadow-sm">
-              Loading applicant dossier…
-            </div>
-          )}
-
-          {!loading && !payload && !error && (
-            <div className="rounded-xl border border-dashed border-border bg-surface px-5 py-16 text-center">
-              <p className="font-semibold text-ink">Select an applicant to begin review</p>
-              <p className="mt-1 text-sm text-ink-muted">Validated dossiers will appear in the applicant queue.</p>
-            </div>
-          )}
-
-          {payload && (
-            <ReviewWorkspace
-              payload={payload}
-              documents={documents}
-              appId={selectedAppId}
-              activeTab={activeTab}
-              onTabChange={selectWorkspaceTab}
-              workspaceMode={workspaceMode}
+          {activeSection === "exceptions" ? (
+            <ExceptionTriagePanel
+              onOpenApplicant={(appId) => {
+                setSelectedAppId(appId);
+                selectSidebarSection("queue");
+              }}
             />
+          ) : (
+            <>
+              {error && (
+                <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {error}
+                </div>
+              )}
+
+              {loading && !payload && (
+                <div className="rounded-xl border border-border bg-surface px-5 py-12 text-center text-sm text-ink-muted shadow-sm">
+                  Loading applicant dossier…
+                </div>
+              )}
+
+              {!loading && !payload && !error && (
+                <div className="rounded-xl border border-dashed border-border bg-surface px-5 py-16 text-center">
+                  <p className="font-semibold text-ink">Select an applicant to begin review</p>
+                  <p className="mt-1 text-sm text-ink-muted">Validated dossiers will appear in the applicant queue.</p>
+                </div>
+              )}
+
+              {payload && (
+                <ReviewWorkspace
+                  payload={payload}
+                  documents={documents}
+                  appId={selectedAppId}
+                  activeTab={activeTab}
+                  onTabChange={selectWorkspaceTab}
+                  workspaceMode={workspaceMode}
+                />
+              )}
+            </>
           )}
         </main>
       </div>

@@ -6,12 +6,18 @@ export default function AppHeader({
   generatedAt,
   workspaceMode,
   onWorkspaceModeChange,
+  titleOverride,
+  eyebrowOverride,
+  descriptionOverride,
 }: {
   selectedAppId: string;
   applicantName: string | null;
   generatedAt?: string;
   workspaceMode: WorkspaceMode;
   onWorkspaceModeChange: (mode: WorkspaceMode) => void;
+  titleOverride?: string;
+  eyebrowOverride?: string;
+  descriptionOverride?: string;
 }) {
   const generatedLabel = generatedAt
     ? new Date(generatedAt).toLocaleString([], { dateStyle: "medium", timeStyle: "short" })
@@ -22,19 +28,19 @@ export default function AppHeader({
       <div className="mx-auto flex w-full max-w-[1600px] flex-wrap items-center justify-between gap-4">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">Applicant review</p>
-            {selectedAppId && (
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">{eyebrowOverride ?? "Applicant review"}</p>
+            {selectedAppId && !titleOverride && (
               <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
                 Human review required
               </span>
             )}
           </div>
           <h1 className="mt-1 truncate text-2xl font-bold tracking-tight text-ink sm:text-3xl">
-            {selectedAppId || "Admissions workspace"}
-            {applicantName && <span className="font-normal text-ink-muted"> · {applicantName}</span>}
+            {(titleOverride ?? selectedAppId) || "Admissions workspace"}
+            {!titleOverride && applicantName && <span className="font-normal text-ink-muted"> · {applicantName}</span>}
           </h1>
           <p className="mt-1 text-sm text-ink-muted">
-            {selectedAppId ? `Dossier generated ${generatedLabel}` : "Choose a validated dossier from the applicant queue."}
+            {descriptionOverride ?? (selectedAppId ? `Dossier generated ${generatedLabel}` : "Choose a validated dossier from the applicant queue.")}
           </p>
         </div>
         <div className="rounded-xl border border-border bg-surface-alt p-1.5">

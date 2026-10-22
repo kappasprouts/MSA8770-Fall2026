@@ -4,11 +4,12 @@ import { useMemo, useState } from "react";
 import type { ApplicantSummary } from "@/lib/types";
 import Logo from "./Logo";
 
-export type SidebarSection = "dashboard" | "queue" | "policies" | "documents" | "reports" | "settings";
+export type SidebarSection = "dashboard" | "queue" | "exceptions" | "policies" | "documents" | "reports" | "settings";
 
-const NAV_ITEMS: Array<{ id: SidebarSection; label: string; icon: "home" | "users" | "policy" | "document" | "report" | "settings" }> = [
+const NAV_ITEMS: Array<{ id: SidebarSection; label: string; icon: "home" | "users" | "warning" | "policy" | "document" | "report" | "settings" }> = [
   { id: "dashboard", label: "Dashboard", icon: "home" },
   { id: "queue", label: "Applicant Queue", icon: "users" },
+  { id: "exceptions", label: "Exception Triage", icon: "warning" },
   { id: "policies", label: "Policies", icon: "policy" },
   { id: "documents", label: "Documents", icon: "document" },
   { id: "reports", label: "Reports", icon: "report" },
@@ -19,6 +20,7 @@ function NavIcon({ name }: { name: (typeof NAV_ITEMS)[number]["icon"] }) {
   const paths = {
     home: <path d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5Z" />,
     users: <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></>,
+    warning: <><path d="M12 3 2.5 20h19L12 3Z" /><path d="M12 9v4M12 17h.01" /></>,
     policy: <><rect x="4" y="3" width="16" height="18" rx="2" /><path d="M8 7h8M8 11h8M8 15h5" /></>,
     document: <><path d="M6 2h8l4 4v16H6z" /><path d="M14 2v6h6M9 13h6M9 17h6" /></>,
     report: <><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" /></>,
@@ -63,7 +65,7 @@ export default function ApplicantSidebar({
         {NAV_ITEMS.map((item, index) => {
           const active = activeSection === item.id;
           return (
-            <div key={item.id} className={index === 5 ? "border-t border-white/10 pt-3 mt-3" : ""}>
+            <div key={item.id} className={index === NAV_ITEMS.length - 1 ? "border-t border-white/10 pt-3 mt-3" : ""}>
               <button
                 type="button"
                 onClick={() => onSectionSelect(item.id)}
