@@ -11,6 +11,7 @@ const navigation = [
   { href: "/review-queue", label: "Processing dashboard", icon: "processing" },
   { href: "/applicant-review", label: "Applicant review", icon: "review" },
   { href: "/final-decisions", label: "Final decisions", icon: "decisions" },
+  { href: "/statistics", label: "Summary statistics", icon: "statistics" },
 ] as const;
 
 export default function EaosShell({ title, subtitle, role, children }: {

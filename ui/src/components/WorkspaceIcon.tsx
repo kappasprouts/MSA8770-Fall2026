@@ -1,4 +1,4 @@
-export type WorkspaceIconName = "home" | "processing" | "review" | "decisions";
+export type WorkspaceIconName = "home" | "processing" | "review" | "decisions" | "statistics";
 
 export default function WorkspaceIcon({ name }: { name: WorkspaceIconName }) {
   return (
@@ -7,6 +7,7 @@ export default function WorkspaceIcon({ name }: { name: WorkspaceIconName }) {
       {name === "processing" && <><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 9v12M13 13h4M13 17h4" /></>}
       {name === "review" && <><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z" /><path d="M14 3v6h6M8 13h8M8 17h5" /></>}
       {name === "decisions" && <><rect x="4" y="5" width="16" height="16" rx="2" /><path d="M9 5V3h6v2M8 13l3 3 5-6" /></>}
+      {name === "statistics" && <><path d="M4 3v17h17M9 16v-5M14 16V7M19 16V4" /></>}
     </svg>
   );
 }

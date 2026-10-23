@@ -24,6 +24,12 @@ const destinations = [
     title: "Final decisions",
     description: "Pending decision queue and recording of authorized admissions decisions.",
   },
+  {
+    href: "/statistics",
+    icon: "statistics",
+    title: "Summary statistics",
+    description: "Applicant pool, academic trends, decision progress, and cohort comparisons.",
+  },
 ] as const;
 
 export default async function Home({ searchParams }: PageProps<"/">) {

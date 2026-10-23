@@ -17,7 +17,7 @@
 .navLabel, .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .09em; color: var(--color-ink-muted); margin: 0; }
 .navLabel { padding: 0 12px; }
 .navigation { display: grid; gap: 6px; }
-.navLink { display: flex; align-items: center; gap: 12px; padding: 13px 12px; border-radius: 9px; color: var(--color-ink-muted); font-weight: 600; text-decoration: none; }
+.navLink { display: flex; align-items: center; gap: 12px; padding: 13px 12px; border-radius: 9px; color: var(--color-ink-muted); font-weight: 600; text-decoration: none; min-width: 0; overflow-wrap: anywhere; }
 .navLink svg { flex-shrink: 0; width: 20px; height: 20px; }
 .navLink:hover { background: var(--color-surface-alt); color: var(--color-ink); }
 .navLink.active { background: var(--color-panel-header); color: var(--color-accent); }
@@ -100,7 +100,7 @@
   .brand { padding: 0 0 14px; }
   .brand strong { font-size: 15px; }
   .navLabel, .sidebarNote { display: none; }
-  .navigation { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+  .navigation { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
   .navLink { flex-direction: column; gap: 5px; padding: 10px 5px; text-align: center; font-size: 12px; }
   .topbar { padding: 12px 16px; min-height: 56px; }
   .content { padding: 22px 16px; }
@@ -110,4 +110,8 @@
   .controls > * { flex: 1 1 100%; width: 100%; }
   .selectorLabel, .selectorLabel select { width: 100%; }
   .dossierGrid > * { height: 520px; }
+}
+@media (max-width: 480px) {
+  .navigation { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .navLink { overflow-wrap: normal; font-size: 11px; padding: 9px 5px; }
 }
