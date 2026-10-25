@@ -23,10 +23,11 @@ export default function ChatPanel({ appId }: { appId: string }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const conversationRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const conversation = conversationRef.current;
+    if (conversation) conversation.scrollTop = conversation.scrollHeight;
   }, [messages, loading]);
 
   async function sendMessage() {
@@ -112,11 +113,11 @@ export default function ChatPanel({ appId }: { appId: string }) {
         <span className="text-xs text-ink-muted">↕ Scroll</span>
       </div>
 
-      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-4">
+      <div ref={conversationRef} className="min-h-0 flex-1 space-y-4 overflow-y-auto p-4" role="log" aria-label="Applicant Q&A conversation" aria-live="polite" aria-busy={loading}>
         {messages.length === 0 && (
           <p className="text-sm text-ink-muted">
-            Ask about this applicant&apos;s academics, activities, recommendations, essay, or
-            policy alignment. Answers are grounded in the validated dossier only.
+            Ask about this applicant&apos;s academics, activities, recommendations, or
+            policy alignment. Answers use the saved dossier and require verification against original documents.
           </p>
         )}
 
@@ -160,12 +161,12 @@ export default function ChatPanel({ appId }: { appId: string }) {
           </div>
         )}
 
-        <div ref={bottomRef} />
       </div>
 
       <div className="border-t border-border p-3">
         <div className="flex items-end gap-2">
           <textarea
+            aria-label="Question about this applicant"
             className="h-20 flex-1 resize-none rounded-lg border border-border bg-surface-alt px-3 py-2 text-sm text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none"
             placeholder='Ask about this applicant (e.g., "What do the recommendation letters say?")'
             value={input}

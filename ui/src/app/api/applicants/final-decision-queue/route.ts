@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     const { rows } = await pool.query(`
-      SELECT
+      WITH pending AS (SELECT
         app_id AS "appId",
         first_name AS "firstName",
         last_name AS "lastName",
@@ -17,10 +17,19 @@ export async function GET() {
       FROM applicants
         WHERE status = 'DOSSIER_READY'
         AND final_decision IS NULL
-      ORDER BY app_id;
+      )
+      SELECT
+        COALESCE((SELECT json_agg(p ORDER BY p."appId") FROM pending p), '[]'::json) AS applicants,
+        json_build_object(
+          'awaiting', COUNT(*) FILTER (WHERE status = 'DOSSIER_READY' AND final_decision IS NULL),
+          'recorded', COUNT(*) FILTER (WHERE final_decision IS NOT NULL),
+          'total', COUNT(*)
+        ) AS totals
+      FROM applicants;
     `);
 
-    return NextResponse.json({ applicants: rows });
+    // One SQL statement keeps the queue and system-wide totals in the same snapshot.
+    return NextResponse.json(rows[0]);
   } catch (error) {
     console.error("Final decision queue error:", error);
 

@@ -13,6 +13,8 @@ export const pool =
     database: process.env.POSTGRES_DB ?? "riverview_admissions",
     user: process.env.POSTGRES_USER ?? "postgres",
     password: process.env.POSTGRES_PASSWORD ?? "postgres",
+    connectionTimeoutMillis: 5000,
+    query_timeout: 10000,
   });
 
 if (process.env.NODE_ENV !== "production") {
@@ -110,7 +112,7 @@ export async function loadDossier(appId: string): Promise<any | null> {
   const d = dossierResult.rows[0];
 
   const runResult = await pool.query(
-    "SELECT * FROM dossier_generation_runs WHERE app_id = $1 ORDER BY created_at DESC LIMIT 1;",
+    "SELECT * FROM dossier_generation_runs WHERE app_id = $1 ORDER BY created_at DESC, id DESC LIMIT 1;",
     [appId]
   );
 
@@ -118,6 +120,8 @@ export async function loadDossier(appId: string): Promise<any | null> {
 
   return {
     run: {
+      id: r.id ?? null,
+      created_at: r.created_at ?? null,
       app_id: appId,
       run_status: r.run_status ?? "UNKNOWN",
       attempts: r.attempts ?? 0,

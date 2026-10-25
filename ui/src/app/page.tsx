@@ -1,148 +1,143 @@
 
-"use client";
-
 import Link from "next/link";
+import Image from "next/image";
+import { redirect } from "next/navigation";
+import EaosShell from "@/components/EaosShell";
+import WorkspaceIcon from "@/components/WorkspaceIcon";
+import { dossierHref } from "@/lib/eaos-api";
+import styles from "./home.module.css";
 
-import { useEffect, useState } from "react";
-import AppHeader from "@/components/AppHeader";
-import DossierPanel from "@/components/DossierPanel";
-import DocumentsPanel from "@/components/DocumentsPanel";
-import ChatPanel from "@/components/ChatPanel";
-import type { ApplicantSummary, DossierPayload, OriginalDocument } from "@/lib/types";
+const destinations = [
+  {
+    href: "/review-queue",
+    icon: "processing",
+    title: "Processing Dashboard",
+  },
+  {
+    href: "/applicant-review",
+    icon: "review",
+    title: "Applicant Review",
+  },
+  {
+    href: "/final-decisions",
+    icon: "decisions",
+    title: "Final Decisions",
+  },
+  {
+    href: "/statistics",
+    icon: "statistics",
+    title: "Summary Statistics",
+  },
+] as const;
 
-export default function Home() {
-  const [applicants, setApplicants] = useState<ApplicantSummary[]>([]);
-  const [selectedAppId, setSelectedAppId] = useState("");
-  const [payload, setPayload] = useState<DossierPayload | null>(null);
-  const [documents, setDocuments] = useState<OriginalDocument[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+export default async function Home({
+  searchParams,
+}: PageProps<"/">) {
+  const params = await searchParams;
+  const appId = Array.isArray(params.appId)
+    ? params.appId[0]
+    : params.appId;
 
-  useEffect(() => {
-    fetch("/api/applicants")
-      .then((res) => res.json())
-      .then((data: { applicants: ApplicantSummary[] }) => {
-        setApplicants(data.applicants);
-
-        if (data.applicants.length > 0) {
-         const requestedAppId = new URLSearchParams(
-            window.location.search
-        ).get("appId");
-
-        const matchingApplicant = data.applicants.find(
-            (applicant) => applicant.id === requestedAppId
-        );
-
-        setSelectedAppId(
-                matchingApplicant
-                ? matchingApplicant.id
-                : data.applicants[0].id
-        );
-    }
-
-
-      })
-      .catch(() => setError("Could not load the list of applicants."));
-  }, []);
-
-  useEffect(() => {
-    if (!selectedAppId) {
-      return;
-    }
-
-    let cancelled = false;
-
-    async function loadDossier() {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const res = await fetch(`/api/dossier?appId=${encodeURIComponent(selectedAppId)}`);
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error ?? "Failed to load dossier.");
-        }
-
-        if (!cancelled) {
-          setPayload(data.data);
-          setDocuments(data.documents ?? []);
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setPayload(null);
-          setDocuments([]);
-          setError(err instanceof Error ? err.message : "Failed to load dossier.");
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    }
-
-    loadDossier();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [selectedAppId]);
-
-  const applicantName = (() => {
-    const demo = payload?.applicant_dossier?.applicant_demographics;
-
-    if (!demo) {
-      return null;
-    }
-
-    const name = [demo.first_name, demo.last_name].filter(Boolean).join(" ");
-    return name || null;
-  })();
+  if (appId) {
+    redirect(dossierHref(appId));
+  }
 
   return (
-    <div className="flex h-screen flex-col bg-app-bg text-ink">
-      <AppHeader
-        applicants={applicants}
-        selectedAppId={selectedAppId}
-        onSelect={setSelectedAppId}
-        applicantName={applicantName}
-      />
-    <div className="border-b border-border bg-surface px-4 py-2">
-      <Link
-        href="/review-queue"
-        className="inline-flex items-center rounded-lg border border-border px-4 py-2 text-sm font-medium text-ink hover:bg-app-bg"
-      >
-        ← Back to Processing Dashboard
-      </Link>
-    </div>
+    <EaosShell title="" subtitle="" role="Home">
+      <div className={styles.homepage}>
+        <div className={styles.hero}>
+          <Image
+            src="/rsu-homepage-sunset.png"
+            alt="Riverview State University campus at sunset"
+            fill
+            priority
+            unoptimized
+            sizes="(max-width: 768px) 100vw, 85vw"
+            className={styles.heroImage}
+          />
+        </div>
 
-      <main className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4">
-        {error && (
-          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-            {error}
-          </div>
-        )}
 
-        {loading && !payload && (
-          <div className="rounded-lg border border-border bg-surface px-4 py-3 text-sm text-ink-muted">
-            Loading applicant dossier…
-          </div>
-        )}
+        <section className={styles.welcome}>
+          <div className={styles.introduction}>
+            <div className={styles.welcomeHeading}>
+              <div className={styles.shield} aria-hidden="true">
+                <span>RSU</span>
+                <span className={styles.shieldChevron}>⌃</span>
+              </div>
 
-        {payload && (
-          <>
-            <div className="grid grid-cols-1 gap-4 lg:h-[52vh] lg:grid-cols-2">
-              <DossierPanel payload={payload} />
-              <DocumentsPanel appId={selectedAppId} documents={documents} />
+              <div>
+                <h1>Welcome to Riverview State University</h1>
+                <p>
+                  Riverview State University, founded in 1913, is
+                  committed to academic excellence, innovative
+                  research, and service to our diverse communities.
+                  We empower students to achieve their full
+                  potential and make a positive impact in an
+                  ever-changing world.
+                </p>
+              </div>
             </div>
+          </div>
 
-            <div className="h-[50vh] shrink-0">
-              <ChatPanel key={selectedAppId} appId={selectedAppId} />
+          <aside className={styles.mission}>
+            <svg
+              className={styles.missionIcon}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M3 9h18L12 3 3 9Z" />
+              <path d="M5 10v9M9 10v9M15 10v9M19 10v9" />
+              <path d="M2 21h20" />
+            </svg>
+
+            <div>
+              <h2>Our Mission</h2>
+              <p>
+                To provide an inclusive, transformative education
+                that prepares students to lead, serve, and create
+                a better tomorrow.
+              </p>
             </div>
-          </>
-        )}
-      </main>
-    </div>
+          </aside>
+        </section>
 
+        <nav
+          aria-label="Admissions workspaces"
+          className={styles.workspaces}
+        >
+          {destinations.map((destination) => (
+            <Link
+              key={destination.href}
+              href={destination.href}
+              className={styles.destination}
+            >
+              <span className={styles.icon}>
+                <WorkspaceIcon name={destination.icon} />
+              </span>
+              <span>{destination.title}</span>
+            </Link>
+          ))}
+
+          <div
+            className={`${styles.destination} ${styles.disabled}`}
+            aria-label="Tech Support coming soon"
+          >
+            <span className={styles.icon}>
+              <span aria-hidden="true">⚙</span>
+            </span>
+            <span>
+              Tech Support
+              <small>Coming Soon</small>
+            </span>
+          </div>
+        </nav>
+      </div>
+    </EaosShell>
   );
 }
