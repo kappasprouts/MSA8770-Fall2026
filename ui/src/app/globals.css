@@ -18,11 +18,11 @@
   --color-panel-header: #ede3f9;
   --color-border: #e3d7c2;
   --color-ink: #2b2420;
-  --color-ink-muted: #83765f;
+  --color-ink-muted: #6e6250;
 
   /* accent (links, buttons, focus) — Riverview purple */
   --color-accent: #6d28d9;
-  --color-accent-strong: #8b5cf6;
+  --color-accent-strong: #6d28d9;
 
   /* AI summary — unified purple card family */
   --color-card-green-bg: #f2e8fb;
@@ -45,14 +45,25 @@
   --color-card-pink-text: #6d28d9;
 
   /* status — kept semantically green/amber/red regardless of brand color */
-  --color-status-pass: #2cac56;
-  --color-status-warn: #b8860b;
-  --color-status-fail: #e0514f;
-  --color-status-muted: #9aa5b6;
+  --color-status-pass: #25643a;
+  --color-status-warn: #80510c;
+  --color-status-fail: #a32b22;
+  --color-status-muted: #667085;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+:where(input, select, textarea):disabled { opacity: .65; cursor: not-allowed; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
 }

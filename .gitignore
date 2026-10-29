@@ -22,3 +22,13 @@ tmp/
 .local_dev_store.db*
 output/local_demo/
 /output/ai_agent/
+
+# Node and Next.js generated files
+**/node_modules/
+**/.next/
+
+# Local comparison/testing UI
+maya-ui-exception-triage/
+
+# Local environment files
+**/.env.local

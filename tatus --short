@@ -1,0 +1,10 @@
+ maya-ui-prototype/.env.local.example               |  16 [32m+[m[31m-[m
+ maya-ui-prototype/UPDATE_INSTRUCTIONS.md           |  25 [32m+[m[31m-[m
+ maya-ui-prototype/eslint.config.mjs                |  17 [32m+[m[31m-[m
+ maya-ui-prototype/src/app/api/exceptions/route.ts  | 286 [32m+++++++++++++++[m
+ maya-ui-prototype/src/app/page.tsx                 |  70 [32m++[m[31m--[m
+ maya-ui-prototype/src/components/AppHeader.tsx     |  16 [32m+[m[31m-[m
+ .../src/components/ApplicantSidebar.tsx            |   8 [32m+[m[31m-[m
+ .../src/components/ExceptionTriagePanel.tsx        | 385 [32m+++++++++++++++++++++[m
+ maya-ui-prototype/src/lib/types.ts                 |  26 [32m++[m
+ 9 files changed, 784 insertions(+), 65 deletions(-)

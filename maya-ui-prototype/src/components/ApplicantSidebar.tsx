@@ -7,9 +7,8 @@ import Logo from "./Logo";
 export type SidebarSection = "dashboard" | "queue" | "exceptions" | "policies" | "documents" | "reports" | "settings";
 
 const NAV_ITEMS: Array<{ id: SidebarSection; label: string; icon: "home" | "users" | "warning" | "policy" | "document" | "report" | "settings" }> = [
-  { id: "dashboard", label: "Dashboard", icon: "home" },
   { id: "queue", label: "Applicant Queue", icon: "users" },
-  { id: "exceptions", label: "Exception Triage", icon: "warning" },
+  { id: "exceptions", label: "Error Queue", icon: "warning" },
   { id: "policies", label: "Policies", icon: "policy" },
   { id: "documents", label: "Documents", icon: "document" },
   { id: "reports", label: "Reports", icon: "report" },
