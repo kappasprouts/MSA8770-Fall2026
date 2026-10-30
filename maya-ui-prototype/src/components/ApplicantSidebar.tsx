@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 import { useMemo, useState } from "react";
 import type { ApplicantSummary } from "@/lib/types";
 import Logo from "./Logo";
@@ -42,6 +45,7 @@ export default function ApplicantSidebar({
   activeSection: SidebarSection;
   onSectionSelect: (section: SidebarSection) => void;
 }) {
+  const pathname = usePathname();
   const [query, setQuery] = useState("");
   const filtered = useMemo(
     () => applicants.filter((applicant) => applicant.id.toLowerCase().includes(query.toLowerCase())),
@@ -60,6 +64,10 @@ export default function ApplicantSidebar({
         </div>
       </div>
 
+      <div className="space-y-1 border-b border-white/10 px-3 py-3">
+        <Link href="/home" aria-current={pathname === "/home" ? "page" : undefined} className={`block rounded-lg px-3 py-2 text-sm font-medium transition ${pathname === "/home" ? "bg-[#2C5583] text-white" : "text-blue-100/90 hover:bg-white/10 hover:text-white"}`}>⌂ &nbsp; Home</Link>
+        <Link href="/processing-dashboard" aria-current={pathname === "/processing-dashboard" ? "page" : undefined} className={`block rounded-lg px-3 py-2 text-sm font-medium transition ${pathname === "/processing-dashboard" ? "bg-[#2C5583] text-white" : "text-blue-100/90 hover:bg-white/10 hover:text-white"}`}>▤ &nbsp; Processing Dashboard</Link>
+      </div>
       <nav className="space-y-1 border-b border-white/10 px-3 py-4" aria-label="Primary navigation">
         {NAV_ITEMS.map((item, index) => {
           const active = activeSection === item.id;
