@@ -50,6 +50,20 @@ export default function StatisticsDashboard({ initialFilters = EMPTY_FILTERS }: 
 
   function changeFilters(next: StatisticsFilters) { setLoading(true); setData(null); setError(""); setNotice(""); setFilters(next); }
   function refresh() { setLoading(true); setData(null); setError(""); setNotice(""); setAttempt(n => n + 1); }
+
+  function printReport() {
+    if (!data || loading) return;
+
+    const originalTitle = document.title;
+
+    document.title = "RSU_Admissions_Statistics_Report";
+    window.print();
+
+    window.addEventListener("afterprint", () => {
+      document.title = originalTitle;
+    }, { once: true });
+  }
+
   function exportSummary() {
     if (!data) return;
     const url = URL.createObjectURL(new Blob([statisticsCsv(data)], { type: "text/csv;charset=utf-8;" }));
@@ -61,10 +75,27 @@ export default function StatisticsDashboard({ initialFilters = EMPTY_FILTERS }: 
   const selected = [filters.year && `${filters.year === UNKNOWN ? "Unknown year" : filters.year}`, filters.term && termLabel(filters.term), filters.major && (filters.major === UNKNOWN ? "Unknown program" : filters.major), filters.decision && ({ ACCEPT: "Accepted", DECLINE: "Declined", WAITLIST: "Waitlisted", UNRECORDED: "No decision", OTHER: "Other decision" }[filters.decision])].filter(Boolean).join(" · ") || "All admission cohorts";
   const activeFilters = Object.values(filters).some(Boolean);
 
-  return <EaosShell title="Summary statistics" subtitle="A clear view of your applicant pool, admissions progress, and academic profile." role="Admissions insights">
+  return <EaosShell title="Summary Statistics" subtitle="A clear view of applicant pool, admissions progress, and academic profile." role="Admissions Insights">
+
+    <header className={styles.printHeader}>
+      <div className={styles.printUniversity}>
+        RIVERVIEW STATE UNIVERSITY
+      </div>
+
+      <h1>Admissions Statistics Report</h1>
+
+      <div className={styles.printMetadata}>
+        <span>Reporting Cohort: {selected}</span>
+        <span>
+        R eport Generated:{" "}
+          {data ? new Date(data.generatedAt).toLocaleDateString("en-US") : ""}
+        </span>
+      </div>
+    </header>
+
     <div className={styles.toolbar}>
       <div className={styles.cohortLabel}><span className={styles.liveDot} aria-hidden="true" />{selected}</div>
-      <div className={styles.toolbarActions}><button type="button" onClick={refresh} disabled={loading}>↻ Refresh</button><button type="button" className={styles.exportButton} onClick={exportSummary} disabled={loading || !data}>↓ Export CSV</button></div>
+      <div className={styles.toolbarActions}><button type="button" onClick={refresh} disabled={loading}>↻ Refresh</button><button type="button" className={styles.exportButton} onClick={printReport} disabled={loading || !data}>↓ Print report</button></div>
     </div>
     <section className={styles.filters} aria-label="Filter summary statistics">
       <Filter label="Admission year" allLabel="All years" options={options.years} value={filters.year} onChange={year => changeFilters({ ...filters, year })} />
@@ -108,7 +139,7 @@ export function StatisticsContent({ data, academicKey, onAcademicChange, geograp
           <DecisionChart items={data.decisions} total={data.total} recorded={data.recorded} />
           <div className={styles.panelFooter}><span>Accepted among recorded decisions <strong>{formatPercent(data.accepted, data.recorded)}</strong></span><Link href="/final-decisions">Open final decisions →</Link></div>
         </Panel>
-        <Panel title="Application completeness" description="Packet readiness from checklist results and processing status">
+        <Panel className={styles.printKeepTogether} title="Application completeness" description="Packet readiness from checklist results and processing status">
           <BarList items={data.completeness} total={data.total} />
           <p className={styles.callout}><strong>{formatNumber(waitingForMaterials)}</strong> applications need documents or required fields before they can move forward.</p>
         </Panel>
@@ -118,7 +149,7 @@ export function StatisticsContent({ data, academicKey, onAcademicChange, geograp
           <TrendChart items={data.trend} />
           <p className={styles.note}>{formatNumber(data.total - data.trendUndated)} dated application{data.total - data.trendUndated === 1 ? "" : "s"} · {formatNumber(data.trendUndated)} missing or invalid source dates. Each application is counted once; database import dates are excluded.</p>
         </Panel>
-        <Panel title="Missing required documents" description="Applicants affected, using each packet’s latest checklist evaluation">
+        <Panel className={styles.printKeepTogether} title="Missing required documents" description="Applicants affected, using each packet’s latest checklist evaluation">
           {data.missingDocuments.length ? <BarList items={data.missingDocuments} total={data.total} /> : <p className={styles.emptyChart}>{data.missingDetailsCount ? "No missing documents listed in available checklist results." : "No missing-document findings available for this cohort."}</p>}
           <p className={styles.note}>A packet may be missing more than one document. Details are available for {formatNumber(data.missingDetailsCount)} packets that are not complete.</p>
         </Panel>
@@ -129,13 +160,13 @@ export function StatisticsContent({ data, academicKey, onAcademicChange, geograp
       <div className={styles.sectionHeading}><div><span className={styles.eyebrow}>ACADEMIC PROFILE</span><h2 id="academics-title">Academic statistics</h2></div><span className={styles.sectionHint}>Valid reported values only</span></div>
       <div className={styles.academicCards}>{data.academics.filter(m => ["gpa", "sat", "act", "ap"].includes(m.key)).map(m => <div key={m.key} className={styles.academicCard}><span>Average {m.label}</span><strong>{formatNumber(m.mean, m.key === "gpa" ? 2 : ["ap", "act"].includes(m.key) ? 1 : 0)}</strong><small>{formatNumber(m.count)} reported · {formatNumber(m.missing)} missing / invalid</small></div>)}</div>
       <div className={styles.twoColumns}>
-        <Panel title="Academic distributions" description="See the spread of scores and coursework across the selected pool.">
+        <Panel className={styles.printKeepTogether} title="Academic distributions" description="See the spread of scores and coursework across the selected pool.">
           <div className={styles.metricPicker} role="group" aria-label="Choose academic distribution">{data.academics.filter(m => m.histogram.length).map(m => <button key={m.key} type="button" aria-pressed={academic.key === m.key} onClick={() => onAcademicChange(m.key)}>{m.key === "gpa" ? "GPA" : m.key.toUpperCase()}</button>)}</div>
           <div className={styles.distributionSummary}><div><small>Median {academic.label}</small><strong>{formatNumber(academic.median, academic.key === "gpa" ? 2 : 1)}</strong></div><div><small>Middle 50%</small><strong>{formatNumber(academic.q1, academic.key === "gpa" ? 2 : 1)} – {formatNumber(academic.q3, academic.key === "gpa" ? 2 : 1)}</strong></div></div>
           <Histogram items={academic.histogram} count={academic.count} label={academic.label} />
           <p className={styles.note}>Based on {formatNumber(academic.count)} valid values; {formatNumber(academic.missing)} missing or invalid. GPA uses the unweighted 0–4 scale. AP/IB use recorded course totals.</p>
         </Panel>
-        <Panel title="Test submission & data coverage" description="The share of the cohort with a usable value for each field.">
+        <Panel className={styles.printKeepTogether} title="Test submission & data coverage" description="The share of the cohort with a usable value for each field.">
           <div className={styles.coverageLead}><strong>{formatPercent(data.testSubmitters, data.total)}</strong><span>have a valid SAT or ACT score<br /><small>{formatNumber(data.total - data.testSubmitters)} have neither reported</small></span></div>
           <BarList items={data.coverage} total={data.total} limit={6} />
           <p className={styles.note}>SAT and ACT coverage can overlap. Missing scores are excluded from averages. SAT uses a valid superscore, then a complete section total; ACT uses a valid superscore, then composite.</p>
@@ -147,19 +178,19 @@ export function StatisticsContent({ data, academicKey, onAcademicChange, geograp
     <section id="representation" className={styles.section} aria-labelledby="representation-title">
       <div className={styles.sectionHeading}><div><span className={styles.eyebrow}>THE APPLICANT POOL</span><h2 id="representation-title">Programs & representation</h2></div><span className={styles.sectionHint}>{formatNumber(data.schools)} high schools represented</span></div>
       <div className={styles.twoColumns}>
-        <Panel title="Major / program interest" description="Select an entry to filter the dashboard. Combined program choices stay together as reported."><BarList items={data.programs} total={data.total} onSelect={onProgramSelect} /></Panel>
+        <Panel className={styles.printKeepTogether} title="Major/Program interest" description="Select an entry to filter the dashboard. Combined program choices stay together as reported."><BarList items={data.programs} total={data.total} onSelect={onProgramSelect} /></Panel>
         <Panel title="Geographic representation" description="Reported school geographic context, grouped by region or country.">
           <div className={styles.metricPicker} role="group" aria-label="Geographic grouping"><button type="button" aria-pressed={geography === "regions"} onClick={() => onGeographyChange("regions")}>Region</button><button type="button" aria-pressed={geography === "countries"} onClick={() => onGeographyChange("countries")}>Country</button></div>
           <BarList key={geography} items={data[geography]} total={data.total} />
         </Panel>
-        <Panel title="Gender" description="Reported categories, including unknown or unreported values."><BarList items={data.genders} total={data.total} colorful /></Panel>
+        <Panel className={styles.printKeepTogether} title="Gender" description="Reported categories, including unknown or unreported values."><BarList items={data.genders} total={data.total} colorful /></Panel>
         <Panel title="Ethnicity" description="Reported categories, including unknown or unreported values."><BarList items={data.ethnicities} total={data.total} colorful /></Panel>
       </div>
     </section>
 
     <section id="comparisons" className={styles.section} aria-labelledby="comparisons-title">
       <div className={styles.sectionHeading}><div><span className={styles.eyebrow}>SIDE BY SIDE</span><h2 id="comparisons-title">Cohort comparisons</h2></div><label className={styles.comparisonSelect}>Compare by<select value={comparison} onChange={e => onComparisonChange(e.target.value as "cycle" | "program")}><option value="cycle">Admission year & term</option><option value="program">Major / program</option></select></label></div>
-      <div className={`${styles.panel} ${styles.comparisonPanel}`}>
+      <div className={`${styles.panel} ${styles.comparisonPanel} ${styles.printKeepTogether}`}>
         <p className={styles.note}>All filters above apply. Cohorts show their current state, and may be at different stages of the admissions cycle.</p>
         {comparisonRows.length < 2 && <p className={styles.callout}>Only one cohort is available. Broaden the filters or compare by another grouping to see more cohorts.</p>}
         <div className={styles.tableWrap} tabIndex={0} role="region" aria-label="Cohort statistics comparison">

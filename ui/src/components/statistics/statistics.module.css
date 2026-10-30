@@ -110,3 +110,128 @@
 @media (max-width: 1190px) { .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); } .resetButton { justify-self: start; } .decisionChart { grid-template-columns: 1fr; } .donut { margin: 0 auto 6px; } .metric { padding: 17px; } .histogram { gap: 8px; } }
 @media (max-width: 950px) { .twoColumns { grid-template-columns: 1fr; } .decisionChart { grid-template-columns: 145px minmax(0, 1fr); } .metrics, .academicCards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .academicCard:nth-child(3) { border-left: 0; } .academicCard:nth-child(n + 3) { border-top: 1px solid var(--color-border); } .sectionNav { gap: 22px; } }
 @media (max-width: 480px) { .toolbarActions { width: 100%; } .toolbarActions button { flex: 1; } .filters { padding: 14px; gap: 12px; } .panel { padding: 18px; } .decisionChart { grid-template-columns: 1fr; } .metrics { gap: 10px; } .metric { padding: 15px; } .metric > span { font-size: 11px; } .metric > small { font-size: 10px; } .academicCard { padding: 16px; } .sectionHeading h2 { font-size: 19px; } .histogram { gap: 7px; } .sectionNav { gap: 20px; } .sectionNav a { font-size: 11px; } .filter select { padding-right: 16px; } }
+
+@media print {
+  .toolbarActions,
+  .filters,
+  .sectionNav {
+    display: none !important;
+  }
+
+  .toolbar {
+    margin: 0 0 12px;
+  }
+
+  .cohortLabel {
+    font-size: 14px;
+  }
+
+  .panel {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  .panelHeading {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .sectionHeading {
+    break-after: avoid;
+  }
+}
+
+.printHeader {
+  display: none;
+}
+
+@media print {
+  .printHeader {
+    display: block !important;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 3px solid #69458a;
+    color: #29223a;
+  }
+
+  .printUniversity {
+    color: #69458a;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  .printHeader h1 {
+    font-size: 25px;
+    font-weight: 700;
+    margin: 0 0 14px;
+  }
+
+  .printMetadata {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 11px;
+    color: #555;
+  }
+
+  .toolbar {
+    display: none !important;
+  }
+}
+
+@media print {
+  .decisionChart,
+  .histogram,
+  .chart,
+  .barList {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
+
+@media print {
+
+  /* Keep individual chart visuals together */
+  .decisionChart,
+  .histogram,
+  .trendSvg,
+  .barList,
+  .monthlyValues {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Keep each bar and its label together */
+  .barList > li {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Keep table rows together */
+  .comparisonTable tr {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Allow larger panels to continue onto another page */
+  .panel {
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+
+  /* Keep headings with the content below them */
+  .panelHeading,
+  .sectionHeading {
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+}
+
+@media print {
+  .panel.printKeepTogether {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
