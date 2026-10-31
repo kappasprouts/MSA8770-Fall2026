@@ -1,7 +1,6 @@
 
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
@@ -22,15 +21,18 @@ export default function EaosShell({
   subtitle,
   role,
   children,
+  reviewLayout = false,
 }: {
   title: string;
   subtitle: string;
   role: string;
   children: ReactNode;
+  reviewLayout?: boolean;
 }) {
   const pathname = usePathname();
   const router = useRouter();
   const isHome = pathname === "/";
+  const compactSidebar = !isHome;
 
   function goBack() {
   if (window.history.length > 1) {
@@ -41,7 +43,7 @@ export default function EaosShell({
 }
 
   return (
-    <div className={styles.shell}>
+    <div className={`${styles.shell} ${compactSidebar ? styles.compactSidebarShell : ""} ${reviewLayout ? styles.focusedShell : ""}`}>
       <a className={styles.skipLink} href="#main-content">
         Skip to content
       </a>
@@ -58,34 +60,24 @@ export default function EaosShell({
           </span>
         </Link>
 
-        {!isHome && (
-          <div className={styles.sidebarPhoto}>
-            <Image
-              src="/rsu-sidebar-building.png"
-              alt="University building beneath a purple sunset"
-              width={200}
-              height={125}
-              style={{ width: "100%", height: "auto" }}
-            />
-          </div>
-        )}
-
         <nav aria-label="Main navigation" className={styles.navigation}>
           {navigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               aria-current={pathname === item.href ? "page" : undefined}
+              title={compactSidebar ? item.label : undefined}
+              aria-label={item.label}
               className={`${styles.navLink} ${
                 pathname === item.href ? styles.active : ""
               }`}
             >
               <WorkspaceIcon name={item.icon} />
-              {item.label}
+              <span className={styles.navText}>{item.label}</span>
             </Link>
           ))}
 
-          <div className={`${styles.navLink} ${styles.comingSoon}`}>
+          <div className={`${styles.navLink} ${styles.comingSoon}`} aria-label="Tech Support coming soon" title={compactSidebar ? "Tech Support — coming soon" : undefined}>
             <span aria-hidden="true">🎧</span>
             <span>
               Tech Support
@@ -98,7 +90,7 @@ export default function EaosShell({
       <div className={styles.main}>
         {!isHome && (
           <header className={styles.topbar}>
-            <button
+            <div className={styles.topbarTitle}><button
               type="button"
               className={styles.backButton}
               onClick={goBack}
@@ -107,6 +99,7 @@ export default function EaosShell({
             >
               <WorkspaceIcon name="back" />
             </button>
+            {reviewLayout && <h1>{title}</h1>}</div>
             <span className={styles.role}>{role}</span>
           </header>
         )}
@@ -114,9 +107,9 @@ export default function EaosShell({
         <main
           id="main-content"
           tabIndex={-1}
-          className={styles.content}
+          className={`${styles.content} ${reviewLayout ? styles.workspaceContent : ""}`}
         >
-          {!isHome && (
+          {!isHome && !reviewLayout && (
             <div className={styles.heading}>
               <h1>{title === "Statistics" ? "Summary Statistics" : title}</h1>
               <p>{subtitle}</p>

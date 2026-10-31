@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import RequestState from "@/components/RequestState";
 import { getOfficerReview, saveOfficerReview } from "@/lib/eaos-api";
-import { MAX_RECOMMENDATION_NOTES, RECOMMENDATIONS, recommendationLabel, type OfficerRecommendation, type OfficerReview } from "@/lib/recommendation";
+import { MAX_RECOMMENDATION_NOTES, RECOMMENDATIONS, recommendationLabel, type OfficerRecommendation, type OfficerReview, type RecommendationState } from "@/lib/recommendation";
 import styles from "./eaos.module.css";
 
-export default function OfficerRecommendationPanel({ appId }: { appId: string }) {
+export default function OfficerRecommendationPanel({ appId, onStateChange }: { appId: string; onStateChange?: (state: RecommendationState) => void }) {
   const [saved, setSaved] = useState<OfficerReview | null>(null);
   const [recommendation, setRecommendation] = useState<OfficerRecommendation | "">("");
   const [notes, setNotes] = useState("");
@@ -54,6 +54,9 @@ export default function OfficerRecommendationPanel({ appId }: { appId: string })
   }
 
   const changed = recommendation !== (saved?.recommendation || "") || notes !== (saved?.notes || "");
+  useEffect(() => {
+    onStateChange?.({ loading, saving, dirty: !loading && changed, saved: saved?.recommendation ?? null, canEdit: saved?.canEdit ?? false, error: Boolean(loadError) });
+  }, [loading, saving, changed, saved, loadError, onStateChange]);
   return <section className={`${styles.card} ${styles.recommendationSection}`} aria-labelledby="officer-recommendation-heading" aria-busy={loading || saving}>
     <h2 id="officer-recommendation-heading">Officer&apos;s Recommendation</h2>
     <p className={styles.help}>Save your recommendation and reasoning for the final decision reviewer.</p>

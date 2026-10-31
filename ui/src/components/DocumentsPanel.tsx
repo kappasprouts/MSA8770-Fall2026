@@ -1,74 +1,38 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import type { OriginalDocument } from "@/lib/types";
+import type { DocumentSelection } from "@/lib/review-workspace";
+import styles from "./eaos.module.css";
 
-function documentUrl(appId: string, file: string) {
-  return `/api/documents?appId=${encodeURIComponent(appId)}&file=${encodeURIComponent(file)}`;
-}
-
-export default function DocumentsPanel({
-  appId,
-  documents,
-}: {
-  appId: string;
-  documents: OriginalDocument[];
-}) {
-  return (
-    <div className="flex h-full min-h-0 flex-col rounded-xl border border-border bg-surface">
-      <div className="flex items-center justify-between border-b border-border bg-panel-header px-4 py-3">
-        <h2 className="text-sm font-semibold text-ink">Original Documents</h2>
-        <span className="text-xs text-ink-muted">↕ Scroll</span>
-      </div>
-
-      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4">
-        {documents.length === 0 && (
-          <p className="text-sm text-ink-muted" role="status">No source documents are listed for this applicant.</p>
-        )}
-
-        {documents.map((doc) => {
-          const url = documentUrl(appId, doc.file);
-          const previewUrl = `${url}#toolbar=0&navpanes=0&scrollbar=0`;
-
-          return (
-            <div key={doc.file} className="rounded-xl border border-border bg-surface-alt p-3">
-              <div className="mb-2 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-red-100 text-xs font-bold text-red-600">
-                    PDF
-                  </span>
-                  <div>
-                    <p className="text-sm font-medium text-ink">{doc.label}</p>
-                    <p className="text-xs text-ink-muted">
-                      {doc.pages ? `${doc.pages.length} page${doc.pages.length === 1 ? "" : "s"}` : "—"}
-                      {doc.access === "withheld" && (
-                        <span className="ml-2 text-status-warn">Withheld from AI</span>
-                      )}
-                    </p>
-                  </div>
-                </div>
-
-                <a
-                  href={url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="shrink-0 text-xs font-medium text-accent hover:underline"
-                  aria-label={`View full ${doc.label} PDF (opens in a new tab)`}
-                >
-                  View Full ↗
-                </a>
-              </div>
-
-              {doc.access === "withheld" && doc.reason && (
-                <p className="mb-2 text-xs text-ink-muted">Reason: {doc.reason}</p>
-              )}
-
-              <iframe
-                src={previewUrl}
-                title={doc.label}
-                className="h-44 w-full rounded-md border border-border bg-white"
-              />
-            </div>
-          );
-        })}
-      </div>
+export default function DocumentsPanel({ appId, documents, selection, onSelect }: { appId: string; documents: OriginalDocument[]; selection: DocumentSelection | null; onSelect: (value: DocumentSelection) => void }) {
+  const viewer = useRef<HTMLDivElement>(null);
+  const [expanded, setExpanded] = useState(false);
+  const [expandError, setExpandError] = useState("");
+  useEffect(() => {
+    const update = () => setExpanded(document.fullscreenElement === viewer.current);
+    document.addEventListener("fullscreenchange", update);
+    return () => document.removeEventListener("fullscreenchange", update);
+  }, []);
+  const active = documents.find(item => item.file === selection?.file) ?? documents[0];
+  if (!active) return <div className={styles.card}><h2>Original documents</h2><p className={styles.help} role="status">No source documents are listed for this applicant.</p></div>;
+  const page = selection?.file === active.file ? selection.page : 1;
+  const url = `/api/documents?appId=${encodeURIComponent(appId)}&file=${encodeURIComponent(active.file)}`;
+  async function toggleExpanded() {
+    setExpandError("");
+    try {
+      if (document.fullscreenElement === viewer.current) await document.exitFullscreen();
+      else await viewer.current?.requestFullscreen();
+    } catch { setExpandError("Full-screen view is unavailable here. Use Open PDF to view the document in a new tab."); }
+  }
+  return <div ref={viewer} className={styles.documentViewer}>
+    <div className={styles.documentToolbar}>
+      <label className={styles.selectorLabel} htmlFor="review-document">Original document<select id="review-document" className={styles.select} value={active.file} onChange={event => onSelect({ file: event.target.value, page: 1 })}>{documents.map(item => <option key={item.file} value={item.file}>{item.label}</option>)}</select></label>
+      <div className={styles.documentActions}><a className={styles.secondaryButton} href={`${url}#page=${page}`} target="_blank" rel="noreferrer" aria-label={`Open ${active.label} PDF in a new tab`}>Open PDF ↗</a><button type="button" className={styles.secondaryButton} onClick={toggleExpanded}>{expanded ? "Exit full screen" : "Expand viewer"}</button></div>
     </div>
-  );
+    <p className={styles.help}>{documents.length} document(s) available · Opened at page {page}. Use the PDF toolbar to zoom or change pages.</p>
+    {active.access === "withheld" && <div className={styles.notice}>Reserved for human review. {active.reason || "This document was withheld from AI."}</div>}
+    {expandError && <p className={styles.help} role="status">{expandError}</p>}
+    <iframe className={styles.documentFrame} title={`${active.label} PDF`} src={`${url}#page=${page}&zoom=page-width&toolbar=1&navpanes=0`} />
+  </div>;
 }

@@ -3,16 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import EaosShell from "@/components/EaosShell";
 import AppHeader from "@/components/AppHeader";
-import DossierPanel from "@/components/DossierPanel";
-import DocumentsPanel from "@/components/DocumentsPanel";
-import ChatPanel from "@/components/ChatPanel";
-import OfficerRecommendationPanel from "@/components/OfficerRecommendationPanel";
+import ApplicantReviewWorkspace from "@/components/ApplicantReviewWorkspace";
 import RequestState from "@/components/RequestState";
 import styles from "@/components/eaos.module.css";
 import { requestJson } from "@/lib/http";
 import { dossierHref } from "@/lib/eaos-api";
 import { isDossierForApplicant, latestRunCheckState, parseApplicantSummaries } from "@/lib/review-state";
 import type { ApplicantSummary, DossierPayload, OriginalDocument } from "@/lib/types";
+import { INITIAL_RECOMMENDATION_STATE } from "@/lib/recommendation";
 
 type LoadedDossier = { data: DossierPayload; documents: OriginalDocument[] };
 
@@ -26,6 +24,21 @@ export default function ApplicantReview() {
   const [dossierError, setDossierError] = useState<{ appId: string; message: string } | null>(null);
   const [dossierAttempt, setDossierAttempt] = useState(0);
   const dossierRequest = useRef<AbortController | null>(null);
+  const [recommendation, setRecommendation] = useState(INITIAL_RECOMMENDATION_STATE);
+  const [pendingApplicant, setPendingApplicant] = useState("");
+  const discardDialog = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    if (pendingApplicant && !discardDialog.current?.open) discardDialog.current?.showModal();
+    if (!pendingApplicant && discardDialog.current?.open) discardDialog.current.close();
+  }, [pendingApplicant]);
+
+  useEffect(() => {
+    if (!recommendation.dirty) return;
+    const warn = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = ""; };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [recommendation.dirty]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -64,10 +77,18 @@ export default function ApplicantReview() {
   }, [selectedAppId, dossierAttempt]);
 
   function selectApplicant(appId: string) {
+    if (appId === selectedAppId || recommendation.saving) return;
+    if (recommendation.dirty) { setPendingApplicant(appId); return; }
+    loadApplicant(appId);
+  }
+
+  function loadApplicant(appId: string) {
     dossierRequest.current?.abort();
     setLoaded(null);
     setDossierError(null);
     setSelectedAppId(appId);
+    setRecommendation(INITIAL_RECOMMENDATION_STATE);
+    setPendingApplicant("");
     window.history.replaceState(null, "", dossierHref(appId));
   }
 
@@ -84,10 +105,11 @@ export default function ApplicantReview() {
   const demographics = current?.data.applicant_dossier?.applicant_demographics;
   const name = demographics ? [demographics.first_name, demographics.last_name].filter(Boolean).join(" ") : null;
   const latestFailed = current && latestRunCheckState(current.data.run ?? {}) === "failed";
+  const header = <AppHeader applicants={applicants} selectedAppId={selectedAppId} onSelect={selectApplicant} applicantName={name || null} description={[selectedAppId, demographics?.intended_major, demographics?.name_of_hs].filter(Boolean).join(" · ")} disabled={listState !== "ready" || applicants.length === 0 || recommendation.saving} placeholder={listState === "loading" ? "Loading applicants…" : listState === "error" ? "Applicants unavailable" : "No saved dossiers"} />;
 
   return (
-    <EaosShell title="Applicant Review" subtitle="Review saved dossiers alongside their original documents." role="Applicant review">
-      <AppHeader applicants={applicants} selectedAppId={selectedAppId} onSelect={selectApplicant} applicantName={name || null} disabled={listState !== "ready" || applicants.length === 0} placeholder={listState === "loading" ? "Loading applicants…" : listState === "error" ? "Applicants unavailable" : "No saved dossiers"} />
+    <EaosShell title="Applicant Review" subtitle="Review saved dossiers alongside their original documents." role="Applicant review" reviewLayout>
+      {!current && <div className={styles.card}>{header}</div>}
       {listState === "loading" && <RequestState kind="loading" title="Loading applicants…" />}
       {listState === "error" && <RequestState kind="error" title="Applicants could not be loaded" description={listError} onRetry={() => { setListState("loading"); setListError(""); setListAttempt(attempt => attempt + 1); }} />}
       {listState === "ready" && applicants.length === 0 && !selectedAppId && <RequestState kind="empty" title="No saved dossiers yet" description="Applicants appear here after a dossier is saved. Check the processing dashboard for applications awaiting generation." />}
@@ -95,13 +117,13 @@ export default function ApplicantReview() {
       {loadingDossier && <RequestState kind="loading" title={`Loading ${selectedAppId}…`} description="Documents and Q&A will be available when this applicant's dossier has loaded." />}
       {current && <>
         {latestFailed && <div className={styles.notice} role="status"><strong>The latest generation attempt failed.</strong><p className={styles.help}>The saved dossier remains available below. Its validation cannot be inferred from the latest attempt.</p></div>}
-        <div className={styles.dossierGrid}>
-          <DossierPanel payload={current.data} />
-          <DocumentsPanel key={selectedAppId} appId={selectedAppId} documents={current.documents} />
-        </div>
-        <OfficerRecommendationPanel key={selectedAppId} appId={selectedAppId} />
-        <div className={styles.chatSection}><ChatPanel key={selectedAppId} appId={selectedAppId} /></div>
+        <ApplicantReviewWorkspace key={selectedAppId} appId={selectedAppId} payload={current.data} documents={current.documents} header={header} recommendation={recommendation} onRecommendationStateChange={setRecommendation} />
       </>}
+      <dialog ref={discardDialog} className={styles.discardDialog} aria-labelledby="discard-recommendation-heading" aria-describedby="discard-recommendation-description" onClose={() => setPendingApplicant("")}>
+        <h2 id="discard-recommendation-heading">Unsaved recommendation</h2>
+        <p id="discard-recommendation-description" className={styles.readingText}>Switch to {pendingApplicant} and discard your unsaved recommendation? Your saved recommendation will remain available.</p>
+        <div className={styles.actionRow}><button type="button" className={styles.button} onClick={() => setPendingApplicant("")}>Keep editing</button><button type="button" className={styles.secondaryButton} onClick={() => { if (pendingApplicant) loadApplicant(pendingApplicant); }}>Discard and switch</button></div>
+      </dialog>
     </EaosShell>
   );
 }

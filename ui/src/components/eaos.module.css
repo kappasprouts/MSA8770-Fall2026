@@ -93,6 +93,101 @@
 .recommendationSection { margin-top: 20px; }
 .recommendationNotes { display: block; margin: 20px 0 8px; font-size: 12px; font-weight: 600; color: var(--color-ink-muted); }
 .notesText { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; }
+.topbarTitle { display: flex; align-items: center; gap: 14px; }
+.topbarTitle h1 { font-size: 21px; color: var(--color-ink); font-weight: 650; margin: 0; }
+.focusedShell .topbar { position: sticky; top: 0; z-index: 30; padding-top: 10px; padding-bottom: 10px; }
+.workspaceContent { padding-top: 0; }
+.reviewWorkspace { min-width: 0; }
+.reviewContext { position: sticky; top: 64px; z-index: 20; padding-top: 18px; background: var(--color-app-bg); }
+.reviewIdentity { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; padding: 0 0 20px; }
+.reviewIdentity .applicantHeader { flex: 1; min-width: 0; }
+.applicantHeader h2 { margin: 0; font-size: 25px; font-weight: 650; }
+.applicantSelector { display: flex; align-items: end; gap: 8px; }
+.applicantSelector .select { min-width: 135px; }
+.reviewTabs { display: flex; gap: 8px; border-bottom: 1px solid var(--color-border); }
+.reviewTab { background: transparent; color: var(--color-ink-muted); font: inherit; font-weight: 600; border: 0; border-bottom: 3px solid transparent; padding: 14px 18px; min-height: 48px; cursor: pointer; }
+.reviewTab[aria-selected="true"] { color: var(--color-accent); border-bottom-color: var(--color-accent); }
+.reviewTab:hover { background: var(--color-panel-header); }
+.reviewPanels { padding-top: 24px; }
+.reviewPanels > [hidden] { display: none; }
+.readingContent { font-size: 16px; line-height: 1.8; }
+.readingContent :global(.text-sm) { font-size: 16px; line-height: 1.8; }
+.readingContent > :global(.rounded-xl) { margin-bottom: 20px; padding: 24px; }
+.readingText { font-size: 16px; line-height: 1.85; max-width: 95ch; margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.readingIntro { margin-bottom: 20px; }
+.readingIntro h2 { font-size: 20px; font-weight: 650; margin: 0; }
+.overviewFacts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 0 0 24px; padding: 22px 26px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px; }
+.overviewFacts dt { font-size: 13px; color: var(--color-ink-muted); }
+.overviewFacts dd { margin: 6px 0 0; font-size: 28px; font-weight: 650; }
+.evidenceList { padding-left: 22px; margin: 0; }
+.evidenceList li + li { margin-top: 16px; }
+.evidenceList p { margin: 0; }
+.evidenceLinks { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 8px; }
+.sourceLink { font: inherit; font-size: 13px; border: 0; padding: 4px 0; color: var(--color-accent); text-decoration: underline; background: transparent; cursor: pointer; text-align: left; overflow-wrap: anywhere; }
+.dossierSection { border: 1px solid var(--color-border); border-radius: 12px; background: var(--color-surface); margin-bottom: 18px; }
+.dossierSection > summary { padding: 20px 24px; cursor: pointer; font-size: 17px; font-weight: 600; scroll-margin-top: 240px; }
+.sectionBody { padding: 0 24px 24px; }
+.sectionBody > :global(section), .sectionBody > :global(div.rounded-xl) { margin-top: 12px; }
+.profileFacts { margin: 18px 0; }
+.profileFacts > div { display: grid; grid-template-columns: minmax(120px, .28fr) minmax(0, 1fr); gap: 20px; padding: 12px 0; border-bottom: 1px solid var(--color-border); }
+.profileFacts dt { color: var(--color-ink-muted); text-transform: capitalize; font-size: 14px; }
+.profileFacts dd { margin: 0; overflow-wrap: anywhere; }
+.profileValues { margin: 0; padding-left: 20px; }
+.profileValues > li + li { margin-top: 12px; }
+.nestedFacts { margin: 0; }
+.nestedFacts > div { padding: 6px 0; }
+.nestedFacts dd { margin-top: 2px; }
+.reviewFooter { position: sticky; bottom: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 16px 22px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 10px; margin-top: 24px; min-height: 76px; }
+.reviewFooter .help { margin: 0; }
+.reviewPanels .recommendationSection { margin-top: 0; padding: 28px; }
+.reviewPanels .recommendationSection .textarea { min-height: 240px; background: var(--color-surface); font-size: 16px; line-height: 1.8; }
+.documentViewer { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px; padding: 22px; }
+.documentToolbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; }
+.documentToolbar .selectorLabel { min-width: 220px; flex: 1; max-width: 440px; }
+.documentActions { display: flex; flex-wrap: wrap; gap: 10px; }
+.documentFrame { width: 100%; height: 75vh; min-height: 580px; border: 1px solid var(--color-border); border-radius: 6px; margin-top: 18px; background: var(--color-surface-alt); }
+.documentViewer:fullscreen { width: 100%; height: 100%; border: 0; border-radius: 0; display: flex; flex-direction: column; }
+.documentViewer:fullscreen .documentFrame { flex: 1; min-height: 0; }
+.qaDialog { position: fixed; inset: 0 0 0 auto; margin: 0; height: 100dvh; max-height: 100dvh; width: min(560px, 100%); max-width: 100%; border: 0; border-left: 1px solid var(--color-border); padding: 22px; background: var(--color-surface); color: var(--color-ink); }
+.qaDialog[open] { display: flex; flex-direction: column; gap: 20px; }
+.qaDialog::backdrop { background: #24143870; }
+.qaHeading { display: flex; align-items: start; justify-content: space-between; gap: 14px; }
+.qaHeading h2 { margin: 0; font-size: 21px; font-weight: 650; }
+.qaConversation { flex: 1; min-height: 0; }
+.discardDialog { border: 1px solid var(--color-border); border-radius: 14px; padding: 28px; width: min(540px, calc(100% - 32px)); background: var(--color-surface); color: var(--color-ink); margin: auto; }
+.discardDialog h2 { margin: 0 0 14px; font-size: 22px; font-weight: 650; }
+.discardDialog::backdrop { background: #24143870; }
+@media (min-width: 761px) {
+  .shell.compactSidebarShell { grid-template-columns: 76px minmax(0, 1fr); }
+  .compactSidebarShell .sidebar { padding: 20px 10px; }
+  .compactSidebarShell .brand { padding: 0 3px 22px; }
+  .compactSidebarShell .brand > span, .compactSidebarShell .navText, .compactSidebarShell .comingSoon > span:last-child { display: none; }
+  .compactSidebarShell .navLink { justify-content: center; padding: 14px 6px; }
+}
+@media (max-width: 760px) {
+  .compactSidebarShell .sidebar { padding: 12px 16px; gap: 12px; }
+  .compactSidebarShell .brand { padding: 0; border: 0; }
+  .compactSidebarShell .navigation { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .compactSidebarShell .navLink { padding: 10px 5px; min-height: 44px; }
+  .compactSidebarShell .navText, .compactSidebarShell .comingSoon { display: none; }
+  .focusedShell .role { display: none; }
+  .reviewContext { position: static; padding-top: 18px; }
+  .focusedShell .topbar { position: static; }
+  .reviewIdentity { align-items: start; }
+  .reviewIdentity .applicantHeader { flex-basis: 100%; }
+  .applicantSelector { width: 100%; }
+  .applicantSelector .selectorLabel { flex: 1; width: auto; }
+  .reviewTabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+  .reviewTab { flex: 1; padding: 12px 9px; font-size: 13px; }
+  .overviewFacts { gap: 10px; padding: 18px 14px; }
+  .overviewFacts dt { font-size: 12px; }
+  .overviewFacts dd { font-size: 23px; }
+  .profileFacts > div { grid-template-columns: 1fr; gap: 4px; }
+  .documentViewer, .reviewPanels .recommendationSection { padding: 18px; }
+  .documentToolbar .selectorLabel { min-width: 0; flex-basis: 100%; }
+  .documentFrame { min-height: 460px; }
+  .reviewFooter { position: static; padding: 12px; }
+}
 @media (max-width: 1100px) {
   .shell { grid-template-columns: 205px minmax(0, 1fr); }
   .content { padding: 24px 20px; }
