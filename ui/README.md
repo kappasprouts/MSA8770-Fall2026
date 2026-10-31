@@ -4,7 +4,7 @@ A Next.js workspace for tracking applicant processing, reviewing saved dossiers 
 
 The AI assistant is advisory and must not make admission decisions. The final-decisions page records a decision supplied by a human reviewer. Dossiers are generated upstream; Q&A uses the selected saved dossier, not direct analysis of the PDFs. Authentication is still simulated in the prototype's decision endpoint.
 
-The home page (`/`) is an internal navigation directory for the processing dashboard (`/review-queue`), applicant review (`/applicant-review?appId=APP_012`), final decisions (`/final-decisions`), and summary statistics (`/statistics`). Every page shares navigation and theme components. Previous dossier bookmarks such as `/?appId=APP_012` redirect to the selected applicant's review page. See [the first-pass implementation notes](docs/first-pass.md) for validation provenance, counts, request handling, and regression checks.
+The home page (`/`) is an internal navigation directory for the processing dashboard (`/review-queue`), applicant review (`/applicant-review?appId=APP_012`), final decisions (`/final-decisions`), summary statistics (`/statistics`), and IT error queue (`/error-queue`). The IT queue opens read-only exception details with technical findings, affected documents, and audit history; see [IT queue integration](IT_QUEUE_INTEGRATION.md). Every page shares navigation and theme components. Previous dossier bookmarks such as `/?appId=APP_012` redirect to the selected applicant's review page. See [the first-pass implementation notes](docs/first-pass.md) for validation provenance, counts, request handling, and regression checks.
 
 ![Applicant Review Chat screenshot](public/readme-screenshot.png)
 
