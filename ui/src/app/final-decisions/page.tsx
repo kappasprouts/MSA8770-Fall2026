@@ -7,7 +7,7 @@ import RequestState from "@/components/RequestState";
 import StatusBadge from "@/components/StatusBadge";
 import styles from "@/components/eaos.module.css";
 import { type ApplicantRow, type FinalDecision, dossierHref, getFinalDecisionData, submitFinalDecision } from "@/lib/eaos-api";
-import { type DecisionTotals, decisionLabel, statusLabel } from "@/lib/review-state";
+import { type DecisionTotals, decisionLabel } from "@/lib/review-state";
 import { recommendationLabel } from "@/lib/recommendation";
 
 export default function FinalDecisionsPage() {
@@ -73,7 +73,7 @@ export default function FinalDecisionsPage() {
           </div>
           {loading ? <RequestState kind="loading" title="Loading decision queue…" />
             : loadError ? <RequestState kind="error" title="Decision queue could not be loaded" description={loadError} onRetry={refreshQueue} />
-              : rows.length === 0 ? <RequestState kind="empty" title="No applicants awaiting a decision" description="Applicants appear here when their dossiers are ready and no final decision has been recorded." />
+              : rows.length === 0 ? <RequestState kind="empty" title="No applicants awaiting a decision" description="Applicants with ready or reviewed dossiers appear here until a final decision is recorded." />
                 : filtered.length === 0 ? <RequestState kind="empty" title="No applicants match this search" actionLabel="Clear search" onRetry={() => setSearch("")} />
                   : <div className={styles.tableWrap} role="region" aria-label="Applicants awaiting a final decision" tabIndex={0}>
                     <table className={`${styles.table} ${styles.decisionTable}`}>
@@ -93,10 +93,9 @@ export default function FinalDecisionsPage() {
           {!selected ? <p className={styles.help}>Select an applicant from the loaded queue to begin.</p> : <>
             <div className={styles.infoLine}><span>Applicant</span><strong>{[selected.firstName, selected.lastName].filter(Boolean).join(" ") || selected.appId}</strong></div>
             <div className={styles.infoLine}><span>Applicant ID</span><strong>{selected.appId}</strong></div>
-            <div className={styles.infoLine}><span>Application status</span><strong>{statusLabel(selected.applicationStatus)}</strong></div>
-            <div className={styles.infoLine}><span>Officer recommendation</span><strong>{recommendationLabel(selected.officerRecommendation)}</strong></div>
-            <div className={styles.infoLine}><span>Officer comments / notes</span><p className={styles.notesText}>{selected.officerRecommendationNotes || "No notes provided."}</p></div>
-            <div className={styles.infoLine}><span>Existing final decision</span><strong>{decisionLabel(selected.finalDecision)}</strong></div>
+            <div className={styles.infoLine}><span>Officer recommendation</span><strong>{selected.officerRecommendation ? recommendationLabel(selected.officerRecommendation) : "—"}</strong></div>
+            <div className={styles.infoLine}><span>Officer comments / notes</span><p className={styles.notesText}>{selected.officerRecommendationNotes || "—"}</p></div>
+            <div className={styles.infoLine}><span>Existing final decision</span><strong>{selected.finalDecision ? decisionLabel(selected.finalDecision) : "—"}</strong></div>
             <Link href={dossierHref(selected.appId)} className={styles.secondaryButton} style={{ marginTop: 16 }}>Review applicant dossier →</Link>
             {selected.finalDecision ? <p className={styles.help}>A final decision is already recorded. An authorized correction workflow is required to change it.</p> : <>
               <fieldset className={styles.decisionFields} disabled={saving}>

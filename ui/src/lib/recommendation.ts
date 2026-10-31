@@ -8,6 +8,7 @@ export interface OfficerReview {
   notes: string;
   updatedAt: string | null;
   canEdit: boolean;
+  applicationStatus: string;
 }
 
 export interface RecommendationState {
@@ -17,9 +18,10 @@ export interface RecommendationState {
   saved: OfficerRecommendation | null;
   canEdit: boolean;
   error: boolean;
+  applicationStatus: string | null;
 }
 
-export const INITIAL_RECOMMENDATION_STATE: RecommendationState = { loading: true, saving: false, dirty: false, saved: null, canEdit: false, error: false };
+export const INITIAL_RECOMMENDATION_STATE: RecommendationState = { loading: true, saving: false, dirty: false, saved: null, canEdit: false, error: false, applicationStatus: null };
 
 export function isOfficerRecommendation(value: unknown): value is OfficerRecommendation {
   return RECOMMENDATIONS.some(option => option === value);

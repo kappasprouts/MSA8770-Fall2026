@@ -125,6 +125,9 @@ checklists:
 status_codes:
   VALID: "All mandatory files and fields present; application packet complete, ready for handoff."
   READY_FOR_REVIEW: "Automated ingestion and validation checks passed; application packet complete, ready for handoff."
+  DOSSIER_READY: "Saved dossier available for admissions officer review."
+  REVIEWED: "An officer recommendation has been saved; awaiting a final decision."
+  FINAL_DECISION_RECORDED: "A human-approved final decision has been saved; the outcome is stored separately."
   AWAITING_MATERIALS: "One or more required checklist documents are missing. Route to Applicant Packet Update."
   INCOMPLETE: "One or more required metadata fields are missing. Route to Applicant Packet Update."
   ERROR: "Corrupted, missing magic bytes, or size violations encountered. Route to Human Review."
@@ -146,6 +149,9 @@ status_priority:
 # 3-Way Deterministic Routing Destination Rules (Architecture Section 4)
 routing_rules:
   on_valid: "READY_FOR_REVIEW"
+  on_dossier_ready: "Applicant Review"
+  on_reviewed: "Final Decisions"
+  on_final_decision: "Final Decision Recorded"
   on_awaiting_materials: "Applicant Packet Update"
   on_incomplete: "Applicant Packet Update"
   on_error: "Human Review"

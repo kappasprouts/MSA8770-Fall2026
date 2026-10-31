@@ -15,7 +15,8 @@ export async function GET(_request: NextRequest, context: Context) {
       SELECT app_id AS "appId", officer_recommendation AS recommendation,
         COALESCE(officer_recommendation_notes, '') AS notes,
         officer_recommendation_updated_at AS "updatedAt",
-        (status = 'DOSSIER_READY' AND final_decision IS NULL) AS "canEdit"
+        status AS "applicationStatus",
+        (status IN ('DOSSIER_READY', 'REVIEWED') AND final_decision IS NULL) AS "canEdit"
       FROM applicants WHERE app_id = $1
     `, [id]);
     if (!rows[0]) return NextResponse.json({ error: "Applicant not found." }, { status: 404 });
@@ -49,10 +50,12 @@ export async function PUT(request: NextRequest, context: Context) {
     // The eligibility check and update share a row lock with final-decision writes.
     const { rows } = await client.query(`
       UPDATE applicants SET officer_recommendation = $1,
-        officer_recommendation_notes = $2, officer_recommendation_updated_at = NOW(), updated_at = NOW()
-      WHERE app_id = $3 AND status = 'DOSSIER_READY' AND final_decision IS NULL
+        officer_recommendation_notes = $2, officer_recommendation_updated_at = NOW(),
+        status = 'REVIEWED', updated_at = NOW()
+      WHERE app_id = $3 AND status IN ('DOSSIER_READY', 'REVIEWED') AND final_decision IS NULL
       RETURNING app_id AS "appId", officer_recommendation AS recommendation,
         officer_recommendation_notes AS notes, officer_recommendation_updated_at AS "updatedAt",
+        status AS "applicationStatus",
         TRUE AS "canEdit"
     `, [body.recommendation, body.notes, id]);
     if (!rows[0]) {
@@ -64,6 +67,7 @@ export async function PUT(request: NextRequest, context: Context) {
       VALUES ($1, $2, $3, $4, $5::jsonb, NOW())
     `, [randomUUID(), id, "OFFICER_RECOMMENDATION_SAVED", "officer_simulated", JSON.stringify({
       recommendation: body.recommendation, notes: body.notes,
+      status: "REVIEWED",
       source: "APPLICANT_REVIEW_UI", authentication: "SIMULATED_FOR_PROTOTYPE",
     })]);
     await client.query("COMMIT");

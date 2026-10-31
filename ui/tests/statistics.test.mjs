@@ -43,6 +43,13 @@ test("all applicant records contribute, independent of dossier or decision avail
   assert.equal(data.missingDocuments.find(i => i.label === "Transcript").count, 2, "A repeated missing document counts once per packet");
 });
 
+test("reviewed and finalized applications still count as complete packets without manifest metadata", () => {
+  const data = stats.buildStatistics([{ status: "REVIEWED" }, { status: "FINAL_DECISION_RECORDED", final_decision: "WAITLIST" }]);
+  assert.equal(data.complete, 2);
+  assert.equal(data.recorded, 1);
+  assert.equal(data.withoutDecision, 1);
+});
+
 test("academic values preserve real zeros, reject invalid scores, and calculate interpolated percentiles", () => {
   const data = stats.buildStatistics(fixtures), gpa = data.academics.find(m => m.key === "gpa");
   assert.equal(gpa.count, 4);

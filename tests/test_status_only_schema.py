@@ -19,6 +19,7 @@ def test_applicant_route_is_derived_from_persisted_status(tmp_path):
 
     storage.stage_applicant({
         "app_id": "APP_050", "first_name": "A", "last_name": "B",
+        "admission_year": 2026, "admission_term": "F",
         "status": "INCOMPLETE", "routing_destination": "stale external value",
     })
     assert storage.get_applicant("APP_050").routing_destination == "Applicant Packet Update"
@@ -37,6 +38,7 @@ def test_existing_sqlite_store_migrates_to_status_only(tmp_path):
     )
     storage.stage_applicant({
         "app_id": "APP_051", "first_name": "A", "last_name": "B", "status": "INCOMPLETE",
+        "admission_year": 2026, "admission_term": "F",
     })
     storage.engine.dispose()
 
@@ -67,6 +69,7 @@ def test_audit_insert_failure_rolls_back_status_change(tmp_path):
     )
     storage.stage_applicant({
         "app_id": "APP_052", "first_name": "A", "last_name": "B", "status": "INCOMPLETE",
+        "admission_year": 2026, "admission_term": "F",
     })
     with storage.engine.begin() as connection:
         connection.execute(text(

@@ -98,11 +98,25 @@ test("real PostgreSQL migration, saves, queue propagation, finalization, and aud
     const migration = readFileSync(new URL("../../storage/migrations/20261030_officer_recommendation.sql", import.meta.url), "utf8");
     await client.query(migration);
     await client.query(migration);
+    const lifecycleMigration = readFileSync(new URL("../../storage/migrations/20261031_review_lifecycle_statuses.sql", import.meta.url), "utf8");
+    await client.query(`INSERT INTO applicants (app_id, status, officer_recommendation, final_decision, updated_at) VALUES
+      ('LEGACY_R', 'DOSSIER_READY', 'WAITLIST', NULL, '2026-10-30T12:00:00Z'),
+      ('LEGACY_F', 'DOSSIER_READY', 'REJECT', 'ACCEPT', '2026-10-30T12:00:00Z'),
+      ('LEGACY_D', 'READY_FOR_REVIEW', NULL, 'WAITLIST', '2026-10-30T12:00:00Z'),
+      ('UNREVIEWED', 'DOSSIER_READY', NULL, NULL, '2026-10-30T12:00:00Z')`);
+    await client.query(lifecycleMigration);
+    await client.query(lifecycleMigration);
+    const backfilled = (await client.query('SELECT * FROM applicants ORDER BY app_id')).rows;
+    assert.deepEqual(backfilled.map(row => row.status), ['FINAL_DECISION_RECORDED', 'FINAL_DECISION_RECORDED', 'REVIEWED', 'DOSSIER_READY']);
+    assert.equal(backfilled[1].officer_recommendation, 'REJECT');
+    assert.equal(backfilled[1].final_decision, 'ACCEPT');
+    for (const row of backfilled) assert.equal(row.updated_at.toISOString(), '2026-10-30T12:00:00.000Z');
+    await client.query('DELETE FROM applicants');
     await client.query(`INSERT INTO applicants (app_id, status) VALUES ('APP_A', 'DOSSIER_READY'), ('APP_B', 'READY_FOR_REVIEW')`);
     const pool = { query: (...args) => client.query(...args), connect: async () => ({ query: (...args) => client.query(...args), release() {} }) };
     const route = loadRoute(pool);
     const initial = await (await route.GET(null, context("APP_A"))).json();
-    assert.deepEqual(initial, { appId: "APP_A", recommendation: null, notes: "", updatedAt: null, canEdit: true });
+    assert.deepEqual(initial, { appId: "APP_A", recommendation: null, notes: "", updatedAt: null, canEdit: true, applicationStatus: "DOSSIER_READY" });
     assert.equal((await route.GET(null, context("MISSING"))).status, 404);
     assert.equal((await route.PUT(request({ recommendation: "ACCEPT", notes: "" }), context("APP_B"))).status, 409);
     assert.equal((await route.PUT(request({ recommendation: "ACCEPT", notes: "" }), context("MISSING"))).status, 409);
@@ -113,6 +127,9 @@ test("real PostgreSQL migration, saves, queue propagation, finalization, and aud
       const saved = await response.json();
       assert.equal(saved.recommendation, recommendation);
       assert.ok(saved.updatedAt);
+      assert.equal(saved.applicationStatus, "REVIEWED");
+      assert.equal(saved.canEdit, true);
+      assert.equal((await client.query("SELECT status FROM applicants WHERE app_id='APP_A'")).rows[0].status, "REVIEWED");
     }
     // Empty notes are optional and can replace previously saved notes.
     assert.equal((await route.PUT(request({ recommendation: "WAITLIST", notes: "" }), context("APP_A"))).status, 200);
@@ -125,21 +142,35 @@ test("real PostgreSQL migration, saves, queue propagation, finalization, and aud
     assert.equal(data.applicants[0].officerRecommendation, "REJECT");
     assert.equal(data.applicants[0].officerRecommendationNotes, saved.notes);
     assert.equal(data.applicants[0].finalDecision, null);
+    assert.equal(data.applicants[0].applicationStatus, "REVIEWED");
     assert.deepEqual(data.totals, { awaiting: 1, recorded: 0, total: 2 });
     assert.equal((await client.query("SELECT COUNT(*)::int AS count FROM audit_logs")).rows[0].count, 5);
 
     // An audit failure rolls the entire save back, preserving the previous review.
     await client.query("ALTER TABLE audit_logs ADD CONSTRAINT fail_audit CHECK (action <> 'OFFICER_RECOMMENDATION_SAVED') NOT VALID");
     t.mock.method(console, "error", () => {});
+    await client.query("INSERT INTO applicants (app_id, status) VALUES ('APP_C', 'DOSSIER_READY')");
+    assert.equal((await route.PUT(request({ recommendation: "ACCEPT", notes: "First save should roll back" }), context("APP_C"))).status, 500);
+    assert.deepEqual((await client.query("SELECT status, officer_recommendation FROM applicants WHERE app_id='APP_C'")).rows[0], { status: "DOSSIER_READY", officer_recommendation: null });
+    await client.query("DELETE FROM applicants WHERE app_id='APP_C'");
     assert.equal((await route.PUT(request({ recommendation: "ACCEPT", notes: "Should roll back" }), context("APP_A"))).status, 500);
     assert.deepEqual(await (await route.GET(null, context("APP_A"))).json(), reloaded);
     await client.query("ALTER TABLE audit_logs DROP CONSTRAINT fail_audit");
 
     const finalRoute = loadRoute(pool, "../src/app/api/applicants/[id]/final-decision/route.ts");
-    assert.equal((await finalRoute.PUT(request({ final_decision: "ACCEPT" }), context("APP_A"))).status, 200);
+    await client.query("ALTER TABLE audit_logs ADD CONSTRAINT fail_final_audit CHECK (action <> 'FINAL_DECISION_RECORDED') NOT VALID");
+    assert.equal((await finalRoute.PUT(request({ final_decision: "ACCEPT" }), context("APP_A"))).status, 500);
+    assert.deepEqual((await client.query("SELECT status, final_decision FROM applicants WHERE app_id='APP_A'")).rows[0], { status: "REVIEWED", final_decision: null });
+    await client.query("ALTER TABLE audit_logs DROP CONSTRAINT fail_final_audit");
+    const finalizedResponse = await finalRoute.PUT(request({ final_decision: "WAITLIST" }), context("APP_A"));
+    assert.equal(finalizedResponse.status, 200);
+    assert.equal((await finalizedResponse.json()).applicationStatus, "FINAL_DECISION_RECORDED");
+    assert.deepEqual((await client.query("SELECT status, final_decision FROM applicants WHERE app_id='APP_A'")).rows[0], { status: "FINAL_DECISION_RECORDED", final_decision: "WAITLIST" });
+    assert.equal((await finalRoute.PUT(request({ final_decision: "ACCEPT" }), context("APP_A"))).status, 409);
     assert.equal((await route.PUT(request({ recommendation: "ACCEPT", notes: "Too late" }), context("APP_A"))).status, 409);
     const finalized = await (await route.GET(null, context("APP_A"))).json();
     assert.equal(finalized.canEdit, false);
+    assert.equal(finalized.applicationStatus, "FINAL_DECISION_RECORDED");
     assert.equal(finalized.recommendation, "REJECT");
     assert.equal(finalized.notes, saved.notes);
     const after = await (await queue.GET()).json();

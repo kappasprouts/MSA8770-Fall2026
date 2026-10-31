@@ -105,7 +105,7 @@ export default function ApplicantReview() {
   const demographics = current?.data.applicant_dossier?.applicant_demographics;
   const name = demographics ? [demographics.first_name, demographics.last_name].filter(Boolean).join(" ") : null;
   const latestFailed = current && latestRunCheckState(current.data.run ?? {}) === "failed";
-  const header = <AppHeader applicants={applicants} selectedAppId={selectedAppId} onSelect={selectApplicant} applicantName={name || null} description={[selectedAppId, demographics?.intended_major, demographics?.name_of_hs].filter(Boolean).join(" · ")} disabled={listState !== "ready" || applicants.length === 0 || recommendation.saving} placeholder={listState === "loading" ? "Loading applicants…" : listState === "error" ? "Applicants unavailable" : "No saved dossiers"} />;
+  const header = <AppHeader applicants={applicants} selectedAppId={selectedAppId} onSelect={selectApplicant} applicantName={name || null} applicationStatus={current ? recommendation.applicationStatus : null} description={[selectedAppId, demographics?.intended_major, demographics?.name_of_hs].filter(Boolean).join(" · ")} disabled={listState !== "ready" || applicants.length === 0 || recommendation.saving} placeholder={listState === "loading" ? "Loading applicants…" : listState === "error" ? "Applicants unavailable" : "No saved dossiers"} />;
 
   return (
     <EaosShell title="Applicant Review" subtitle="Review saved dossiers alongside their original documents." role="Applicant review" reviewLayout>

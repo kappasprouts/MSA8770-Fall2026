@@ -2,6 +2,7 @@ import type { ApplicantSummary, DossierPayload, RunInfo, ValidationCall } from "
 
 const STATUS_LABELS: Record<string, string> = {
   DOSSIER_READY: "Dossier ready", READY_FOR_REVIEW: "Awaiting dossier",
+  REVIEWED: "Reviewed", FINAL_DECISION_RECORDED: "Final decision recorded",
   AWAITING_MATERIALS: "Awaiting materials", INCOMPLETE: "Incomplete",
   AI_VALIDATION_FAILED: "Validation failed", HUMAN_REVIEW_AI_FAILED: "Needs human review",
   AGENT_ERROR: "Generation failed", ERROR: "Processing error", PENDING: "Pending", UNKNOWN: "Unknown",
@@ -13,6 +14,11 @@ export function statusLabel(status: string): string {
 
 export function decisionLabel(decision: string | null): string {
   return ({ ACCEPT: "Accepted", WAITLIST: "Waitlisted", DECLINE: "Declined" } as Record<string, string>)[decision ?? ""] ?? "Not recorded";
+}
+
+/** Saved dossiers remain accessible throughout human review and finalization. */
+export function hasReviewableDossier(status: string): boolean {
+  return ["DOSSIER_READY", "REVIEWED", "FINAL_DECISION_RECORDED"].includes(status);
 }
 
 export function parseApplicantSummaries(value: unknown): ApplicantSummary[] {

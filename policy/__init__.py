@@ -75,6 +75,12 @@ def derive_routing_destination(status: str, rules: Optional[Dict[str, str]] = No
     status_value = getattr(status, "value", status)
     if status_value in {"READY_FOR_REVIEW", "VALID"}:
         return targets.get("on_valid", targets.get("on_ready", "READY_FOR_REVIEW"))
+    if status_value == "DOSSIER_READY":
+        return targets.get("on_dossier_ready", "Applicant Review")
+    if status_value == "REVIEWED":
+        return targets.get("on_reviewed", "Final Decisions")
+    if status_value == "FINAL_DECISION_RECORDED":
+        return targets.get("on_final_decision", "Final Decision Recorded")
     if status_value == "INCOMPLETE":
         return targets.get("on_incomplete", "Applicant Packet Update")
     if status_value == "AWAITING_MATERIALS":

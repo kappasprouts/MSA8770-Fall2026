@@ -1,12 +1,14 @@
 import type { ApplicantSummary } from "@/lib/types";
 import styles from "./eaos.module.css";
+import StatusBadge from "./StatusBadge";
 
-export default function AppHeader({ applicants, selectedAppId, onSelect, applicantName, description, disabled, placeholder = "No saved dossiers" }: {
+export default function AppHeader({ applicants, selectedAppId, onSelect, applicantName, description, applicationStatus, disabled, placeholder = "No saved dossiers" }: {
   applicants: ApplicantSummary[];
   selectedAppId: string;
   onSelect: (appId: string) => void;
   applicantName: string | null;
   description?: string;
+  applicationStatus?: string | null;
   disabled?: boolean;
   placeholder?: string;
 }) {
@@ -16,6 +18,7 @@ export default function AppHeader({ applicants, selectedAppId, onSelect, applica
       <div>
         <h2>{applicantName || selectedAppId || "Select an applicant"}</h2>
         <p className={styles.help}>{description || "Select an applicant to review their saved dossier."}</p>
+        {applicationStatus && <div className={styles.help} aria-label="Application status"><StatusBadge status={applicationStatus} /></div>}
       </div>
       <div className={styles.applicantSelector}><button type="button" className={styles.secondaryButton} aria-label="Previous applicant" title="Previous applicant" disabled={disabled || index <= 0} onClick={() => onSelect(applicants[index - 1].id)}>←</button><label className={styles.selectorLabel}>
         Applicant

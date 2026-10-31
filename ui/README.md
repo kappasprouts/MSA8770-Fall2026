@@ -91,6 +91,8 @@ npm run build
 
 ## Using the interface
 
+Application statuses progress from **Dossier ready** to **Reviewed** when an officer recommendation is saved, then **Final decision recorded** when the final decision is saved. Recommendations remain editable until the final decision is recorded, and saved dossiers remain accessible throughout. See [review lifecycle and database migration](docs/review-lifecycle.md).
+
 Start at **Home** and choose a workspace. The processing dashboard shows application and batch statuses; applicant review provides saved dossiers and source documents; final decisions records human-approved decisions. **Summary statistics** (`/statistics`) shows the applicant pool, completeness, decisions, academic distributions, representation, trends, and cohort comparisons, with shared filters and CSV export. See [statistics definitions and validation](docs/statistics.md). The Home link and university logo return to the landing page from any workspace. The landing page itself does not depend on database or model requests.
 
 1. **Select an applicant** from the dropdown. Available IDs are read from `applicant_dossier`; an applicant must have a generated dossier to appear.

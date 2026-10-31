@@ -8,7 +8,7 @@ import StatusBadge from "@/components/StatusBadge";
 import styles from "@/components/eaos.module.css";
 import { type ApplicantRow, dossierHref, getReviewQueue } from "@/lib/eaos-api";
 import { requestJson } from "@/lib/http";
-import { type BatchState, parseBatchStatus, statusLabel } from "@/lib/review-state";
+import { type BatchState, hasReviewableDossier, parseBatchStatus, statusLabel } from "@/lib/review-state";
 
 const PAGE_SIZE = 20;
 
@@ -71,6 +71,8 @@ export default function ReviewQueuePage() {
       <section className={styles.metrics} aria-label="Application counts" aria-busy={loading}>
         <div className={styles.metric}><small>All applicants</small><strong>{metric(rows.length)}</strong></div>
         <div className={styles.metric}><small>Dossier ready</small><strong>{metric(count("DOSSIER_READY"))}</strong></div>
+        <div className={styles.metric}><small>Reviewed</small><strong>{metric(count("REVIEWED"))}</strong></div>
+        <div className={styles.metric}><small>Final decision recorded</small><strong>{metric(count("FINAL_DECISION_RECORDED"))}</strong></div>
         <div className={styles.metric}><small>Awaiting materials</small><strong>{metric(count("AWAITING_MATERIALS"))}</strong></div>
         <div className={styles.metric}><small>Incomplete</small><strong>{metric(count("INCOMPLETE"))}</strong></div>
       </section>
@@ -109,7 +111,7 @@ export default function ReviewQueuePage() {
                     <tbody>{pageRows.map(row => <tr key={row.appId}>
                       <td className={styles.strong}>{row.appId}</td><td>{[row.firstName, row.lastName].filter(Boolean).join(" ") || "Unavailable"}</td>
                       <td>{row.intendedMajor || "Unavailable"}</td><td><StatusBadge status={row.applicationStatus} /></td><td>{row.finalDecision ? <StatusBadge status={row.finalDecision} decision /> : <span className={styles.muted} aria-label="No final decision recorded">—</span>}</td>
-                      <td>{row.applicationStatus === "DOSSIER_READY" ? <Link className={styles.secondaryButton} href={dossierHref(row.appId)} aria-label={`Open dossier for ${row.appId}`}>Open dossier →</Link> : <span className={styles.muted} aria-label="Dossier not available">—</span>}</td>
+                      <td>{hasReviewableDossier(row.applicationStatus) ? <Link className={styles.secondaryButton} href={dossierHref(row.appId)} aria-label={`Open dossier for ${row.appId}`}>Open dossier →</Link> : <span className={styles.muted} aria-label="Dossier not available">—</span>}</td>
                     </tr>)}</tbody>
                   </table>
                 </div>
@@ -122,7 +124,7 @@ export default function ReviewQueuePage() {
                     </div>
                   </nav>
                 </>}
-        <p className={styles.footnote}>Dossier links are available when an applicant&apos;s processing status is dossier ready.</p>
+        <p className={styles.footnote}>Dossiers remain available after review and after a final decision is recorded.</p>
       </section>
     </EaosShell>
   );

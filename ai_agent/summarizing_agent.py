@@ -1664,7 +1664,10 @@ def save_run(connection, run):
         # Application_status is VARCHAR(32)
 
         cursor.execute(
-            "UPDATE applicants SET status = %s WHERE app_id = %s",
+            """UPDATE applicants SET status = CASE
+                WHEN final_decision IS NOT NULL THEN 'FINAL_DECISION_RECORDED'
+                WHEN officer_recommendation IS NOT NULL THEN 'REVIEWED'
+                ELSE %s END WHERE app_id = %s""",
             (
                 "DOSSIER_READY"
                 if run["run_status"] == "DOSSIER_READY"

@@ -17,13 +17,13 @@ export async function GET() {
         officer_recommendation_notes AS "officerRecommendationNotes",
         updated_at AS "lastUpdated"
       FROM applicants
-        WHERE status = 'DOSSIER_READY'
+        WHERE status IN ('DOSSIER_READY', 'REVIEWED')
         AND final_decision IS NULL
       )
       SELECT
         COALESCE((SELECT json_agg(p ORDER BY p."appId") FROM pending p), '[]'::json) AS applicants,
         json_build_object(
-          'awaiting', COUNT(*) FILTER (WHERE status = 'DOSSIER_READY' AND final_decision IS NULL),
+          'awaiting', COUNT(*) FILTER (WHERE status IN ('DOSSIER_READY', 'REVIEWED') AND final_decision IS NULL),
           'recorded', COUNT(*) FILTER (WHERE final_decision IS NOT NULL),
           'total', COUNT(*)
         ) AS totals

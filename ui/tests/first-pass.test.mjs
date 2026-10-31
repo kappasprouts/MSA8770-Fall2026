@@ -125,10 +125,11 @@ test("decision SQL counts recorded decisions outside the pending queue", { skip:
     ) ON COMMIT DROP`);
     await client.query(`INSERT INTO applicants (app_id, status, final_decision) VALUES
       ('PENDING', 'DOSSIER_READY', NULL), ('RECORDED', 'READY_FOR_REVIEW', 'ACCEPT'),
-      ('WAITING', 'AWAITING_MATERIALS', NULL), ('DECLINED', 'DOSSIER_READY', 'DECLINE')`);
+      ('WAITING', 'AWAITING_MATERIALS', NULL), ('DECLINED', 'FINAL_DECISION_RECORDED', 'DECLINE'),
+      ('REVIEWED', 'REVIEWED', NULL)`);
     const { rows } = await client.query(sql);
-    assert.deepEqual(rows[0].totals, { awaiting: 1, recorded: 2, total: 4 });
-    assert.deepEqual(rows[0].applicants.map(row => row.appId), ["PENDING"]);
+    assert.deepEqual(rows[0].totals, { awaiting: 2, recorded: 2, total: 5 });
+    assert.deepEqual(rows[0].applicants.map(row => row.appId), ["PENDING", "REVIEWED"]);
     await client.query("DELETE FROM applicants");
     assert.deepEqual((await client.query(sql)).rows[0], { applicants: [], totals: { awaiting: 0, recorded: 0, total: 0 } });
   } finally {

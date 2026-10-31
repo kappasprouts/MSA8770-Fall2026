@@ -54,9 +54,10 @@ export async function PUT(
       `
       UPDATE applicants
       SET final_decision = $1,
+          status = 'FINAL_DECISION_RECORDED',
           updated_at = NOW()
       WHERE app_id = $2
-        AND status = 'DOSSIER_READY'
+        AND status IN ('DOSSIER_READY', 'REVIEWED')
         AND final_decision IS NULL
       RETURNING app_id
       `,
@@ -89,6 +90,7 @@ export async function PUT(
         "dean_simulated",
         JSON.stringify({
           final_decision: decision,
+          status: "FINAL_DECISION_RECORDED",
           previous_final_decision: null,
           source: "EAOS_UI_3",
           authentication: "SIMULATED_FOR_PROTOTYPE",
@@ -102,6 +104,7 @@ export async function PUT(
       success: true,
       appId,
       final_decision: decision,
+      applicationStatus: "FINAL_DECISION_RECORDED",
     });
   } catch (error) {
     await client.query("ROLLBACK");

@@ -55,7 +55,7 @@ export default function OfficerRecommendationPanel({ appId, onStateChange }: { a
 
   const changed = recommendation !== (saved?.recommendation || "") || notes !== (saved?.notes || "");
   useEffect(() => {
-    onStateChange?.({ loading, saving, dirty: !loading && changed, saved: saved?.recommendation ?? null, canEdit: saved?.canEdit ?? false, error: Boolean(loadError) });
+    onStateChange?.({ loading, saving, dirty: !loading && changed, saved: saved?.recommendation ?? null, canEdit: saved?.canEdit ?? false, error: Boolean(loadError), applicationStatus: saved?.applicationStatus ?? null });
   }, [loading, saving, changed, saved, loadError, onStateChange]);
   return <section className={`${styles.card} ${styles.recommendationSection}`} aria-labelledby="officer-recommendation-heading" aria-busy={loading || saving}>
     <h2 id="officer-recommendation-heading">Officer&apos;s Recommendation</h2>
@@ -64,7 +64,7 @@ export default function OfficerRecommendationPanel({ appId, onStateChange }: { a
       : loadError ? <RequestState kind="error" title="Recommendation unavailable" description={loadError} onRetry={reload} />
         : <form onSubmit={save}>
           {saved?.recommendation && <p className={styles.help}>Saved recommendation: <strong>{recommendationLabel(saved.recommendation)}</strong></p>}
-          {saved && !saved.canEdit && <p className={styles.help}>Recommendations can be edited when the dossier is ready and no final decision has been recorded.</p>}
+          {saved && !saved.canEdit && <p className={styles.help}>{saved.applicationStatus === "FINAL_DECISION_RECORDED" ? "A final decision has been recorded. The saved recommendation is read-only." : "Recommendations can be edited for Dossier ready or Reviewed applications until a final decision is recorded."}</p>}
           <fieldset className={styles.decisionFields} disabled={saving || !saved?.canEdit}>
             <legend className={styles.fieldLabel}>Recommended outcome</legend>
             <div className={styles.radioRow}>{RECOMMENDATIONS.map(value => <label className={styles.radioLabel} key={value}>
@@ -76,7 +76,7 @@ export default function OfficerRecommendationPanel({ appId, onStateChange }: { a
             <p id="officer-notes-help" className={styles.help}>{notes.length.toLocaleString()} / {MAX_RECOMMENDATION_NOTES.toLocaleString()} characters</p>
           </fieldset>
           {saveError && <div className={styles.error} role="alert">{saveError}<button type="button" className={styles.secondaryButton} onClick={reload}>Reload saved recommendation</button></div>}
-          {success && <div className={styles.success} role="status">Recommendation saved. It is now available on Final Decisions.</div>}
+          {success && <div className={styles.success} role="status">Recommendation saved. Application marked Reviewed and available on Final Decisions.</div>}
           <div className={styles.actionRow}><button className={styles.button} type="submit" disabled={!saved?.canEdit || !recommendation || !changed || saving}>{saving ? "Saving…" : "Save Recommendation"}</button></div>
         </form>}
   </section>;

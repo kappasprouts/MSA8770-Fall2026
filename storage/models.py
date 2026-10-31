@@ -103,8 +103,8 @@ class Applicant(Base):
     last_updated_csv = Column(String(64), nullable=True)
     review_ctr = Column(Integer, default=0, nullable=True)
     application_status_raw = Column(String(64), nullable=True)
-    # Deterministic Gate Workflow Status
-    # Statuses: PENDING, READY_FOR_REVIEW, AWAITING_MATERIALS, INCOMPLETE, ERROR
+    # Packet processing followed by human review and final-decision recording.
+    # Human milestones: DOSSIER_READY -> REVIEWED -> FINAL_DECISION_RECORDED.
     status = Column(String(32), default="PENDING", nullable=False, index=True)
     final_decision = Column(String(10), nullable=True)
     officer_recommendation = Column(String(10), nullable=True)
@@ -173,6 +173,7 @@ class Applicant(Base):
             "hooks": self.hooks or [],
             "documents": self.documents or [],
             "status": self.status,
+            "final_decision": self.final_decision,
             "officer_recommendation": self.officer_recommendation,
             "officer_recommendation_notes": self.officer_recommendation_notes,
             "officer_recommendation_updated_at": (

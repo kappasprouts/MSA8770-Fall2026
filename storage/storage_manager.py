@@ -28,6 +28,7 @@ except ImportError:
 
 from storage.database import Base
 from storage.date_utils import parse_date_of_birth
+from storage.workflow import application_status
 from storage.models import (
     Applicant,
     AuditLog,
@@ -160,6 +161,13 @@ class StorageManager:
                         )
             if "routing_destination" in columns:
                 conn.execute(text("ALTER TABLE applicants DROP COLUMN routing_destination"))
+            if {"status", "final_decision"} <= columns:
+                conn.execute(text("""
+                    UPDATE applicants SET status = CASE
+                        WHEN final_decision IS NOT NULL THEN 'FINAL_DECISION_RECORDED'
+                        ELSE 'REVIEWED' END
+                    WHERE final_decision IS NOT NULL OR officer_recommendation IS NOT NULL
+                """))
 
     def _init_db_connection(self):
         """Attempt to establish PostgreSQL connection, falling back gracefully to persistent SQLite store."""
@@ -378,7 +386,7 @@ class StorageManager:
             try:
                 existing = None
                 for candidate in applicant_id_candidates(app_id):
-                    existing = session.execute(select(Applicant).where(Applicant.app_id == candidate)).scalar_one_or_none()
+                    existing = session.execute(select(Applicant).where(Applicant.app_id == candidate).with_for_update()).scalar_one_or_none()
                     if existing:
                         break
                 if existing:
@@ -394,6 +402,7 @@ class StorageManager:
                                 updated_json_columns.add(k)
                     for json_col in updated_json_columns:
                         flag_modified(existing, json_col)
+                    existing.status = application_status(existing.status, existing.officer_recommendation, existing.final_decision)
                     existing.updated_at = datetime.now(timezone.utc)
                     session.commit()
                     session.refresh(existing)
@@ -401,6 +410,7 @@ class StorageManager:
                 else:
                     applicant_data["app_id"] = normalize_applicant_id(app_id) or app_id
                     new_app = Applicant(**applicant_data)
+                    new_app.status = application_status(new_app.status, new_app.officer_recommendation, new_app.final_decision)
                     session.add(new_app)
                     session.commit()
                     session.refresh(new_app)
@@ -423,11 +433,13 @@ class StorageManager:
                     continue
                 if k != "app_id" and hasattr(cached, k):
                     setattr(cached, k, v)
+            cached.status = application_status(cached.status, cached.officer_recommendation, cached.final_decision)
             return cached
         else:
             app_id = normalize_applicant_id(app_id) or app_id
             applicant_data["app_id"] = app_id
             cached = Applicant(**applicant_data)
+            cached.status = application_status(cached.status, cached.officer_recommendation, cached.final_decision)
             self.dry_run_applicants[app_id] = cached
             return cached
 
@@ -480,12 +492,12 @@ class StorageManager:
             try:
                 app = None
                 for cand in candidates:
-                    app = session.execute(select(Applicant).where(Applicant.app_id == cand)).scalar_one_or_none()
+                    app = session.execute(select(Applicant).where(Applicant.app_id == cand).with_for_update()).scalar_one_or_none()
                     if app:
                         break
                 if app:
                     previous_status = app.status
-                    app.status = status
+                    app.status = application_status(status, app.officer_recommendation, app.final_decision)
                     if documents is not None:
                         app.documents = documents
                         flag_modified(app, "documents")
@@ -497,7 +509,8 @@ class StorageManager:
                             details={
                                 **(audit_details or {}),
                                 "previous_status": previous_status,
-                                "status": status,
+                                "status": app.status,
+                                "processing_status": status,
                             },
                         ))
                     session.commit()
@@ -516,7 +529,7 @@ class StorageManager:
         for cand in candidates:
             if cand in self.dry_run_applicants:
                 cached = self.dry_run_applicants[cand]
-                cached.status = status
+                cached.status = application_status(status, cached.officer_recommendation, cached.final_decision)
                 if documents is not None:
                     cached.documents = documents
                 return True

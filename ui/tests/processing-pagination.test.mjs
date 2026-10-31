@@ -11,6 +11,11 @@ const source = readFileSync(new URL("../src/app/review-queue/page.tsx", import.m
 const compiled = ts.transpileModule(source, { compilerOptions: {
   jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022,
 } }).outputText;
+const reviewState = { exports: {} };
+new Function("require", "module", "exports", ts.transpileModule(
+  readFileSync(new URL("../src/lib/review-state.ts", import.meta.url), "utf8"),
+  { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } },
+).outputText)(require, reviewState, reviewState.exports);
 
 function applicants(count) {
   return Array.from({ length: count }, (_, index) => ({
@@ -45,7 +50,7 @@ function ledger(rows) {
     "@/components/StatusBadge": { default: ({ status }) => React.createElement("span", {}, status) },
     "@/components/eaos.module.css": { default: {} },
     "@/lib/eaos-api": { dossierHref: id => `/applicant-review?appId=${id}` },
-    "@/lib/http": {}, "@/lib/review-state": { statusLabel: value => value },
+    "@/lib/http": {}, "@/lib/review-state": reviewState.exports,
   };
   const loaded = { exports: {} };
   new Function("require", "module", "exports", compiled)(
@@ -107,6 +112,23 @@ test("status filters paginate the full matching set and reset to the first page"
   assert.equal(view.ids().length, 5);
   view.field("Filter by status").props.onChange({ target: { value: "ALL" } });
   assert.equal(view.ids()[0], "APP_001");
+});
+
+test("reviewed and finalized applicants retain dossier links, filters, and separate milestone counts", () => {
+  const rows = applicants(4);
+  rows[1].applicationStatus = "REVIEWED";
+  rows[2].applicationStatus = "FINAL_DECISION_RECORDED";
+  rows[2].finalDecision = "WAITLIST";
+  rows[3].applicationStatus = "READY_FOR_REVIEW";
+  const view = ledger(rows);
+  assert.equal((view.html().match(/Open dossier for/g) ?? []).length, 3);
+  assert.match(view.html(), /Reviewed<\/small><strong>1<\/strong>/);
+  assert.match(view.html(), /Final decision recorded<\/small><strong>1<\/strong>/);
+  for (const status of ["REVIEWED", "FINAL_DECISION_RECORDED"]) {
+    view.field("Filter by status").props.onChange({ target: { value: status } });
+    assert.equal(view.ids().length, 1);
+    assert.equal((view.html().match(/Open dossier for/g) ?? []).length, 1);
+  }
 });
 
 test("exact multiples, one-page lists, empty results, refresh, and shrinking data keep valid page bounds", () => {
