@@ -102,8 +102,10 @@ export default function EaosShell({
               type="button"
               className={styles.backButton}
               onClick={goBack}
+              aria-label="Back to previous screen"
+              title="Back to previous screen"
             >
-              ← Back to Previous Screen
+              <WorkspaceIcon name="back" />
             </button>
             <span className={styles.role}>{role}</span>
           </header>

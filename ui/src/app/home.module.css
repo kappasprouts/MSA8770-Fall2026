@@ -37,26 +37,11 @@
   margin-bottom: 18px;
 }
 
-.shield {
-  width: 66px;
-  height: 78px;
+.welcomeLogo {
+  display: block;
+  width: 76px;
+  height: 76px;
   flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  color: #fff;
-  background: #56317b;
-  clip-path: polygon(
-    0 0, 100% 0, 100% 73%,
-    50% 100%, 0 73%
-  );
-  border-top: 5px solid #bca5d4;
-}
-
-.shield span {
-  font-family: Georgia, serif;
-  font-size: 20px;
-  font-weight: bold;
-  letter-spacing: 1px;
 }
 
 .welcome h1 {
@@ -178,15 +163,6 @@ a.destination:focus-visible {
     gap: 12px;
   }
 
-  .shield {
-    width: 48px;
-    height: 60px;
-  }
-
-  .shield span {
-    font-size: 15px;
-  }
-
   .workspaces {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     padding: 10px 20px 24px;
@@ -210,30 +186,6 @@ a.destination:focus-visible {
   align-items: flex-start;
   gap: 22px;
   margin-bottom: 0;
-}
-
-.shield {
-  width: 76px;
-  height: 92px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 4px;
-  background: #38106b;
-  border: none;
-  outline: 2px solid #d8a431;
-  outline-offset: -3px;
-  color: #fff;
-}
-
-.shield span {
-  font-size: 27px;
-}
-
-.shield .shieldChevron {
-  font-size: 26px;
-  line-height: 0.7;
-  color: #e2b33b;
 }
 
 .welcome h1 {
@@ -291,13 +243,9 @@ a.destination:focus-visible {
     padding: 24px 20px;
   }
 
-  .shield {
+  .welcomeLogo {
     width: 50px;
-    height: 64px;
-  }
-
-  .shield span {
-    font-size: 18px;
+    height: 50px;
   }
 
   .mission {

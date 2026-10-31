@@ -135,9 +135,16 @@ class StorageManager:
 
     @staticmethod
     def _migrate_sqlite_applicants(engine) -> None:
-        """Upgrade the persistent local fallback to the status-only model."""
+        """Upgrade the persistent local fallback to the current applicant model."""
         with engine.begin() as conn:
             columns = {row[1] for row in conn.execute(text("PRAGMA table_info(applicants)"))}
+            for name, sql_type in (
+                ("officer_recommendation", "VARCHAR(10) CHECK (officer_recommendation IN ('ACCEPT', 'REJECT', 'WAITLIST'))"),
+                ("officer_recommendation_notes", "TEXT"),
+                ("officer_recommendation_updated_at", "DATETIME"),
+            ):
+                if name not in columns:
+                    conn.execute(text(f"ALTER TABLE applicants ADD COLUMN {name} {sql_type}"))
             if "ib_test_scores" not in columns:
                 conn.execute(text("ALTER TABLE applicants ADD COLUMN ib_test_scores JSON NOT NULL DEFAULT '[]'"))
                 if "ib_courses" in columns:

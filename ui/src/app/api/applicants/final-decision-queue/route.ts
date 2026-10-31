@@ -13,6 +13,8 @@ export async function GET() {
         intended_major AS "intendedMajor",
         status AS "applicationStatus",
         final_decision AS "finalDecision",
+        officer_recommendation AS "officerRecommendation",
+        officer_recommendation_notes AS "officerRecommendationNotes",
         updated_at AS "lastUpdated"
       FROM applicants
         WHERE status = 'DOSSIER_READY'

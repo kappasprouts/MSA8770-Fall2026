@@ -1,5 +1,6 @@
 import { requestJson } from "./http";
 import { parseDecisionTotals, type DecisionTotals } from "./review-state";
+import { isOfficerRecommendation, type OfficerRecommendation, type OfficerReview } from "./recommendation";
 
 /** Next.js API adapter; optional URL overrides support external deployments. */
 export type ApplicationStatus = string;
@@ -12,6 +13,8 @@ export interface ApplicantRow {
   intendedMajor: string | null;
   applicationStatus: ApplicationStatus;
   finalDecision: FinalDecision | null;
+  officerRecommendation: OfficerRecommendation | null;
+  officerRecommendationNotes: string;
   lastUpdated: string | null;
 }
 
@@ -22,6 +25,7 @@ const BASE_URL = (
 const QUEUE_PATH = process.env.NEXT_PUBLIC_EAOS_REVIEW_QUEUE_PATH || '/api/applicants/review-queue';
 const FINAL_QUEUE_PATH = process.env.NEXT_PUBLIC_EAOS_FINAL_QUEUE_PATH || '/api/applicants/final-decision-queue';
 const FINAL_DECISION_PATH = process.env.NEXT_PUBLIC_EAOS_FINAL_DECISION_PATH || '/api/applicants/{id}/final-decision';
+const RECOMMENDATION_PATH = process.env.NEXT_PUBLIC_EAOS_RECOMMENDATION_PATH || '/api/applicants/{id}/recommendation';
 
 function asObject(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Expected an applicant object.');
@@ -40,6 +44,7 @@ export function normalizeApplicant(raw: unknown): ApplicantRow {
   const r = asObject(raw);
   const id = asText(get(r, 'app_id', 'App_ID', 'appId', 'CAID', 'caid'));
   if (!id) throw new Error('Applicant record missing app_id/CAID.');
+  const recommendation = get(r, 'officer_recommendation', 'officerRecommendation');
   return {
     appId: id,
     firstName: asText(get(r, 'first_name', 'First_Name', 'firstName')) || '',
@@ -47,6 +52,8 @@ export function normalizeApplicant(raw: unknown): ApplicantRow {
     intendedMajor: asText(get(r, 'intended_major', 'Intended_Major', 'intendedMajor')),
     applicationStatus: asText(get(r, 'application_status', 'Application_Status', 'applicationStatus')) || 'UNKNOWN',
     finalDecision: normalizeDecision(get(r, 'final_decision', 'Final_Decision', 'finalDecision')),
+    officerRecommendation: isOfficerRecommendation(recommendation) ? recommendation : null,
+    officerRecommendationNotes: asText(get(r, 'officer_recommendation_notes', 'officerRecommendationNotes')) || '',
     lastUpdated: asText(get(r, 'last_updated', 'Last_Updated', 'lastUpdated')),
   };
 }
@@ -75,6 +82,16 @@ export async function getFinalDecisionData(signal?: AbortSignal): Promise<{ appl
 export async function submitFinalDecision(appId: string, decision: FinalDecision): Promise<void> {
   const path = FINAL_DECISION_PATH.replace('{id}', encodeURIComponent(appId));
   await request(path, { method: 'PUT', body: JSON.stringify({ final_decision: decision }) });
+}
+
+export async function getOfficerReview(appId: string, signal?: AbortSignal): Promise<OfficerReview> {
+  return await request(RECOMMENDATION_PATH.replace('{id}', encodeURIComponent(appId)), { signal }) as OfficerReview;
+}
+
+export async function saveOfficerReview(appId: string, recommendation: OfficerRecommendation, notes: string, signal?: AbortSignal): Promise<OfficerReview> {
+  return await request(RECOMMENDATION_PATH.replace('{id}', encodeURIComponent(appId)), {
+    method: 'PUT', body: JSON.stringify({ recommendation, notes }), signal,
+  }) as OfficerReview;
 }
 
 /** Canonical applicant dossier route; the home page redirects legacy bookmarks. */

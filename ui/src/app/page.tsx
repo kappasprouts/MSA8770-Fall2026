@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import EaosShell from "@/components/EaosShell";
+import Logo from "@/components/Logo";
 import WorkspaceIcon from "@/components/WorkspaceIcon";
 import { dossierHref } from "@/lib/eaos-api";
 import styles from "./home.module.css";
@@ -61,10 +62,7 @@ export default async function Home({
         <section className={styles.welcome}>
           <div className={styles.introduction}>
             <div className={styles.welcomeHeading}>
-              <div className={styles.shield} aria-hidden="true">
-                <span>RSU</span>
-                <span className={styles.shieldChevron}>⌃</span>
-              </div>
+              <Logo className={styles.welcomeLogo} />
 
               <div>
                 <h1>Welcome to Riverview State University</h1>

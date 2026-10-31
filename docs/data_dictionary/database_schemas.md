@@ -17,6 +17,22 @@
 
 ---
 
+## Officer recommendations
+
+The active `applicants` table stores the human review separately from `final_decision`:
+
+| Column | Type | Meaning |
+| --- | --- | --- |
+| `officer_recommendation` | `VARCHAR(10)`, nullable | `ACCEPT`, `REJECT`, or `WAITLIST`; null means no saved recommendation |
+| `officer_recommendation_notes` | `TEXT`, nullable | Officer's comments, including line breaks; the API accepts up to 10,000 characters |
+| `officer_recommendation_updated_at` | `TIMESTAMPTZ`, nullable | Time of the most recent recommendation save |
+
+Apply `storage/migrations/20261030_officer_recommendation.sql` to existing PostgreSQL databases before running the updated UI. New databases use the ORM schema; existing SQLite fallback stores upgrade automatically. The PostgreSQL migration is safe to repeat.
+
+`GET /api/applicants/{id}/recommendation` returns `{ appId, recommendation, notes, updatedAt, canEdit }`. `PUT` accepts `{ recommendation, notes }`, saves both fields atomically, and records `OFFICER_RECOMMENDATION_SAVED` in `audit_logs` using the prototype's simulated officer identity. Saves require `DOSSIER_READY` and no recorded final decision. The final-decision queue includes `officerRecommendation` and `officerRecommendationNotes`; its details panel displays both. A recommendation does not set or preselect a final decision. The existing final-decision value `DECLINE` is independent of the officer's `REJECT` recommendation.
+
+---
+
 ## 1. Relational Tables Overview
 
 ```mermaid

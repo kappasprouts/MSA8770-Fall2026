@@ -8,6 +8,7 @@ import StatusBadge from "@/components/StatusBadge";
 import styles from "@/components/eaos.module.css";
 import { type ApplicantRow, type FinalDecision, dossierHref, getFinalDecisionData, submitFinalDecision } from "@/lib/eaos-api";
 import { type DecisionTotals, decisionLabel, statusLabel } from "@/lib/review-state";
+import { recommendationLabel } from "@/lib/recommendation";
 
 export default function FinalDecisionsPage() {
   const [rows, setRows] = useState<ApplicantRow[]>([]);
@@ -75,12 +76,13 @@ export default function FinalDecisionsPage() {
               : rows.length === 0 ? <RequestState kind="empty" title="No applicants awaiting a decision" description="Applicants appear here when their dossiers are ready and no final decision has been recorded." />
                 : filtered.length === 0 ? <RequestState kind="empty" title="No applicants match this search" actionLabel="Clear search" onRetry={() => setSearch("")} />
                   : <div className={styles.tableWrap} role="region" aria-label="Applicants awaiting a final decision" tabIndex={0}>
-                    <table className={styles.table}>
+                    <table className={`${styles.table} ${styles.decisionTable}`}>
                       <caption>{filtered.length} applicant(s) shown</caption>
-                      <thead><tr><th scope="col">Applicant</th><th scope="col">Final decision</th><th scope="col">Action</th></tr></thead>
+                      <thead><tr><th scope="col">Applicant</th><th scope="col">Officer recommendation</th><th scope="col">Final decision</th><th scope="col">Action</th></tr></thead>
                       <tbody>{filtered.map(row => <tr key={row.appId} aria-selected={row.appId === selectedId}>
                         <td><div className={styles.strong}>{[row.firstName, row.lastName].filter(Boolean).join(" ") || row.appId}</div><div className={styles.muted}>{row.appId}</div></td>
-                        <td><StatusBadge status={row.finalDecision} decision /></td>
+                        <td>{row.officerRecommendation ? <span className={`${styles.pill} ${styles.done}`}>{recommendationLabel(row.officerRecommendation)}</span> : <span className={styles.muted} aria-label="No officer recommendation recorded">—</span>}</td>
+                        <td>{row.finalDecision ? <StatusBadge status={row.finalDecision} decision /> : <span className={styles.muted} aria-label="No final decision recorded">—</span>}</td>
                         <td><button type="button" className={styles.secondaryButton} onClick={() => chooseApplicant(row.appId)} disabled={saving} aria-label={`View decision form for ${row.appId}`}>View</button></td>
                       </tr>)}</tbody>
                     </table>
@@ -92,6 +94,8 @@ export default function FinalDecisionsPage() {
             <div className={styles.infoLine}><span>Applicant</span><strong>{[selected.firstName, selected.lastName].filter(Boolean).join(" ") || selected.appId}</strong></div>
             <div className={styles.infoLine}><span>Applicant ID</span><strong>{selected.appId}</strong></div>
             <div className={styles.infoLine}><span>Application status</span><strong>{statusLabel(selected.applicationStatus)}</strong></div>
+            <div className={styles.infoLine}><span>Officer recommendation</span><strong>{recommendationLabel(selected.officerRecommendation)}</strong></div>
+            <div className={styles.infoLine}><span>Officer comments / notes</span><p className={styles.notesText}>{selected.officerRecommendationNotes || "No notes provided."}</p></div>
             <div className={styles.infoLine}><span>Existing final decision</span><strong>{decisionLabel(selected.finalDecision)}</strong></div>
             <Link href={dossierHref(selected.appId)} className={styles.secondaryButton} style={{ marginTop: 16 }}>Review applicant dossier →</Link>
             {selected.finalDecision ? <p className={styles.help}>A final decision is already recorded. An authorized correction workflow is required to change it.</p> : <>

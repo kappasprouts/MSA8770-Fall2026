@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import EaosShell from "@/components/EaosShell";
 import RequestState from "@/components/RequestState";
@@ -10,19 +10,23 @@ import { type ApplicantRow, dossierHref, getReviewQueue } from "@/lib/eaos-api";
 import { requestJson } from "@/lib/http";
 import { type BatchState, parseBatchStatus, statusLabel } from "@/lib/review-state";
 
+const PAGE_SIZE = 20;
+
 export default function ReviewQueuePage() {
   const [rows, setRows] = useState<ApplicantRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("ALL");
+  const [page, setPage] = useState(1);
   const [attempt, setAttempt] = useState(0);
   const [batchAttempt, setBatchAttempt] = useState(0);
   const [batch, setBatch] = useState<BatchState>({ kind: "loading" });
+  const ledgerHeading = useRef<HTMLHeadingElement>(null);
 
   function refreshBatch() { setBatch({ kind: "loading" }); setBatchAttempt(value => value + 1); }
   function refreshQueue() {
-    setLoading(true); setRows([]); setError(""); setAttempt(value => value + 1); refreshBatch();
+    setLoading(true); setRows([]); setError(""); setPage(1); setAttempt(value => value + 1); refreshBatch();
   }
 
   useEffect(() => {
@@ -48,8 +52,19 @@ export default function ReviewQueuePage() {
     const matches = [row.appId, row.firstName, row.lastName, row.intendedMajor ?? ""].join(" ").toLowerCase().includes(search.trim().toLowerCase());
     return matches && (status === "ALL" || row.applicationStatus === status);
   }), [rows, search, status]);
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const pageStart = (currentPage - 1) * PAGE_SIZE;
+  const pageEnd = Math.min(pageStart + PAGE_SIZE, filtered.length);
+  const pageRows = filtered.slice(pageStart, pageEnd);
   const count = (value: string) => rows.filter(row => row.applicationStatus === value).length;
   const metric = (value: number) => loading || error ? "—" : value;
+
+  function changePage(nextPage: number) {
+    setPage(Math.max(1, Math.min(nextPage, pageCount)));
+    ledgerHeading.current?.focus({ preventScroll: true });
+    ledgerHeading.current?.scrollIntoView({ block: "start" });
+  }
 
   return (
     <EaosShell title="Admissions Processing Dashboard" subtitle="Track applications, packet completeness, and dossier availability." role="Application processing">
@@ -73,10 +88,10 @@ export default function ReviewQueuePage() {
         {!loading && !error && count("READY_FOR_REVIEW") > 0 && <p className={styles.help}>{count("READY_FOR_REVIEW")} application(s) are awaiting dossier generation.</p>}
       </section>
       <section className={styles.card} aria-labelledby="ledger-heading" aria-busy={loading}>
-        <h2 id="ledger-heading">Applicant Processing Ledger</h2>
+        <h2 id="ledger-heading" ref={ledgerHeading} tabIndex={-1}>Applicant Processing Ledger</h2>
         <div className={styles.controls}>
-          <input className={styles.input} aria-label="Search applicants" placeholder="Search by ID, name, or major…" value={search} onChange={event => setSearch(event.target.value)} disabled={loading || Boolean(error)} />
-          <select className={styles.select} aria-label="Filter by status" value={status} onChange={event => setStatus(event.target.value)} disabled={loading || Boolean(error)}>
+          <input className={styles.input} aria-label="Search applicants" placeholder="Search by ID, name, or major…" value={search} onChange={event => { setSearch(event.target.value); setPage(1); }} disabled={loading || Boolean(error)} />
+          <select className={styles.select} aria-label="Filter by status" value={status} onChange={event => { setStatus(event.target.value); setPage(1); }} disabled={loading || Boolean(error)}>
             <option value="ALL">All statuses</option>
             {status !== "ALL" && !statuses.includes(status) && <option value={status}>{statusLabel(status)}</option>}
             {statuses.map(value => <option key={value} value={value}>{statusLabel(value)}</option>)}
@@ -86,18 +101,27 @@ export default function ReviewQueuePage() {
         {loading ? <RequestState kind="loading" title="Loading applicants…" />
           : error ? <RequestState kind="error" title="Applicant records could not be loaded" description={error} onRetry={refreshQueue} />
             : rows.length === 0 ? <RequestState kind="empty" title="No applicant records yet" description="Applications will appear here after ingestion." />
-              : filtered.length === 0 ? <RequestState kind="empty" title="No applicants match these filters" actionLabel="Clear filters" onRetry={() => { setSearch(""); setStatus("ALL"); }} />
-                : <div className={styles.tableWrap} tabIndex={0} role="region" aria-label="Applicant processing ledger">
-                  <table className={styles.table}>
-                    <caption>{filtered.length} of {rows.length} applicant(s)</caption>
+              : filtered.length === 0 ? <RequestState kind="empty" title="No applicants match these filters" actionLabel="Clear filters" onRetry={() => { setSearch(""); setStatus("ALL"); setPage(1); }} />
+                : <><div className={styles.tableWrap} tabIndex={0} role="region" aria-label="Applicant processing ledger">
+                  <table className={`${styles.table} ${styles.processingTable}`}>
+                    <caption>Showing {pageStart + 1}–{pageEnd} of {filtered.length} applicant(s){filtered.length !== rows.length && ` (filtered from ${rows.length})`}</caption>
                     <thead><tr>{["Applicant ID", "Applicant", "Intended Major", "Application Status", "Final Decision", "Action"].map(label => <th key={label} scope="col">{label}</th>)}</tr></thead>
-                    <tbody>{filtered.map(row => <tr key={row.appId}>
+                    <tbody>{pageRows.map(row => <tr key={row.appId}>
                       <td className={styles.strong}>{row.appId}</td><td>{[row.firstName, row.lastName].filter(Boolean).join(" ") || "Unavailable"}</td>
-                      <td>{row.intendedMajor || "Unavailable"}</td><td><StatusBadge status={row.applicationStatus} /></td><td><StatusBadge status={row.finalDecision} decision /></td>
-                      <td>{row.applicationStatus === "DOSSIER_READY" ? <Link className={styles.secondaryButton} href={dossierHref(row.appId)} aria-label={`Open dossier for ${row.appId}`}>Open dossier →</Link> : <span className={styles.muted}>Not available</span>}</td>
+                      <td>{row.intendedMajor || "Unavailable"}</td><td><StatusBadge status={row.applicationStatus} /></td><td>{row.finalDecision ? <StatusBadge status={row.finalDecision} decision /> : <span className={styles.muted} aria-label="No final decision recorded">—</span>}</td>
+                      <td>{row.applicationStatus === "DOSSIER_READY" ? <Link className={styles.secondaryButton} href={dossierHref(row.appId)} aria-label={`Open dossier for ${row.appId}`}>Open dossier →</Link> : <span className={styles.muted} aria-label="Dossier not available">—</span>}</td>
                     </tr>)}</tbody>
                   </table>
-                </div>}
+                </div>
+                  <nav className={styles.pagination} aria-label="Applicant ledger pages">
+                    <span className={styles.muted}>20 applicants per page</span>
+                    <div className={styles.paginationControls}>
+                      <button type="button" className={styles.secondaryButton} disabled={currentPage === 1} onClick={() => changePage(currentPage - 1)}>Previous</button>
+                      <span className={styles.muted} role="status" aria-live="polite" aria-atomic="true">Page {currentPage} of {pageCount}</span>
+                      <button type="button" className={styles.secondaryButton} disabled={currentPage === pageCount} onClick={() => changePage(currentPage + 1)}>Next</button>
+                    </div>
+                  </nav>
+                </>}
         <p className={styles.footnote}>Dossier links are available when an applicant&apos;s processing status is dossier ready.</p>
       </section>
     </EaosShell>

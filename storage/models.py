@@ -10,6 +10,7 @@ import uuid
 
 from sqlalchemy import (
     Boolean,
+    CheckConstraint,
     Column,
     Date,
     DateTime,
@@ -17,6 +18,7 @@ from sqlalchemy import (
     Integer,
     Numeric,
     String,
+    Text,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.types import JSON
@@ -39,6 +41,12 @@ class Applicant(Base):
     """
 
     __tablename__ = "applicants"
+    __table_args__ = (
+        CheckConstraint(
+            "officer_recommendation IN ('ACCEPT', 'REJECT', 'WAITLIST')",
+            name="ck_applicants_officer_recommendation",
+        ),
+    )
 
     # Primary Identifier
     app_id = Column(String(10), primary_key=True, index=True)
@@ -99,6 +107,9 @@ class Applicant(Base):
     # Statuses: PENDING, READY_FOR_REVIEW, AWAITING_MATERIALS, INCOMPLETE, ERROR
     status = Column(String(32), default="PENDING", nullable=False, index=True)
     final_decision = Column(String(10), nullable=True)
+    officer_recommendation = Column(String(10), nullable=True)
+    officer_recommendation_notes = Column(Text, nullable=True)
+    officer_recommendation_updated_at = Column(DateTime(timezone=True), nullable=True)
 
     # Timestamps
     created_at = Column(
@@ -162,6 +173,12 @@ class Applicant(Base):
             "hooks": self.hooks or [],
             "documents": self.documents or [],
             "status": self.status,
+            "officer_recommendation": self.officer_recommendation,
+            "officer_recommendation_notes": self.officer_recommendation_notes,
+            "officer_recommendation_updated_at": (
+                self.officer_recommendation_updated_at.isoformat()
+                if self.officer_recommendation_updated_at else None
+            ),
             "routing_destination": self.routing_destination,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
