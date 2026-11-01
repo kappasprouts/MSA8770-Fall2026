@@ -117,11 +117,11 @@ export default function ApplicantReview() {
       {loadingDossier && <RequestState kind="loading" title={`Loading ${selectedAppId}…`} description="Documents and Q&A will be available when this applicant's dossier has loaded." />}
       {current && <>
         {latestFailed && <div className={styles.notice} role="status"><strong>The latest generation attempt failed.</strong><p className={styles.help}>The saved dossier remains available below. Its validation cannot be inferred from the latest attempt.</p></div>}
-        <ApplicantReviewWorkspace key={selectedAppId} appId={selectedAppId} payload={current.data} documents={current.documents} header={header} recommendation={recommendation} onRecommendationStateChange={setRecommendation} />
+        <ApplicantReviewWorkspace key={`${selectedAppId}-${dossierAttempt}`} appId={selectedAppId} payload={current.data} documents={current.documents} header={header} recommendation={recommendation} onRecommendationStateChange={setRecommendation} onReviewSaved={retryDossier} />
       </>}
       <dialog ref={discardDialog} className={styles.discardDialog} aria-labelledby="discard-recommendation-heading" aria-describedby="discard-recommendation-description" onClose={() => setPendingApplicant("")}>
-        <h2 id="discard-recommendation-heading">Unsaved recommendation</h2>
-        <p id="discard-recommendation-description" className={styles.readingText}>Switch to {pendingApplicant} and discard your unsaved recommendation? Your saved recommendation will remain available.</p>
+        <h2 id="discard-recommendation-heading">Unsaved review changes</h2>
+        <p id="discard-recommendation-description" className={styles.readingText}>Switch to {pendingApplicant} and discard your unsaved recommendation or exception resolution? Your saved review will remain available.</p>
         <div className={styles.actionRow}><button type="button" className={styles.button} onClick={() => setPendingApplicant("")}>Keep editing</button><button type="button" className={styles.secondaryButton} onClick={() => { if (pendingApplicant) loadApplicant(pendingApplicant); }}>Discard and switch</button></div>
       </dialog>
     </EaosShell>

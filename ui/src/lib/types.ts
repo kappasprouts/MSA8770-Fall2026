@@ -1,4 +1,5 @@
 export interface EvidenceItem {
+  verification_status?: string;
   document?: string;
   page?: number | string;
   quote?: string;
@@ -44,7 +45,7 @@ export interface ApplicantDossier {
   supplemental_essay_profile?: ProfileSection;
   strengths?: StrengthItem[];
   policy_assessment?: PolicyAssessmentItem[];
-  review_notes?: string[];
+  review_notes?: (string | { note?: string; section?: string; category?: string })[];
   holistic_assessment?: string;
   evidence_map?: EvidenceItem[];
   generated_at?: string;
@@ -82,11 +83,15 @@ export interface RunInfo {
 }
 
 export interface DossierPayload {
+  publication?: { request_id: string; generation_run_id: number | string; candidate_hash: string; reviewer: string | null; decided_at: string | null; mode?: string } | null;
+  review_checkpoint?: { request_id: string; candidate_hash: string; state: string; reasons: string[]; expires_at: string;
+    requires_evidence_review?: boolean; outcome_reason?: string; documents: { filename: string }[] };
   run?: RunInfo;
   applicant_dossier?: ApplicantDossier;
 }
 
 export interface OriginalDocument {
+  sourceUrl?: string;
   file: string;
   label: string;
   pages: number[] | null;

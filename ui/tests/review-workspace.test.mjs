@@ -61,10 +61,10 @@ function* elements(value) {
   else if (React.isValidElement(value)) { yield value; yield* elements(value.props.children); }
 }
 
-function review() {
-  const state = ["overview", null, false, "", false, false];
+function review(payload = { applicant_dossier: { app_id: "APP_A" } }) {
+  const state = ["overview", null, false, "", false, false, { reviewer: "", reason: "", confirmed: false, evidenceReviewed: false }, false];
   let cursor = 0;
-  const Overview = () => null, Dossier = () => null, Documents = () => null, Officer = () => null, Chat = () => null;
+  const Overview = () => null, Dossier = () => null, Documents = () => null, Officer = () => null, Chat = () => null, Exceptions = () => null;
   const Component = load("../src/components/ApplicantReviewWorkspace.tsx", {
     react: { ...React, useEffect() {}, useRef: () => ({ current: null }), useState() {
       const index = cursor++;
@@ -72,9 +72,10 @@ function review() {
     } },
     "./ApplicantOverview": { default: Overview }, "./DossierPanel": { default: Dossier }, "./DocumentsPanel": { default: Documents },
     "./OfficerRecommendationPanel": { default: Officer }, "./ChatPanel": { default: Chat },
+    "./ApplicantExceptionsPanel": { default: Exceptions },
     "@/lib/review-workspace": workspace, "@/lib/recommendation": recommendations, "./eaos.module.css": { default: {} },
   }).default;
-  const props = { appId: "APP_A", payload: { applicant_dossier: { app_id: "APP_A" } }, documents, header: "Applicant header", recommendation: { ...recommendations.INITIAL_RECOMMENDATION_STATE, loading: false, canEdit: true }, onRecommendationStateChange() {} };
+  const props = { appId: "APP_A", payload, documents, header: "Applicant header", recommendation: { ...recommendations.INITIAL_RECOMMENDATION_STATE, loading: false, canEdit: true }, onRecommendationStateChange() {} };
   function render() { cursor = 0; return Component(props); }
   const find = predicate => [...elements(render())].find(predicate);
   return {
@@ -82,6 +83,7 @@ function review() {
     panel: id => find(node => node.props.id === `review-panel-${id}`),
     overview: () => find(node => node.type === Overview), documents: () => find(node => node.type === Documents),
     officer: () => find(node => node.type === Officer), chat: () => find(node => node.type === Chat),
+    exceptions: () => find(node => node.type === Exceptions),
     button: label => find(node => node.type === "button" && node.props.children === label),
     props, html: () => renderToStaticMarkup(render()),
   };
@@ -89,6 +91,8 @@ function review() {
 
 test("tabs have accessible relationships, keep the recommendation mounted, and lazily load documents", () => {
   const view = review();
+  assert.equal(view.tab("exceptions"), undefined);
+  assert.equal(view.panel("exceptions"), undefined);
   assert.equal(view.tab("overview").props["aria-selected"], true);
   assert.equal(view.panel("overview").props.hidden, false);
   assert.equal(view.panel("recommendation").props.hidden, true);
@@ -107,6 +111,32 @@ test("tabs have accessible relationships, keep the recommendation mounted, and l
   view.tab("documents").props.onClick();
   assert.equal(view.documents().props.selection.file, "CommonApp.pdf");
   assert.equal(view.tab("documents").props["aria-controls"], view.panel("documents").props.id);
+});
+
+test("exception tab is conditional, keeps resolution across tabs, and disappears after resolution", () => {
+  const view = review({ applicant_dossier: { app_id: "APP_A" }, review_checkpoint: {
+    request_id: "request", candidate_hash: "hash", state: "REVIEW_PENDING", reasons: ["Scores conflict"],
+  } });
+  assert.equal(view.tab("exceptions").props["aria-controls"], view.panel("exceptions").props.id);
+  assert.equal(view.panel("exceptions").props.hidden, true);
+  view.tab("documents").props.onKeyDown({ key: "ArrowRight", preventDefault() {} });
+  assert.equal(view.tab("exceptions").props["aria-selected"], true);
+  const draft = { reviewer: "Officer", reason: "Checked original sources", confirmed: true, evidenceReviewed: true };
+  view.exceptions().props.onChange(draft);
+  view.exceptions().props.onOpenDocuments();
+  assert.equal(view.panel("documents").props.hidden, false);
+  view.tab("exceptions").props.onClick();
+  assert.deepEqual(view.exceptions().props.resolution, draft);
+  view.exceptions().props.onContinue();
+  assert.equal(view.panel("recommendation").props.hidden, false);
+  assert.deepEqual(view.officer().props.exceptionResolution, draft);
+  view.officer().props.onOpenExceptions();
+  assert.equal(view.panel("exceptions").props.hidden, false);
+  view.props.payload = { applicant_dossier: { app_id: "APP_A" } };
+  assert.equal(view.tab("exceptions"), undefined);
+  assert.equal(view.panel("exceptions"), undefined);
+  assert.equal(view.panel("overview").props.hidden, false);
+  assert.equal(view.tab("overview").props.tabIndex, 0);
 });
 
 test("citation clicks open the cited source and missing sources show an explicit message", () => {

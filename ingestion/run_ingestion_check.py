@@ -26,7 +26,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from ingestion.batch_ingest import BatchIngestor, BatchIngestionResult
 from storage.storage_manager import StorageManager
-from ingestion.validation.manifest_gate import GateStatus, ManifestValidationGate, ManifestGateResult
+from ingestion.validation.manifest_gate import GateStatus, ManifestValidationGate, ManifestGateResult, RoutedApplicant
+from ingestion.batch_events import ingestion_event
 
 
 def format_table_row(cols, widths, fillchar=" ", align="<"):
@@ -223,7 +224,7 @@ def print_console_summary(
     print("=" * 80 + "\n")
 
 
-def run_pipeline(
+def _run_pipeline(
     input_dir: str = "data/batches/batch_01",
     config_file: Optional[str] = None,
     report_file: Optional[str] = None,
@@ -233,6 +234,7 @@ def run_pipeline(
     require_object_storage: bool = False,
     require_postgresql: bool = False,
     run_id: Optional[str] = None,
+    durable_event=None,
 ) -> ManifestGateResult:
     """Execute two-pass batch ingestion, manifest completeness gate, and hard stop."""
     input_path = Path(input_dir)
@@ -249,67 +251,86 @@ def run_pipeline(
     out_file = Path(report_file) if report_file else Path(f"output/ingestion/ingestion_{batch_name}_report.txt") 
     if out_affected.resolve() == out_file.resolve():
         raise ValueError("The audit report and affected-ID file must use different paths")
+    # Reject directories before any applicant or object write. os.replace's
+    # exception for a directory target differs between Windows and POSIX.
+    for destination in (out_file, out_affected):
+        if destination.is_dir():
+            raise IsADirectoryError(f"Output path must be a file: {destination}")
+        for parent in destination.parents:
+            if parent.exists() and not parent.is_dir():
+                raise NotADirectoryError(f"Output parent must be a directory: {parent}")
     storage = storage_manager or StorageManager()
     if require_postgresql and (not storage.db_available or storage.is_sqlite_fallback):
         raise RuntimeError("PostgreSQL is unavailable; refusing to export a summary-agent handoff")
     if require_object_storage and not storage.minio_available:
         raise RuntimeError("MinIO is unavailable; refusing to export a summary-agent handoff")
 
-    # 1. Component 2: Two-Pass Batch Ingestion & Linking
-    ingestor = BatchIngestor(config_path=config_path, storage_manager=storage)
-    ingest_result = ingestor.ingest_batch(input_path, applicant_ids=applicant_ids, audit_run_id=run_id)
+    if durable_event and durable_event.staged:
+        saved = dict(durable_event.row['result'])
+        orphan_count = saved.pop('orphans_count', 0)
+        saved['routed_applicants'] = [RoutedApplicant(**{**row, 'status': GateStatus(row['status'])}) for row in saved['routed_applicants']]
+        result = ManifestGateResult(**saved)
+        from types import SimpleNamespace
+        ingest_result = SimpleNamespace(orphans=[None] * orphan_count)
+        report_text = durable_event.row['report_text']
+    else:
+        # 1. Component 2: Two-Pass Batch Ingestion & Linking
+        ingestor = BatchIngestor(config_path=config_path, storage_manager=storage)
+        ingest_result = ingestor.ingest_batch(input_path, applicant_ids=applicant_ids, audit_run_id=run_id)
 
-    # 2. Component 3: Manifest Validation Gate
-    gate = ManifestValidationGate(config_path=config_path)
-    result = gate.evaluate_batch(ingest_result.applications)
+        # 2. Component 3: Manifest Validation Gate
+        gate = ManifestValidationGate(config_path=config_path)
+        result = gate.evaluate_batch(ingest_result.applications)
 
-    if require_object_storage:
-        by_id = {app.applicant_id: app for app in ingest_result.applications}
-        for routed in result.routed_applicants:
-            if not routed.is_valid:
-                continue
-            for document in by_id[routed.applicant_id].documents:
-                if storage.object_exists(document.minio_key, document.minio_bucket):
+        if require_object_storage:
+            by_id = {app.applicant_id: app for app in ingest_result.applications}
+            for routed in result.routed_applicants:
+                if not routed.is_valid:
                     continue
-                if not storage.update_applicant_status(
-                    app_id=routed.applicant_id,
-                    status=GateStatus.ERROR.value,
-                    audit_action="OBJECT_STORAGE_UNAVAILABLE",
-                    audit_details={"document_type": document.doc_type},
-                ):
-                    raise RuntimeError(f"Could not persist storage error for {routed.applicant_id}")
-                raise RuntimeError(
-                    f"Document object is unavailable for {routed.applicant_id}: "
-                    f"s3://{document.minio_bucket}/{document.minio_key}"
-                )
+                for document in by_id[routed.applicant_id].documents:
+                    if storage.object_exists(document.minio_key, document.minio_bucket):
+                        continue
+                    if not storage.update_applicant_status(
+                        app_id=routed.applicant_id,
+                        status=GateStatus.ERROR.value,
+                        audit_action="OBJECT_STORAGE_UNAVAILABLE",
+                        audit_details={"document_type": document.doc_type},
+                    ):
+                        raise RuntimeError(f"Could not persist storage error for {routed.applicant_id}")
+                    raise RuntimeError(
+                        f"Document object is unavailable for {routed.applicant_id}: "
+                        f"s3://{document.minio_bucket}/{document.minio_key}"
+                    )
 
-    # 3. Confirm the final gate status. Pass 2 has already persisted each
-    # applicant's status, documents, and audit row in one transaction.
-    for routed in result.routed_applicants:
-        if not storage.update_applicant_status(
-            app_id=routed.applicant_id,
-            status=routed.status.value,
-        ):
-            raise RuntimeError(f"Could not persist manifest status for {routed.applicant_id}")
+        # 3. Confirm the final gate status. Pass 2 has already persisted each
+        # applicant's status, documents, and audit row in one transaction.
+        for routed in result.routed_applicants:
+            if not storage.update_applicant_status(
+                app_id=routed.applicant_id,
+                status=routed.status.value,
+            ):
+                raise RuntimeError(f"Could not persist manifest status for {routed.applicant_id}")
 
-    # Prepare the report and handoff paths. Publish the ID file only after the
-    # report is complete, because a watcher may treat the ID file as a trigger.
-    # 4. Save the audit report atomically.
-    report_text = generate_report_text(
-        input_dir=input_path,
-        config_path=config_path,
-        result=result,
-        orphans_count=len(ingest_result.orphans),
-        execution_time=execution_time,
-        affected_ids_file=out_affected,
-        run_id=run_id,
-        database_mode=(
-            "PostgreSQL"
-            if storage.db_available and not storage.is_sqlite_fallback
-            else "SQLite" if storage.db_available else "In-memory"
-        ),
-        object_storage_mode="MinIO" if storage.minio_available else "Simulated",
-    )
+        # Prepare the report and handoff paths. Publish the ID file only after the
+        # report is complete, because a watcher may treat the ID file as a trigger.
+        # 4. Save the audit report atomically.
+        report_text = generate_report_text(
+            input_dir=input_path,
+            config_path=config_path,
+            result=result,
+            orphans_count=len(ingest_result.orphans),
+            execution_time=execution_time,
+            affected_ids_file=out_affected,
+            run_id=run_id,
+            database_mode=(
+                "PostgreSQL"
+                if storage.db_available and not storage.is_sqlite_fallback
+                else "SQLite" if storage.db_available else "In-memory"
+            ),
+            object_storage_mode="MinIO" if storage.minio_available else "Simulated",
+        )
+        if durable_event: durable_event.stage(result, report_text, ingest_result)
+
     out_file.parent.mkdir(parents=True, exist_ok=True)
     temporary_report = out_file.with_name(f".{out_file.name}.{uuid.uuid4().hex}.tmp")
     try:
@@ -327,6 +348,30 @@ def run_pipeline(
         os.replace(temporary_affected, out_affected)
     finally:
         temporary_affected.unlink(missing_ok=True)
+
+    if durable_event:
+        # Consumers use the event ID and verify COMPLETED in PostgreSQL; a partial
+        # filesystem delivery can never authorize generation for a staged receipt.
+        sidecar = out_affected.with_suffix('.batch.json')
+        temporary = sidecar.with_name('.' + sidecar.name + '.' + uuid.uuid4().hex + '.tmp')
+        try:
+            temporary.write_text(json.dumps({'batch_event_id': durable_event.id, 'affected_ids': result.affected_ids}, indent=2), encoding='utf-8')
+            os.replace(temporary, sidecar)
+        finally:
+            temporary.unlink(missing_ok=True)
+        durable_event.complete({"status":"COMPLETED","executed_at":result.evaluated_at,"batch_event_id":durable_event.id,
+            "deduplicated":durable_event.replayed,"affected_ids":result.affected_ids,"affected_ids_file":str(out_affected.resolve()),
+            "report_file":str(out_file.resolve()),"handoff_file":str(sidecar.resolve()),"hard_stop":True,
+            "storage_mode":"postgresql","minio_available":storage.minio_available,
+            "postgresql_required":require_postgresql,"object_storage_required":require_object_storage,
+            "handoff_ready":require_postgresql and require_object_storage and durable_event.row["effects"]["objects_verified"],
+            "total_packets_discovered":result.total_processed,
+            "status_breakdown":{"READY_FOR_REVIEW":result.total_valid,"INCOMPLETE":result.total_incomplete,
+              "AWAITING_MATERIALS":result.total_awaiting_materials,"ERROR":result.total_error}})
+        result.batch_event_id = durable_event.id
+        result.deduplicated = durable_event.replayed
+        result.handoff_file = str(sidecar.resolve())
+        print(f"Durable batch event: {durable_event.id} (deduplicated={durable_event.replayed})")
 
     # 6. Print the completed run summary.
     print_console_summary(
@@ -347,6 +392,23 @@ def run_pipeline(
     print("=" * 80 + "\n")
 
     return result
+
+
+def run_pipeline(input_dir="data/batches/batch_01", config_file=None, report_file=None, affected_ids_file=None,
+    storage_manager=None, applicant_ids=None, require_object_storage=False, require_postgresql=False, run_id=None, retry_key=None):
+    storage = storage_manager or StorageManager()
+    config = Path(config_file) if config_file else Path("policy/ingestion_rules.yaml")
+    source = Path(input_dir).resolve()
+    for destination in (report_file, affected_ids_file):
+        if destination and Path(destination).resolve().is_relative_to(source):
+            raise ValueError("Batch artifacts must be outside the input directory")
+    if require_postgresql and (not storage.db_available or storage.is_sqlite_fallback):
+        raise RuntimeError("PostgreSQL is unavailable; refusing to export a summary-agent handoff")
+    if require_object_storage and not storage.minio_available:
+        raise RuntimeError("MinIO is unavailable; refusing to export a summary-agent handoff")
+    with ingestion_event(storage, source, config, applicant_ids, require_object_storage, require_postgresql, retry_key) as event:
+        return _run_pipeline(input_dir, str(config), report_file, affected_ids_file, storage, applicant_ids,
+            require_object_storage, require_postgresql, event.id if event else run_id, event)
 
 
 def main():
@@ -388,6 +450,7 @@ def main():
         help="Fail instead of exporting a handoff when PostgreSQL falls back to SQLite.",
     )
 
+    parser.add_argument("--retry-key", help="Explicit repair attempt after inspecting an intake without a receiver receipt")
     args = parser.parse_args()
     try:
         run_pipeline(
@@ -397,6 +460,7 @@ def main():
             affected_ids_file=args.affected_ids,
             require_object_storage=args.require_object_storage,
             require_postgresql=args.require_postgresql,
+            retry_key=args.retry_key,
         )
         sys.exit(0)
     except Exception as e:

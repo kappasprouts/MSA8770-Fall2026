@@ -1,4 +1,4 @@
-"""GPA columns retain three decimal places through CSV ingestion and storage."""
+"""GPA columns retain two decimal places through CSV ingestion and storage."""
 
 from decimal import Decimal
 import json
@@ -14,7 +14,7 @@ def test_gpa_columns_and_csv_round_trip(tmp_path):
     for name in ("unweighted_gpa", "weighted_gpa"):
         assert Applicant.__table__.c[name].type.compile(
             dialect=postgresql.dialect()
-        ) == "NUMERIC(5, 3)"
+        ) == "NUMERIC(3, 2)"
 
     batch = tmp_path / "batch"
     batch.mkdir()
@@ -30,9 +30,9 @@ def test_gpa_columns_and_csv_round_trip(tmp_path):
     BatchIngestor(storage_manager=storage).pass_1_parse_and_stage_csv(batch)
 
     applicant = storage.get_applicant("APP_080")
-    assert applicant.unweighted_gpa == Decimal("3.865")
-    assert applicant.weighted_gpa == Decimal("4.677")
+    assert applicant.unweighted_gpa == Decimal("3.86")
+    assert applicant.weighted_gpa == Decimal("4.68")
     serialized = applicant.to_dict()
-    assert serialized["unweighted_gpa"] == 3.865
-    assert serialized["weighted_gpa"] == 4.677
+    assert serialized["unweighted_gpa"] == 3.86
+    assert serialized["weighted_gpa"] == 4.68
     json.dumps(serialized)

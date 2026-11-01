@@ -1,0 +1,145 @@
+{
+  "scope": "Academic-only APP_012 live Qwen smoke test; no dossier or applicant writes; final response also revalidated with final source against local original fixtures. Empty essay-shingle guard as in the academic-only script.",
+  "model": "qwen3-vl:8b-instruct",
+  "attempts": 1,
+  "model_reported_seconds": 94.0,
+  "output_tokens": 1224,
+  "errors": [],
+  "image_only_citations": 4,
+  "output": {
+    "document_facts": {
+      "unweighted_gpa": 3.97,
+      "weighted_gpa": 4.4,
+      "class_rank": null,
+      "sat_superscore": 1530,
+      "act_superscore": 35,
+      "intended_major": "Biomedical Engineering",
+      "high_school": "Madison High School",
+      "expected_graduation": "2026"
+    },
+    "ap_courses_on_transcript": [
+      {
+        "course": "AP Human Geography",
+        "grade_level": "11",
+        "final_grade": "A-"
+      },
+      {
+        "course": "AP Chemistry",
+        "grade_level": "11",
+        "final_grade": "A"
+      },
+      {
+        "course": "AP Comparative Government",
+        "grade_level": "11",
+        "final_grade": "A"
+      },
+      {
+        "course": "AP Computer Science A",
+        "grade_level": "11",
+        "final_grade": "A-"
+      },
+      {
+        "course": "AP Physics C Electricity and Magnetism",
+        "grade_level": "11",
+        "final_grade": "B"
+      },
+      {
+        "course": "AP Macroeconomics",
+        "grade_level": "11",
+        "final_grade": "A-"
+      },
+      {
+        "course": "AP Calculus AB",
+        "grade_level": "12",
+        "final_grade": "A-"
+      },
+      {
+        "course": "AP Seminar",
+        "grade_level": "12",
+        "final_grade": "B"
+      },
+      {
+        "course": "AP Art History",
+        "grade_level": "12",
+        "final_grade": "B"
+      },
+      {
+        "course": "AP Physics 1",
+        "grade_level": "12",
+        "final_grade": "B"
+      },
+      {
+        "course": "AP French Language",
+        "grade_level": "12",
+        "final_grade": "A"
+      },
+      {
+        "course": "AP English Literature",
+        "grade_level": "12",
+        "final_grade": "A-"
+      }
+    ],
+    "ap_exam_scores": [],
+    "summary": "The applicant, Drew Young, has a strong academic profile with a weighted GPA of 4.4 and an unweighted GPA of 3.97. They are applying for admission in Fall 2026 to pursue Biomedical Engineering. Their standardized test scores include a superscored SAT of 1530 and a superscored ACT of 35. The applicant completed 12 AP courses, including AP Human Geography, AP Chemistry, AP Comparative Government, AP Computer Science A, AP Physics C Electricity and Magnetism, AP Macroeconomics, AP Calculus AB, AP Seminar, AP Art History, AP Physics 1, AP French Language, and AP English Literature. The transcript shows grades ranging from A- to B for these AP courses, with most grades being A- or A. The applicant's coursework spans grades 9 through 12, with a focus on advanced courses in their senior year.",
+    "course_rigor": "The applicant took 12 AP courses, which is a high level of academic rigor. The courses span multiple disciplines including science, mathematics, social studies, and humanities. The grades for these AP courses are generally strong, with most grades being A- or A, indicating consistent performance in challenging coursework.",
+    "performance_patterns": "The applicant's performance shows a pattern of strong grades in advanced coursework, particularly in their senior year. The grades for AP courses are mostly A- or A, with only a few B grades. The applicant's performance in core subjects such as English, Math, and Science is also strong, with grades ranging from A- to B+.",
+    "strengths": [
+      "High academic achievement with a weighted GPA of 4.4 and unweighted GPA of 3.97.",
+      "Strong performance in advanced coursework, with 12 AP courses completed and mostly A- or A grades.",
+      "Excellent standardized test scores, including a superscored SAT of 1530 and a superscored ACT of 35.",
+      "Diverse course selection across multiple disciplines, including science, mathematics, social studies, and humanities."
+    ],
+    "concerns": [],
+    "notes": [],
+    "evidence": [
+      {
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 3.97",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.4",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored SAT Score 1530",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored ACT Score 35",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "Unweighted GPA 3.97",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "Weighted GPA 4.4",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Human Geography A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "document": "transcript.pdf",
+        "page": 2,
+        "quote": "AP English Literature A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      }
+    ]
+  }
+}

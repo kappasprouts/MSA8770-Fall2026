@@ -201,23 +201,34 @@ def test_strict_entrypoint_refuses_offline_minio_before_artifacts(tmp_path):
     assert storage.get_applicant("APP_101") is None
 
 
-def test_report_failure_does_not_publish_summary_handoff(tmp_path):
+@pytest.mark.parametrize("invalid_output", ["report", "handoff", "parent"])
+def test_report_failure_does_not_publish_summary_handoff(tmp_path, invalid_output):
     source_dir = tmp_path / "batch"
     _write_batch(source_dir)
-    report_dir = tmp_path / "report"
-    report_dir.mkdir()
+    report_file = tmp_path / "report.txt"
     affected_file = tmp_path / "affected_ids.json"
+    if invalid_output == "report":
+        report_file.mkdir()
+    elif invalid_output == "handoff":
+        affected_file.mkdir()
+    else:
+        blocker = tmp_path / "not_a_directory"
+        blocker.write_text("preserve me")
+        report_file = blocker / "report.txt"
+    storage = _storage(tmp_path)
 
-    with pytest.raises(IsADirectoryError):
+    with pytest.raises(NotADirectoryError if invalid_output == "parent" else IsADirectoryError):
         run_pipeline(
             input_dir=source_dir,
             config_file=CONFIG_PATH,
-            report_file=report_dir,
+            report_file=report_file,
             affected_ids_file=affected_file,
-            storage_manager=_storage(tmp_path),
+            storage_manager=storage,
         )
 
-    assert not affected_file.exists()
+    assert not affected_file.is_file()
+    assert storage.get_applicant("APP_101") is None
+    assert not list(tmp_path.glob(".*.tmp"))
 
 
 def test_report_and_handoff_path_collision_fails_before_ingestion(tmp_path):

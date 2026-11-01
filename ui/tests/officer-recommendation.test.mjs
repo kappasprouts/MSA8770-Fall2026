@@ -95,6 +95,11 @@ test("real PostgreSQL migration, saves, queue propagation, finalization, and aud
     await client.query(`CREATE TEMP TABLE audit_logs (
       id text PRIMARY KEY, applicant_id text, action text, actor text, details jsonb, created_at timestamptz
     )`);
+    await client.query(`CREATE TEMP TABLE dossier_review_requests (
+      id uuid, app_id text, candidate_hash text, state text, input_snapshot jsonb,
+      requested_at timestamptz, requires_evidence_review boolean, exception_reasons jsonb,
+      expires_at timestamptz, outcome_reason text, reviewer text, reason text
+    )`);
     const migration = readFileSync(new URL("../../storage/migrations/20261030_officer_recommendation.sql", import.meta.url), "utf8");
     await client.query(migration);
     await client.query(migration);

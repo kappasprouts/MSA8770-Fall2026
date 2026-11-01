@@ -1,0 +1,55 @@
+{
+  "checked_at_utc": "2026-11-01T01:15:03.117534+00:00",
+  "python": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "187",
+    "time": "43.314",
+    "timestamp": "2026-10-31T21:11:58.279454-04:00",
+    "hostname": "DESKTOP-TJU3O7C"
+  },
+  "worker_cases": 11,
+  "ui": {
+    "passed": 60,
+    "failed": 0,
+    "skipped": 0
+  },
+  "typecheck": "passed",
+  "lint": "passed with one existing unused-variable warning",
+  "production_build": "passed (isolated webpack build)",
+  "http_checks": {
+    "/error-queue": {
+      "status": 200
+    },
+    "/error-queue/applicant-APP_002-summarizer": {
+      "status": 200
+    },
+    "/api/exceptions/applicant-APP_002-summarizer": {
+      "status": 200
+    },
+    "/api/exceptions": {
+      "status": 200,
+      "detected_issues": 1
+    },
+    "/applicant-review": {
+      "status": 200
+    }
+  },
+  "shared_database": {
+    "applicants_preserved": 20,
+    "dossiers_preserved": 5,
+    "eight_tables_exactly_preserved_after_final_tests": true,
+    "cases": 0,
+    "jobs": 0,
+    "initial_test_isolation_issue": "Two own synthetic orphan-score rows removed; adapter fixed; final suite preserved restored baseline"
+  },
+  "models": "Controlled responses; no new live model inference",
+  "worker": {
+    "running": true,
+    "dossier_retries": true,
+    "packet_retries": false,
+    "reason": "No explicit INGESTION_INPUT_DIR configured"
+  }
+}

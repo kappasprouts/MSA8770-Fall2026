@@ -1,0 +1,294 @@
+{
+  "it_exception_cases": [
+    {
+      "id": "8aeb4f32-1215-4b50-bd62-4f769e8442e5",
+      "exception_key": "orphan-9aac2976-f18c-41d9-990e-76822ac8544e",
+      "fingerprint": "72f85c20e7d49aa28bc72f5d5ce86b13908fdc5685ea77d1c2fc898f409c6a9f",
+      "applicant_id": null,
+      "source": "ORPHAN_INTAKE",
+      "snapshot": {
+        "id": "orphan-9aac2976-f18c-41d9-990e-76822ac8544e",
+        "active": true,
+        "source": "ORPHAN_INTAKE",
+        "status": "ORPHAN_DOCUMENT",
+        "actions": [],
+        "eventId": "9aac2976-f18c-41d9-990e-76822ac8544e",
+        "summary": "unmatched.pdf could not be matched to an applicant record.",
+        "category": "Orphan Document",
+        "findings": [
+          "The file is retained in MinIO and recorded in PostgreSQL until a matching application is available.",
+          "Storage key: saved/orphan.pdf",
+          "SHA-256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        ],
+        "revision": 0,
+        "severity": "MEDIUM",
+        "caseState": "OPEN",
+        "objectKey": "saved/orphan.pdf",
+        "updatedAt": "2026-11-01T01:11:59.106Z",
+        "hasDossier": false,
+        "applicantId": "APP_050",
+        "fingerprint": "72f85c20e7d49aa28bc72f5d5ce86b13908fdc5685ea77d1c2fc898f409c6a9f",
+        "auditHistory": [],
+        "retryAllowed": false,
+        "applicantName": "Possible match: APP_050",
+        "intendedMajor": null,
+        "sourceVersion": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "workerAvailable": false,
+        "affectedDocuments": [
+          "unmatched.pdf"
+        ]
+      },
+      "state": "RESOLVED",
+      "owner": "Intake matching team",
+      "revision": 2,
+      "created_at": "2026-11-01T01:11:59.116Z",
+      "updated_at": "2026-11-01T01:11:59.185Z",
+      "resolution_evidence": {
+        "applicant_id": "APP_050",
+        "sha256_checksum": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "minio_object_key": "saved/orphan.pdf"
+      }
+    },
+    {
+      "id": "3c8d756b-1368-4ff8-ba28-0e399d03e365",
+      "exception_key": "applicant-APP_050-summarizer",
+      "fingerprint": "0a61cebd982b64e8bd4c1db9d7a4910afdd6453b507d2c85d7a087d2b41b2a65",
+      "applicant_id": "APP_050",
+      "source": "SUMMARIZER",
+      "snapshot": {
+        "id": "applicant-APP_050-summarizer",
+        "active": true,
+        "source": "SUMMARIZER",
+        "status": "AI_VALIDATION_FAILED",
+        "actions": [],
+        "eventId": "1",
+        "summary": "Academic: Unsupported citation",
+        "category": "AI Validation Failure",
+        "findings": [
+          "Academic: Unsupported citation"
+        ],
+        "revision": 0,
+        "severity": "HIGH",
+        "caseState": "OPEN",
+        "updatedAt": "2026-11-01T01:11:58.706Z",
+        "hasDossier": false,
+        "applicantId": "APP_050",
+        "fingerprint": "0a61cebd982b64e8bd4c1db9d7a4910afdd6453b507d2c85d7a087d2b41b2a65",
+        "auditHistory": [],
+        "failureRunId": "1",
+        "retryAllowed": true,
+        "applicantName": "APP_050",
+        "intendedMajor": null,
+        "sourceVersion": "54e1b7143beb11d53919816a57c38e5527870ddf80f0874593f728d69093a13b",
+        "workerAvailable": false,
+        "affectedDocuments": []
+      },
+      "state": "RESOLVED",
+      "owner": "IT demo",
+      "revision": 4,
+      "created_at": "2026-11-01T01:11:58.799Z",
+      "updated_at": "2026-11-01T01:11:59.066Z",
+      "resolution_evidence": {
+        "state": "PUBLISHED",
+        "request_id": "8b402d20-f618-4f46-9f06-5ed32d912f54",
+        "run_status": "DOSSIER_READY",
+        "applicant_status": "DOSSIER_READY",
+        "generation_run_id": "2"
+      }
+    }
+  ],
+  "it_retry_jobs": [
+    {
+      "id": "13be6f5a-93e0-4dff-98dc-b821a57d6c10",
+      "case_id": "3c8d756b-1368-4ff8-ba28-0e399d03e365",
+      "command_id": "07ba5e56-a218-4d88-8370-15a4c4adbce9",
+      "applicant_id": "APP_050",
+      "source": "SUMMARIZER",
+      "source_version": "54e1b7143beb11d53919816a57c38e5527870ddf80f0874593f728d69093a13b",
+      "failure_run_id": "1",
+      "state": "FAILED",
+      "worker_id": null,
+      "created_at": "2026-11-01T01:11:58.951Z",
+      "started_at": null,
+      "finished_at": "2026-11-01T01:11:59.025Z",
+      "result": {
+        "message": "Receiver rechecked; no validated success found. Case remains open; a new explicit retry may be requested.",
+        "verified": false
+      }
+    }
+  ],
+  "it_exception_actions": [
+    {
+      "command_id": "9e06d4bd-6b76-470b-aadd-9e04c6094805",
+      "case_id": "3c8d756b-1368-4ff8-ba28-0e399d03e365",
+      "action": "CLAIM",
+      "actor": "IT demo",
+      "note": "Investigated the service and checked the saved evidence",
+      "request": {
+        "id": "applicant-APP_050-summarizer",
+        "note": "Investigated the service and checked the saved evidence",
+        "actor": "IT demo",
+        "owner": "",
+        "action": "CLAIM",
+        "revision": 0,
+        "commandId": "9e06d4bd-6b76-470b-aadd-9e04c6094805",
+        "confirmed": true,
+        "fingerprint": "0a61cebd982b64e8bd4c1db9d7a4910afdd6453b507d2c85d7a087d2b41b2a65"
+      },
+      "result": {
+        "jobId": null,
+        "state": "IN_PROGRESS",
+        "caseId": "3c8d756b-1368-4ff8-ba28-0e399d03e365",
+        "evidence": null,
+        "replayed": false,
+        "revision": 1
+      },
+      "created_at": "2026-11-01T01:11:58.799Z"
+    },
+    {
+      "command_id": "07ba5e56-a218-4d88-8370-15a4c4adbce9",
+      "case_id": "3c8d756b-1368-4ff8-ba28-0e399d03e365",
+      "action": "REQUEST_RETRY",
+      "actor": "IT demo",
+      "note": "Investigated the service and checked the saved evidence",
+      "request": {
+        "id": "case-3c8d756b-1368-4ff8-ba28-0e399d03e365",
+        "note": "Investigated the service and checked the saved evidence",
+        "actor": "IT demo",
+        "owner": "",
+        "action": "REQUEST_RETRY",
+        "revision": 1,
+        "commandId": "07ba5e56-a218-4d88-8370-15a4c4adbce9",
+        "confirmed": true,
+        "fingerprint": "0a61cebd982b64e8bd4c1db9d7a4910afdd6453b507d2c85d7a087d2b41b2a65"
+      },
+      "result": {
+        "jobId": "13be6f5a-93e0-4dff-98dc-b821a57d6c10",
+        "state": "WAITING",
+        "caseId": "3c8d756b-1368-4ff8-ba28-0e399d03e365",
+        "evidence": null,
+        "replayed": false,
+        "revision": 2
+      },
+      "created_at": "2026-11-01T01:11:58.951Z"
+    },
+    {
+      "command_id": "111c76cf-c1ea-4214-a6c3-b31a6f3c6a4d",
+      "case_id": "3c8d756b-1368-4ff8-ba28-0e399d03e365",
+      "action": "VERIFY_RESOLVED",
+      "actor": "IT demo",
+      "note": "Investigated the service and checked the saved evidence",
+      "request": {
+        "id": "case-3c8d756b-1368-4ff8-ba28-0e399d03e365",
+        "note": "Investigated the service and checked the saved evidence",
+        "actor": "IT demo",
+        "owner": "",
+        "action": "VERIFY_RESOLVED",
+        "revision": 2,
+        "commandId": "111c76cf-c1ea-4214-a6c3-b31a6f3c6a4d",
+        "confirmed": true,
+        "fingerprint": "0a61cebd982b64e8bd4c1db9d7a4910afdd6453b507d2c85d7a087d2b41b2a65"
+      },
+      "result": {
+        "jobId": null,
+        "state": "IN_PROGRESS",
+        "caseId": "3c8d756b-1368-4ff8-ba28-0e399d03e365",
+        "evidence": null,
+        "replayed": false,
+        "revision": 3
+      },
+      "created_at": "2026-11-01T01:11:59.025Z"
+    },
+    {
+      "command_id": "bf3baa69-1354-4534-b9ac-67e0292dbbf6",
+      "case_id": "3c8d756b-1368-4ff8-ba28-0e399d03e365",
+      "action": "VERIFY_RESOLVED",
+      "actor": "IT demo",
+      "note": "Investigated the service and checked the saved evidence",
+      "request": {
+        "id": "case-3c8d756b-1368-4ff8-ba28-0e399d03e365",
+        "note": "Investigated the service and checked the saved evidence",
+        "actor": "IT demo",
+        "owner": "",
+        "action": "VERIFY_RESOLVED",
+        "revision": 3,
+        "commandId": "bf3baa69-1354-4534-b9ac-67e0292dbbf6",
+        "confirmed": true,
+        "fingerprint": "0a61cebd982b64e8bd4c1db9d7a4910afdd6453b507d2c85d7a087d2b41b2a65"
+      },
+      "result": {
+        "jobId": null,
+        "state": "RESOLVED",
+        "caseId": "3c8d756b-1368-4ff8-ba28-0e399d03e365",
+        "evidence": {
+          "state": "PUBLISHED",
+          "request_id": "8b402d20-f618-4f46-9f06-5ed32d912f54",
+          "run_status": "DOSSIER_READY",
+          "applicant_status": "DOSSIER_READY",
+          "generation_run_id": "2"
+        },
+        "replayed": false,
+        "revision": 4
+      },
+      "created_at": "2026-11-01T01:11:59.066Z"
+    },
+    {
+      "command_id": "a92b75e7-c2dc-4954-be47-1dbd13147103",
+      "case_id": "8aeb4f32-1215-4b50-bd62-4f769e8442e5",
+      "action": "HANDOFF",
+      "actor": "IT demo",
+      "note": "Investigated the service and checked the saved evidence",
+      "request": {
+        "id": "orphan-9aac2976-f18c-41d9-990e-76822ac8544e",
+        "note": "Investigated the service and checked the saved evidence",
+        "actor": "IT demo",
+        "owner": "Intake matching team",
+        "action": "HANDOFF",
+        "revision": 0,
+        "commandId": "a92b75e7-c2dc-4954-be47-1dbd13147103",
+        "confirmed": true,
+        "fingerprint": "72f85c20e7d49aa28bc72f5d5ce86b13908fdc5685ea77d1c2fc898f409c6a9f"
+      },
+      "result": {
+        "jobId": null,
+        "state": "WAITING",
+        "caseId": "8aeb4f32-1215-4b50-bd62-4f769e8442e5",
+        "evidence": null,
+        "replayed": false,
+        "revision": 1
+      },
+      "created_at": "2026-11-01T01:11:59.116Z"
+    },
+    {
+      "command_id": "ab91c45f-bfe8-4037-a2fd-b910ff3516cf",
+      "case_id": "8aeb4f32-1215-4b50-bd62-4f769e8442e5",
+      "action": "VERIFY_RESOLVED",
+      "actor": "IT demo",
+      "note": "Investigated the service and checked the saved evidence",
+      "request": {
+        "id": "case-8aeb4f32-1215-4b50-bd62-4f769e8442e5",
+        "note": "Investigated the service and checked the saved evidence",
+        "actor": "IT demo",
+        "owner": "",
+        "action": "VERIFY_RESOLVED",
+        "revision": 1,
+        "commandId": "ab91c45f-bfe8-4037-a2fd-b910ff3516cf",
+        "confirmed": true,
+        "fingerprint": "72f85c20e7d49aa28bc72f5d5ce86b13908fdc5685ea77d1c2fc898f409c6a9f"
+      },
+      "result": {
+        "jobId": null,
+        "state": "RESOLVED",
+        "caseId": "8aeb4f32-1215-4b50-bd62-4f769e8442e5",
+        "evidence": {
+          "applicant_id": "APP_050",
+          "sha256_checksum": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "minio_object_key": "saved/orphan.pdf"
+        },
+        "replayed": false,
+        "revision": 2
+      },
+      "created_at": "2026-11-01T01:11:59.185Z"
+    }
+  ]
+}

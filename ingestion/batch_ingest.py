@@ -17,7 +17,7 @@ Implements Two-Pass Ingestion:
 
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
-from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
+from decimal import Decimal
 import hashlib
 import logging
 import mimetypes
@@ -30,6 +30,7 @@ from uuid import uuid4
 
 from policy import derive_routing_destination, get_file_constraints, load_policies
 from storage.date_utils import parse_date_of_birth
+from storage.gpa_utils import parse_gpa
 from storage.storage_manager import StorageManager
 
 logger = logging.getLogger(__name__)
@@ -118,16 +119,8 @@ def _parse_float(val: Any) -> Optional[float]:
 
 
 def _parse_gpa(val: Any) -> Optional[Decimal]:
-    """Parse CSV GPA without binary float rounding before NUMERIC(5,3) storage."""
-    if val is None or str(val).strip().lower() in {"", "nan"}:
-        return None
-    try:
-        value = Decimal(str(val).strip())
-        if not value.is_finite():
-            return None
-        return value.quantize(Decimal("0.001"), rounding=ROUND_HALF_UP)
-    except InvalidOperation:
-        return None
+    """Parse and round once, half up, for two-decimal GPA storage."""
+    return parse_gpa(val)
 
 
 def _parse_int(val: Any) -> Optional[int]:
@@ -457,7 +450,7 @@ class BatchIngestor:
 
     def find_csv_file(self, input_dir: Path) -> Path:
         """Locate the batch applicant CSV file."""
-        csv_files = list(input_dir.glob("*.csv"))
+        csv_files = sorted(input_dir.glob("*.csv"))
         if csv_files:
             for c in csv_files:
                 if "applicant" in c.name.lower():

@@ -95,8 +95,9 @@ class Applicant(Base):
     hooks = Column(JsonType, default=list, nullable=False)             # List of up to 5 hooks
     documents = Column(JsonType, default=list, nullable=False)         # List of attached document metadata
 
-    admission_year = Column(Integer, nullable=False)
-    admission_term = Column(String(1), nullable=False)
+    # Incomplete submissions must be storable before the manifest gate runs.
+    admission_year = Column(Integer, nullable=True)
+    admission_term = Column(String(1), nullable=True)
 
     # Inbound Submission & Review Metadata
     create_date_time = Column(String(64), nullable=True)

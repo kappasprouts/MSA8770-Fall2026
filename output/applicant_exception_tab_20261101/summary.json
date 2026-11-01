@@ -1,0 +1,25 @@
+{
+  "checked_at_utc": "2026-11-01T01:29:53.892059+00:00",
+  "ui": {
+    "passed": 63,
+    "failed": 0,
+    "skipped": 0
+  },
+  "typecheck": "passed",
+  "lint": "passed; one pre-existing unused-variable warning",
+  "production_build": "passed; isolated webpack build",
+  "http_checks": {
+    "/applicant-review": {
+      "status": 200
+    },
+    "/api/dossier?appId=APP_012": {
+      "status": 200,
+      "legacy_dossier_preserved": true
+    },
+    "/error-queue": {
+      "status": 200
+    }
+  },
+  "python": "Unchanged; prior 187 tests passed",
+  "shared_applicant_decisions": "No changes; integration tests use isolated schemas"
+}

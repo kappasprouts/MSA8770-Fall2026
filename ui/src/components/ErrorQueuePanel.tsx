@@ -19,6 +19,7 @@ export default function ErrorQueuePanel({ onViewDetails }: {
   const [category, setCategory] = useState("ALL");
   const [severity, setSeverity] = useState("ALL");
   const [attempt, setAttempt] = useState(0);
+  const [scope,setScope]=useState("ACTIVE");
 
   useEffect(() => {
     const controller = new AbortController();
@@ -43,8 +44,9 @@ export default function ErrorQueuePanel({ onViewDetails }: {
     const matchesSearch = [item.applicantId ?? "", item.applicantName, item.category, item.summary,
       item.status, exceptionSourceLabel(item.source), ...item.affectedDocuments, ...item.findings]
       .join(" ").toLowerCase().includes(search.trim().toLowerCase());
-    return matchesSearch && (category === "ALL" || item.category === category) && (severity === "ALL" || item.severity === severity);
-  }), [records, search, category, severity]);
+    return matchesSearch && (category === "ALL" || item.category === category) && (severity === "ALL" || item.severity === severity) &&
+      (scope==="ALL" || (scope==="ACTIVE" ? item.active!==false : item.active===false));
+  }), [records, search, category, severity,scope]);
   const metric = (value: number) => loading || error ? "—" : value;
 
   return (
@@ -58,7 +60,7 @@ export default function ErrorQueuePanel({ onViewDetails }: {
       </section>
 
       <div className={styles.metrics} aria-label="Exception totals">
-        <div className={styles.metric}><small>Open exceptions</small><strong>{metric(records.length)}</strong><p className={styles.help}>IT-actionable system errors</p></div>
+        <div className={styles.metric}><small>Detected exceptions</small><strong>{metric(records.filter(item=>item.active!==false).length)}</strong><p className={styles.help}>Current IT-actionable errors</p></div>
         <div className={styles.metric}><small>High priority</small><strong>{metric(records.filter(item => item.severity === "HIGH" || item.severity === "CRITICAL").length)}</strong><p className={styles.help}>Review these first</p></div>
         <div className={styles.metric}><small>AI validation failures</small><strong>{metric(records.filter(item => item.source === "SUMMARIZER").length)}</strong><p className={styles.help}>Summarizer handoffs</p></div>
         <div className={styles.metric}><small>Orphaned uploads</small><strong>{metric(records.filter(item => item.source === "ORPHAN_INTAKE").length)}</strong><p className={styles.help}>Awaiting applicant match</p></div>
@@ -74,6 +76,8 @@ export default function ErrorQueuePanel({ onViewDetails }: {
         </div>
 
         <div className={styles.controls}>
+          <label className={styles.fieldLabel}>Records<select className={styles.select} value={scope || "ACTIVE"} onChange={e=>setScope(e.target.value)} aria-label="Current or historical cases">
+            <option value="ACTIVE">Current detected issues</option><option value="HISTORY">Saved case history</option><option value="ALL">All records</option></select></label>
           <label className={`${styles.fieldLabel} ${details.searchField}`}>
             Search exceptions
             <input type="search" value={search} onChange={event => setSearch(event.target.value)}
@@ -110,9 +114,9 @@ export default function ErrorQueuePanel({ onViewDetails }: {
                 <td><p className={styles.strong}>{item.category}</p><p className={`${styles.muted} ${details.summary}`}>{item.summary}</p></td>
                 <td className={styles.muted}>{exceptionSourceLabel(item.source)}</td>
                 <td><span className={`${styles.pill} ${styles[exceptionPriorityTone(item.severity)]}`}>{exceptionStatusLabel(item.severity)}</span></td>
-                <td><span className={styles.pill}>{exceptionStatusLabel(item.status)}</span></td>
+                <td><span className={styles.pill}>{exceptionStatusLabel(item.status)}</span><p className={styles.help}>{item.caseState || "OPEN"} · {item.owner || "Unassigned"}</p></td>
                 <td className={`${styles.muted} ${details.timestamp}`}>{formatExceptionDate(item.updatedAt)}</td>
-                <td><button type="button" onClick={() => onViewDetails(item.id)} className={styles.button} aria-label={`View details for ${item.applicantId ?? item.applicantName}`}>View Details</button></td>
+                <td><button type="button" onClick={() => onViewDetails(item.caseId ? `case-${item.caseId}` : item.id)} className={styles.button} aria-label={`View details for ${item.applicantId ?? item.applicantName}`}>View Details</button></td>
               </tr>)}</tbody>
             </table>
           </div>}

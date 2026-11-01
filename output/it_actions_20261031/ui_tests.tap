@@ -1,0 +1,372 @@
+TAP version 13
+# Subtest: chat context preserves structured conflict notes for the reviewer
+ok 1 - chat context preserves structured conflict notes for the reviewer
+  ---
+  duration_ms: 77.059
+  type: 'test'
+  ...
+# Subtest: invalid roles, structures and excessive conversations stop before dossier lookup
+ok 2 - invalid roles, structures and excessive conversations stop before dossier lookup
+  ---
+  duration_ms: 57.283
+  type: 'test'
+  ...
+# Subtest: actual route reconstructs messages, owns system role and sets timeout
+ok 3 - actual route reconstructs messages, owns system role and sets timeout
+  ---
+  duration_ms: 25.273
+  type: 'test'
+  ...
+# Subtest: decision wording and incomplete or malformed responses are withheld
+ok 4 - decision wording and incomplete or malformed responses are withheld
+  ---
+  duration_ms: 85.5397
+  type: 'test'
+  ...
+# Subtest: service outages, timeouts, missing dossiers and bad JSON have explicit outcomes
+ok 5 - service outages, timeouts, missing dossiers and bad JSON have explicit outcomes
+  ---
+  duration_ms: 42.9066
+  type: 'test'
+  ...
+# Subtest: published dossiers load their linked run rather than a newer unrelated run
+ok 6 - published dossiers load their linked run rather than a newer unrelated run
+  ---
+  duration_ms: 83.9344
+  type: 'test'
+  ...
+# Subtest: published structured review notes render without React object-child errors
+ok 7 - published structured review notes render without React object-child errors
+  ---
+  duration_ms: 67.9456
+  type: 'test'
+  ...
+# Subtest: missing decisions, confirmation, scope and reviewer never reach storage
+ok 8 - missing decisions, confirmation, scope and reviewer never reach storage
+  ---
+  duration_ms: 56.4147
+  type: 'test'
+  ...
+# Subtest: automatic dossier provenance does not invent a human approval
+ok 9 - automatic dossier provenance does not invent a human approval
+  ---
+  duration_ms: 36.2153
+  type: 'test'
+  ...
+# Subtest: source viewer uses saved bucket/key and checks bytes against the saved version
+ok 10 - source viewer uses saved bucket/key and checks bytes against the saved version
+  ---
+  duration_ms: 16.7426
+  type: 'test'
+  ...
+# Subtest: actual decision route publishes through the PostgreSQL transaction and recovers replay
+ok 11 - actual decision route publishes through the PostgreSQL transaction and recovers replay
+  ---
+  duration_ms: 207.3064
+  type: 'test'
+  ...
+# Subtest: exception controls are in the recommendation form and stale displayed versions cannot submit
+ok 12 - exception controls are in the recommendation form and stale displayed versions cannot submit
+  ---
+  duration_ms: 72.8696
+  type: 'test'
+  ...
+# Subtest: actual integrated review atomically resolves exceptions and recommends, with version checks and replay
+ok 13 - actual integrated review atomically resolves exceptions and recommends, with version checks and replay
+  ---
+  duration_ms: 278.6105
+  type: 'test'
+  ...
+# integrated_receiver_snapshot: {"applicants":[{"app_id":"APP_050","status":"REVIEWED","officer_recommendation":"WAITLIST","final_decision":null},{"app_id":"APP_051","status":"REVIEWED","officer_recommendation":"ACCEPT","final_decision":null}],"dossier_review_requests":[{"id":"f8ec1f19-23c4-4ae7-9c00-282cf6aa0deb","app_id":"APP_050","state":"PUBLISHED","review_mode":"EXCEPTION","decision":"APPROVE","reviewer":"Officer demo","reason":"Compared original sources; recorded authoritative score and uncertainty","candidate_hash":"eba28fd68487702462d7da353c8dd7bf675340acd64a9699f7205de8e48c5296","generation_run_id":"1"},{"id":"5e6d2916-28e5-4e39-b21c-7c4a93c933fb","app_id":"APP_051","state":"PUBLISHED","review_mode":"AUTOMATIC","decision":null,"reviewer":null,"reason":null,"candidate_hash":"b23a872f6f2a17fba4b07add88c3ab24ffd488c4543df7b8069632962c5b259e","generation_run_id":"2"}],"applicant_dossier":[{"app_id":"APP_050","publication_request_id":"f8ec1f19-23c4-4ae7-9c00-282cf6aa0deb"},{"app_id":"APP_051","publication_request_id":"5e6d2916-28e5-4e39-b21c-7c4a93c933fb"}],"dossier_publication_receipts":[{"request_id":"f8ec1f19-23c4-4ae7-9c00-282cf6aa0deb","app_id":"APP_050","candidate_hash":"eba28fd68487702462d7da353c8dd7bf675340acd64a9699f7205de8e48c5296"},{"request_id":"5e6d2916-28e5-4e39-b21c-7c4a93c933fb","app_id":"APP_051","candidate_hash":"b23a872f6f2a17fba4b07add88c3ab24ffd488c4543df7b8069632962c5b259e"}]}
+# Subtest: a new selection never accepts the previous dossier or a mismatched run
+ok 14 - a new selection never accepts the previous dossier or a mismatched run
+  ---
+  duration_ms: 2.3182
+  type: 'test'
+  ...
+# Subtest: an empty applicant list differs from an unreadable or failed response
+ok 15 - an empty applicant list differs from an unreadable or failed response
+  ---
+  duration_ms: 1.5371
+  type: 'test'
+  ...
+# Subtest: validation is unknown without an explicit successful run and failed states take precedence
+ok 16 - validation is unknown without an explicit successful run and failed states take precedence
+  ---
+  duration_ms: 0.4881
+  type: 'test'
+  ...
+# Subtest: section counts use final attempts and do not count missing errors as passed
+ok 17 - section counts use final attempts and do not count missing errors as passed
+  ---
+  duration_ms: 0.4788
+  type: 'test'
+  ...
+# Subtest: saved dossier markup never claims Complete merely because a dossier exists
+ok 18 - saved dossier markup never claims Complete merely because a dossier exists
+  ---
+  duration_ms: 57.723
+  type: 'test'
+  ...
+# Subtest: unavailable decision counts stay unknown while true zero remains zero
+ok 19 - unavailable decision counts stay unknown while true zero remains zero
+  ---
+  duration_ms: 0.3358
+  type: 'test'
+  ...
+# Subtest: batch states distinguish no recorded run, completion, other statuses, and bad data
+ok 20 - batch states distinguish no recorded run, completion, other statuses, and bad data
+  ---
+  duration_ms: 0.3819
+  type: 'test'
+  ...
+# Subtest: JSON requests preserve service errors and reject unreadable responses
+ok 21 - JSON requests preserve service errors and reject unreadable responses
+  ---
+  duration_ms: 43.6182
+  type: 'test'
+  ...
+# Subtest: cancelling a superseded request aborts the underlying fetch
+ok 22 - cancelling a superseded request aborts the underlying fetch
+  ---
+  duration_ms: 2.1438
+  type: 'test'
+  ...
+# Subtest: decision SQL counts recorded decisions outside the pending queue
+ok 23 - decision SQL counts recorded decisions outside the pending queue
+  ---
+  duration_ms: 133.1603
+  type: 'test'
+  ...
+# Subtest: queue search includes affected documents, combines filters, and opens the matching exception
+ok 24 - queue search includes affected documents, combines filters, and opens the matching exception
+  ---
+  duration_ms: 134.7153
+  type: 'test'
+  ...
+# Subtest: queue distinguishes loading, outages, and a true empty queue without showing stale rows
+ok 25 - queue distinguishes loading, outages, and a true empty queue without showing stale rows
+  ---
+  duration_ms: 130.6218
+  type: 'test'
+  ...
+# Subtest: details retain findings, documents, audit history, back navigation, and conditional dossier access
+ok 26 - details retain findings, documents, audit history, back navigation, and conditional dossier access
+  ---
+  duration_ms: 103.9812
+  type: 'test'
+  ...
+# Subtest: nested exception routes keep IT navigation active and preserve all existing workspaces
+ok 27 - nested exception routes keep IT navigation active and preserve all existing workspaces
+  ---
+  duration_ms: 15.1005
+  type: 'test'
+  ...
+# Subtest: queue and details routes encode IDs and use mi's canonical applicant link
+ok 28 - queue and details routes encode IDs and use mi's canonical applicant link
+  ---
+  duration_ms: 59.3793
+  type: 'test'
+  ...
+# Subtest: exception API preserves technical evidence and orphan records while excluding student-only findings
+ok 29 - exception API preserves technical evidence and orphan records while excluding student-only findings
+  ---
+  duration_ms: 41.1067
+  type: 'test'
+  ...
+# Subtest: IT actions require a scoped command, note, actor and explicit retry confirmation
+ok 30 - IT actions require a scoped command, note, actor and explicit retry confirmation
+  ---
+  duration_ms: 44.0567
+  type: 'test'
+  ...
+# Subtest: IT action form distinguishes queued work, source matching, and verified closure
+ok 31 - IT action form distinguishes queued work, source matching, and verified closure
+  ---
+  duration_ms: 35.5551
+  type: 'test'
+  ...
+# Subtest: actual IT actions save ownership, notes, retries, replay and verified outcomes atomically
+ok 32 - actual IT actions save ownership, notes, retries, replay and verified outcomes atomically
+  ---
+  duration_ms: 631.2991
+  type: 'test'
+  ...
+# it_receiver_snapshot: {"it_exception_cases":[{"id":"8aeb4f32-1215-4b50-bd62-4f769e8442e5","exception_key":"orphan-9aac2976-f18c-41d9-990e-76822ac8544e","fingerprint":"72f85c20e7d49aa28bc72f5d5ce86b13908fdc5685ea77d1c2fc898f409c6a9f","applicant_id":null,"source":"ORPHAN_INTAKE","snapshot":{"id":"orphan-9aac2976-f18c-41d9-990e-76822ac8544e","active":true,"source":"ORPHAN_INTAKE","status":"ORPHAN_DOCUMENT","actions":[],"eventId":"9aac2976-f18c-41d9-990e-76822ac8544e","summary":"unmatched.pdf could not be matched to an applicant record.","category":"Orphan Document","findings":["The file is retained in MinIO and recorded in PostgreSQL until a matching application is available.","Storage key: saved/orphan.pdf","SHA-256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"],"revision":0,"severity":"MEDIUM","caseState":"OPEN","objectKey":"saved/orphan.pdf","updatedAt":"2026-11-01T01:11:59.106Z","hasDossier":false,"applicantId":"APP_050","fingerprint":"72f85c20e7d49aa28bc72f5d5ce86b13908fdc5685ea77d1c2fc898f409c6a9f","auditHistory":[],"retryAllowed":false,"applicantName":"Possible match: APP_050","intendedMajor":null,"sourceVersion":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","workerAvailable":false,"affectedDocuments":["unmatched.pdf"]},"state":"RESOLVED","owner":"Intake matching team","revision":2,"created_at":"2026-11-01T01:11:59.116Z","updated_at":"2026-11-01T01:11:59.185Z","resolution_evidence":{"applicant_id":"APP_050","sha256_checksum":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","minio_object_key":"saved/orphan.pdf"}},{"id":"3c8d756b-1368-4ff8-ba28-0e399d03e365","exception_key":"applicant-APP_050-summarizer","fingerprint":"0a61cebd982b64e8bd4c1db9d7a4910afdd6453b507d2c85d7a087d2b41b2a65","applicant_id":"APP_050","source":"SUMMARIZER","snapshot":{"id":"applicant-APP_050-summarizer","active":true,"source":"SUMMARIZER","status":"AI_VALIDATION_FAILED","actions":[],"eventId":"1","summary":"Academic: Unsupported citation","category":"AI Validation Failure","findings":["Academic: Unsupported citation"],"revision":0,"severity":"HIGH","caseState":"OPEN","updatedAt":"2026-11-01T01:11:58.706Z","hasDossier":false,"applicantId":"APP_050","fingerprint":"0a61cebd982b64e8bd4c1db9d7a4910afdd6453b507d2c85d7a087d2b41b2a65","auditHistory":[],"failureRunId":"1","retryAllowed":true,"applicantName":"APP_050","intendedMajor":null,"sourceVersion":"54e1b7143beb11d53919816a57c38e5527870ddf80f0874593f728d69093a13b","workerAvailable":false,"affectedDocuments":[]},"state":"RESOLVED","owner":"IT demo","revision":4,"created_at":"2026-11-01T01:11:58.799Z","updated_at":"2026-11-01T01:11:59.066Z","resolution_evidence":{"state":"PUBLISHED","request_id":"8b402d20-f618-4f46-9f06-5ed32d912f54","run_status":"DOSSIER_READY","applicant_status":"DOSSIER_READY","generation_run_id":"2"}}],"it_retry_jobs":[{"id":"13be6f5a-93e0-4dff-98dc-b821a57d6c10","case_id":"3c8d756b-1368-4ff8-ba28-0e399d03e365","command_id":"07ba5e56-a218-4d88-8370-15a4c4adbce9","applicant_id":"APP_050","source":"SUMMARIZER","source_version":"54e1b7143beb11d53919816a57c38e5527870ddf80f0874593f728d69093a13b","failure_run_id":"1","state":"FAILED","worker_id":null,"created_at":"2026-11-01T01:11:58.951Z","started_at":null,"finished_at":"2026-11-01T01:11:59.025Z","result":{"message":"Receiver rechecked; no validated success found. Case remains open; a new explicit retry may be requested.","verified":false}}],"it_exception_actions":[{"command_id":"9e06d4bd-6b76-470b-aadd-9e04c6094805","case_id":"3c8d756b-1368-4ff8-ba28-0e399d03e365","action":"CLAIM","actor":"IT demo","note":"Investigated the service and checked the saved evidence","request":{"id":"applicant-APP_050-summarizer","note":"Investigated the service and checked the saved evidence","actor":"IT demo","owner":"","action":"CLAIM","revision":0,"commandId":"9e06d4bd-6b76-470b-aadd-9e04c6094805","confirmed":true,"fingerprint":"0a61cebd982b64e8bd4c1db9d7a4910afdd6453b507d2c85d7a087d2b41b2a65"},"result":{"jobId":null,"state":"IN_PROGRESS","caseId":"3c8d756b-1368-4ff8-ba28-0e399d03e365","evidence":null,"replayed":false,"revision":1},"created_at":"2026-11-01T01:11:58.799Z"},{"command_id":"07ba5e56-a218-4d88-8370-15a4c4adbce9","case_id":"3c8d756b-1368-4ff8-ba28-0e399d03e365","action":"REQUEST_RETRY","actor":"IT demo","note":"Investigated the service and checked the saved evidence","request":{"id":"case-3c8d756b-1368-4ff8-ba28-0e399d03e365","note":"Investigated the service and checked the saved evidence","actor":"IT demo","owner":"","action":"REQUEST_RETRY","revision":1,"commandId":"07ba5e56-a218-4d88-8370-15a4c4adbce9","confirmed":true,"fingerprint":"0a61cebd982b64e8bd4c1db9d7a4910afdd6453b507d2c85d7a087d2b41b2a65"},"result":{"jobId":"13be6f5a-93e0-4dff-98dc-b821a57d6c10","state":"WAITING","caseId":"3c8d756b-1368-4ff8-ba28-0e399d03e365","evidence":null,"replayed":false,"revision":2},"created_at":"2026-11-01T01:11:58.951Z"},{"command_id":"111c76cf-c1ea-4214-a6c3-b31a6f3c6a4d","case_id":"3c8d756b-1368-4ff8-ba28-0e399d03e365","action":"VERIFY_RESOLVED","actor":"IT demo","note":"Investigated the service and checked the saved evidence","request":{"id":"case-3c8d756b-1368-4ff8-ba28-0e399d03e365","note":"Investigated the service and checked the saved evidence","actor":"IT demo","owner":"","action":"VERIFY_RESOLVED","revision":2,"commandId":"111c76cf-c1ea-4214-a6c3-b31a6f3c6a4d","confirmed":true,"fingerprint":"0a61cebd982b64e8bd4c1db9d7a4910afdd6453b507d2c85d7a087d2b41b2a65"},"result":{"jobId":null,"state":"IN_PROGRESS","caseId":"3c8d756b-1368-4ff8-ba28-0e399d03e365","evidence":null,"replayed":false,"revision":3},"created_at":"2026-11-01T01:11:59.025Z"},{"command_id":"bf3baa69-1354-4534-b9ac-67e0292dbbf6","case_id":"3c8d756b-1368-4ff8-ba28-0e399d03e365","action":"VERIFY_RESOLVED","actor":"IT demo","note":"Investigated the service and checked the saved evidence","request":{"id":"case-3c8d756b-1368-4ff8-ba28-0e399d03e365","note":"Investigated the service and checked the saved evidence","actor":"IT demo","owner":"","action":"VERIFY_RESOLVED","revision":3,"commandId":"bf3baa69-1354-4534-b9ac-67e0292dbbf6","confirmed":true,"fingerprint":"0a61cebd982b64e8bd4c1db9d7a4910afdd6453b507d2c85d7a087d2b41b2a65"},"result":{"jobId":null,"state":"RESOLVED","caseId":"3c8d756b-1368-4ff8-ba28-0e399d03e365","evidence":{"state":"PUBLISHED","request_id":"8b402d20-f618-4f46-9f06-5ed32d912f54","run_status":"DOSSIER_READY","applicant_status":"DOSSIER_READY","generation_run_id":"2"},"replayed":false,"revision":4},"created_at":"2026-11-01T01:11:59.066Z"},{"command_id":"a92b75e7-c2dc-4954-be47-1dbd13147103","case_id":"8aeb4f32-1215-4b50-bd62-4f769e8442e5","action":"HANDOFF","actor":"IT demo","note":"Investigated the service and checked the saved evidence","request":{"id":"orphan-9aac2976-f18c-41d9-990e-76822ac8544e","note":"Investigated the service and checked the saved evidence","actor":"IT demo","owner":"Intake matching team","action":"HANDOFF","revision":0,"commandId":"a92b75e7-c2dc-4954-be47-1dbd13147103","confirmed":true,"fingerprint":"72f85c20e7d49aa28bc72f5d5ce86b13908fdc5685ea77d1c2fc898f409c6a9f"},"result":{"jobId":null,"state":"WAITING","caseId":"8aeb4f32-1215-4b50-bd62-4f769e8442e5","evidence":null,"replayed":false,"revision":1},"created_at":"2026-11-01T01:11:59.116Z"},{"command_id":"ab91c45f-bfe8-4037-a2fd-b910ff3516cf","case_id":"8aeb4f32-1215-4b50-bd62-4f769e8442e5","action":"VERIFY_RESOLVED","actor":"IT demo","note":"Investigated the service and checked the saved evidence","request":{"id":"case-8aeb4f32-1215-4b50-bd62-4f769e8442e5","note":"Investigated the service and checked the saved evidence","actor":"IT demo","owner":"","action":"VERIFY_RESOLVED","revision":1,"commandId":"ab91c45f-bfe8-4037-a2fd-b910ff3516cf","confirmed":true,"fingerprint":"72f85c20e7d49aa28bc72f5d5ce86b13908fdc5685ea77d1c2fc898f409c6a9f"},"result":{"jobId":null,"state":"RESOLVED","caseId":"8aeb4f32-1215-4b50-bd62-4f769e8442e5","evidence":{"applicant_id":"APP_050","sha256_checksum":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","minio_object_key":"saved/orphan.pdf"},"replayed":false,"revision":2},"created_at":"2026-11-01T01:11:59.185Z"}]}
+# Subtest: student missing material is not an IT incident
+ok 33 - student missing material is not an IT incident
+  ---
+  duration_ms: 1.3338
+  type: 'test'
+  ...
+# Subtest: technical errors and orphan intake remain available to IT
+ok 34 - technical errors and orphan intake remain available to IT
+  ---
+  duration_ms: 0.2141
+  type: 'test'
+  ...
+# Subtest: unknown workflow status is not automatically a technical error
+ok 35 - unknown workflow status is not automatically a technical error
+  ---
+  duration_ms: 0.209
+  type: 'test'
+  ...
+# Subtest: invalid recommendations, malformed JSON, and non-text/oversized notes never reach storage
+ok 36 - invalid recommendations, malformed JSON, and non-text/oversized notes never reach storage
+  ---
+  duration_ms: 109.3796
+  type: 'test'
+  ...
+# Subtest: API adapter carries recommendation and multiline notes without confusing them with final decisions
+ok 37 - API adapter carries recommendation and multiline notes without confusing them with final decisions
+  ---
+  duration_ms: 5.7677
+  type: 'test'
+  ...
+# Subtest: database connection failures return a readable save error
+ok 38 - database connection failures return a readable save error
+  ---
+  duration_ms: 20.49
+  type: 'test'
+  ...
+# Subtest: details panel shows recommendation and safely escaped multiline notes before the final decision controls
+ok 39 - details panel shows recommendation and safely escaped multiline notes before the final decision controls
+  ---
+  duration_ms: 69.5827
+  type: 'test'
+  ...
+# Subtest: real PostgreSQL migration, saves, queue propagation, finalization, and audit rollback
+ok 40 - real PostgreSQL migration, saves, queue propagation, finalization, and audit rollback
+  ---
+  duration_ms: 302.927
+  type: 'test'
+  ...
+# Subtest: ledger caps each page at 20 and handles a partial last page with bounded navigation
+ok 41 - ledger caps each page at 20 and handles a partial last page with bounded navigation
+  ---
+  duration_ms: 144.889
+  type: 'test'
+  ...
+# Subtest: search covers every applicant and resets pagination
+ok 42 - search covers every applicant and resets pagination
+  ---
+  duration_ms: 39.2623
+  type: 'test'
+  ...
+# Subtest: status filters paginate the full matching set and reset to the first page
+ok 43 - status filters paginate the full matching set and reset to the first page
+  ---
+  duration_ms: 54.5021
+  type: 'test'
+  ...
+# Subtest: reviewed and finalized applicants retain dossier links, filters, and separate milestone counts
+ok 44 - reviewed and finalized applicants retain dossier links, filters, and separate milestone counts
+  ---
+  duration_ms: 23.9419
+  type: 'test'
+  ...
+# Subtest: exact multiples, one-page lists, empty results, refresh, and shrinking data keep valid page bounds
+ok 45 - exact multiples, one-page lists, empty results, refresh, and shrinking data keep valid page bounds
+  ---
+  duration_ms: 49.7824
+  type: 'test'
+  ...
+# Subtest: source links resolve the matching document and page without substituting an unrelated PDF
+ok 46 - source links resolve the matching document and page without substituting an unrelated PDF
+  ---
+  duration_ms: 2.4655
+  type: 'test'
+  ...
+# Subtest: repeated source citations produce one link for each document and page
+ok 47 - repeated source citations produce one link for each document and page
+  ---
+  duration_ms: 47.0866
+  type: 'test'
+  ...
+# Subtest: document viewer renders one selected PDF, preserves cited pages, and labels human-only documents
+ok 48 - document viewer renders one selected PDF, preserves cited pages, and labels human-only documents
+  ---
+  duration_ms: 27.8757
+  type: 'test'
+  ...
+# Subtest: tabs have accessible relationships, keep the recommendation mounted, and lazily load documents
+ok 49 - tabs have accessible relationships, keep the recommendation mounted, and lazily load documents
+  ---
+  duration_ms: 41.5994
+  type: 'test'
+  ...
+# Subtest: citation clicks open the cited source and missing sources show an explicit message
+ok 50 - citation clicks open the cited source and missing sources show an explicit message
+  ---
+  duration_ms: 35.9905
+  type: 'test'
+  ...
+# Subtest: arrow, Home, and End keys switch tabs; Q&A state stays mounted after closing
+ok 51 - arrow, Home, and End keys switch tabs; Q&A state stays mounted after closing
+  ---
+  duration_ms: 33.2123
+  type: 'test'
+  ...
+# Subtest: all applicant records contribute, independent of dossier or decision availability
+ok 52 - all applicant records contribute, independent of dossier or decision availability
+  ---
+  duration_ms: 26.9969
+  type: 'test'
+  ...
+# Subtest: reviewed and finalized applications still count as complete packets without manifest metadata
+ok 53 - reviewed and finalized applications still count as complete packets without manifest metadata
+  ---
+  duration_ms: 0.5845
+  type: 'test'
+  ...
+# Subtest: academic values preserve real zeros, reject invalid scores, and calculate interpolated percentiles
+ok 54 - academic values preserve real zeros, reject invalid scores, and calculate interpolated percentiles
+  ---
+  duration_ms: 3.4881
+  type: 'test'
+  ...
+# Subtest: cohort filters apply to every chart and comparison while options retain the full pool
+ok 55 - cohort filters apply to every chart and comparison while options retain the full pool
+  ---
+  duration_ms: 2.717
+  type: 'test'
+  ...
+# Subtest: application trends use valid source dates, preserve empty months, and exclude import times
+ok 56 - application trends use valid source dates, preserve empty months, and exclude import times
+  ---
+  duration_ms: 1.0765
+  type: 'test'
+  ...
+# Subtest: filter parsing and CSV export handle hostile text without exposing source applicant fields
+ok 57 - filter parsing and CSV export handle hostile text without exposing source applicant fields
+  ---
+  duration_ms: 2.7823
+  type: 'test'
+  ...
+# Subtest: statistics endpoint validates first, returns aggregate-only results, and distinguishes outages
+ok 58 - statistics endpoint validates first, returns aggregate-only results, and distinguishes outages
+  ---
+  duration_ms: 140.3155
+  type: 'test'
+  ...
+# Subtest: populated charts render accessible values, unknown categories, sample sizes, and useful links
+ok 59 - populated charts render accessible values, unknown categories, sample sizes, and useful links
+  ---
+  duration_ms: 171.774
+  type: 'test'
+  ...
+# Subtest: real statistics SQL uses the latest manifest per applicant without multiplying pool counts
+ok 60 - real statistics SQL uses the latest manifest per applicant without multiplying pool counts
+  ---
+  duration_ms: 96.0464
+  type: 'test'
+  ...
+1..60
+# tests 60
+# suites 0
+# pass 60
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1762.0388

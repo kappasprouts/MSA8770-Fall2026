@@ -77,6 +77,8 @@ def derive_routing_destination(status: str, rules: Optional[Dict[str, str]] = No
         return targets.get("on_valid", targets.get("on_ready", "READY_FOR_REVIEW"))
     if status_value == "DOSSIER_READY":
         return targets.get("on_dossier_ready", "Applicant Review")
+    if status_value in {"REVIEW_PENDING", "REVIEW_REJECTED", "REVIEW_ESCALATED", "REVIEW_SUPERSEDED"}:
+        return "Applicant Review"
     if status_value == "REVIEWED":
         return targets.get("on_reviewed", "Final Decisions")
     if status_value == "FINAL_DECISION_RECORDED":

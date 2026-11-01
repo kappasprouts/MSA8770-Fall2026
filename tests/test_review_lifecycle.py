@@ -73,7 +73,7 @@ def test_generation_run_preserves_human_progress_in_postgresql():
             cursor.execute("""CREATE TEMP TABLE applicants (
                 app_id text PRIMARY KEY, status text, officer_recommendation text, final_decision text
             )""")
-            cursor.execute("""CREATE TEMP TABLE dossier_generation_runs (
+            cursor.execute("""CREATE TEMP TABLE dossier_generation_runs (id BIGSERIAL PRIMARY KEY,
                 app_id text, run_status text, model text, attempts integer, runtime_seconds numeric,
                 documents_sent jsonb, documents_withheld jsonb, policies_retrieved jsonb, validation jsonb, failed_output jsonb
             )""")

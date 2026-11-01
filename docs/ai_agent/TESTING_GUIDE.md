@@ -16,6 +16,43 @@ For the **UI tests**, the existing prototypes additionally need Node.js/npm, and
 
 ## Part A — Summarizing agent (backend)
 
+### Validation regression checks
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests -q
+cd ui
+node --env-file=.env.local --test tests/*.test.mjs
+```
+
+The former `integration_review_20261009` diagnostic contracts now run in normal
+pytest discovery. They must continue to pass rather than being excluded as known
+failures. Additional validation tests cover numeric label/value association,
+extra/nested fields, nonfinite values, scanned-evidence uncertainty, cross-document
+privacy, multiline fields, blank forms and stream completion. Chat tests execute
+the actual route with controlled dossier/model responses; they verify role
+boundaries, request limits, completion/output checks and service errors.
+
+These regressions use synthetic fixtures and controlled model responses. Passing
+them does not establish universal extraction accuracy or privacy across layouts.
+Use the academic-only live check below for a real-model smoke test; it does not
+save a dossier or change applicant records. Install the updated requirements,
+including `jsonschema`, before running the agent or tests.
+
+### Document/score contract regression checks
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests/ai_agent/test_input_handoff.py tests/ai_agent/test_policy_assessment.py -q
+```
+
+The checks cover routing, actual PDF retrieval from a recorded historical bucket,
+an actual isolated score-feed update, allowlisted provenance, missing and invalid
+scores, retained document/database disagreements, and truthful CLI outcomes.
+Model responses are simulated. With `POSTGRES_*` test settings configured, the
+receiver test executes actual invalid-input persistence against session-local
+PostgreSQL TEMP tables; it otherwise skips. It does not migrate or change shared
+applicant tables. Input errors must save zero model attempts and preserve SAT 31
+as the original value. No paid or local model inference is needed for these checks.
+
 ### A1. Syntax and imports
 
 ```bash

@@ -1,0 +1,2113 @@
+[
+  {
+    "case": "test_closed_connection_resumes_only_unfinished_sections",
+    "passed": true,
+    "checkpoints": {
+      "generation_executions": [
+        {
+          "id": "6237d063-febd-427a-b65a-58a47e95096f",
+          "state": "COMPLETED",
+          "app_id": "APP_050",
+          "context": {
+            "policies": []
+          },
+          "outcome": "DOSSIER_READY",
+          "retry_key": "normal",
+          "created_at": "2026-11-01T02:00:53.215371+00:00",
+          "input_hash": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7",
+          "last_error": null,
+          "updated_at": "2026-11-01T02:00:53.369875+00:00",
+          "owner_token": "5d05783c-79b0-4763-947e-0e2f0063ebc7",
+          "final_run_id": 1,
+          "resume_count": 1,
+          "input_snapshot": {
+            "policies": [],
+            "applicant": {
+              "app_id": "APP_050",
+              "documents": [],
+              "superscored_sat_score": null
+            }
+          },
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "review_request_id": "3da22c07-1f29-47db-8c4f-fe27c7dbe1c1"
+        }
+      ],
+      "generation_section_checkpoints": [
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "concerns": [],
+            "evidence": [],
+            "strengths": [],
+            "course_rigor": "Factual advisory summary.",
+            "ap_exam_scores": [],
+            "document_facts": {
+              "class_rank": null,
+              "high_school": null,
+              "weighted_gpa": null,
+              "act_superscore": null,
+              "intended_major": null,
+              "sat_superscore": null,
+              "unweighted_gpa": null,
+              "expected_graduation": null
+            },
+            "performance_patterns": "Factual advisory summary.",
+            "ap_courses_on_transcript": []
+          },
+          "section": "academic",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "academic"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:53.244758+00:00",
+          "execution_id": "6237d063-febd-427a-b65a-58a47e95096f",
+          "request_hash": "df1521f111a8b075e78083758b083831cf9503a8087773893371919a509d9948"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "awards": [],
+            "themes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "activities": [],
+            "assessment": "Factual advisory summary.",
+            "leadership_service_employment": "Factual advisory summary."
+          },
+          "section": "engagement",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "engagement"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:53.254794+00:00",
+          "execution_id": "6237d063-febd-427a-b65a-58a47e95096f",
+          "request_hash": "72509ca7fa6a645c70e2eec9a1f871f53bee88c0121993b7c8187114cc1cef4a"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "recommenders": [],
+            "common_themes": [],
+            "strengths_identified": []
+          },
+          "section": "recommendation",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "recommendation"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:53.345443+00:00",
+          "execution_id": "6237d063-febd-427a-b65a-58a47e95096f",
+          "request_hash": "686328a1a9350ed0bb6ad7ace7bc5c854f4a9fca5530bceb5deb98c73a14a218"
+        },
+        {
+          "errors": [],
+          "output": {
+            "policy_assessment": []
+          },
+          "section": "policy",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "policy"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:53.35527+00:00",
+          "execution_id": "6237d063-febd-427a-b65a-58a47e95096f",
+          "request_hash": "2df74c2bcdf4d7a4cf2bbe30f2f73e9a9892a538c1910e82fa7c0af242beb6d2"
+        },
+        {
+          "errors": [],
+          "output": {
+            "strengths": [],
+            "holistic_assessment": "Factual advisory summary."
+          },
+          "section": "synthesis",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "synthesis"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:53.365167+00:00",
+          "execution_id": "6237d063-febd-427a-b65a-58a47e95096f",
+          "request_hash": "0edf82d17680c92455f859946ff934f20de399ffdb777a98f49a88e9bda9da19"
+        }
+      ],
+      "generation_batches": [],
+      "generation_batch_members": []
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "DOSSIER_READY"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "3da22c07-1f29-47db-8c4f-fe27c7dbe1c1",
+          "app_id": "APP_050",
+          "state": "PUBLISHED",
+          "candidate_hash": "cd9b955e1feb03da02eb0f3fc8c0314f8c92260fbc73738028270ee3f084006c",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [
+        {
+          "app_id": "APP_050",
+          "publication_request_id": "3da22c07-1f29-47db-8c4f-fe27c7dbe1c1"
+        }
+      ],
+      "dossier_publication_receipts": [
+        {
+          "request_id": "3da22c07-1f29-47db-8c4f-fe27c7dbe1c1",
+          "app_id": "APP_050",
+          "candidate_hash": "cd9b955e1feb03da02eb0f3fc8c0314f8c92260fbc73738028270ee3f084006c"
+        }
+      ]
+    }
+  },
+  {
+    "case": "test_completed_receipt_lost_before_export_does_not_repeat_publication",
+    "passed": true,
+    "checkpoints": {
+      "generation_executions": [
+        {
+          "id": "036c540a-ac50-4430-bb16-675d2eec0218",
+          "state": "COMPLETED",
+          "app_id": "APP_050",
+          "context": {
+            "policies": []
+          },
+          "outcome": "DOSSIER_READY",
+          "retry_key": "normal",
+          "created_at": "2026-11-01T02:00:53.536253+00:00",
+          "input_hash": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7",
+          "last_error": null,
+          "updated_at": "2026-11-01T02:00:53.609574+00:00",
+          "owner_token": "c7e5ae9e-dd32-4615-89e3-9bcb31496dec",
+          "final_run_id": 1,
+          "resume_count": 0,
+          "input_snapshot": {
+            "policies": [],
+            "applicant": {
+              "app_id": "APP_050",
+              "documents": [],
+              "superscored_sat_score": null
+            }
+          },
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "review_request_id": "1906cd72-abda-4a8e-a471-fb17b245123a"
+        }
+      ],
+      "generation_section_checkpoints": [
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "concerns": [],
+            "evidence": [],
+            "strengths": [],
+            "course_rigor": "Factual advisory summary.",
+            "ap_exam_scores": [],
+            "document_facts": {
+              "class_rank": null,
+              "high_school": null,
+              "weighted_gpa": null,
+              "act_superscore": null,
+              "intended_major": null,
+              "sat_superscore": null,
+              "unweighted_gpa": null,
+              "expected_graduation": null
+            },
+            "performance_patterns": "Factual advisory summary.",
+            "ap_courses_on_transcript": []
+          },
+          "section": "academic",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "academic"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:53.566062+00:00",
+          "execution_id": "036c540a-ac50-4430-bb16-675d2eec0218",
+          "request_hash": "edbd4cf6c6637def64d0b574c36bfa2d066178e77df538847289b3b514e6230d"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "awards": [],
+            "themes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "activities": [],
+            "assessment": "Factual advisory summary.",
+            "leadership_service_employment": "Factual advisory summary."
+          },
+          "section": "engagement",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "engagement"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:53.576342+00:00",
+          "execution_id": "036c540a-ac50-4430-bb16-675d2eec0218",
+          "request_hash": "72509ca7fa6a645c70e2eec9a1f871f53bee88c0121993b7c8187114cc1cef4a"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "recommenders": [],
+            "common_themes": [],
+            "strengths_identified": []
+          },
+          "section": "recommendation",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "recommendation"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:53.586039+00:00",
+          "execution_id": "036c540a-ac50-4430-bb16-675d2eec0218",
+          "request_hash": "686328a1a9350ed0bb6ad7ace7bc5c854f4a9fca5530bceb5deb98c73a14a218"
+        },
+        {
+          "errors": [],
+          "output": {
+            "policy_assessment": []
+          },
+          "section": "policy",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "policy"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:53.595829+00:00",
+          "execution_id": "036c540a-ac50-4430-bb16-675d2eec0218",
+          "request_hash": "22bf26536d4c84cdc514f6d41e9644e087da7b84d064c8d60845150215e9a45b"
+        },
+        {
+          "errors": [],
+          "output": {
+            "strengths": [],
+            "holistic_assessment": "Factual advisory summary."
+          },
+          "section": "synthesis",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "synthesis"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:53.605261+00:00",
+          "execution_id": "036c540a-ac50-4430-bb16-675d2eec0218",
+          "request_hash": "b2f6241440b164dc9c0f8da28abd9888574f5ad164304962fd6110ef716b8fee"
+        }
+      ],
+      "generation_batches": [],
+      "generation_batch_members": []
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "DOSSIER_READY"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "1906cd72-abda-4a8e-a471-fb17b245123a",
+          "app_id": "APP_050",
+          "state": "PUBLISHED",
+          "candidate_hash": "592ad2649d1df8eeb448efc31f3591e81d990ff69e19264694236aa3bb48e3be",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [
+        {
+          "app_id": "APP_050",
+          "publication_request_id": "1906cd72-abda-4a8e-a471-fb17b245123a"
+        }
+      ],
+      "dossier_publication_receipts": [
+        {
+          "request_id": "1906cd72-abda-4a8e-a471-fb17b245123a",
+          "app_id": "APP_050",
+          "candidate_hash": "592ad2649d1df8eeb448efc31f3591e81d990ff69e19264694236aa3bb48e3be"
+        }
+      ]
+    }
+  },
+  {
+    "case": "test_failed_attempts_keep_the_same_retry_budget_on_resume",
+    "passed": true,
+    "checkpoints": {
+      "generation_executions": [
+        {
+          "id": "4193c452-bece-4252-bf2f-e9eedf061ec8",
+          "state": "FAILED",
+          "app_id": "APP_050",
+          "context": {
+            "policies": []
+          },
+          "outcome": "AI_VALIDATION_FAILED",
+          "retry_key": "normal",
+          "created_at": "2026-11-01T02:00:53.782398+00:00",
+          "input_hash": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7",
+          "last_error": "StoppedProcess",
+          "updated_at": "2026-11-01T02:00:53.880075+00:00",
+          "owner_token": "970a512b-95d1-4a95-9364-6725d9e8a7ae",
+          "final_run_id": 1,
+          "resume_count": 1,
+          "input_snapshot": {
+            "policies": [],
+            "applicant": {
+              "app_id": "APP_050",
+              "documents": [],
+              "superscored_sat_score": null
+            }
+          },
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "review_request_id": null
+        }
+      ],
+      "generation_section_checkpoints": [
+        {
+          "errors": [
+            "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+            "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+            "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+            "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+            "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+            "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+            "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+            "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+            "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+            "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']"
+          ],
+          "output": {},
+          "section": "academic",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 1
+              },
+              "errors": [
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']"
+              ],
+              "attempt": 1,
+              "section": "academic"
+            },
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 1
+              },
+              "errors": [
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']",
+                "Schema output: invalid required; expected ['document_facts', 'ap_courses_on_transcript', 'ap_exam_scores', 'summary', 'course_rigor', 'performance_patterns', 'strengths', 'concerns', 'notes', 'evidence']"
+              ],
+              "attempt": 2,
+              "section": "academic"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:53.815794+00:00",
+          "execution_id": "4193c452-bece-4252-bf2f-e9eedf061ec8",
+          "request_hash": "ca9de79005e5b698c5d8fb8ca4322ab9db1481728e143d5359236cf276f99792"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "awards": [],
+            "themes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "activities": [],
+            "assessment": "Factual advisory summary.",
+            "leadership_service_employment": "Factual advisory summary."
+          },
+          "section": "engagement",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "engagement"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:53.825331+00:00",
+          "execution_id": "4193c452-bece-4252-bf2f-e9eedf061ec8",
+          "request_hash": "72509ca7fa6a645c70e2eec9a1f871f53bee88c0121993b7c8187114cc1cef4a"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "recommenders": [],
+            "common_themes": [],
+            "strengths_identified": []
+          },
+          "section": "recommendation",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "recommendation"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:53.834905+00:00",
+          "execution_id": "4193c452-bece-4252-bf2f-e9eedf061ec8",
+          "request_hash": "686328a1a9350ed0bb6ad7ace7bc5c854f4a9fca5530bceb5deb98c73a14a218"
+        }
+      ],
+      "generation_batches": [],
+      "generation_batch_members": []
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "READY_FOR_REVIEW"
+        }
+      ],
+      "dossier_review_requests": [],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_changed_inputs_or_policy_cannot_reuse_old_sections[UPDATE applicants SET superscored_sat_score=1599]",
+    "passed": true,
+    "checkpoints": {
+      "generation_executions": [
+        {
+          "id": "1a6f883c-dd58-4249-9459-7d701eec74da",
+          "state": "SUPERSEDED",
+          "app_id": "APP_050",
+          "context": {
+            "policies": []
+          },
+          "outcome": null,
+          "retry_key": "normal",
+          "created_at": "2026-11-01T02:00:54.099268+00:00",
+          "input_hash": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7",
+          "last_error": "StaleGeneration",
+          "updated_at": "2026-11-01T02:00:54.130361+00:00",
+          "owner_token": "77450809-e7aa-400f-b7b1-d008cf3f67cf",
+          "final_run_id": null,
+          "resume_count": 0,
+          "input_snapshot": {
+            "policies": [],
+            "applicant": {
+              "app_id": "APP_050",
+              "documents": [],
+              "superscored_sat_score": null
+            }
+          },
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "review_request_id": null
+        },
+        {
+          "id": "8724f383-f261-49cc-b0d6-55433fa578f5",
+          "state": "COMPLETED",
+          "app_id": "APP_050",
+          "context": {
+            "policies": []
+          },
+          "outcome": "DOSSIER_READY",
+          "retry_key": "normal",
+          "created_at": "2026-11-01T02:00:54.149369+00:00",
+          "input_hash": "3576ab6520ee1b63d2d66d80ae11132eee4e3f5a601d342b9a2b4e09cffb53a7",
+          "last_error": null,
+          "updated_at": "2026-11-01T02:00:54.219237+00:00",
+          "owner_token": "854f1153-9e05-4503-a2b0-4a4bd6322d70",
+          "final_run_id": 1,
+          "resume_count": 0,
+          "input_snapshot": {
+            "policies": [],
+            "applicant": {
+              "app_id": "APP_050",
+              "documents": [],
+              "superscored_sat_score": 1599
+            }
+          },
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "review_request_id": "2cd316b4-adc9-4845-9c89-8a19ee20ae2d"
+        }
+      ],
+      "generation_section_checkpoints": [
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "concerns": [],
+            "evidence": [],
+            "strengths": [],
+            "course_rigor": "Factual advisory summary.",
+            "ap_exam_scores": [],
+            "document_facts": {
+              "class_rank": null,
+              "high_school": null,
+              "weighted_gpa": null,
+              "act_superscore": null,
+              "intended_major": null,
+              "sat_superscore": null,
+              "unweighted_gpa": null,
+              "expected_graduation": null
+            },
+            "performance_patterns": "Factual advisory summary.",
+            "ap_courses_on_transcript": []
+          },
+          "section": "academic",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "academic"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:54.175631+00:00",
+          "execution_id": "8724f383-f261-49cc-b0d6-55433fa578f5",
+          "request_hash": "46bf98b67c9a4752b6baed274346b334f74342f11eebfd5bdc7f654cc65fb284"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "awards": [],
+            "themes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "activities": [],
+            "assessment": "Factual advisory summary.",
+            "leadership_service_employment": "Factual advisory summary."
+          },
+          "section": "engagement",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "engagement"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:54.185626+00:00",
+          "execution_id": "8724f383-f261-49cc-b0d6-55433fa578f5",
+          "request_hash": "72509ca7fa6a645c70e2eec9a1f871f53bee88c0121993b7c8187114cc1cef4a"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "recommenders": [],
+            "common_themes": [],
+            "strengths_identified": []
+          },
+          "section": "recommendation",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "recommendation"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:54.195501+00:00",
+          "execution_id": "8724f383-f261-49cc-b0d6-55433fa578f5",
+          "request_hash": "686328a1a9350ed0bb6ad7ace7bc5c854f4a9fca5530bceb5deb98c73a14a218"
+        },
+        {
+          "errors": [],
+          "output": {
+            "policy_assessment": []
+          },
+          "section": "policy",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "policy"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:54.205338+00:00",
+          "execution_id": "8724f383-f261-49cc-b0d6-55433fa578f5",
+          "request_hash": "be3492f81fa1f5c5fcb051927d4d8a4c6998201b61b3d937e6ce9008d91b136e"
+        },
+        {
+          "errors": [],
+          "output": {
+            "strengths": [],
+            "holistic_assessment": "Factual advisory summary."
+          },
+          "section": "synthesis",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "synthesis"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:54.214783+00:00",
+          "execution_id": "8724f383-f261-49cc-b0d6-55433fa578f5",
+          "request_hash": "3a065a23a826dd7c0e7fd0b513217bb6d9090dde9ba287099cbae920c2c6e72f"
+        }
+      ],
+      "generation_batches": [],
+      "generation_batch_members": []
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "DOSSIER_READY"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "2cd316b4-adc9-4845-9c89-8a19ee20ae2d",
+          "app_id": "APP_050",
+          "state": "PUBLISHED",
+          "candidate_hash": "6758b1cd343caff568351b653edbb38a0d1f419ceb0edb8763764df567cf08d8",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [
+        {
+          "app_id": "APP_050",
+          "publication_request_id": "2cd316b4-adc9-4845-9c89-8a19ee20ae2d"
+        }
+      ],
+      "dossier_publication_receipts": [
+        {
+          "request_id": "2cd316b4-adc9-4845-9c89-8a19ee20ae2d",
+          "app_id": "APP_050",
+          "candidate_hash": "6758b1cd343caff568351b653edbb38a0d1f419ceb0edb8763764df567cf08d8"
+        }
+      ]
+    }
+  },
+  {
+    "case": "test_changed_inputs_or_policy_cannot_reuse_old_sections[INSERT INTO policy_chunks VALUES('POL-NEW','Changed policy')]",
+    "passed": true,
+    "checkpoints": {
+      "generation_executions": [
+        {
+          "id": "79302780-e7f0-4c29-8284-02b1c101fc5b",
+          "state": "SUPERSEDED",
+          "app_id": "APP_050",
+          "context": {
+            "policies": []
+          },
+          "outcome": null,
+          "retry_key": "normal",
+          "created_at": "2026-11-01T02:00:54.406407+00:00",
+          "input_hash": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7",
+          "last_error": "StaleGeneration",
+          "updated_at": "2026-11-01T02:00:54.437599+00:00",
+          "owner_token": "cf8e0167-9def-4f13-b317-2010424f9e8e",
+          "final_run_id": null,
+          "resume_count": 0,
+          "input_snapshot": {
+            "policies": [],
+            "applicant": {
+              "app_id": "APP_050",
+              "documents": [],
+              "superscored_sat_score": null
+            }
+          },
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "review_request_id": null
+        },
+        {
+          "id": "ca778fdf-0efd-46ea-8eed-b0f40afabc56",
+          "state": "COMPLETED",
+          "app_id": "APP_050",
+          "context": {
+            "policies": []
+          },
+          "outcome": "DOSSIER_READY",
+          "retry_key": "normal",
+          "created_at": "2026-11-01T02:00:54.456752+00:00",
+          "input_hash": "aebaa1e97c2f1b383b44f54d1abcaf3849170020e5b09b70fe935f0f8185aff9",
+          "last_error": null,
+          "updated_at": "2026-11-01T02:00:54.526982+00:00",
+          "owner_token": "1497509d-cbef-40ed-9e7e-0471455e7499",
+          "final_run_id": 1,
+          "resume_count": 0,
+          "input_snapshot": {
+            "policies": [
+              {
+                "content": "Changed policy",
+                "policy_id": "POL-NEW"
+              }
+            ],
+            "applicant": {
+              "app_id": "APP_050",
+              "documents": [],
+              "superscored_sat_score": null
+            }
+          },
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "review_request_id": "238cc252-92fd-4a63-89c6-2872010faa51"
+        }
+      ],
+      "generation_section_checkpoints": [
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "concerns": [],
+            "evidence": [],
+            "strengths": [],
+            "course_rigor": "Factual advisory summary.",
+            "ap_exam_scores": [],
+            "document_facts": {
+              "class_rank": null,
+              "high_school": null,
+              "weighted_gpa": null,
+              "act_superscore": null,
+              "intended_major": null,
+              "sat_superscore": null,
+              "unweighted_gpa": null,
+              "expected_graduation": null
+            },
+            "performance_patterns": "Factual advisory summary.",
+            "ap_courses_on_transcript": []
+          },
+          "section": "academic",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "academic"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:54.483409+00:00",
+          "execution_id": "ca778fdf-0efd-46ea-8eed-b0f40afabc56",
+          "request_hash": "baeb90b840f74fb8bbc52badc95b65e8d6232da3a2783c25c280538b580291af"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "awards": [],
+            "themes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "activities": [],
+            "assessment": "Factual advisory summary.",
+            "leadership_service_employment": "Factual advisory summary."
+          },
+          "section": "engagement",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "engagement"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:54.493532+00:00",
+          "execution_id": "ca778fdf-0efd-46ea-8eed-b0f40afabc56",
+          "request_hash": "72509ca7fa6a645c70e2eec9a1f871f53bee88c0121993b7c8187114cc1cef4a"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "recommenders": [],
+            "common_themes": [],
+            "strengths_identified": []
+          },
+          "section": "recommendation",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "recommendation"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:54.503156+00:00",
+          "execution_id": "ca778fdf-0efd-46ea-8eed-b0f40afabc56",
+          "request_hash": "686328a1a9350ed0bb6ad7ace7bc5c854f4a9fca5530bceb5deb98c73a14a218"
+        },
+        {
+          "errors": [],
+          "output": {
+            "policy_assessment": []
+          },
+          "section": "policy",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "policy"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:54.512682+00:00",
+          "execution_id": "ca778fdf-0efd-46ea-8eed-b0f40afabc56",
+          "request_hash": "3f57ef95144c262789eac8c7246a93c5c9ab7779807cfaef491bc6a9e2544fb8"
+        },
+        {
+          "errors": [],
+          "output": {
+            "strengths": [],
+            "holistic_assessment": "Factual advisory summary."
+          },
+          "section": "synthesis",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "synthesis"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:54.522547+00:00",
+          "execution_id": "ca778fdf-0efd-46ea-8eed-b0f40afabc56",
+          "request_hash": "0e23b0588d5c7c5aeb53b875de1807c9548f9ae33884c71485a295006764ad12"
+        }
+      ],
+      "generation_batches": [],
+      "generation_batch_members": []
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "DOSSIER_READY"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "238cc252-92fd-4a63-89c6-2872010faa51",
+          "app_id": "APP_050",
+          "state": "PUBLISHED",
+          "candidate_hash": "4bbbe75efde85d71bf2d007cd52658ff64c4616b793db196f3de5d259104c6da",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [
+        {
+          "app_id": "APP_050",
+          "publication_request_id": "238cc252-92fd-4a63-89c6-2872010faa51"
+        }
+      ],
+      "dossier_publication_receipts": [
+        {
+          "request_id": "238cc252-92fd-4a63-89c6-2872010faa51",
+          "app_id": "APP_050",
+          "candidate_hash": "4bbbe75efde85d71bf2d007cd52658ff64c4616b793db196f3de5d259104c6da"
+        }
+      ]
+    }
+  },
+  {
+    "case": "test_per_applicant_lock_and_owner_token_fence_old_workers",
+    "passed": true,
+    "checkpoints": {
+      "generation_executions": [
+        {
+          "id": "1db29048-1083-4512-a493-26c8e4a2528a",
+          "state": "RUNNING",
+          "app_id": "APP_050",
+          "context": {},
+          "outcome": null,
+          "retry_key": "fence-test",
+          "created_at": "2026-11-01T02:00:54.707346+00:00",
+          "input_hash": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7",
+          "last_error": null,
+          "updated_at": "2026-11-01T02:00:54.707346+00:00",
+          "owner_token": "dad44dde-d685-4a6f-a864-76b7d6956996",
+          "final_run_id": null,
+          "resume_count": 0,
+          "input_snapshot": {
+            "policies": [],
+            "applicant": {
+              "app_id": "APP_050",
+              "documents": [],
+              "superscored_sat_score": null
+            }
+          },
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "review_request_id": null
+        }
+      ],
+      "generation_section_checkpoints": [],
+      "generation_batches": [],
+      "generation_batch_members": []
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "READY_FOR_REVIEW"
+        }
+      ],
+      "dossier_review_requests": [],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_interrupted_multi_applicant_batch_resumes_without_repeating_done_member[False]",
+    "passed": true,
+    "checkpoints": {
+      "generation_executions": [
+        {
+          "id": "3b5fc189-35a9-4dd9-9f56-3f1bcdc22cb2",
+          "state": "COMPLETED",
+          "app_id": "APP_050",
+          "context": {
+            "policies": []
+          },
+          "outcome": "DOSSIER_READY",
+          "retry_key": "normal",
+          "created_at": "2026-11-01T02:00:54.932602+00:00",
+          "input_hash": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7",
+          "last_error": null,
+          "updated_at": "2026-11-01T02:00:55.003757+00:00",
+          "owner_token": "47714c19-5f04-41b0-be07-c81b21d96270",
+          "final_run_id": 1,
+          "resume_count": 0,
+          "input_snapshot": {
+            "policies": [],
+            "applicant": {
+              "app_id": "APP_050",
+              "documents": [],
+              "superscored_sat_score": null
+            }
+          },
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "review_request_id": "5a539154-0fb8-47a2-889f-21289789148d"
+        },
+        {
+          "id": "8af783d3-ee11-47da-9d88-63b936270ffd",
+          "state": "COMPLETED",
+          "app_id": "APP_051",
+          "context": {
+            "policies": []
+          },
+          "outcome": "DOSSIER_READY",
+          "retry_key": "normal",
+          "created_at": "2026-11-01T02:00:55.04114+00:00",
+          "input_hash": "6cc46915a7f076fbf95455256df4c5951cb3226c707a63850b02cb06d46a8f1c",
+          "last_error": null,
+          "updated_at": "2026-11-01T02:00:55.183786+00:00",
+          "owner_token": "e09f16b3-be98-4f4e-aa57-b902671c64f1",
+          "final_run_id": 2,
+          "resume_count": 1,
+          "input_snapshot": {
+            "policies": [],
+            "applicant": {
+              "app_id": "APP_051",
+              "documents": [],
+              "superscored_sat_score": null
+            }
+          },
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "review_request_id": "dc989518-b418-4cf4-9450-fc9c5ff76487"
+        }
+      ],
+      "generation_section_checkpoints": [
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "concerns": [],
+            "evidence": [],
+            "strengths": [],
+            "course_rigor": "Factual advisory summary.",
+            "ap_exam_scores": [],
+            "document_facts": {
+              "class_rank": null,
+              "high_school": null,
+              "weighted_gpa": null,
+              "act_superscore": null,
+              "intended_major": null,
+              "sat_superscore": null,
+              "unweighted_gpa": null,
+              "expected_graduation": null
+            },
+            "performance_patterns": "Factual advisory summary.",
+            "ap_courses_on_transcript": []
+          },
+          "section": "academic",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "academic"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:54.959491+00:00",
+          "execution_id": "3b5fc189-35a9-4dd9-9f56-3f1bcdc22cb2",
+          "request_hash": "aa017fe8398761a26e8222e27cc6ef4a6360cd16be1f78bc057e3c192e6274c3"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "awards": [],
+            "themes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "activities": [],
+            "assessment": "Factual advisory summary.",
+            "leadership_service_employment": "Factual advisory summary."
+          },
+          "section": "engagement",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "engagement"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:54.969046+00:00",
+          "execution_id": "3b5fc189-35a9-4dd9-9f56-3f1bcdc22cb2",
+          "request_hash": "72509ca7fa6a645c70e2eec9a1f871f53bee88c0121993b7c8187114cc1cef4a"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "recommenders": [],
+            "common_themes": [],
+            "strengths_identified": []
+          },
+          "section": "recommendation",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "recommendation"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:54.978762+00:00",
+          "execution_id": "3b5fc189-35a9-4dd9-9f56-3f1bcdc22cb2",
+          "request_hash": "686328a1a9350ed0bb6ad7ace7bc5c854f4a9fca5530bceb5deb98c73a14a218"
+        },
+        {
+          "errors": [],
+          "output": {
+            "policy_assessment": []
+          },
+          "section": "policy",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "policy"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:54.988756+00:00",
+          "execution_id": "3b5fc189-35a9-4dd9-9f56-3f1bcdc22cb2",
+          "request_hash": "f2dc3bad3a640d824a846d35a04ef04ec302d610d42909d9c0f9d473bddd6d51"
+        },
+        {
+          "errors": [],
+          "output": {
+            "strengths": [],
+            "holistic_assessment": "Factual advisory summary."
+          },
+          "section": "synthesis",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "synthesis"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:54.998526+00:00",
+          "execution_id": "3b5fc189-35a9-4dd9-9f56-3f1bcdc22cb2",
+          "request_hash": "6bc52bb04e501d12e9a65f2a60fc37ff6cfa93d7f9922dc4b18d642f7d91aaed"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "concerns": [],
+            "evidence": [],
+            "strengths": [],
+            "course_rigor": "Factual advisory summary.",
+            "ap_exam_scores": [],
+            "document_facts": {
+              "class_rank": null,
+              "high_school": null,
+              "weighted_gpa": null,
+              "act_superscore": null,
+              "intended_major": null,
+              "sat_superscore": null,
+              "unweighted_gpa": null,
+              "expected_graduation": null
+            },
+            "performance_patterns": "Factual advisory summary.",
+            "ap_courses_on_transcript": []
+          },
+          "section": "academic",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "academic"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:55.069165+00:00",
+          "execution_id": "8af783d3-ee11-47da-9d88-63b936270ffd",
+          "request_hash": "2a807eaac9a7aa923d9f51015462c84f199a3e7550bde16726e3e1cd7697813c"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "awards": [],
+            "themes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "activities": [],
+            "assessment": "Factual advisory summary.",
+            "leadership_service_employment": "Factual advisory summary."
+          },
+          "section": "engagement",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "engagement"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:55.079439+00:00",
+          "execution_id": "8af783d3-ee11-47da-9d88-63b936270ffd",
+          "request_hash": "135918afc0ac30f4383f83976fb749a54761f53691b9e325e0119f76f362cc7b"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "recommenders": [],
+            "common_themes": [],
+            "strengths_identified": []
+          },
+          "section": "recommendation",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "recommendation"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:55.159929+00:00",
+          "execution_id": "8af783d3-ee11-47da-9d88-63b936270ffd",
+          "request_hash": "c0f59a2a9724be29deee586eb5c6e0c1c2a7f362acffdf9abe941b41b1ae1992"
+        },
+        {
+          "errors": [],
+          "output": {
+            "policy_assessment": []
+          },
+          "section": "policy",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "policy"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:55.169667+00:00",
+          "execution_id": "8af783d3-ee11-47da-9d88-63b936270ffd",
+          "request_hash": "c6e2815fc0c0871832aeeba56bc330c19091e4eb33614f2d01f443e0c30db007"
+        },
+        {
+          "errors": [],
+          "output": {
+            "strengths": [],
+            "holistic_assessment": "Factual advisory summary."
+          },
+          "section": "synthesis",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "synthesis"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:55.179179+00:00",
+          "execution_id": "8af783d3-ee11-47da-9d88-63b936270ffd",
+          "request_hash": "8dab213838ce31e73d63ffa776c699b0553a8015a9f79b96a3090275616920f0"
+        }
+      ],
+      "generation_batches": [
+        {
+          "id": "acfe4657-a457-46bd-9271-8a588116df1d",
+          "state": "COMPLETED",
+          "retry_key": "normal",
+          "created_at": "2026-11-01T02:00:54.897959+00:00",
+          "updated_at": "2026-11-01T02:00:55.22449+00:00",
+          "identity_hash": "3d2506c6f147cf332bf72b41e639fff988e042031f0501fecabe00c33a6754b1",
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "ingestion_event_id": null
+        }
+      ],
+      "generation_batch_members": [
+        {
+          "state": "DONE",
+          "app_id": "APP_050",
+          "outcome": "DOSSIER_READY",
+          "batch_id": "acfe4657-a457-46bd-9271-8a588116df1d",
+          "input_hash": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7",
+          "updated_at": "2026-11-01T02:00:55.018622+00:00",
+          "execution_id": "3b5fc189-35a9-4dd9-9f56-3f1bcdc22cb2"
+        },
+        {
+          "state": "DONE",
+          "app_id": "APP_051",
+          "outcome": "DOSSIER_READY",
+          "batch_id": "acfe4657-a457-46bd-9271-8a588116df1d",
+          "input_hash": "6cc46915a7f076fbf95455256df4c5951cb3226c707a63850b02cb06d46a8f1c",
+          "updated_at": "2026-11-01T02:00:55.198924+00:00",
+          "execution_id": "8af783d3-ee11-47da-9d88-63b936270ffd"
+        }
+      ]
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "DOSSIER_READY"
+        },
+        {
+          "app_id": "APP_051",
+          "status": "DOSSIER_READY"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "5a539154-0fb8-47a2-889f-21289789148d",
+          "app_id": "APP_050",
+          "state": "PUBLISHED",
+          "candidate_hash": "a1d5149a10f4d02e641ebfd66b7f1566cd189338213955351361979c72bf1645",
+          "generation_run_id": 1
+        },
+        {
+          "id": "dc989518-b418-4cf4-9450-fc9c5ff76487",
+          "app_id": "APP_051",
+          "state": "PUBLISHED",
+          "candidate_hash": "e47a2f3edb2530d72b49b8909852b81c94f98e7876300fc9896bd9f43bb813de",
+          "generation_run_id": 2
+        }
+      ],
+      "applicant_dossier": [
+        {
+          "app_id": "APP_050",
+          "publication_request_id": "5a539154-0fb8-47a2-889f-21289789148d"
+        },
+        {
+          "app_id": "APP_051",
+          "publication_request_id": "dc989518-b418-4cf4-9450-fc9c5ff76487"
+        }
+      ],
+      "dossier_publication_receipts": [
+        {
+          "request_id": "5a539154-0fb8-47a2-889f-21289789148d",
+          "app_id": "APP_050",
+          "candidate_hash": "a1d5149a10f4d02e641ebfd66b7f1566cd189338213955351361979c72bf1645"
+        },
+        {
+          "request_id": "dc989518-b418-4cf4-9450-fc9c5ff76487",
+          "app_id": "APP_051",
+          "candidate_hash": "e47a2f3edb2530d72b49b8909852b81c94f98e7876300fc9896bd9f43bb813de"
+        }
+      ]
+    }
+  },
+  {
+    "case": "test_interrupted_multi_applicant_batch_resumes_without_repeating_done_member[True]",
+    "passed": true,
+    "checkpoints": {
+      "generation_executions": [
+        {
+          "id": "5915a977-abb2-4b5c-877b-f4b4124b2728",
+          "state": "COMPLETED",
+          "app_id": "APP_050",
+          "context": {
+            "policies": []
+          },
+          "outcome": "DOSSIER_READY",
+          "retry_key": "normal",
+          "created_at": "2026-11-01T02:00:55.4278+00:00",
+          "input_hash": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7",
+          "last_error": null,
+          "updated_at": "2026-11-01T02:00:55.501694+00:00",
+          "owner_token": "0a64eda0-52a0-49fd-b3a6-4525025fb9fa",
+          "final_run_id": 1,
+          "resume_count": 0,
+          "input_snapshot": {
+            "policies": [],
+            "applicant": {
+              "app_id": "APP_050",
+              "documents": [],
+              "superscored_sat_score": null
+            }
+          },
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "review_request_id": "3dc9de3c-9519-45c6-b31b-7fa3fd0ae6d1"
+        },
+        {
+          "id": "7711c757-fcb0-4bc3-8ddc-068c620c6fd4",
+          "state": "RUNNING",
+          "app_id": "APP_051",
+          "context": {
+            "policies": []
+          },
+          "outcome": null,
+          "retry_key": "normal",
+          "created_at": "2026-11-01T02:00:55.537551+00:00",
+          "input_hash": "6cc46915a7f076fbf95455256df4c5951cb3226c707a63850b02cb06d46a8f1c",
+          "last_error": null,
+          "updated_at": "2026-11-01T02:00:55.552954+00:00",
+          "owner_token": "dab31d10-932e-4ade-a727-f0d19ba69596",
+          "final_run_id": null,
+          "resume_count": 0,
+          "input_snapshot": {
+            "policies": [],
+            "applicant": {
+              "app_id": "APP_051",
+              "documents": [],
+              "superscored_sat_score": null
+            }
+          },
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "review_request_id": null
+        }
+      ],
+      "generation_section_checkpoints": [
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "concerns": [],
+            "evidence": [],
+            "strengths": [],
+            "course_rigor": "Factual advisory summary.",
+            "ap_exam_scores": [],
+            "document_facts": {
+              "class_rank": null,
+              "high_school": null,
+              "weighted_gpa": null,
+              "act_superscore": null,
+              "intended_major": null,
+              "sat_superscore": null,
+              "unweighted_gpa": null,
+              "expected_graduation": null
+            },
+            "performance_patterns": "Factual advisory summary.",
+            "ap_courses_on_transcript": []
+          },
+          "section": "academic",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "academic"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:55.45832+00:00",
+          "execution_id": "5915a977-abb2-4b5c-877b-f4b4124b2728",
+          "request_hash": "b025d993b0ae00201a383e735ee35271be559f3850e4554681895befbd366579"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "awards": [],
+            "themes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "activities": [],
+            "assessment": "Factual advisory summary.",
+            "leadership_service_employment": "Factual advisory summary."
+          },
+          "section": "engagement",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "engagement"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:55.467923+00:00",
+          "execution_id": "5915a977-abb2-4b5c-877b-f4b4124b2728",
+          "request_hash": "72509ca7fa6a645c70e2eec9a1f871f53bee88c0121993b7c8187114cc1cef4a"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "recommenders": [],
+            "common_themes": [],
+            "strengths_identified": []
+          },
+          "section": "recommendation",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "recommendation"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:55.477495+00:00",
+          "execution_id": "5915a977-abb2-4b5c-877b-f4b4124b2728",
+          "request_hash": "686328a1a9350ed0bb6ad7ace7bc5c854f4a9fca5530bceb5deb98c73a14a218"
+        },
+        {
+          "errors": [],
+          "output": {
+            "policy_assessment": []
+          },
+          "section": "policy",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "policy"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:55.487486+00:00",
+          "execution_id": "5915a977-abb2-4b5c-877b-f4b4124b2728",
+          "request_hash": "bb618f5c2a8d4193e30ad47ea1d7a364142806f651027f0c93b2e0de1c7b4e6b"
+        },
+        {
+          "errors": [],
+          "output": {
+            "strengths": [],
+            "holistic_assessment": "Factual advisory summary."
+          },
+          "section": "synthesis",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "synthesis"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:55.497225+00:00",
+          "execution_id": "5915a977-abb2-4b5c-877b-f4b4124b2728",
+          "request_hash": "c424905b689adae1cd51572ade8109b34f26a8ec30332ddff04e3d6b5ce005a2"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "concerns": [],
+            "evidence": [],
+            "strengths": [],
+            "course_rigor": "Factual advisory summary.",
+            "ap_exam_scores": [],
+            "document_facts": {
+              "class_rank": null,
+              "high_school": null,
+              "weighted_gpa": null,
+              "act_superscore": null,
+              "intended_major": null,
+              "sat_superscore": null,
+              "unweighted_gpa": null,
+              "expected_graduation": null
+            },
+            "performance_patterns": "Factual advisory summary.",
+            "ap_courses_on_transcript": []
+          },
+          "section": "academic",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "academic"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:55.56628+00:00",
+          "execution_id": "7711c757-fcb0-4bc3-8ddc-068c620c6fd4",
+          "request_hash": "0fa76a68abd58119683576bd0783ddaad98ba41aa3312236b261cfd6c6ad09b7"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "awards": [],
+            "themes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "activities": [],
+            "assessment": "Factual advisory summary.",
+            "leadership_service_employment": "Factual advisory summary."
+          },
+          "section": "engagement",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "engagement"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:55.576867+00:00",
+          "execution_id": "7711c757-fcb0-4bc3-8ddc-068c620c6fd4",
+          "request_hash": "135918afc0ac30f4383f83976fb749a54761f53691b9e325e0119f76f362cc7b"
+        }
+      ],
+      "generation_batches": [
+        {
+          "id": "49440a7c-1c4b-4620-a417-a714501e43d1",
+          "state": "NEEDS_ATTENTION",
+          "retry_key": "normal",
+          "created_at": "2026-11-01T02:00:55.393194+00:00",
+          "updated_at": "2026-11-01T02:00:55.635776+00:00",
+          "identity_hash": "3d2506c6f147cf332bf72b41e639fff988e042031f0501fecabe00c33a6754b1",
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "ingestion_event_id": null
+        }
+      ],
+      "generation_batch_members": [
+        {
+          "state": "DONE",
+          "app_id": "APP_050",
+          "outcome": "DOSSIER_READY",
+          "batch_id": "49440a7c-1c4b-4620-a417-a714501e43d1",
+          "input_hash": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7",
+          "updated_at": "2026-11-01T02:00:55.516065+00:00",
+          "execution_id": "5915a977-abb2-4b5c-877b-f4b4124b2728"
+        },
+        {
+          "state": "STALE",
+          "app_id": "APP_051",
+          "outcome": "INPUTS_CHANGED",
+          "batch_id": "49440a7c-1c4b-4620-a417-a714501e43d1",
+          "input_hash": "6cc46915a7f076fbf95455256df4c5951cb3226c707a63850b02cb06d46a8f1c",
+          "updated_at": "2026-11-01T02:00:55.633336+00:00",
+          "execution_id": "7711c757-fcb0-4bc3-8ddc-068c620c6fd4"
+        }
+      ]
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "DOSSIER_READY"
+        },
+        {
+          "app_id": "APP_051",
+          "status": "READY_FOR_REVIEW"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "3dc9de3c-9519-45c6-b31b-7fa3fd0ae6d1",
+          "app_id": "APP_050",
+          "state": "PUBLISHED",
+          "candidate_hash": "fb562deac1fbcfcc3710c105f5e573168e0590818d9b5651a2d78641db83e48e",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [
+        {
+          "app_id": "APP_050",
+          "publication_request_id": "3dc9de3c-9519-45c6-b31b-7fa3fd0ae6d1"
+        }
+      ],
+      "dossier_publication_receipts": [
+        {
+          "request_id": "3dc9de3c-9519-45c6-b31b-7fa3fd0ae6d1",
+          "app_id": "APP_050",
+          "candidate_hash": "fb562deac1fbcfcc3710c105f5e573168e0590818d9b5651a2d78641db83e48e"
+        }
+      ]
+    }
+  },
+  {
+    "case": "test_batch_scope_is_rechecked_after_the_applicant_lock",
+    "passed": true,
+    "checkpoints": {
+      "generation_executions": [],
+      "generation_section_checkpoints": [],
+      "generation_batches": [],
+      "generation_batch_members": []
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "READY_FOR_REVIEW"
+        }
+      ],
+      "dossier_review_requests": [],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_force_or_recovery_cannot_override_a_missing_materials_gate",
+    "passed": true,
+    "checkpoints": {
+      "generation_executions": [],
+      "generation_section_checkpoints": [],
+      "generation_batches": [],
+      "generation_batch_members": []
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "AWAITING_MATERIALS"
+        }
+      ],
+      "dossier_review_requests": [],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_two_decimal_gpa_scope_hash_matches_batch_and_execution",
+    "passed": true,
+    "checkpoints": {
+      "generation_executions": [
+        {
+          "id": "9dd1e39e-dce4-4137-9d42-eefc564c69f7",
+          "state": "COMPLETED",
+          "app_id": "APP_050",
+          "context": {
+            "policies": []
+          },
+          "outcome": "DOSSIER_READY",
+          "retry_key": "normal",
+          "created_at": "2026-11-01T02:00:56.085185+00:00",
+          "input_hash": "6878d8fa3ddb1017b97303c6d3a0e79518eb35df6dc341a8d4fa300bd7c70976",
+          "last_error": null,
+          "updated_at": "2026-11-01T02:00:56.161525+00:00",
+          "owner_token": "63e7d2dd-ab63-4e18-bae9-f924073d6f7f",
+          "final_run_id": 1,
+          "resume_count": 0,
+          "input_snapshot": {
+            "policies": [],
+            "applicant": {
+              "app_id": "APP_050",
+              "documents": [],
+              "unweighted_gpa": 3.8,
+              "superscored_sat_score": null
+            }
+          },
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "review_request_id": "30cdc06e-b0f9-4ea0-8ae5-54de76c98dc0"
+        }
+      ],
+      "generation_section_checkpoints": [
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "concerns": [],
+            "evidence": [],
+            "strengths": [],
+            "course_rigor": "Factual advisory summary.",
+            "ap_exam_scores": [],
+            "document_facts": {
+              "class_rank": null,
+              "high_school": null,
+              "weighted_gpa": null,
+              "act_superscore": null,
+              "intended_major": null,
+              "sat_superscore": null,
+              "unweighted_gpa": null,
+              "expected_graduation": null
+            },
+            "performance_patterns": "Factual advisory summary.",
+            "ap_courses_on_transcript": []
+          },
+          "section": "academic",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "academic"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:56.117824+00:00",
+          "execution_id": "9dd1e39e-dce4-4137-9d42-eefc564c69f7",
+          "request_hash": "16cf90490609e7fb1c785182b8652c6ebe3bdd5c040be84f014df446012a790b"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "awards": [],
+            "themes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "activities": [],
+            "assessment": "Factual advisory summary.",
+            "leadership_service_employment": "Factual advisory summary."
+          },
+          "section": "engagement",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "engagement"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:56.12798+00:00",
+          "execution_id": "9dd1e39e-dce4-4137-9d42-eefc564c69f7",
+          "request_hash": "72509ca7fa6a645c70e2eec9a1f871f53bee88c0121993b7c8187114cc1cef4a"
+        },
+        {
+          "errors": [],
+          "output": {
+            "notes": [],
+            "summary": "Factual advisory summary.",
+            "evidence": [],
+            "recommenders": [],
+            "common_themes": [],
+            "strengths_identified": []
+          },
+          "section": "recommendation",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "recommendation"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:56.137575+00:00",
+          "execution_id": "9dd1e39e-dce4-4137-9d42-eefc564c69f7",
+          "request_hash": "686328a1a9350ed0bb6ad7ace7bc5c854f4a9fca5530bceb5deb98c73a14a218"
+        },
+        {
+          "errors": [],
+          "output": {
+            "policy_assessment": []
+          },
+          "section": "policy",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "policy"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:56.146917+00:00",
+          "execution_id": "9dd1e39e-dce4-4137-9d42-eefc564c69f7",
+          "request_hash": "c1e09b0bae05e0708d02352934fd082f187434da08c287323f612121e0a2a5bd"
+        },
+        {
+          "errors": [],
+          "output": {
+            "strengths": [],
+            "holistic_assessment": "Factual advisory summary."
+          },
+          "section": "synthesis",
+          "attempts": [
+            {
+              "usage": {
+                "seconds": 0,
+                "output_tokens": 5
+              },
+              "errors": [],
+              "attempt": 1,
+              "section": "synthesis"
+            }
+          ],
+          "updated_at": "2026-11-01T02:00:56.156833+00:00",
+          "execution_id": "9dd1e39e-dce4-4137-9d42-eefc564c69f7",
+          "request_hash": "d1ec941fcbf6569ea6168134f26faa6bb96aff253a81150c27d00ea23053c7f3"
+        }
+      ],
+      "generation_batches": [
+        {
+          "id": "2e576fa4-1dd8-4b53-814a-6992e8cdad6a",
+          "state": "COMPLETED",
+          "retry_key": "normal",
+          "created_at": "2026-11-01T02:00:56.054986+00:00",
+          "updated_at": "2026-11-01T02:00:56.201118+00:00",
+          "identity_hash": "d25fe632916f97392835bb7e1fe722ada793294996660d1ae894377ae0fdea42",
+          "pipeline_version": "6d4a80d027b2290b928a6857b1d16ab7b88e1cece7cefa0f4ebfd4f2abdfc8fd",
+          "ingestion_event_id": null
+        }
+      ],
+      "generation_batch_members": [
+        {
+          "state": "DONE",
+          "app_id": "APP_050",
+          "outcome": "DOSSIER_READY",
+          "batch_id": "2e576fa4-1dd8-4b53-814a-6992e8cdad6a",
+          "input_hash": "6878d8fa3ddb1017b97303c6d3a0e79518eb35df6dc341a8d4fa300bd7c70976",
+          "updated_at": "2026-11-01T02:00:56.175587+00:00",
+          "execution_id": "9dd1e39e-dce4-4137-9d42-eefc564c69f7"
+        }
+      ]
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "DOSSIER_READY"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "30cdc06e-b0f9-4ea0-8ae5-54de76c98dc0",
+          "app_id": "APP_050",
+          "state": "PUBLISHED",
+          "candidate_hash": "f673d38b935bfb72b31a54234022e9d1acc4856a36c926c0a5e2d25fdd72e7c4",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [
+        {
+          "app_id": "APP_050",
+          "publication_request_id": "30cdc06e-b0f9-4ea0-8ae5-54de76c98dc0"
+        }
+      ],
+      "dossier_publication_receipts": [
+        {
+          "request_id": "30cdc06e-b0f9-4ea0-8ae5-54de76c98dc0",
+          "app_id": "APP_050",
+          "candidate_hash": "f673d38b935bfb72b31a54234022e9d1acc4856a36c926c0a5e2d25fdd72e7c4"
+        }
+      ]
+    }
+  }
+]

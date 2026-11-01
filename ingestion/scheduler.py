@@ -20,6 +20,18 @@ _scheduler = None
 _latest_batch_summary: Optional[Dict[str, Any]] = None
 
 
+def reconcile_review_deadlines() -> None:
+    """Timer event only expires/supersedes reviews; it never grants approval."""
+    from ai_agent.summarizing_agent import connect_postgres
+    connection = connect_postgres()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT reconcile_dossier_reviews()")
+        connection.commit()
+    finally:
+        connection.close()
+
+
 def run_overnight_batch() -> Dict[str, Any]:
     """Execute scheduled overnight batch ingestion run."""
     logger.info("Executing scheduled overnight batch ingestion run...")
@@ -41,7 +53,10 @@ def record_batch_summary(summary: Dict[str, Any]) -> None:
 
 def get_latest_batch_summary() -> Optional[Dict[str, Any]]:
     """Return metrics and outcomes from the most recent batch run."""
-    return _latest_batch_summary
+    if _latest_batch_summary is not None and not _latest_batch_summary.get("batch_event_id"):
+        return _latest_batch_summary  # Explicit local/SQLite demonstration only.
+    from ingestion.batch_events import latest_summary
+    return latest_summary()
 
 
 def init_scheduler(
@@ -62,6 +77,8 @@ def init_scheduler(
 
     if _scheduler is None:
         _scheduler = BackgroundScheduler()
+        _scheduler.add_job(reconcile_review_deadlines, "interval", seconds=60,
+            id="dossier_review_deadlines", replace_existing=True, max_instances=1, coalesce=True)
         _scheduler.add_job(
             func=run_overnight_batch,
             trigger=CronTrigger(hour=hour, minute=minute),

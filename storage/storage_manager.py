@@ -29,6 +29,8 @@ except ImportError:
 from storage.database import Base
 from storage.date_utils import parse_date_of_birth
 from storage.workflow import application_status
+from storage.gpa_utils import parse_gpa
+from storage.sqlite_migrations import migrate_applicant_contract
 from storage.models import (
     Applicant,
     AuditLog,
@@ -137,6 +139,7 @@ class StorageManager:
     @staticmethod
     def _migrate_sqlite_applicants(engine) -> None:
         """Upgrade the persistent local fallback to the current applicant model."""
+        migrate_applicant_contract(engine)
         with engine.begin() as conn:
             columns = {row[1] for row in conn.execute(text("PRAGMA table_info(applicants)"))}
             for name, sql_type in (
@@ -367,6 +370,9 @@ class StorageManager:
         applicant_data = dict(applicant_data)
         # Serialized applicants may expose this derived value for API callers.
         applicant_data.pop("routing_destination", None)
+        for field in ("unweighted_gpa", "weighted_gpa"):
+            if field in applicant_data:
+                applicant_data[field] = parse_gpa(applicant_data[field])
         if "date_of_birth" in applicant_data:
             applicant_data["date_of_birth"] = parse_date_of_birth(applicant_data["date_of_birth"])
         app_id = applicant_data.get("app_id")

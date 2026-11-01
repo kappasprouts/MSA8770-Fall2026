@@ -6,6 +6,7 @@ import { exceptionPriorityTone, exceptionSourceLabel, exceptionStatusLabel, form
 import { requestJson } from "@/lib/http";
 import RequestState from "./RequestState";
 import WorkspaceIcon from "./WorkspaceIcon";
+import ItCaseActions from "./ItCaseActions";
 import styles from "./eaos.module.css";
 import details from "./exceptions.module.css";
 
@@ -21,10 +22,10 @@ export default function ApplicantExceptionDetails({ exceptionId, onBack, onOpenA
 
   useEffect(() => {
     const controller = new AbortController();
-    requestJson<{ exceptions: ExceptionRecord[] }>("/api/exceptions", { signal: controller.signal })
+    requestJson<{ record: ExceptionRecord }>(`/api/exceptions/${encodeURIComponent(exceptionId)}`, { signal: controller.signal })
       .then(body => {
         if (controller.signal.aborted) return;
-        const selected = body.exceptions.find(item => item.id === exceptionId);
+        const selected = body.record;
         if (!selected) throw new Error(`Exception "${exceptionId}" could not be found. It may no longer need technical review.`);
         setRecord(selected);
       })
@@ -114,7 +115,7 @@ export default function ApplicantExceptionDetails({ exceptionId, onBack, onOpenA
                     ["Detected by", exceptionSourceLabel(record.source)],
                     ["Priority", exceptionStatusLabel(record.severity)],
                     ["Last event", formatExceptionDate(record.updatedAt)],
-                    ["Follow-up owner", "Ingestion / IT team"],
+                    ["Follow-up owner", record.owner || "Unassigned"],
                   ].map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
                 </dl>
               </section>
@@ -128,10 +129,7 @@ export default function ApplicantExceptionDetails({ exceptionId, onBack, onOpenA
                 Open available applicant dossier
               </button>}
 
-              <section className={styles.notice}>
-                <h2 className={styles.feedbackTitle}>Human review required</h2>
-                <p className={styles.help}>Technical staff must verify the correction, preserve the audit trail, and initiate the appropriate retry or handoff. This screen is read-only.</p>
-              </section>
+              <ItCaseActions key={`${record.caseId || record.id}-${record.revision ?? 0}`} record={record} onRefresh={retry} />
             </aside>
           </div>
         </>}

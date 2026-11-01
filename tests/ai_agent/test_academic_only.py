@@ -38,7 +38,7 @@ def main():
         allowed, _ = split_documents(documents)
 
         minio_client = connect_minio()
-        pages, problems = load_pages(minio_client, allowed)
+        pages, problems = load_pages(minio_client, allowed, restricted_values(applicant))
 
         if problems:
             raise RuntimeError(f"Document loading errors: {problems}")
@@ -70,10 +70,11 @@ def main():
         print(f"\nAttempts: {attempts}")
         print(f"Validation errors: {errors}")
         print(json.dumps(output, indent=2, default=str))
+        return 1 if errors else 0
 
     finally:
         connection.close()
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

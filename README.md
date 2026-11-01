@@ -21,7 +21,7 @@ The system accepts applicant CSV records and PDFs, checks packet completeness, a
 | Link applicant records and PDFs, check required materials, and record status and audit events. | Use permitted pages and retrieved policy text to draft sections with supporting evidence. | Read the saved dossier, open source PDFs, and ask questions grounded in the dossier. |
 
 > [!NOTE]
-> The included applicants and documents are synthetic. This prototype **does not make or record final admissions decisions**.
+> The included applicants and documents are synthetic. AI output is advisory; human reviewers can record recommendations and final decisions. Reviewer identity is simulated in this prototype.
 
 **New here?** Follow the [sample workflow](#run-the-sample-workflow) to ingest `batch_02`, generate a dossier for `APP_012`, and open the review UI. The seven steps cover every required service and dependency.
 
@@ -34,12 +34,12 @@ flowchart LR
     I --> G["Deterministic manifest gate<br/>policy/ingestion_rules.yaml"]
     G -->|applicant data, status, audit| DB[(PostgreSQL)]
     I -->|original PDFs| M[(MinIO)]
-    G -->|ready IDs; manual handoff| A["Summarizing agent<br/>PyMuPDF + Qwen3-VL"]
+    G -->|durable receipt; explicit generation trigger| A["Summarizing agent<br/>PyMuPDF + Qwen3-VL"]
     P["Policy text"] --> L["Policy loader<br/>nomic-embed-text"] --> V[(pgvector policy_chunks)]
     DB --> A
     M --> A
     V --> A
-    A -->|dossier, run history, audit| DB
+    A -->|validated candidate, run history, audit| DB
     DB --> U["Next.js review UI"]
     M -->|original PDFs| U
     O["Ollama<br/>vision + embeddings + chat"]
@@ -47,12 +47,14 @@ flowchart LR
     A <--> O
     U <--> O
     U --> H["Human reviewer"]
+    H -->|resolve exceptions + recommend| C["Integrated human checkpoint"]
+    C -->|scoped version + recommendation + receipt| DB
 ```
 
 1. **Ingestion** reads the batch CSV, upserts applicant fields, links PDFs by applicant ID, and archives raw files in MinIO. It checks size, PDF signature, and the required document manifest without extracting PDF content. Unmatched documents are recorded as orphans.
 2. **The manifest gate** applies [`policy/ingestion_rules.yaml`](policy/ingestion_rules.yaml). It routes complete packets to `READY_FOR_REVIEW`, missing documents to `AWAITING_MATERIALS`, missing required fields to `INCOMPLETE`, and integrity failures to `ERROR`. It writes an audit report and a JSON file of ready IDs. An optional score-feed CLI updates SAT/ACT/AP fields and re-runs the gate.
-3. **Dossier generation** is invoked separately for a ready applicant. It downloads permitted PDFs, renders pages with PyMuPDF, retrieves policy chunks from PostgreSQL/pgvector, and asks Ollama's `qwen3-vl:8b-instruct` model for academic, engagement, recommendation, supplement, policy, and holistic sections. It records evidence and validation results, then stores successful dossiers and run history in PostgreSQL. The agent's document rules withhold personal statements from model input for human review.
-4. **The review UI** reads saved dossiers from PostgreSQL, serves original PDFs from MinIO, and sends questions about the selected dossier to Ollama. It is a local, read-only prototype without authentication or a final-decision workflow.
+3. **Dossier generation** is invoked separately for a ready applicant. It downloads permitted PDFs, renders pages with PyMuPDF, retrieves policy chunks from PostgreSQL/pgvector, and asks Ollama's `qwen3-vl:8b-instruct` model for academic, engagement, recommendation, supplement, policy, and holistic sections. Fully validated dossiers without identified exceptions become available automatically. Flagged validated drafts wait for an explicit human resolution. Personal statements remain withheld from model input for human review.
+4. **The review UI** brings the dossier, source documents, exceptions and recommendation into one applicant review session. Exception resolution, exact draft publication and recommendation save atomically. There is no separate mandatory release review. Q&A uses published dossiers only; final decisions remain separate. Identity is simulated. PostgreSQL receipts deduplicate completed intake; generation resumes saved applicant/section attempts after interruption.
 
 PostgreSQL is the shared record for status, document metadata, dossiers, and audit/run history. MinIO holds original PDFs. The policy loader reads [`policy/riverview_admissions_policy.txt`](policy/riverview_admissions_policy.txt), which is separate from the YAML used by the ingestion gate. The older [architecture overview](docs/architecture/system_overview.md) describes a broader plan, including components not wired into this runnable workflow.
 
@@ -176,9 +178,9 @@ python ai_agent/create_pgvector_once.py
 python ai_agent/summarizing_agent.py APP_012
 ```
 
-The loader creates the `vector` extension and builds or replaces `policy_chunks` from [the agent policy text](policy/riverview_admissions_policy.txt). Run it once for a new database or after that text changes. The PostgreSQL user must be allowed to create extensions. Pass an applicant ID explicitly: the agent's no-argument fallback does **not** read the unique ingestion handoff. `--force` deliberately regenerates an existing dossier.
+The loader creates the `vector` extension and builds or replaces `policy_chunks` from [the agent policy text](policy/riverview_admissions_policy.txt). Run it once for a new database or after that text changes. The PostgreSQL user must be allowed to create extensions. Pass an applicant ID, `--batch-event INTAKE_UUID`, or `--handoff PATH.batch.json`: the no-argument fallback does **not** read the unique handoff. Record the printed generation batch UUID and resume with `--batch-id UUID`. `--force` intentionally creates a new attempt; it does not override missing-material gates or human dispositions. See [durable batch/recovery operations](docs/ai_agent/DURABLE_BATCH_RECOVERY.md).
 
-A successful run prints `DOSSIER_READY`, stores a row in `applicant_dossier`, records a `dossier_generation_runs` entry, and writes a snapshot under `output/ai_agent/`. Check the **new database run and status**, not only the CLI exit code or an older snapshot: the current agent can catch an applicant-level error and still exit with code 0. The bundled PostgreSQL container supplies `psql` for this check:
+A successful generation saves its candidate/run in PostgreSQL and a snapshot under `output/ai_agent/`. Clean validated output becomes `DOSSIER_READY` automatically; identified exceptions pause as `REVIEW_PENDING`. Open `/applicant-review` to inspect sources and resolve exceptions with the officer recommendation in one session. See the [integrated exception checkpoint](docs/review_console/durable_checkpoint.md) for classification, setup, expiry and recovery. The CLI returns nonzero for agent errors or unresolved output-validation failures while continuing the batch. Check the **new database run and status** as well as the exit code. The bundled PostgreSQL container supplies `psql` for this check:
 
 ```bash
 docker compose exec -T postgres psql -U postgres -d riverview_admissions \
@@ -187,7 +189,7 @@ docker compose exec -T postgres psql -U postgres -d riverview_admissions \
   -c "SELECT app_id, run_status, validation->>'passed' AS passed, created_at FROM dossier_generation_runs WHERE app_id = 'APP_012' ORDER BY created_at DESC LIMIT 1;"
 ```
 
-Expect `DOSSIER_READY` for the applicant and newest generation run, with validation passed. Compare citations with original PDFs; validation does not prove every model-written claim correct.
+Expect `DOSSIER_READY` for clean output or `REVIEW_PENDING` for a flagged validated draft. Resolving exceptions with a recommendation produces `REVIEWED`. Missing/expired decisions never publish flagged drafts. Compare citations with original PDFs; validation does not prove every model-written claim correct.
 
 ### 7. Open the review UI
 
@@ -236,7 +238,7 @@ curl -X POST http://127.0.0.1:8000/ingestion/batch/trigger
 
 The service uses `data/batches/batch_01` unless `INGESTION_INPUT_DIR` is set before startup. Browse <http://127.0.0.1:8000/docs> for the interactive API and see the [API guide](docs/api/ingestion_api.md) for all endpoints. The scheduler follows the host's timezone. The API also stops at the ready-ID handoff; invoke the dossier agent separately.
 
-For an optional score-feed CSV, run `python -m ingestion.run_score_ingest --source college_board --file PATH_TO_CSV` or `--source act`. See `python -m ingestion.run_score_ingest --help` for strict storage flags and the [score ingestion code](ingestion/score_ingest.py) for accepted columns. The feed updates applicant records and re-runs the gate; the current dossier agent does not reliably include changed scores in model prompts.
+For an optional score-feed CSV, run `python -m ingestion.run_score_ingest --source college_board --file PATH_TO_CSV` or `--source act`. See `python -m ingestion.run_score_ingest --help` for strict storage flags and the [score ingestion code](ingestion/score_ingest.py) for accepted columns. The feed updates applicant records and re-runs the gate. On regeneration, academic prompts include current SAT/ACT/AP database facts with source metadata, separately from PDF observations. Invalid recorded scores stop generation before model calls and save an input-error run; missing optional scores remain unknown. The saved academic profile retains `recorded_test_scores` and flags SAT/ACT disagreements with document facts. See [handoff behavior and limitations](docs/ai_agent/SYSTEM_OVERVIEW.md#document-and-score-handoff-october-31-update).
 
 ## Test the system
 
@@ -250,7 +252,11 @@ Run Python tests in the activated virtual environment. Run UI checks from `ui/`.
 | UI static checks | `cd ui && npm run lint && npm run build` | Lint, TypeScript, and production build. Use `npm run build -- --webpack` if Turbopack cannot start its worker in a restricted environment. |
 | End-to-end smoke check | Run steps 2–7, then inspect `APP_012` in the browser | Real storage handoff, a new dossier record, PDF retrieval, and one chat response. |
 
-The [agent testing guide](docs/ai_agent/TESTING_GUIDE.md) has expected outputs and additional negative cases. On this checkout (October 9, 2026), `.venv/bin/python -m pytest tests --ignore=tests/integration_review_20261009 -q` produced **53 passed, 8 failed**; failures include database schema constraints and a GPA precision check. The new Compose stack completed strict Batch 02 ingestion with the expected **7 ready / 1 awaiting / 2 incomplete** results, and the policy loader stored **21 chunks**. UI lint and `npm run build -- --webpack` passed. A full Qwen dossier was not rerun in this check because the vision model was absent locally; the earlier [live Batch 02 test](output/live_test_setup/TEST_RESULTS.md) records an `APP_012` dossier run and UI responses. The [integration review](output/integration_review_20261009/REVIEW.md) describes broader diagnostic failures that remain open.
+The [agent testing guide](docs/ai_agent/TESTING_GUIDE.md) has expected outputs and additional negative cases. On this checkout (October 9, 2026), `.venv/bin/python -m pytest tests --ignore=tests/integration_review_20261009 -q` produced **53 passed, 8 failed**; failures include database schema constraints and a GPA precision check. The new Compose stack completed strict Batch 02 ingestion with the expected **7 ready / 1 awaiting / 2 incomplete** results, and the policy loader stored **21 chunks**. UI lint and `npm run build -- --webpack` passed. A full Qwen dossier was not rerun in this check because the vision model was absent locally; the earlier [live Batch 02 test](output/live_test_setup/TEST_RESULTS.md) records an `APP_012` dossier run and UI responses. The [integration review](output/integration_review_20261009/REVIEW.md) records historical diagnostic failures; see the current verification below for the repaired contracts.
+
+Current verification (durable batch/recovery update): **209 Python tests and 63 UI tests passed; no failures or skips**. PostgreSQL is configured for the suites, and ten new receiver cases use real MinIO in isolated buckets. Tests cover duplicate batch delivery, closed-connection recovery, section retry budgets, receiver drift, numeric scope hashes and existing human controls. See [current recovery evidence](output/durable_batch_20261101/README.md). No UI source changed in this phase; prior TypeScript/production-build/lint checks remain recorded in [Exceptions-tab evidence](output/applicant_exception_tab_20261101/README.md). Earlier [IT-action](output/it_actions_20261031/README.md), [integrated-review](output/integrated_exception_review_20261031/README.md) and [validation-hardening evidence](output/validation_hardening_20261031/README.md) retain their historical scope and limits.
+
+The **IT Error Queue** supports saved ownership, notes, handoffs, durable scoped retry requests and receiver-verified resolution. Start the retry worker separately; packet retries require an explicit input directory. See the [IT action guide](docs/review_console/it_error_actions.md). IT actions do not record admissions decisions or approve invalid dossiers.
 
 ## Troubleshooting
 
@@ -266,9 +272,9 @@ The [agent testing guide](docs/ai_agent/TESTING_GUIDE.md) has expected outputs a
 
 ## Current scope and known limitations
 
-- This is a research prototype for synthetic data. The review UI has no authentication or final-decision recording; do not deploy it for real applicant records.
-- The ingestion-to-agent handoff is manual. Use explicit applicant IDs. Some supplied ready applicants have known agent rendering failures, and a failed run may not surface clearly in the UI.
-- Document-type mapping, late score-feed visibility, citation/fact validation, and privacy/chat guardrails have open issues documented in the [integration review](output/integration_review_20261009/REVIEW.md). Human verification of evidence and original documents remains necessary.
+- This is a research prototype for synthetic data. Reviewer identity is simulated; the UI can record human decisions but has no production authentication. Use synthetic records for this prototype.
+- Ingestion still stops before AI. Start generation explicitly using an intake receipt, sidecar or applicant IDs. Completed intake is deduplicated and committed generation attempts/sections recover across process restarts. An unsaved in-flight model call can repeat; intake interrupted before a receiver receipt requires explicit repair. Immutable object retention and token-stream recovery are not implemented. See the [recovery guide](docs/ai_agent/DURABLE_BATCH_RECOVERY.md).
+- The activities/AP handoff, score-feed visibility, nested output schemas, targeted numeric/citation support checks and privacy/chat boundaries have regression coverage. The former integration contracts now run in default pytest discovery. These checks do not establish complete narrative accuracy, semantic policy correctness, or privacy across all scanned layouts; human verification remains necessary. See [current validation behavior and limits](docs/ai_agent/SYSTEM_OVERVIEW.md#output-validation-and-privacy-hardening-october-31), and treat the older [integration review](output/integration_review_20261009/REVIEW.md) as historical evidence.
 - The ingestion YAML and the agent's policy text are separate sources with known differences. Align policy interpretations before using results as policy-compliance evidence.
 
 ## Detailed documentation

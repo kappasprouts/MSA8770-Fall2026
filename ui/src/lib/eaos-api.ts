@@ -1,6 +1,6 @@
 import { requestJson } from "./http";
 import { parseDecisionTotals, type DecisionTotals } from "./review-state";
-import { isOfficerRecommendation, type OfficerRecommendation, type OfficerReview } from "./recommendation";
+import { isOfficerRecommendation, type OfficerRecommendation, type OfficerReview, type ExceptionResolution } from "./recommendation";
 
 /** Next.js API adapter; optional URL overrides support external deployments. */
 export type ApplicationStatus = string;
@@ -88,9 +88,10 @@ export async function getOfficerReview(appId: string, signal?: AbortSignal): Pro
   return await request(RECOMMENDATION_PATH.replace('{id}', encodeURIComponent(appId)), { signal }) as OfficerReview;
 }
 
-export async function saveOfficerReview(appId: string, recommendation: OfficerRecommendation, notes: string, signal?: AbortSignal): Promise<OfficerReview> {
+export async function saveOfficerReview(appId: string, recommendation: OfficerRecommendation, notes: string, signal?: AbortSignal,
+  version?: OfficerReview["version"], resolution?: ExceptionResolution): Promise<OfficerReview> {
   return await request(RECOMMENDATION_PATH.replace('{id}', encodeURIComponent(appId)), {
-    method: 'PUT', body: JSON.stringify({ recommendation, notes }), signal,
+    method: 'PUT', body: JSON.stringify({ recommendation, notes, ...(version ? { version: { requestId: version.requestId, candidateHash: version.candidateHash } } : {}), ...(resolution ? { resolution } : {}) }), signal,
   }) as OfficerReview;
 }
 

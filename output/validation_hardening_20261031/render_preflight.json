@@ -1,0 +1,98 @@
+[
+  {
+    "app_id": "APP_001",
+    "rendered_pages": 10,
+    "render_errors": [],
+    "invalid_recorded_scores": 0
+  },
+  {
+    "app_id": "APP_002",
+    "rendered_pages": 10,
+    "render_errors": [],
+    "invalid_recorded_scores": 0
+  },
+  {
+    "app_id": "APP_003",
+    "rendered_pages": 11,
+    "render_errors": [],
+    "invalid_recorded_scores": 0
+  },
+  {
+    "app_id": "APP_004",
+    "rendered_pages": 9,
+    "render_errors": [],
+    "invalid_recorded_scores": 0
+  },
+  {
+    "app_id": "APP_005",
+    "rendered_pages": 11,
+    "render_errors": [],
+    "invalid_recorded_scores": 0
+  },
+  {
+    "app_id": "APP_006",
+    "rendered_pages": 9,
+    "render_errors": [],
+    "invalid_recorded_scores": 0
+  },
+  {
+    "app_id": "APP_007",
+    "rendered_pages": 10,
+    "render_errors": [],
+    "invalid_recorded_scores": 0
+  },
+  {
+    "app_id": "APP_008",
+    "rendered_pages": 9,
+    "render_errors": [],
+    "invalid_recorded_scores": 0
+  },
+  {
+    "app_id": "APP_009",
+    "rendered_pages": 11,
+    "render_errors": [],
+    "invalid_recorded_scores": 0
+  },
+  {
+    "app_id": "APP_012",
+    "rendered_pages": 7,
+    "render_errors": [],
+    "invalid_recorded_scores": 0
+  },
+  {
+    "app_id": "APP_013",
+    "rendered_pages": 6,
+    "render_errors": [],
+    "invalid_recorded_scores": 0
+  },
+  {
+    "app_id": "APP_014",
+    "rendered_pages": 6,
+    "render_errors": [],
+    "invalid_recorded_scores": 1
+  },
+  {
+    "app_id": "APP_015",
+    "rendered_pages": 7,
+    "render_errors": [],
+    "invalid_recorded_scores": 0
+  },
+  {
+    "app_id": "APP_016",
+    "rendered_pages": 6,
+    "render_errors": [],
+    "invalid_recorded_scores": 0
+  },
+  {
+    "app_id": "APP_017",
+    "rendered_pages": 7,
+    "render_errors": [],
+    "invalid_recorded_scores": 0
+  },
+  {
+    "app_id": "APP_020",
+    "rendered_pages": 6,
+    "render_errors": [],
+    "invalid_recorded_scores": 0
+  }
+]

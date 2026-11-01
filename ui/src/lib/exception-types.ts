@@ -8,6 +8,21 @@ export interface ExceptionAuditEvent {
 }
 
 export interface ExceptionRecord {
+  fingerprint?: string;
+  sourceVersion?: string;
+  objectKey?: string;
+  failureRunId?: number | string | null;
+  eventId?: string | null;
+  active?: boolean;
+  retryAllowed?: boolean;
+  caseId?: string;
+  caseState?: string;
+  revision?: number;
+  owner?: string | null;
+  resolutionEvidence?: Record<string, unknown> | null;
+  actions?: { action: string; actor: string; note: string; createdAt: string }[];
+  retryJob?: { id: string; state: string; result?: Record<string, unknown>; created_at: string } | null;
+  workerAvailable?: boolean;
   id: string;
   applicantId: string | null;
   applicantName: string;

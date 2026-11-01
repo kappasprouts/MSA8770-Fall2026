@@ -1,0 +1,149 @@
+    ✓ CommonApp.pdf                            2 page(s)
+    ✓ letter_rec1.pdf                          1 page(s)
+    ✓ letter_rec2.pdf                          1 page(s)
+    ✓ supplement.pdf                           1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+Academic pages: 4
+    [1/2] academic (4 page image(s)) ..... 120.5s, 1289 tokens  ✗ 2 problem(s)
+          - output: quote "Unweighted GPA 3.97" is not on CommonApp.pdf page 1.
+          - output: quote "Weighted GPA 4.4" is not on CommonApp.pdf page 1.
+    [2/2] academic (4 page image(s)) ..... 94.6s, 1189 tokens  ✗ 2 problem(s)
+          - output: quote "Unweighted GPA 3.97" is not on CommonApp.pdf page 1.
+          - output: quote "Weighted GPA 4.4" is not on CommonApp.pdf page 1.
+
+Attempts: 2
+Validation errors: ['output: quote "Unweighted GPA 3.97" is not on CommonApp.pdf page 1.', 'output: quote "Weighted GPA 4.4" is not on CommonApp.pdf page 1.']
+{
+  "document_facts": {
+    "unweighted_gpa": 3.97,
+    "weighted_gpa": 4.4,
+    "class_rank": null,
+    "sat_superscore": 1530,
+    "act_superscore": 35,
+    "intended_major": "Biomedical Engineering",
+    "high_school": "Madison High School",
+    "expected_graduation": "2026"
+  },
+  "ap_courses_on_transcript": [
+    {
+      "course": "AP Human Geography",
+      "grade_level": "11",
+      "final_grade": "A-"
+    },
+    {
+      "course": "AP Chemistry",
+      "grade_level": "11",
+      "final_grade": "A"
+    },
+    {
+      "course": "AP Comparative Government",
+      "grade_level": "11",
+      "final_grade": "A"
+    },
+    {
+      "course": "AP Computer Science A",
+      "grade_level": "11",
+      "final_grade": "A-"
+    },
+    {
+      "course": "AP Physics C Electricity and Magnetism",
+      "grade_level": "11",
+      "final_grade": "B"
+    },
+    {
+      "course": "AP Macroeconomics",
+      "grade_level": "11",
+      "final_grade": "A-"
+    },
+    {
+      "course": "AP Calculus AB",
+      "grade_level": "12",
+      "final_grade": "A-"
+    },
+    {
+      "course": "AP Seminar",
+      "grade_level": "12",
+      "final_grade": "B"
+    },
+    {
+      "course": "AP Art History",
+      "grade_level": "12",
+      "final_grade": "B"
+    },
+    {
+      "course": "AP Physics 1",
+      "grade_level": "12",
+      "final_grade": "B"
+    },
+    {
+      "course": "AP French Language",
+      "grade_level": "12",
+      "final_grade": "A"
+    },
+    {
+      "course": "AP English Literature",
+      "grade_level": "12",
+      "final_grade": "A-"
+    }
+  ],
+  "ap_exam_scores": [],
+  "summary": "The applicant, Drew Young, has a strong academic profile with an unweighted GPA of 3.97 and a weighted GPA of 4.4. They have a superscored SAT of 1530 and a superscored ACT of 35. Their intended major is Biomedical Engineering, and they are applying to Madison High School for admission in Fall 2026. The applicant is enrolled in 12 AP courses, including AP Human Geography, AP Chemistry, AP Comparative Government, AP Computer Science A, AP Physics C Electricity and Magnetism, AP Macroeconomics, AP Calculus AB, AP Seminar, AP Art History, AP Physics 1, AP French Language, and AP English Literature. Their transcript shows consistent performance, with grades ranging from A- to B, and they are taking advanced coursework in their 11th and 12th grades.",
+  "course_rigor": "The applicant is taking a rigorous course load, including 12 AP courses, which demonstrates a commitment to challenging academic work. The courses span a wide range of subjects, including science, mathematics, humanities, and languages, indicating a well-rounded academic profile.",
+  "performance_patterns": "The applicant's performance is consistent across their courses, with grades ranging from A- to B. The applicant's grades improve slightly in their 12th grade, with several courses receiving A- or B grades. The applicant's performance in AP courses is strong, with grades ranging from A- to B, indicating a solid understanding of advanced material.",
+  "strengths": [
+    "Strong academic performance with a weighted GPA of 4.4.",
+    "High standardized test scores, including a superscored SAT of 1530 and a superscored ACT of 35.",
+    "Enrollment in 12 AP courses, demonstrating a commitment to challenging coursework.",
+    "Consistent performance across courses, with grades ranging from A- to B."
+  ],
+  "concerns": [],
+  "notes": [],
+  "evidence": [
+    {
+      "document": "CommonApp.pdf",
+      "page": 1,
+      "quote": "Unweighted GPA 3.97"
+    },
+    {
+      "document": "CommonApp.pdf",
+      "page": 1,
+      "quote": "Weighted GPA 4.4"
+    },
+    {
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Superscored SAT Score 1530",
+      "verification_status": "TEXT_VERIFIED"
+    },
+    {
+      "document": "CommonApp.pdf",
+      "page": 2,
+      "quote": "Superscored ACT Score 35",
+      "verification_status": "TEXT_VERIFIED"
+    },
+    {
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "Unweighted GPA 3.97",
+      "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+    },
+    {
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "Weighted GPA 4.4",
+      "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+    },
+    {
+      "document": "transcript.pdf",
+      "page": 1,
+      "quote": "AP Human Geography A-",
+      "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+    },
+    {
+      "document": "transcript.pdf",
+      "page": 2,
+      "quote": "AP English Literature A-",
+      "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+    }
+  ]
+}

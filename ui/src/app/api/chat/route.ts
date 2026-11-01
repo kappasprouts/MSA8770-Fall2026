@@ -1,23 +1,14 @@
 import { NextResponse } from "next/server";
 import { buildDossierContext, buildSystemPrompt, loadDossier } from "@/lib/dossier";
+import { isAdvisoryReply, parseChatInput } from "@/lib/chat-guards";
 
 export const dynamic = "force-dynamic";
 
 const OLLAMA_CHAT_URL = process.env.OLLAMA_CHAT_URL ?? "http://localhost:11434/api/chat";
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL ?? "qwen3-vl:8b-instruct";
 
-interface ChatMessage {
-  role: "user" | "assistant";
-  content: string;
-}
-
-interface ChatRequestBody {
-  appId?: string;
-  messages?: ChatMessage[];
-}
-
 export async function POST(request: Request) {
-  let body: ChatRequestBody;
+  let body: unknown;
 
   try {
     body = await request.json();
@@ -25,16 +16,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
 
-  const { appId, messages } = body;
-
-  if (!appId || !Array.isArray(messages) || messages.length === 0) {
+  const input = parseChatInput(body);
+  if (!input) {
     return NextResponse.json(
-      { error: "appId and a non-empty messages array are required." },
+      { error: "Provide an applicant ID and a bounded conversation using user/assistant text messages, ending in a user question." },
       { status: 400 }
     );
   }
 
-  const dossierData = await loadDossier(appId);
+  const { appId, messages } = input;
+  let dossierData;
+  try {
+    dossierData = await loadDossier(appId);
+  } catch {
+    return NextResponse.json({ error: "The dossier service is unavailable." }, { status: 503 });
+  }
 
   if (!dossierData) {
     return NextResponse.json(
@@ -55,40 +51,27 @@ export async function POST(request: Request) {
     messages: [{ role: "system", content: systemPrompt }, ...messages],
   };
 
-  let response: Response;
-
   try {
-    response = await fetch(OLLAMA_CHAT_URL, {
+    const response = await fetch(OLLAMA_CHAT_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(60000),
     });
-  } catch {
+    if (!response.ok) {
+      return NextResponse.json({ error: "The model service could not complete the request." }, { status: 502 });
+    }
+    const data = await response.json();
+    const reply = data?.message?.content;
+    if (data?.done !== true || data?.done_reason === "length" || typeof reply !== "string" || !isAdvisoryReply(reply)) {
+      return NextResponse.json({ error: "The assistant did not return a complete advisory response. Review the dossier or try again." }, { status: 502 });
+    }
+    return NextResponse.json({ reply });
+  } catch (error) {
+    const timedOut = error instanceof Error && ["AbortError", "TimeoutError"].includes(error.name);
     return NextResponse.json(
-      {
-        error:
-          `Could not reach Ollama at ${OLLAMA_CHAT_URL}. ` +
-          "Make sure `ollama serve` is running and the model is pulled " +
-          `(\`ollama pull ${OLLAMA_MODEL}\`).`,
-      },
-      { status: 502 }
+      { error: timedOut ? "The assistant timed out. Review the dossier or try again." : "The model service is unavailable or returned an invalid response." },
+      { status: timedOut ? 504 : 502 }
     );
   }
-
-  if (!response.ok) {
-    const text = await response.text();
-    return NextResponse.json({ error: `Ollama returned an error: ${text}` }, { status: 502 });
-  }
-  
-  const data = await response.json();
-  const reply: string = data?.message?.content ?? "";
-
-  console.log("Ollama chat result:", {
-    done_reason: data?.done_reason,
-    eval_count: data?.eval_count,
-    reply_length: reply.length,
-  });
-
-  return NextResponse.json({ reply });
-
 }

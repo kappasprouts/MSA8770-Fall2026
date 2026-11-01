@@ -4,7 +4,11 @@ export const REVIEW_TABS = [
   { id: "overview", label: "Overview" }, { id: "dossier", label: "Dossier" },
   { id: "documents", label: "Documents" }, { id: "recommendation", label: "Recommendation" },
 ] as const;
-export type ReviewTab = typeof REVIEW_TABS[number]["id"];
+export type ReviewTab = typeof REVIEW_TABS[number]["id"] | "exceptions";
+export function applicantReviewTabs(hasExceptions: boolean): { id: ReviewTab; label: string }[] {
+  return REVIEW_TABS.flatMap(tab => tab.id === "recommendation" && hasExceptions
+    ? [{ id: "exceptions" as ReviewTab, label: "Exceptions" }, tab] : [tab]);
+}
 export type DocumentSelection = { file: string; page: number };
 
 export function resolveEvidenceDocument(evidence: EvidenceItem, documents: OriginalDocument[]): DocumentSelection | null {

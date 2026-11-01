@@ -12,8 +12,29 @@
 > values. If `audit_logs` was created from the earlier SQL example, run
 > `storage/migrations/20261006_audit_logs_created_at.sql` to align its timestamp
 > column with the active ORM. Run
-> `storage/migrations/20261006_gpa_numeric.sql` to convert existing GPA columns
-> to `NUMERIC(5,3)`.
+> `storage/migrations/20261031_applicant_schema_contract.sql` **after older
+> migrations** to align the current contract: nullable `admission_year` and
+> `admission_term`, and GPA columns of `NUMERIC(3,2)`. The older October 6 GPA
+> migration used three decimal places and is superseded by this migration.
+
+The gate's five required metadata fields remain unchanged. Missing year/term
+are stored as NULL without an inferred admission cycle. CSV and direct storage
+writes round GPA to two decimal places using decimal half-up rounding (3.865
+becomes 3.87). GPA is a JSON number on serialization, so trailing zeroes need
+not appear. Existing SQLite fallback stores upgrade transactionally on startup,
+preserving rows, additional columns, indexes, triggers and review outcomes.
+
+For an existing PostgreSQL database, back it up and apply the new migration with
+the configured connection, for example:
+
+```powershell
+psql "$env:DATABASE_URL" -v ON_ERROR_STOP=1 -f storage/migrations/20261031_applicant_schema_contract.sql
+```
+
+The migration is safe to repeat. Existing GPA values are rounded to two places;
+values that cannot fit `NUMERIC(3,2)` abort the transaction. New PostgreSQL
+databases use the ORM schema. PostgreSQL upgrades are explicit; ingestion does
+not silently alter a shared database.
 
 ---
 
@@ -208,3 +229,20 @@ Stored in `applications.ai_review`. Contains output from Model Gateway:
   "bypassed_documents": ["personal_statement.pdf"]
 }
 ```
+
+## Durable intake and generation recovery (November 1, 2026)
+
+Migration: `storage/migrations/20261101_durable_batch_generation.sql`.
+
+| Relation | Key and responsibility |
+| --- | --- |
+| `ingestion_batch_events` | UUID receipt; unique content/config/code/storage/scope hash; gate result, receiver object manifest, report, delivered summary and intake state |
+| `generation_batches` | UUID; unique batch identity; optional intake receipt FK, pipeline version, retry scope and aggregate progress |
+| `generation_batch_members` | `(batch_id, app_id)`; saved input hash, execution FK, progress and generation outcome |
+| `generation_executions` | UUID; unique `(app_id, input_hash, pipeline_version, retry_key)`; server-owned input snapshot, owner token, policy context and final run/review links |
+| `generation_section_checkpoints` | `(execution_id, section)`; request hash, output, validation errors and committed attempt log |
+| `dossier_generation_runs.execution_id` | Nullable unique execution FK; legacy rows stay NULL; resumed executions reuse one final run row |
+
+Session advisory locks serialize intake and per-applicant generation. Durable
+execution completion and candidate/publication effects commit together. See
+[operation and recovery boundaries](../ai_agent/DURABLE_BATCH_RECOVERY.md).

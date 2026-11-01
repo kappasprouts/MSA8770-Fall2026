@@ -98,6 +98,7 @@ class BatchIngestionPipeline:
         report_path: Optional[Path] = None,
         affected_ids_path: Optional[Path] = None,
         artifact_label: Optional[str] = None,
+        retry_key: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Persist a batch and export its ready IDs, stopping before AI work.
 
@@ -133,10 +134,11 @@ class BatchIngestionPipeline:
                 require_object_storage=self.require_object_storage,
                 require_postgresql=self.require_postgresql,
                 run_id=run_id,
+                retry_key=retry_key,
             )
 
         results = [self._applicant_result(routed) for routed in gate_result.routed_applicants]
-        return {
+        summary = {
             "status": "COMPLETED",
             "executed_at": datetime.now(timezone.utc).isoformat(),
             "total_packets_discovered": gate_result.total_processed,
@@ -148,6 +150,9 @@ class BatchIngestionPipeline:
             },
             "results": results,
             "affected_ids": list(gate_result.affected_ids),
+            "batch_event_id": getattr(gate_result,"batch_event_id",None),
+            "deduplicated": getattr(gate_result,"deduplicated",False),
+            "handoff_file": getattr(gate_result,"handoff_file",None),
             "affected_ids_file": str(output_ids.resolve()),
             "report_file": str(output_report.resolve()),
             "hard_stop": True,
@@ -162,8 +167,11 @@ class BatchIngestionPipeline:
                 and bool(getattr(storage, "minio_available", False))
             ),
         }
+        from ingestion.batch_events import remember_summary
+        remember_summary(storage,summary["batch_event_id"],summary)
+        return summary
 
-    def process_packet(self, applicant_id: str) -> Optional[Dict[str, Any]]:
+    def process_packet(self, applicant_id: str, retry_key: Optional[str] = None) -> Optional[Dict[str, Any]]:
         """Run the canonical gate for one ID and write separate handoff files."""
         if re.fullmatch(r"APP[_\-\s]?\d+", applicant_id, re.IGNORECASE) is None:
             raise ValueError(f"Invalid applicant ID: {applicant_id!r}")
@@ -172,7 +180,7 @@ class BatchIngestionPipeline:
             raise ValueError(f"Invalid applicant ID: {applicant_id!r}")
 
         safe_id = re.sub(r"[^A-Za-z0-9_]", "_", canonical_id)
-        summary = self.run_batch(applicant_ids={canonical_id}, artifact_label=safe_id)
+        summary = self.run_batch(applicant_ids={canonical_id}, artifact_label=safe_id, retry_key=retry_key)
         if not summary["results"]:
             return None
         result = dict(summary["results"][0])

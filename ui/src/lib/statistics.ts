@@ -68,7 +68,7 @@ function packetState(row: StatisticsRow): string {
     if (Array.isArray(gate.missing_documents) && gate.missing_documents.length) return PACKETS[1];
     if (gate.ready_for_review === true || (Array.isArray(gate.missing_fields) && Array.isArray(gate.missing_documents) && numeric(gate.error_count) === 0)) return PACKETS[0];
   }
-  if (["VALID", "READY_FOR_REVIEW", "DOSSIER_READY", "REVIEWED", "FINAL_DECISION_RECORDED", "AGENT_ERROR", "AI_VALIDATION_FAILED", "HUMAN_REVIEW_AI_FAILED"].includes(status)) return PACKETS[0];
+  if (["VALID", "READY_FOR_REVIEW", "REVIEW_PENDING", "REVIEW_REJECTED", "REVIEW_ESCALATED", "REVIEW_SUPERSEDED", "DOSSIER_READY", "REVIEWED", "FINAL_DECISION_RECORDED", "AGENT_ERROR", "AI_VALIDATION_FAILED", "HUMAN_REVIEW_AI_FAILED"].includes(status)) return PACKETS[0];
   return PACKETS[4];
 }
 function gpa(row: StatisticsRow) { return numeric(row.unweighted_gpa, 0, 4); }

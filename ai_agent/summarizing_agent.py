@@ -44,9 +44,11 @@ Run (after the setup scripts in setup/):
 import argparse
 import base64
 import json
+import hashlib
 import os
 import re
 import time
+import sys
 from pathlib import Path
 
 import psycopg2
@@ -56,6 +58,19 @@ from minio import Minio
 from psycopg2.extras import Json, RealDictCursor
 
 from dotenv import load_dotenv
+
+# Support the documented direct-script command as well as module imports.
+try:
+    from .academic_inputs import current_test_scores
+    from .output_validation import schema_errors, quote_matches, academic_fact_errors
+    from .privacy import redact_fields, redact_known_values, restricted_pattern
+    from . import review_checkpoint, generation_recovery
+except ImportError:
+    from academic_inputs import current_test_scores
+    from output_validation import schema_errors, quote_matches, academic_fact_errors
+    from privacy import redact_fields, redact_known_values, restricted_pattern
+    import review_checkpoint
+    import generation_recovery
 
 # ============================================================
 # CONFIGURATION
@@ -121,7 +136,7 @@ WITHHELD_FILENAME_WORDS = {
 # Which documents each image section reads.
 SECTION_DOCUMENT_TYPES = {
     "academic": ["application_form", "transcript", "standardized_test_score", "advanced_coursework"],
-    "engagement": ["application_form"],
+    "engagement": ["application_form", "activities_and_awards"],
     "recommendation": ["recommendation"],
     "supplement": ["university_supplement"],
 }
@@ -129,7 +144,7 @@ SECTION_DOCUMENT_TYPES = {
 # Applicant fields whose values must never appear in the output.
 RESTRICTED_FIELDS = [
     "gender", "ethnicity", "date_of_birth",
-    "mailing_address", "primary_phone_number", "email_address",
+    "mailing_address", "primary_phone_number", "phone_number", "email_address",
 ]
 
 # ============================================================
@@ -157,6 +172,10 @@ ALWAYS_INCLUDED_POLICIES = []
 
 # Admission-decision wording the model must never produce.
 DECISION_PATTERNS = [
+    r"^\s*(?:accept|admit|reject|deny|decline|waitlist)(?:ed)?[.!]?\s*$",
+    r"\b(?:final\s+)?(?:decision|recommendation)\s*(?:is\s*|:|=)\s*(?:accept|admit|reject|deny|decline|waitlist)\b",
+    r"\badmit\s+(?:this|the)\s+(?:applicant|candidate|student)\b",
+    r"\brecommend\s+(?:admitting|accepting|rejecting|denying|waitlisting)\b",
     r"\b(?:applicant|candidate|student|they|he|she)\s+(?:should|must|will|would)\s+be\s+admitted\b",
     r"\brecommend(?:ed)?\s+(?:the\s+)?(?:applicant|candidate|student)\s+for\s+admission\b",
     r"\badmission decision\b",
@@ -188,10 +207,11 @@ EVIDENCE = {
         "type": "object",
         "properties": {
             "document": {"type": "string"},
-            "page": {"type": "integer"},
-            "quote": {"type": "string"},
+            "page": {"type": "integer", "minimum": 1},
+            "quote": {"type": "string", "minLength": 1},
         },
         "required": ["document", "page", "quote"],
+        "additionalProperties": False,
     },
 }
 
@@ -204,11 +224,12 @@ NOTES = {
             "note": {"type": "string"},
         },
         "required": ["category", "note"],
+        "additionalProperties": False,
     },
 }
 
 def object_schema(properties):
-    return {"type": "object", "properties": properties, "required": list(properties)}
+    return {"type": "object", "properties": properties, "required": list(properties), "additionalProperties": False}
 
 
 SCHEMAS = {
@@ -217,8 +238,8 @@ SCHEMAS = {
             "unweighted_gpa": {"type": ["number", "null"]},
             "weighted_gpa": {"type": ["number", "null"]},
             "class_rank": {"type": ["string", "null"]},
-            "sat_superscore": {"type": ["integer", "null"]},
-            "act_superscore": {"type": ["integer", "null"]},
+            "sat_superscore": {"type": ["integer", "null"], "minimum": 400, "maximum": 1600},
+            "act_superscore": {"type": ["integer", "null"], "minimum": 1, "maximum": 36},
             "intended_major": {"type": ["string", "null"]},
             "high_school": {"type": ["string", "null"]},
             "expected_graduation": {"type": ["string", "null"]},
@@ -432,6 +453,7 @@ def ensure_output_tables(connection):
         )
 
     connection.commit()
+    review_checkpoint.ensure_review_schema(connection)
 
 
 def write_audit(connection, app_id, event, details=None):
@@ -462,15 +484,20 @@ def get_applicant(connection, app_id):
 def normalize_document(document):
     """Normalize ingestion document types for the summarizer."""
 
-    doc_type = document.get("type") or document.get("doc_type") or ""
-
-    if doc_type in ("recommendation_letter_1", "recommendation_letter_2"):
-        doc_type = "recommendation"
+    doc_type = str(document.get("type") or document.get("doc_type") or "").lower().strip()
+    doc_type = {
+        "recommendation_letter_1": "recommendation", "recommendation_letter_2": "recommendation",
+        "recommendation_letter": "recommendation", "official_transcript": "transcript",
+        "advanced_coursework_and_ap_scores": "advanced_coursework", "ap_scores": "advanced_coursework",
+        "activities": "activities_and_awards", "awards": "activities_and_awards",
+    }.get(doc_type, doc_type)
 
     return {
         "type": doc_type,
         "filename": document.get("filename", ""),
         "object_key": document.get("object_key") or document.get("minio_key") or "",
+        "minio_bucket": document.get("minio_bucket") or document.get("bucket") or MINIO_BUCKET,
+        "sha256": document.get("sha256") or document.get("sha256_checksum"),
     }
 
 
@@ -507,12 +534,12 @@ def split_documents(documents):
 # [3] PAGES: MINIO → PNG (MEMORY ONLY)
 # ============================================================
 
-def download_pdf(minio_client, object_key):
+def download_pdf(minio_client, object_key, bucket=None):
 
     response = None
 
     try:
-        response = minio_client.get_object(MINIO_BUCKET, object_key)
+        response = minio_client.get_object(bucket or MINIO_BUCKET, object_key)
         return response.read()
 
     finally:
@@ -545,157 +572,36 @@ RESTRICTED_LABELS = (
 )
 
 def redact_commonapp_page(page):
-    """
-    Redact restricted fields and their values on the same row.
-    Fail if the expected labels cannot be found.
-    """
-    restricted = {
-        "date of birth",
-        "mailing address",
-        "primary phone number",
-        "email address",
-        "gender",
-        "ethnicity",
-    }
+    return redact_fields(page)
 
-    lines = []
-
-    for block in page.get_text("dict")["blocks"]:
-        for line in block.get("lines", []):
-            text = "".join(
-                span["text"] for span in line["spans"]
-            ).strip()
-
-            if text:
-                lines.append({
-                    "text": text,
-                    "rect": pymupdf.Rect(line["bbox"]),
-                })
-
-    found = set()
-
-    for label in restricted:
-        matches = [
-            line for line in lines
-            if line["text"].casefold() == label
-        ]
-
-        if len(matches) != 1:
-            raise ValueError(
-                f"Cannot safely redact field: {label}"
-            )
-
-        found.add(label)
-        label_rect = matches[0]["rect"]
-
-        # Redact every text line sharing the label's row.
-        for line in lines:
-            if abs(line["rect"].y0 - label_rect.y0) <= 2:
-
-                rect = line["rect"]
-                rect.y0 -= 1
-                rect.y1 += 1
-                page.add_redact_annot(rect)
-
-    page.apply_redactions()
-
-    # Check that restricted labels are gone.
-    remaining = page.get_text().casefold()
-
-    for label in found:
-        if label in remaining:
-            raise ValueError(
-                f"Redaction verification failed: {label}"
-            )
 
 def redact_hooks(page):
-    """Remove the Hooks field and its value from a CommonApp page."""
+    return redact_fields(page, {"hooks"})
 
-    lines = []
 
-    for block in page.get_text("dict")["blocks"]:
-        for line in block.get("lines", []):
-            text = "".join(
-                span["text"] for span in line["spans"]
-            ).strip()
-
-            if text:
-                lines.append({
-                    "text": text,
-                    "rect": pymupdf.Rect(line["bbox"]),
-                })
-
-    matches = [
-        line for line in lines
-        if line["text"].casefold() == "hooks"
-    ]
-
-    if len(matches) != 1:
-        raise ValueError("Cannot safely locate Hooks field")
-
-    label_rect = matches[0]["rect"]
-
-    # Find the value below the Hooks heading.
-    values = [
-        line for line in lines
-        if line["rect"].y0 > label_rect.y1
-    ]
-
-    if not values:
-        raise ValueError("Cannot safely locate Hooks value")
-
-    value = min(values, key=lambda line: line["rect"].y0)
-
-    for target in (matches[0], value):
-        rect = pymupdf.Rect(target["rect"])
-        rect.y0 -= 1
-        rect.y1 += 1
-        page.add_redact_annot(rect)
-
-    page.apply_redactions()
-
-    # Verify that the Hooks label was removed
-    remaining = page.get_text().casefold()
-
-    if "hooks" in remaining:
-        raise ValueError("Hooks label remains after redaction")
-
-def render_pdf(pdf_bytes, zoom=RENDER_ZOOM, document_type=None):
-    document = pymupdf.open(
-        stream=pdf_bytes,
-        filetype="pdf"
-    )
-
-    matrix = pymupdf.Matrix(zoom, zoom)
+def render_pdf(pdf_bytes, zoom=RENDER_ZOOM, document_type=None, restricted=None):
     rendered_pages = []
-
-    for index in range(len(document)):
-        page = document[index]
-        original_text = page.get_text()
-
-        if document_type == "application_form":
-            if is_essay_page(original_text):
+    with pymupdf.open(stream=pdf_bytes, filetype="pdf") as document:
+        for index, page in enumerate(document):
+            original_text = page.get_text()
+            if document_type is not None and is_essay_page(original_text):
                 continue
-
-            if "Applicant information" in original_text:
-                redact_commonapp_page(page)
-
-            if "Hooks" in original_text.splitlines():
-                redact_hooks(page)
-
-        rendered_pages.append({
-            "page_number": index + 1,
-            "png_bytes": page.get_pixmap(
-                matrix=matrix,
-                alpha=False
-            ).tobytes("png"),
-            "text": page.get_text(),
-        })
-
-    document.close()
+            if document_type == "application_form":
+                if not original_text.strip():
+                    raise ValueError("Application page has no verifiable text layer; human review required")
+            found = redact_fields(page)
+            if document_type == "application_form" and "applicant information" in original_text.casefold() and not found:
+                raise ValueError("Cannot establish restricted field boundaries; human review required")
+            redact_known_values(page, restricted)
+            rendered_pages.append({
+                "page_number": index + 1,
+                "png_bytes": page.get_pixmap(matrix=pymupdf.Matrix(zoom, zoom), alpha=False).tobytes("png"),
+                "text": page.get_text(),
+            })
     return rendered_pages
 
-def load_pages(minio_client, documents):
+
+def load_pages(minio_client, documents, restricted=None):
 
     """Download and render documents. A failure is recorded, never silently skipped."""
 
@@ -704,9 +610,12 @@ def load_pages(minio_client, documents):
     for document in documents:
         try:
 
+            pdf_bytes = download_pdf(minio_client, document["object_key"], document.get("minio_bucket"))
+            if document.get("sha256") and hashlib.sha256(pdf_bytes).hexdigest() != str(document["sha256"]).lower():
+                raise ValueError("Stored source bytes differ from the registered checksum; reconcile before generation")
             rendered = render_pdf(
-                download_pdf(minio_client, document["object_key"]),
-                document_type=document["type"],
+                pdf_bytes,
+                document_type=document["type"], restricted=restricted,
                 )
 
             if not rendered:
@@ -726,6 +635,9 @@ def load_pages(minio_client, documents):
                     "page_number": page["page_number"],
                     "png_bytes": page["png_bytes"],
                     "text": page["text"],
+                    "object_key": document["object_key"],
+                    "minio_bucket": document.get("minio_bucket") or MINIO_BUCKET,
+                    "sha256": document.get("sha256"),
                 }
             )
 
@@ -823,16 +735,18 @@ RULES
 - You SUMMARIZE what the documents say. You do not decide anything.
 - Do NOT make or suggest an admission decision (no admit, deny, reject,
   waitlist, or "should be accepted").
-- Do NOT invent information. Use only what is visible on the pages.
+- Do NOT invent information. Use only the supplied pages and, for the
+  academic section, the explicitly supplied current database score facts.
   If something is not shown, use null, an empty list, or say so.
 - Do NOT mention gender, ethnicity, date of birth, or contact details.
-- Do NOT use outside knowledge or numbers that are not on the pages.
+- Do NOT use outside knowledge or numbers absent from these supplied sources.
 
 EVIDENCE
 Each evidence item gives: document (exact filename from the image map),
 page (page_number from the image map), and quote: a SHORT phrase copied
 
 EXACTLY from that page (a few words, not a paraphrase).
+Use the original PDF page_number, not image_number or the order of selected images.
 For the academic section, include up to 8 evidence items so that
 GPA, SAT, ACT, and transcript coursework can be cited separately.
 For all other sections, include at most 4 evidence items.
@@ -860,6 +774,8 @@ EVIDENCE REQUIREMENTS:
 - Cite each available GPA and test score separately:
   unweighted GPA, weighted GPA, SAT, and ACT.
 - Copy short, exact quotations from the corresponding pages.
+- Every numeric GPA/SAT/ACT fact needs a quotation containing both its
+  metric label and matching value (for example, "Unweighted GPA 3.97").
 - Include the correct document name and page number.
 - If a metric is absent, leave its value null and do not cite it.
 - Also cite relevant transcript coursework when available.
@@ -943,7 +859,22 @@ summary, major_themes: what the answers say.
 }
 
 def build_image_prompt(section, applicant, pages):
-
+    score_context = ""
+    if section == "academic":
+        recorded, issues = current_test_scores(applicant)
+        if issues:
+            raise ValueError("Invalid score input: " + "; ".join(i["message"] for i in issues))
+        score_context = """
+CURRENT DATABASE TEST SCORES (separate from PDF observations):
+""" + json.dumps(recorded, indent=2) + """
+Use these current recorded SAT/ACT/AP facts in the summary with their database
+provenance. document_facts and PDF evidence must still describe only the pages:
+never invent a PDF quote/page for a database value. If sources differ, describe
+the discrepancy in notes without assuming chronology or silently replacing a
+document value. Missing database scores are unknown, not zero or a penalty.
+Course-only AP entries do not establish exam scores. The backend attaches this
+database snapshot separately as recorded_test_scores after your response.
+"""
     return f"""
 You are the document-understanding and summarization component of a
 college admissions review system. An admissions officer will read your
@@ -957,10 +888,16 @@ DOCUMENT IMAGE MAP (the images supplied, in order):
 {SECTION_TASKS[section]}
 
 {COMMON_RULES}
+
+{score_context}
 """.strip()
 
 def evaluate_test_score_policies(applicant, policies):
     """Evaluate SAT/ACT reference ranges using PostgreSQL scores."""
+
+    recorded, issues = current_test_scores(applicant)
+    if issues:
+        raise ValueError("Invalid score input: " + "; ".join(i["message"] for i in issues))
 
     configurations = {
         "POL-004": ("superscored_sat_score", "SAT", 1500, 1600, 400, 1600),
@@ -1035,6 +972,7 @@ def evaluate_test_score_policies(applicant, policies):
             "findings": findings,
             "evidence_ids": [],
             "evidence": [],
+            "source": recorded["scores"][field]["source"],
         })
 
     return assessments
@@ -1188,36 +1126,44 @@ def call_model(prompt, schema, num_predict, images=None):
     # Some model builds reject the "think" option; retry without it.
     if response.status_code == 400 and "think" in response.text.lower():
         payload.pop("think")
+        response.close()
         response = requests.post(OLLAMA_CHAT_URL, json=payload, stream=True, timeout=VLM_TIMEOUT_SECONDS)
 
-    if response.status_code != 200:
-        raise RuntimeError(f"Ollama returned HTTP {response.status_code}: {response.text}")
+    try:
+        if response.status_code != 200:
+            raise RuntimeError(f"Ollama returned HTTP {response.status_code}: {response.text}")
 
-    parts, final = [], {}
+        parts, final = [], {}
 
-    for line in response.iter_lines():
-        if not line:
-            continue
-        data = json.loads(line)
-        if "error" in data:
-            raise RuntimeError(f"Ollama error: {data['error']}")
-        piece = (data.get("message") or {}).get("content", "")
-        if piece:
-            parts.append(piece)
-            if len(parts) % 200 == 0:
-                print(".", end="", flush=True)
-        if data.get("done"):
-            final = data
-            break
+        for line in response.iter_lines():
+            if not line:
+                continue
+            data = json.loads(line)
+            if "error" in data:
+                raise RuntimeError(f"Ollama error: {data['error']}")
+            piece = (data.get("message") or {}).get("content", "")
+            if piece:
+                parts.append(piece)
+                if len(parts) % 200 == 0:
+                    print(".", end="", flush=True)
+            if data.get("done") is True:
+                final = data
+                break
 
-    if final.get("done_reason") == "length":
-        raise RuntimeError(f"Output hit the {num_predict}-token cap (likely repeating).")
+        if final.get("done") is not True:
+            raise RuntimeError("Model stream ended without a completion marker")
 
-    return "".join(parts), {
-        "prompt_tokens": final.get("prompt_eval_count"),
-        "output_tokens": final.get("eval_count"),
-        "seconds": round((final.get("total_duration") or 0) / 1e9, 1),
-    }
+        if final.get("done_reason") == "length":
+            raise RuntimeError(f"Output hit the {num_predict}-token cap (likely repeating).")
+
+        return "".join(parts), {
+            "prompt_tokens": final.get("prompt_eval_count"),
+            "output_tokens": final.get("eval_count"),
+            "seconds": round((final.get("total_duration") or 0) / 1e9, 1),
+        }
+
+    finally:
+        response.close()
 
 
 def parse_json(raw):
@@ -1245,28 +1191,8 @@ NUMBER = re.compile(r"\d")
 
 
 def quote_on_page(quote, page_text):
-
-    """
-    True if the cited quote appears on the page (PDF text layer, read
-    by code only). Rules: every number in the quote must be on the
-    page, and at least 80% of its words.
-    """
-
-    quote_words = [w.strip(".") for w in normalize(quote) if w.strip(".")]
-    page_words = {w.strip(".") for w in normalize(page_text)}
-
-    if not quote_words:
-        return False
-
-    numbers = [w for w in quote_words if NUMBER.search(w)]
-    if any(n not in page_words for n in numbers):
-        return False
-
-    words = [w for w in quote_words if not NUMBER.search(w) and len(w) > 2]
-    if not words:
-        return True
-
-    return sum(1 for w in words if w in page_words) / len(words) >= 0.8
+    """Match a contiguous normalized passage, preserving word/number order."""
+    return quote_matches(quote, page_text)
 
 
 def iter_evidence(node, path=""):
@@ -1330,6 +1256,15 @@ def narrative_text(node):
     return node if isinstance(node, str) else ""
 
 
+def output_text(node):
+    """Raw leaf content, including quotes, without JSON newline escaping."""
+    if isinstance(node, dict):
+        return " ".join(output_text(value) for value in node.values())
+    if isinstance(node, list):
+        return " ".join(output_text(value) for value in node)
+    return str(node)
+
+
 def word_shingles(text, size=8):
 
     words = re.findall(r"[a-z0-9']+", str(text).lower())
@@ -1342,10 +1277,19 @@ def restricted_values(applicant):
     for field in RESTRICTED_FIELDS:
         value = applicant.get(field)
         if value:
-            text = value.isoformat() if hasattr(value, "isoformat") else str(value)
+            text = value.isoformat() if hasattr(value, "isoformat") else str(value).strip()
             if len(text) >= 4:
                 values.append(text)
-    return values
+    # Hooks are excluded even when repeated in a permitted supplement.
+    for hook in applicant.get("hooks") or []:
+        if isinstance(hook, str) and len(hook.strip()) >= 4 and hook.strip().casefold() not in {"not provided", "none", "unknown"}:
+            values.append(hook.strip())
+    birth_date = applicant.get("date_of_birth")
+    if hasattr(birth_date, "strftime"):
+        values.extend([birth_date.strftime("%m/%d/%Y"), birth_date.strftime("%m/%d/%y"),
+                       f"{birth_date.month}/{birth_date.day}/{birth_date.year}",
+                       f"{birth_date.month}/{birth_date.day}/{birth_date.year % 100:02d}"])
+    return list(dict.fromkeys(values))
 
 def validate_policy_evidence_match(entry, evidence_registry):
     """Check evidence relevance for GPA policies."""
@@ -1357,11 +1301,8 @@ def validate_policy_evidence_match(entry, evidence_registry):
         "POL-002": ("unweighted", "gpa")
     }
 
-    if policy_id not in required_terms:
-        return []
-
     if not isinstance(evidence_ids, list):
-        return []
+        return ["Policy evidence_ids must be a list."]
 
     if not evidence_ids:
         if entry.get("alignment") in ("aligned", "not_aligned"):
@@ -1370,6 +1311,14 @@ def validate_policy_evidence_match(entry, evidence_registry):
                 f"'{entry.get('alignment')}' without supporting evidence. "
                 "Use alignment: unclear when evidence is insufficient."
             ]
+        return []
+
+    if entry.get("alignment") in ("aligned", "not_aligned") and not any(
+        evidence_registry.get(eid, {}).get("verification_status") == "TEXT_VERIFIED" for eid in evidence_ids
+    ):
+        return [f"{policy_id}: Finding requires verified supporting evidence; use unclear pending human verification."]
+
+    if policy_id not in required_terms:
         return []
 
     terms = required_terms[policy_id]
@@ -1405,7 +1354,18 @@ def validate_section(section, output, pages_by_location, policy_ids, guards):
     if not isinstance(output, dict):
         return ["Output is not a JSON object."]
 
-    errors = [f"Missing key: {k}" for k in SCHEMAS[section]["required"] if k not in output]
+    # Run privacy checks first, so even malformed output cannot put sensitive
+    # values into schema-error feedback that will be sent to the next attempt.
+    content = output_text(output)
+    privacy_errors = []
+    if any(re.search(restricted_pattern(value), content, re.IGNORECASE) for value in guards["restricted"]):
+        privacy_errors.append("Restricted applicant data in output.")
+    if guards["essay_shingles"] & word_shingles(content):
+        privacy_errors.append("Personal statement content detected in output.")
+    if privacy_errors:
+        return privacy_errors
+
+    errors = schema_errors(SCHEMAS[section], output)
     if errors:
         return errors
 
@@ -1415,6 +1375,9 @@ def validate_section(section, output, pages_by_location, policy_ids, guards):
 
     # Image-only pages cannot support text-based quote verification.
     for path, item in iter_evidence(output):
+        if not item["quote"].strip():
+            errors.append(f"{path}: evidence quote is empty.")
+            continue
         location = (item.get("document"), item.get("page"))
 
         if location not in pages_by_location:
@@ -1433,12 +1396,15 @@ def validate_section(section, output, pages_by_location, policy_ids, guards):
             continue
 
         if not quote_on_page(item.get("quote", ""), page_text):
-            errors.append(
-                f'{path}: quote "{str(item.get("quote"))[:80]}" '
-                f"is not on {location[0]} page {location[1]}."
-            )
+            matching = [f"{name} page {page}" for (name, page), text in pages_by_location.items()
+                        if text.strip() and quote_on_page(item["quote"], text)]
+            hint = " Matching supplied location(s): " + "; ".join(matching) + "." if matching else " No supplied text page matches; remove the unsupported citation."
+            errors.append(f"{path}: quotation is not on {location[0]} page {location[1]}." + hint)
         else:
             item["verification_status"] = "TEXT_VERIFIED"
+
+    if section == "academic":
+        errors.extend(academic_fact_errors(output))
 
     if section == "policy":
         for entry in output.get("policy_assessment", []):
@@ -1466,26 +1432,34 @@ def validate_section(section, output, pages_by_location, policy_ids, guards):
         if match:
             errors.append(f"Admission-decision language: '{match.group(0)}'.")
 
-    lowered = json.dumps(output).lower()
-    for value in guards["restricted"]:
-        if re.search(r"\b" + re.escape(value.lower()) + r"\b", lowered):
-            errors.append(f"Restricted applicant data in output: '{value}'.")
-
-    leaked = guards["essay_shingles"] & word_shingles(json.dumps(output))
-    if leaked:
-        errors.append(f"Personal statement text in output: '{sorted(leaked)[0]}...'")
-
     return errors
 
 # ============================================================
 # [5] + [6] RUN ONE SECTION (call → validate → retry once)
 # ============================================================
 
-def run_section(section, prompt, images, pages_by_location, policy_ids, guards, log, evidence_registry=None):
+def run_section(section, prompt, images, pages_by_location, policy_ids, guards, log, evidence_registry=None, checkpoint=None):
 
     errors, output, attempts = [], None, 0
+    history = []
+    request_hash = None
+    if checkpoint:
+        request_hash = generation_recovery.digest({"section": section, "prompt": prompt,
+            "images": [hashlib.sha256(p["png_bytes"]).hexdigest() for p in (images or [])],
+            "locations": sorted((name, page, text) for (name, page), text in pages_by_location.items()),
+            "policy_ids": sorted(policy_ids), "evidence_registry": evidence_registry,
+            "guard_hash": generation_recovery.digest({"restricted": guards.get("restricted"), "essay_shingles": sorted(guards.get("essay_shingles", []))})})
+        cached = checkpoint.attempt(section, request_hash)
+        if cached:
+            output, errors, history = cached["output"], cached["errors"], cached["attempts"]
+            log.extend(history)
+            attempts = len(history)
+            if not errors or attempts >= MAX_ATTEMPTS:
+                print(f"    {section}: recovered {attempts} saved attempt(s); no model call")
+                return output, errors, attempts
 
-    for attempts in range(1, MAX_ATTEMPTS + 1):
+    for attempts in range(attempts + 1, MAX_ATTEMPTS + 1):
+        if checkpoint: checkpoint.assert_current()
 
         attempt_prompt = prompt
         if errors:
@@ -1497,7 +1471,11 @@ def run_section(section, prompt, images, pages_by_location, policy_ids, guards, 
 
                     "If no evidence supports a finding, use evidence_ids: [] "
                     "and set alignment to unclear. Do not mark unsupported "
-                    "findings as aligned or not_aligned."
+                    "findings as aligned or not_aligned. "
+                    "Use original PDF page_number, never image_number. "
+                    "Remove every incorrect citation, including incorrect duplicates "
+                    "of otherwise valid quotations. Matching supplied locations are "
+                    "correction hints, not permission to invent a different quotation."
             )
 
         label = f"{section} ({len(images)} page image(s))" if images else f"{section} (text only)"
@@ -1528,7 +1506,9 @@ def run_section(section, prompt, images, pages_by_location, policy_ids, guards, 
         except Exception as error:
             usage, output, errors = {}, None, [f"Model call failed: {error}"]
 
-        log.append({"section": section, "attempt": attempts, "usage": usage, "errors": errors})
+        entry = {"section": section, "attempt": attempts, "usage": usage, "errors": errors}
+        log.append(entry); history.append(entry)
+        if checkpoint: checkpoint.save_attempt(section, request_hash, output, errors, history)
 
         if not errors:
             print("  ✓")
@@ -1605,7 +1585,7 @@ NO_SUPPLEMENT = {
     "responses": [],
     "summary": "No university supplement was included in the application packet.",
     "major_themes": [],
-    "notes": [{"category": "missing_information", "note": "No university supplement document was available."}],
+    "notes": [],  # An absent optional supplement is not an actionable exception.
     "evidence": [],
 }
 
@@ -1621,45 +1601,39 @@ JSON_COLUMNS = [
 
 
 def save_dossier(connection, dossier):
+    raise RuntimeError("Direct publication is disabled; approve the saved dossier review request")
+
+
+def stage_review_candidate(connection, app_id, dossier, run, snapshot, version, execution=None):
+    return review_checkpoint.stage_candidate(connection, app_id, dossier, run, snapshot, version, save_run, execution)
+
+
+def save_run(connection, run, commit=True):
 
     with connection.cursor() as cursor:
+        execution = run.get("execution_id")
+        execution_column = ", execution_id" if execution else ""
+        execution_value = ", %s" if execution else ""
+        conflict = """ON CONFLICT(execution_id) DO UPDATE SET run_status=EXCLUDED.run_status,
+          attempts=EXCLUDED.attempts,runtime_seconds=EXCLUDED.runtime_seconds,documents_sent=EXCLUDED.documents_sent,
+          documents_withheld=EXCLUDED.documents_withheld,policies_retrieved=EXCLUDED.policies_retrieved,
+          validation=EXCLUDED.validation,failed_output=EXCLUDED.failed_output""" if execution else ""
         cursor.execute(
             f"""
-            INSERT INTO applicant_dossier (
-                app_id, {", ".join(JSON_COLUMNS)}, holistic_assessment, generated_at, updated_at
-            )
-            VALUES (%s, {", ".join(["%s"] * len(JSON_COLUMNS))}, %s, now(), now())
-            ON CONFLICT (app_id) DO UPDATE SET
-                {", ".join(f"{c} = EXCLUDED.{c}" for c in JSON_COLUMNS)},
-                holistic_assessment = EXCLUDED.holistic_assessment,
-                updated_at = now()
-            RETURNING generated_at, updated_at;
-            """,
-            [dossier["app_id"]] + [Json(dossier[c]) for c in JSON_COLUMNS] + [dossier["holistic_assessment"]]
-        )
-        generated_at, updated_at = cursor.fetchone()
-
-    connection.commit()
-    return generated_at, updated_at
-
-
-def save_run(connection, run):
-
-    with connection.cursor() as cursor:
-        cursor.execute(
-            """
             INSERT INTO dossier_generation_runs (
                 app_id, run_status, model, attempts, runtime_seconds, documents_sent,
-                documents_withheld, policies_retrieved, validation, failed_output
+                documents_withheld, policies_retrieved, validation, failed_output{execution_column}
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s{execution_value}) {conflict} RETURNING id;
             """,
             (
                 run["app_id"], run["run_status"], VLM_MODEL, run["attempts"], run["runtime_seconds"],
                 Json(run["documents_sent"]), Json(run["documents_withheld"]),
                 Json(run["policies_retrieved"]), Json(run["validation"]), Json(run.get("failed_output")),
-            )
+            ) + ((execution,) if execution else ())
         )
+
+        run_id = cursor.fetchone()[0]
 
         # Application_status is VARCHAR(32)
 
@@ -1671,12 +1645,15 @@ def save_run(connection, run):
             (
                 "DOSSIER_READY"
                 if run["run_status"] == "DOSSIER_READY"
-                else "READY_FOR_REVIEW",
+                else "REVIEW_PENDING" if run["run_status"] == "REVIEW_PENDING"
+                else "ERROR" if run["run_status"] == "AGENT_ERROR" else "READY_FOR_REVIEW",
                     run["app_id"],
             ),
         )
 
-    connection.commit()
+    if commit:
+        connection.commit()
+    return run_id
 
 
 def write_result_file(app_id, run, dossier):
@@ -1691,7 +1668,26 @@ def write_result_file(app_id, run, dossier):
 # PROCESS ONE APPLICANT
 # ============================================================
 
-def process_applicant(connection, minio_client, app_id, force=False):
+def generation_pipeline_version():
+    return review_checkpoint.pipeline_version({"model": VLM_MODEL, "embedding_model": EMBED_MODEL,
+        "num_ctx": NUM_CTX, "render_zoom": RENDER_ZOOM, "num_predict": NUM_PREDICT})
+
+
+def configure_console():
+    # Windows redirected streams can default to cp1252; progress symbols must not
+    # interrupt a saved generation or prevent the recovery CLI from printing help.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            try: stream.reconfigure(encoding="utf-8", errors="replace")
+            except (ValueError, OSError): pass
+
+
+def process_applicant(connection, minio_client, app_id, force=False, generation_key=None, expected_input_hash=None):
+    configure_console()
+    return generation_recovery.run_applicant(sys.modules[__name__], connection, minio_client, app_id, force, generation_key, expected_input_hash)
+
+
+def _process_applicant(connection, minio_client, app_id, force=False, checkpoint=None):
 
     print("\n========================================")
     print(f"PROCESSING {app_id}")
@@ -1709,11 +1705,43 @@ def process_applicant(connection, minio_client, app_id, force=False):
 
     status = applicant.get("status")
     print(f"[1] Applicant {applicant['app_id']}, status {status}")
+    if status in {"INCOMPLETE", "AWAITING_MATERIALS", "REPLACEMENT_REQUESTED", "COUNSELOR_REVIEW"}:
+        write_audit(connection, app_id, "SKIPPED_MANIFEST_NOT_READY", {"status": status})
+        return "SKIPPED"
 
     if status != "READY_FOR_REVIEW" and not force:
         print("    Not COMPLETE. Skipped (use --force to summarize again).")
         write_audit(connection, app_id, "SKIPPED_NOT_COMPLETE", {"status": status})
         return "SKIPPED"
+
+    recorded_scores, input_errors = current_test_scores(applicant)
+    if input_errors:
+        # Preserve the source record and any older dossier; never call a model
+        # or numerical policy evaluation on known-invalid recorded scores.
+        run = {
+            "app_id": app_id, "run_status": "AGENT_ERROR", "attempts": 0,
+            "runtime_seconds": round(time.time() - started, 1),
+            "documents_sent": {}, "documents_withheld": {}, "policies_retrieved": [],
+            "validation": {"passed": False, "failed_sections": {"input": [i["message"] for i in input_errors]},
+                           "input_errors": input_errors, "calls": []},
+            "failed_output": {"recorded_test_scores": recorded_scores},
+        }
+        save_run(connection, run)
+        write_audit(connection, app_id, "INPUT_VALIDATION_FAILED", {"errors": input_errors})
+        write_result_file(app_id, run, None)
+        print("Input score validation failed; correction required. No inference performed.")
+        return run["run_status"]
+
+    if applicant.get("officer_recommendation") is not None or applicant.get("final_decision") is not None:
+        write_audit(connection, app_id, "SKIPPED_HUMAN_DISPOSITION")
+        return "SKIPPED"
+    snapshot = review_checkpoint.capture_input_snapshot(connection, applicant)
+    version = checkpoint.row["pipeline_version"] if checkpoint else generation_pipeline_version()
+    if not force:
+        cached = review_checkpoint.existing_review(connection, app_id, snapshot, version)
+        if cached:
+            print(f"Saved checkpoint: {cached}; no repeated inference")
+            return cached
 
     write_audit(connection, app_id, "SUMMARY_STARTED", {"model": VLM_MODEL})
 
@@ -1731,7 +1759,7 @@ def process_applicant(connection, minio_client, app_id, force=False):
     # ---- [3] Pages -------------------------------------------------------
     print(f"[3] Rendering pages at {RENDER_ZOOM}x (memory only)")
 
-    pages, load_problems = load_pages(minio_client, allowed)
+    pages, load_problems = load_pages(minio_client, allowed, restricted_values(applicant))
     if load_problems or not pages:
         raise RuntimeError(
             f"Document loading failed for {app_id}: {load_problems}"
@@ -1744,6 +1772,7 @@ def process_applicant(connection, minio_client, app_id, force=False):
         "policies_retrieved": [],
         "attempts": 0,
     }
+    if checkpoint: run["execution_id"] = checkpoint.id
 
     # Code-only guards: the personal statement's text (for leak detection)
     # and the applicant's restricted values. Never sent to the model.
@@ -1751,7 +1780,7 @@ def process_applicant(connection, minio_client, app_id, force=False):
     for d in withheld:
         if withhold_reason(d) == ESSAY_REASON:
             try:
-                for page in render_pdf(download_pdf(minio_client, d["object_key"]), zoom=0.2):
+                for page in render_pdf(download_pdf(minio_client, d["object_key"], d.get("minio_bucket")), zoom=0.2):
                     essay_shingles |= word_shingles(page["text"])
             except Exception as error:
                 print(f"    (could not load {d['filename']} for the leak check: {error})")
@@ -1765,7 +1794,7 @@ def process_applicant(connection, minio_client, app_id, force=False):
     all_locations = {(p["filename"], p["page_number"]): p["text"] for p in pages}
 
     # ---- [4] RAG ---------------------------------------------------------
-    policies = retrieve_policies(connection, applicant)
+    policies = checkpoint.policies(lambda: retrieve_policies(connection, applicant)) if checkpoint else retrieve_policies(connection, applicant)
     policy_ids = {p["policy_id"] for p in policies}
     run["policies_retrieved"] = [
         {k: p[k] for k in ("policy_id", "title", "similarity", "query")} for p in policies
@@ -1791,13 +1820,22 @@ def process_applicant(connection, minio_client, app_id, force=False):
         locations = {(p["filename"], p["page_number"]): p["text"] for p in images}
         output, errors, attempts = run_section(
             section, build_image_prompt(section, applicant, images), images,
-            locations, policy_ids, guards, section_log
+            locations, policy_ids, guards, section_log, checkpoint=checkpoint
         )
         attempts_total += attempts
 
         if errors:
             failed[section] = {"errors": errors, "output": output}
         else:
+            if section == "academic":
+                output["recorded_test_scores"] = recorded_scores
+                for field, document_field in (("superscored_sat_score", "sat_superscore"), ("superscored_act_score", "act_superscore")):
+                    current = recorded_scores["scores"][field]["value"]
+                    document_facts = output.get("document_facts")
+                    observed = document_facts.get(document_field) if isinstance(document_facts, dict) else None
+                    if current is not None and observed is not None and current != observed:
+                        output.setdefault("notes", []).append({"category": "other", "note":
+                            f"Source discrepancy: PostgreSQL {field} is {current}; document {document_field} is {observed}. Verify sources; record update time does not establish test date."})
             sections[section] = output
 
     if not failed:
@@ -1829,7 +1867,7 @@ def process_applicant(connection, minio_client, app_id, force=False):
             vlm_policy_ids,
             guards,
             section_log,
-            evidence_registry=evidence_registry
+            evidence_registry=evidence_registry, checkpoint=checkpoint
         )
 
         attempts_total += attempts
@@ -1860,7 +1898,7 @@ def process_applicant(connection, minio_client, app_id, force=False):
     if not failed:
         output, errors, attempts = run_section(
             "synthesis", build_synthesis_prompt(applicant, sections), None,
-            all_locations, policy_ids, guards, section_log
+            all_locations, policy_ids, guards, section_log, checkpoint=checkpoint
         )
         attempts_total += attempts
         if errors:
@@ -1877,30 +1915,53 @@ def process_applicant(connection, minio_client, app_id, force=False):
             "failed_sections": {k: v["errors"] for k, v in failed.items()},
             "load_problems": load_problems,
             "calls": section_log,
+            "recorded_test_scores": recorded_scores,
+            "document_sources": documents,
+            "requires_human_verification": any(
+                item.get("verification_status") == "UNVERIFIED_IMAGE_SOURCE"
+                for section_output in sections.values() for _, item in iter_evidence(section_output)
+            ),
         },
     )
 
     dossier = None
-
     if failed:
         run["run_status"] = "AI_VALIDATION_FAILED"
         run["failed_output"] = {"completed_sections": sections, "failed_sections": failed}
-        print(f"[6] ✗ Section(s) failed validation twice: {', '.join(failed)} → human review")
+        if checkpoint:
+            run_id = save_run(connection, run, commit=False)
+            checkpoint.finish_in_transaction(run["run_status"], run_id)
+            connection.commit()
+        else:
+            save_run(connection, run)
     else:
-        run["run_status"] = "DOSSIER_READY"
+        run["run_status"] = "REVIEW_PENDING"
         dossier = build_dossier(applicant, sections)
-        generated_at, updated_at = save_dossier(connection, dossier)
-        dossier["generated_at"], dossier["updated_at"] = generated_at, updated_at
-        print(f"[6] ✓ All sections passed validation ({len(dossier['evidence_map'])} citations checked)")
-        print(f"[7] Dossier assembled: {len(dossier['review_notes'])} review note(s)")
-
-    save_run(connection, run)
-    path = write_result_file(app_id, run, dossier)
-    write_audit(connection, app_id, run["run_status"], {"attempts": attempts_total, "failed": list(failed)})
-
-    target = "applicant_dossier + dossier_generation_runs" if dossier else "dossier_generation_runs only"
-    print(f"[8] Saved {run['run_status']} → {target}, {path}")
-    print(f"    Total time {run['runtime_seconds']}s")
+        try:
+            if checkpoint: checkpoint.assert_current()
+            review = stage_review_candidate(connection, app_id, dossier, run, snapshot, version, checkpoint)
+            run["review_request_id"] = review["id"]
+            run["candidate_hash"] = review["candidate_hash"]
+            run["run_status"] = {"PUBLISHED": "DOSSIER_READY", "REJECTED": "REVIEW_REJECTED",
+                "ESCALATED": "REVIEW_ESCALATED", "SUPERSEDED": "REVIEW_SUPERSEDED"}.get(review["state"], "REVIEW_PENDING")
+            print(f"Validated candidate routed: {review['id']} ({review['state']}, {review.get('review_mode', 'LEGACY_MANUAL')})")
+        except Exception as error:
+            connection.rollback()
+            if checkpoint: raise
+            message = getattr(getattr(error, "diag", None), "message_primary", None) or "Checkpoint persistence failed"
+            run["run_status"] = "AGENT_ERROR"
+            run["validation"]["section_validation_passed"] = run["validation"]["passed"]
+            run["validation"]["passed"] = False
+            run["validation"]["failed_sections"]["checkpoint"] = [message]
+            run["failed_output"] = {"withheld_candidate": dossier}
+            save_run(connection, run)
+            dossier = None
+            print(f"Publication withheld: {message}")
+    path = write_result_file(app_id, run, dossier if run["run_status"] == "DOSSIER_READY" else None)
+    write_audit(connection, app_id, run["run_status"], {"attempts": attempts_total, "failed": list(failed),
+        "review_request_id": run.get("review_request_id")})
+    print(f"Saved {run['run_status']}; snapshot {path}. Flagged candidates require an explicit exception resolution.")
+    print(f"Total time {run['runtime_seconds']}s")
 
     return run["run_status"]
 
@@ -1922,13 +1983,28 @@ def load_affected_ids(cli_ids):
 
 
 def main():
-
+    configure_console()
     parser = argparse.ArgumentParser(description="EAOS summarizing agent (RAG + Qwen3-VL) → applicant dossier")
     parser.add_argument("app_ids", nargs="*", help="Applicant IDs (default: output/ingestion/affected_ids.json, else APP_001)")
-    parser.add_argument("--force", action="store_true", help="Summarize even if status is not COMPLETE")
+    parser.add_argument("--force", action="store_true", help="Intentionally regenerate an eligible applicant in a new retry scope")
+    scope = parser.add_mutually_exclusive_group()
+    scope.add_argument("--batch-event", help="Generate from a completed durable ingestion receipt")
+    scope.add_argument("--batch-id", help="Resume an existing generation batch without changing its scope")
+    scope.add_argument("--handoff", type=Path, help="Read the durable .batch.json handoff (or a legacy ID list)")
+    parser.add_argument("--retry-key", help="Explicit, stable key for an intentional new attempt; reuse to recover it")
+    parser.add_argument("--inspect", action="store_true", help="Inspect --batch-id receiving-system rows without inference")
+    parser.add_argument("--verify-objects", action="store_true", help="With --inspect, read and hash the receiving MinIO objects")
     args = parser.parse_args()
-
-    affected_ids = load_affected_ids(args.app_ids)
+    if args.app_ids and (args.batch_event or args.batch_id or args.handoff):parser.error("Use explicit IDs or one batch scope, not both")
+    if args.inspect and not args.batch_id:parser.error("--inspect requires --batch-id")
+    if args.verify_objects and not args.inspect:parser.error("--verify-objects requires --inspect")
+    if args.batch_id and (args.force or args.retry_key):parser.error("Resuming a batch preserves its saved scope; omit --force and --retry-key")
+    affected_ids = [] if args.batch_event or args.batch_id else load_affected_ids(args.app_ids)
+    if args.handoff:
+        handoff = json.loads(args.handoff.read_text(encoding="utf-8"))
+        if isinstance(handoff, dict):args.batch_event = handoff["batch_event_id"]; affected_ids = []
+        elif isinstance(handoff, list):affected_ids = handoff
+        else:parser.error("Invalid handoff")
 
     print("\n========================================")
     print("EAOS SUMMARIZING AGENT (RAG + QWEN3-VL)")
@@ -1940,11 +2016,22 @@ def main():
 
     try:
         ensure_output_tables(connection)
+        if args.inspect:
+            generation_recovery.ensure_schema(connection)
+            inspected = generation_recovery.inspect_batch(connection,args.batch_id,connect_minio() if args.verify_objects else None)
+            print(json.dumps(inspected,indent=2,default=str))
+            return 0 if inspected and not any(m.get('objects_verified') is False for m in inspected['members']) else 1
         minio_client = connect_minio()
 
         results = {}
-
-        for app_id in affected_ids:
+        if isinstance(connection, psycopg2.extensions.connection):
+            try:
+                batch_id,results = generation_recovery.run_batch(sys.modules[__name__],connection,minio_client,affected_ids,
+                    event_id=args.batch_event,batch_id=args.batch_id,force=args.force,retry_key=args.retry_key)
+            except (generation_recovery.GenerationBusy,generation_recovery.StaleGeneration,ValueError) as error:
+                print(f"Batch not run: {error}")
+                return 1
+        for app_id in ([] if isinstance(connection, psycopg2.extensions.connection) else affected_ids):
             # One applicant's failure must not stop the batch.
             try:
                 results[app_id] = process_applicant(connection, minio_client, app_id, args.force)
@@ -1958,13 +2045,22 @@ def main():
         print("BATCH SUMMARY")
         print("========================================")
         for app_id, result in results.items():
-            print(f"  {app_id:<10} {result}")
+            if isinstance(connection, psycopg2.extensions.connection):
+                with connection.cursor() as cursor:
+                    cursor.execute("SELECT status FROM applicants WHERE app_id=%s",(app_id,))
+                    received = cursor.fetchone()
+                print(f"  {app_id:<10} generation={result}; applicant_status={received[0] if received else 'NOT_FOUND'}")
+            else:
+                print(f"  {app_id:<10} {result}")
+        if isinstance(connection, psycopg2.extensions.connection):
+            print(f"Inspect receiver rows and objects: --batch-id {batch_id} --inspect --verify-objects")
 
         print("\n[HARD STOP] Dossiers are advisory. An admissions officer makes every decision.")
+        return 1 if any(value in {"AGENT_ERROR", "AI_VALIDATION_FAILED", "REVIEW_REJECTED", "REVIEW_ESCALATED", "INTERRUPTED", "INPUTS_CHANGED", "GENERATION_BUSY"} for value in results.values()) else 0
 
     finally:
         connection.close()
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

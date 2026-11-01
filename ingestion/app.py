@@ -83,7 +83,10 @@ if FASTAPI_AVAILABLE:
     @app.get("/ingestion/batch/status")
     def batch_status() -> Dict[str, Any]:
         """Retrieve metrics and summary from the most recent batch run."""
-        summary = get_latest_batch_summary()
+        try:
+            summary = get_latest_batch_summary()
+        except RuntimeError as exc:
+            raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc
         if summary is None:
             return {"status": "NO_PREVIOUS_RUN", "message": "No batch run has been executed yet."}
         return summary

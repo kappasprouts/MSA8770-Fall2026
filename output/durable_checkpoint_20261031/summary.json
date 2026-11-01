@@ -1,0 +1,42 @@
+{
+  "checked_at_utc": "2026-11-01T00:26:17.059039+00:00",
+  "python": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "169",
+    "time": "39.817",
+    "timestamp": "2026-10-31T20:24:19.247433-04:00",
+    "hostname": "DESKTOP-TJU3O7C"
+  },
+  "ui": {
+    "passed": 55,
+    "failed": 0,
+    "skipped": 0
+  },
+  "typecheck": "passed",
+  "lint": "passed with one existing unused-variable warning",
+  "production_build": "passed, isolated snapshot (webpack)",
+  "preview": "http://127.0.0.1:31040/dossier-reviews",
+  "http_checks": {
+    "/dossier-reviews": {
+      "status": 200
+    },
+    "/api/dossier-reviews": {
+      "status": 200,
+      "reviews": []
+    },
+    "/api/dossier?appId=APP_012": {
+      "status": 200
+    }
+  },
+  "receiving_system_cases": 13,
+  "shared_database_changes": "Additive checkpoint schema/functions only; no shared applicant dispositions or published dossiers changed",
+  "models": "Controlled responses in checkpoint tests; no new live inference in this phase",
+  "shared_database_verification": {
+    "applicant_rows_preserved": 20,
+    "dossier_rows_preserved": 5,
+    "review_requests": 0
+  }
+}

@@ -1,0 +1,366 @@
+[
+  {
+    "case": "test_approved_publication_and_duplicate_receipt",
+    "passed": true,
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "DOSSIER_READY"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "7e03b8a6-ff80-42e0-b296-b932a324ff37",
+          "app_id": "APP_050",
+          "state": "PUBLISHED",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [
+        {
+          "app_id": "APP_050",
+          "publication_request_id": "7e03b8a6-ff80-42e0-b296-b932a324ff37"
+        }
+      ],
+      "dossier_publication_receipts": [
+        {
+          "request_id": "7e03b8a6-ff80-42e0-b296-b932a324ff37",
+          "app_id": "APP_050",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80"
+        }
+      ]
+    }
+  },
+  {
+    "case": "test_rejection_and_duplicate_staging_withhold_publication",
+    "passed": true,
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "REVIEW_REJECTED"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "60c93d5a-a2bc-4260-a3f5-7d086bc0c6b4",
+          "app_id": "APP_050",
+          "state": "REJECTED",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_expiry_escalates_and_late_approval_fails",
+    "passed": true,
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "REVIEW_ESCALATED"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "09f5b180-b59d-4974-8db2-cd6afe0f119e",
+          "app_id": "APP_050",
+          "state": "ESCALATED",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_source_or_policy_changes_invalidate_authorization[UPDATE applicants SET superscored_sat_score=1550]",
+    "passed": true,
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "REVIEW_SUPERSEDED"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "84b6d13c-6267-4814-9814-bbf58588f1a1",
+          "app_id": "APP_050",
+          "state": "SUPERSEDED",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_source_or_policy_changes_invalidate_authorization[INSERT INTO policy_chunks VALUES ('POL-NEW','Changed rule')]",
+    "passed": true,
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "REVIEW_SUPERSEDED"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "3c120f9e-17b6-4e31-a4dd-654a2e3ef783",
+          "app_id": "APP_050",
+          "state": "SUPERSEDED",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_restart_interrupted_transaction_and_lost_confirmation",
+    "passed": true,
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "DOSSIER_READY"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "39ab2c10-868d-4c43-afcf-63ab4045d9ef",
+          "app_id": "APP_050",
+          "state": "PUBLISHED",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [
+        {
+          "app_id": "APP_050",
+          "publication_request_id": "39ab2c10-868d-4c43-afcf-63ab4045d9ef"
+        }
+      ],
+      "dossier_publication_receipts": [
+        {
+          "request_id": "39ab2c10-868d-4c43-afcf-63ab4045d9ef",
+          "app_id": "APP_050",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80"
+        }
+      ]
+    }
+  },
+  {
+    "case": "test_scanned_evidence_and_immutable_content",
+    "passed": true,
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "DOSSIER_READY"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "b9927379-1a24-4dfa-85c4-fa82df71ca23",
+          "app_id": "APP_050",
+          "state": "PUBLISHED",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [
+        {
+          "app_id": "APP_050",
+          "publication_request_id": "b9927379-1a24-4dfa-85c4-fa82df71ca23"
+        }
+      ],
+      "dossier_publication_receipts": [
+        {
+          "request_id": "b9927379-1a24-4dfa-85c4-fa82df71ca23",
+          "app_id": "APP_050",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80"
+        }
+      ]
+    }
+  },
+  {
+    "case": "test_receiver_failure_rolls_back_entire_approval",
+    "passed": true,
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "REVIEW_PENDING"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "cc56cf67-f0f8-4493-ac5d-9bf9dfc4eb22",
+          "app_id": "APP_050",
+          "state": "REVIEW_PENDING",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_new_candidate_supersedes_old_and_human_disposition_blocks_replacement",
+    "passed": true,
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "REVIEWED"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "82c0d6ab-ba00-44cd-8ad1-27a9b2fa13ee",
+          "app_id": "APP_050",
+          "state": "SUPERSEDED",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80",
+          "generation_run_id": 1
+        },
+        {
+          "id": "b8e1021d-cd60-4055-83e1-4fd7790ec123",
+          "app_id": "APP_050",
+          "state": "REVIEW_PENDING",
+          "candidate_hash": "a246517be6353adf7541d8ca41999cd7e831171f9e9bc614f973d0f782e7b544",
+          "generation_run_id": 2
+        }
+      ],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_actual_generator_pauses_before_publication_and_reuses_saved_request",
+    "passed": true,
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "DOSSIER_READY"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "0338baf9-887c-4cac-acbb-522170a01193",
+          "app_id": "APP_050",
+          "state": "PUBLISHED",
+          "candidate_hash": "c9883d363ea1794fa08427a3da93e184adffc36fdd8aed14d57f0ee5be3f4a67",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [
+        {
+          "app_id": "APP_050",
+          "publication_request_id": "0338baf9-887c-4cac-acbb-522170a01193"
+        }
+      ],
+      "dossier_publication_receipts": [
+        {
+          "request_id": "0338baf9-887c-4cac-acbb-522170a01193",
+          "app_id": "APP_050",
+          "candidate_hash": "c9883d363ea1794fa08427a3da93e184adffc36fdd8aed14d57f0ee5be3f4a67"
+        }
+      ]
+    }
+  },
+  {
+    "case": "test_concurrent_approvals_have_one_effect",
+    "passed": true,
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "DOSSIER_READY"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "49daf00e-c2bb-48e8-b0c4-934144a7f4f9",
+          "app_id": "APP_050",
+          "state": "PUBLISHED",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [
+        {
+          "app_id": "APP_050",
+          "publication_request_id": "49daf00e-c2bb-48e8-b0c4-934144a7f4f9"
+        }
+      ],
+      "dossier_publication_receipts": [
+        {
+          "request_id": "49daf00e-c2bb-48e8-b0c4-934144a7f4f9",
+          "app_id": "APP_050",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80"
+        }
+      ]
+    }
+  },
+  {
+    "case": "test_staging_refuses_inputs_changed_since_generation",
+    "passed": true,
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "READY_FOR_REVIEW"
+        }
+      ],
+      "dossier_review_requests": [],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_policy_cannot_change_between_approval_check_and_commit",
+    "passed": true,
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "DOSSIER_READY"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "7976314a-084e-4b80-ad84-ac4897bff136",
+          "app_id": "APP_050",
+          "state": "PUBLISHED",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80",
+          "generation_run_id": 1
+        }
+      ],
+      "applicant_dossier": [
+        {
+          "app_id": "APP_050",
+          "publication_request_id": "7976314a-084e-4b80-ad84-ac4897bff136"
+        }
+      ],
+      "dossier_publication_receipts": [
+        {
+          "request_id": "7976314a-084e-4b80-ad84-ac4897bff136",
+          "app_id": "APP_050",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80"
+        }
+      ]
+    }
+  }
+]

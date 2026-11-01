@@ -1,0 +1,820 @@
+[
+  {
+    "case": "test_worker_claims_once_across_connections",
+    "passed": true,
+    "worker": {
+      "it_exception_cases": [
+        {
+          "id": "29d16baa-7c18-444a-8b56-15b687c03ac4",
+          "owner": null,
+          "state": "IN_PROGRESS",
+          "source": "SUMMARIZER",
+          "revision": 1,
+          "snapshot": {},
+          "created_at": "2026-11-01T01:12:25.949572+00:00",
+          "updated_at": "2026-11-01T01:12:25.981907+00:00",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "applicant_id": "APP_050",
+          "exception_key": "applicant-APP_050-summarizer",
+          "resolution_evidence": {
+            "message": "Retry failed (RuntimeError); inspect service logs and correct the source or service",
+            "verified": false
+          }
+        }
+      ],
+      "it_retry_jobs": [
+        {
+          "id": "33a60740-f06e-42b2-9d12-f9f6250870e9",
+          "state": "FAILED",
+          "result": {
+            "message": "Retry failed (RuntimeError); inspect service logs and correct the source or service",
+            "verified": false
+          },
+          "source": "SUMMARIZER",
+          "case_id": "29d16baa-7c18-444a-8b56-15b687c03ac4",
+          "worker_id": "9f725661-c72d-4f69-ba8c-9061ef419056",
+          "command_id": "c2d742e1-8e40-49fa-95bd-5b9980f0d713",
+          "created_at": "2026-11-01T01:12:25.952611+00:00",
+          "started_at": "2026-11-01T01:12:25.957739+00:00",
+          "finished_at": "2026-11-01T01:12:25.981907+00:00",
+          "applicant_id": "APP_050",
+          "failure_run_id": 1,
+          "source_version": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7"
+        }
+      ],
+      "it_exception_actions": [
+        {
+          "note": "Corrected service; retry this version",
+          "actor": "IT demo",
+          "action": "REQUEST_RETRY",
+          "result": {},
+          "case_id": "29d16baa-7c18-444a-8b56-15b687c03ac4",
+          "request": {},
+          "command_id": "c2d742e1-8e40-49fa-95bd-5b9980f0d713",
+          "created_at": "2026-11-01T01:12:25.951022+00:00"
+        }
+      ]
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "AI_VALIDATION_FAILED"
+        }
+      ],
+      "dossier_review_requests": [],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_changed_input_or_human_disposition_withholds_retry[UPDATE applicants SET superscored_sat_score=1599]",
+    "passed": true,
+    "worker": {
+      "it_exception_cases": [
+        {
+          "id": "c308ede2-83f7-445c-994d-b4c481a5d6ac",
+          "owner": null,
+          "state": "IN_PROGRESS",
+          "source": "SUMMARIZER",
+          "revision": 1,
+          "snapshot": {},
+          "created_at": "2026-11-01T01:12:26.118127+00:00",
+          "updated_at": "2026-11-01T01:12:26.139263+00:00",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "applicant_id": "APP_050",
+          "exception_key": "applicant-APP_050-summarizer",
+          "resolution_evidence": {
+            "message": "Applicant inputs or human disposition changed; retry withheld",
+            "verified": false
+          }
+        }
+      ],
+      "it_retry_jobs": [
+        {
+          "id": "f00e364b-d0f1-454b-ad62-df2c02b2d852",
+          "state": "STALE",
+          "result": {
+            "message": "Applicant inputs or human disposition changed; retry withheld",
+            "verified": false
+          },
+          "source": "SUMMARIZER",
+          "case_id": "c308ede2-83f7-445c-994d-b4c481a5d6ac",
+          "worker_id": "ba47cfdf-7d61-48fc-8455-d9d8e2dbe818",
+          "command_id": "828fb332-67f6-4b5b-865a-32cfbe0da946",
+          "created_at": "2026-11-01T01:12:26.121757+00:00",
+          "started_at": "2026-11-01T01:12:26.127956+00:00",
+          "finished_at": "2026-11-01T01:12:26.139263+00:00",
+          "applicant_id": "APP_050",
+          "failure_run_id": 1,
+          "source_version": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7"
+        }
+      ],
+      "it_exception_actions": [
+        {
+          "note": "Corrected service; retry this version",
+          "actor": "IT demo",
+          "action": "REQUEST_RETRY",
+          "result": {},
+          "case_id": "c308ede2-83f7-445c-994d-b4c481a5d6ac",
+          "request": {},
+          "command_id": "828fb332-67f6-4b5b-865a-32cfbe0da946",
+          "created_at": "2026-11-01T01:12:26.119986+00:00"
+        }
+      ]
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "AI_VALIDATION_FAILED"
+        }
+      ],
+      "dossier_review_requests": [],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_changed_input_or_human_disposition_withholds_retry[UPDATE applicants SET officer_recommendation='WAITLIST']",
+    "passed": true,
+    "worker": {
+      "it_exception_cases": [
+        {
+          "id": "5eb96e96-2fbc-4646-9531-f502ba09be71",
+          "owner": null,
+          "state": "IN_PROGRESS",
+          "source": "SUMMARIZER",
+          "revision": 1,
+          "snapshot": {},
+          "created_at": "2026-11-01T01:12:26.28495+00:00",
+          "updated_at": "2026-11-01T01:12:26.303717+00:00",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "applicant_id": "APP_050",
+          "exception_key": "applicant-APP_050-summarizer",
+          "resolution_evidence": {
+            "message": "Applicant inputs or human disposition changed; retry withheld",
+            "verified": false
+          }
+        }
+      ],
+      "it_retry_jobs": [
+        {
+          "id": "f2af9085-1918-4812-9454-fb82662b27b5",
+          "state": "STALE",
+          "result": {
+            "message": "Applicant inputs or human disposition changed; retry withheld",
+            "verified": false
+          },
+          "source": "SUMMARIZER",
+          "case_id": "5eb96e96-2fbc-4646-9531-f502ba09be71",
+          "worker_id": "1d7f3feb-21be-400d-8726-c97edd5896b4",
+          "command_id": "5475550e-2418-41a9-b721-ab67aa0a831c",
+          "created_at": "2026-11-01T01:12:26.288328+00:00",
+          "started_at": "2026-11-01T01:12:26.294032+00:00",
+          "finished_at": "2026-11-01T01:12:26.303717+00:00",
+          "applicant_id": "APP_050",
+          "failure_run_id": 1,
+          "source_version": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7"
+        }
+      ],
+      "it_exception_actions": [
+        {
+          "note": "Corrected service; retry this version",
+          "actor": "IT demo",
+          "action": "REQUEST_RETRY",
+          "result": {},
+          "case_id": "5eb96e96-2fbc-4646-9531-f502ba09be71",
+          "request": {},
+          "command_id": "5475550e-2418-41a9-b721-ab67aa0a831c",
+          "created_at": "2026-11-01T01:12:26.286659+00:00"
+        }
+      ]
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "AI_VALIDATION_FAILED"
+        }
+      ],
+      "dossier_review_requests": [],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_retry_executes_actual_generator_and_verifies_receiver[False]",
+    "passed": true,
+    "worker": {
+      "it_exception_cases": [
+        {
+          "id": "cec0d74c-f9d3-4578-a691-83a41c0f2341",
+          "owner": null,
+          "state": "RESOLVED",
+          "source": "SUMMARIZER",
+          "revision": 1,
+          "snapshot": {},
+          "created_at": "2026-11-01T01:12:26.45416+00:00",
+          "updated_at": "2026-11-01T01:12:26.507488+00:00",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "applicant_id": "APP_050",
+          "exception_key": "applicant-APP_050-summarizer",
+          "resolution_evidence": {
+            "message": "Validated receiver confirmed; any admissions exceptions still need officer resolution",
+            "verified": true,
+            "request_id": "2a6ad566-2a2a-4b77-bb77-99d41e710059",
+            "run_status": "DOSSIER_READY",
+            "review_state": "PUBLISHED",
+            "generation_run_id": 2
+          }
+        }
+      ],
+      "it_retry_jobs": [
+        {
+          "id": "a78fe7a6-6d76-4c5c-8755-8b925c10b754",
+          "state": "SUCCEEDED",
+          "result": {
+            "message": "Validated receiver confirmed; any admissions exceptions still need officer resolution",
+            "verified": true,
+            "request_id": "2a6ad566-2a2a-4b77-bb77-99d41e710059",
+            "run_status": "DOSSIER_READY",
+            "review_state": "PUBLISHED",
+            "generation_run_id": 2
+          },
+          "source": "SUMMARIZER",
+          "case_id": "cec0d74c-f9d3-4578-a691-83a41c0f2341",
+          "worker_id": "9183f766-5cfe-429b-a0b8-53354dff9a6c",
+          "command_id": "81ed8063-ba4a-4039-9d34-2d85f4d7c512",
+          "created_at": "2026-11-01T01:12:26.45867+00:00",
+          "started_at": "2026-11-01T01:12:26.466922+00:00",
+          "finished_at": "2026-11-01T01:12:26.507488+00:00",
+          "applicant_id": "APP_050",
+          "failure_run_id": 1,
+          "source_version": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7"
+        }
+      ],
+      "it_exception_actions": [
+        {
+          "note": "Corrected service; retry this version",
+          "actor": "IT demo",
+          "action": "REQUEST_RETRY",
+          "result": {},
+          "case_id": "cec0d74c-f9d3-4578-a691-83a41c0f2341",
+          "request": {},
+          "command_id": "81ed8063-ba4a-4039-9d34-2d85f4d7c512",
+          "created_at": "2026-11-01T01:12:26.456491+00:00"
+        }
+      ]
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "DOSSIER_READY"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "2a6ad566-2a2a-4b77-bb77-99d41e710059",
+          "app_id": "APP_050",
+          "state": "PUBLISHED",
+          "candidate_hash": "a8345e99d7e6ad77d0e8945069a14c6eaa4008bb3a6d16d65ed67cd6c35ce40c",
+          "generation_run_id": 2
+        }
+      ],
+      "applicant_dossier": [
+        {
+          "app_id": "APP_050",
+          "publication_request_id": "2a6ad566-2a2a-4b77-bb77-99d41e710059"
+        }
+      ],
+      "dossier_publication_receipts": [
+        {
+          "request_id": "2a6ad566-2a2a-4b77-bb77-99d41e710059",
+          "app_id": "APP_050",
+          "candidate_hash": "a8345e99d7e6ad77d0e8945069a14c6eaa4008bb3a6d16d65ed67cd6c35ce40c"
+        }
+      ]
+    }
+  },
+  {
+    "case": "test_retry_executes_actual_generator_and_verifies_receiver[True]",
+    "passed": true,
+    "worker": {
+      "it_exception_cases": [
+        {
+          "id": "f8348d18-4d66-4654-bbeb-a2e4486b9183",
+          "owner": null,
+          "state": "RESOLVED",
+          "source": "SUMMARIZER",
+          "revision": 1,
+          "snapshot": {},
+          "created_at": "2026-11-01T01:12:26.625369+00:00",
+          "updated_at": "2026-11-01T01:12:26.676989+00:00",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "applicant_id": "APP_050",
+          "exception_key": "applicant-APP_050-summarizer",
+          "resolution_evidence": {
+            "message": "Validated receiver confirmed; any admissions exceptions still need officer resolution",
+            "verified": true,
+            "request_id": "ed9f0f7b-5105-43e8-a45d-1b49bcf36a73",
+            "run_status": "REVIEW_PENDING",
+            "review_state": "REVIEW_PENDING",
+            "generation_run_id": 2
+          }
+        }
+      ],
+      "it_retry_jobs": [
+        {
+          "id": "9a27516c-6b61-469c-afa6-71959f5a4559",
+          "state": "SUCCEEDED",
+          "result": {
+            "message": "Validated receiver confirmed; any admissions exceptions still need officer resolution",
+            "verified": true,
+            "request_id": "ed9f0f7b-5105-43e8-a45d-1b49bcf36a73",
+            "run_status": "REVIEW_PENDING",
+            "review_state": "REVIEW_PENDING",
+            "generation_run_id": 2
+          },
+          "source": "SUMMARIZER",
+          "case_id": "f8348d18-4d66-4654-bbeb-a2e4486b9183",
+          "worker_id": "dd976511-c3af-4b82-bfd0-d0d2e935ab53",
+          "command_id": "079387c2-88fd-4ad6-94b8-979a7ea3caaf",
+          "created_at": "2026-11-01T01:12:26.628711+00:00",
+          "started_at": "2026-11-01T01:12:26.637313+00:00",
+          "finished_at": "2026-11-01T01:12:26.676989+00:00",
+          "applicant_id": "APP_050",
+          "failure_run_id": 1,
+          "source_version": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7"
+        }
+      ],
+      "it_exception_actions": [
+        {
+          "note": "Corrected service; retry this version",
+          "actor": "IT demo",
+          "action": "REQUEST_RETRY",
+          "result": {},
+          "case_id": "f8348d18-4d66-4654-bbeb-a2e4486b9183",
+          "request": {},
+          "command_id": "079387c2-88fd-4ad6-94b8-979a7ea3caaf",
+          "created_at": "2026-11-01T01:12:26.627128+00:00"
+        }
+      ]
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "REVIEW_PENDING"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "ed9f0f7b-5105-43e8-a45d-1b49bcf36a73",
+          "app_id": "APP_050",
+          "state": "REVIEW_PENDING",
+          "candidate_hash": "5978f95aec9e41ee1a73f00197053cf182d576566d47c6245af712b218d34cbd",
+          "generation_run_id": 2
+        }
+      ],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_failed_retry_does_not_close_case",
+    "passed": true,
+    "worker": {
+      "it_exception_cases": [
+        {
+          "id": "d33ea971-ea6c-4580-87ca-6c6f7cbe85ba",
+          "owner": null,
+          "state": "IN_PROGRESS",
+          "source": "SUMMARIZER",
+          "revision": 1,
+          "snapshot": {},
+          "created_at": "2026-11-01T01:12:26.823233+00:00",
+          "updated_at": "2026-11-01T01:12:26.849268+00:00",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "applicant_id": "APP_050",
+          "exception_key": "applicant-APP_050-summarizer",
+          "resolution_evidence": {
+            "message": "Retry failed (RuntimeError); inspect service logs and correct the source or service",
+            "verified": false
+          }
+        }
+      ],
+      "it_retry_jobs": [
+        {
+          "id": "f9eecb6a-8ce5-43f5-9c75-985f702fbe4a",
+          "state": "FAILED",
+          "result": {
+            "message": "Retry failed (RuntimeError); inspect service logs and correct the source or service",
+            "verified": false
+          },
+          "source": "SUMMARIZER",
+          "case_id": "d33ea971-ea6c-4580-87ca-6c6f7cbe85ba",
+          "worker_id": "df3c6d41-d2d0-4312-91df-ebfac2a83ad2",
+          "command_id": "b3a6e908-e172-4fea-9e6e-131c80194067",
+          "created_at": "2026-11-01T01:12:26.827665+00:00",
+          "started_at": "2026-11-01T01:12:26.837312+00:00",
+          "finished_at": "2026-11-01T01:12:26.849268+00:00",
+          "applicant_id": "APP_050",
+          "failure_run_id": 1,
+          "source_version": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7"
+        }
+      ],
+      "it_exception_actions": [
+        {
+          "note": "Corrected service; retry this version",
+          "actor": "IT demo",
+          "action": "REQUEST_RETRY",
+          "result": {},
+          "case_id": "d33ea971-ea6c-4580-87ca-6c6f7cbe85ba",
+          "request": {},
+          "command_id": "b3a6e908-e172-4fea-9e6e-131c80194067",
+          "created_at": "2026-11-01T01:12:26.82554+00:00"
+        }
+      ]
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "AI_VALIDATION_FAILED"
+        }
+      ],
+      "dossier_review_requests": [],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_worker_crash_requires_receiver_recheck_not_blind_requeue",
+    "passed": true,
+    "worker": {
+      "it_exception_cases": [
+        {
+          "id": "27571c4a-955c-454a-ab1b-d16cc251e939",
+          "owner": null,
+          "state": "IN_PROGRESS",
+          "source": "SUMMARIZER",
+          "revision": 1,
+          "snapshot": {},
+          "created_at": "2026-11-01T01:12:26.973571+00:00",
+          "updated_at": "2026-11-01T01:12:27.027859+00:00",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "applicant_id": "APP_050",
+          "exception_key": "applicant-APP_050-summarizer",
+          "resolution_evidence": {
+            "message": "Retry failed (RuntimeError); inspect service logs and correct the source or service",
+            "verified": false
+          }
+        }
+      ],
+      "it_retry_jobs": [
+        {
+          "id": "24888635-8ec5-4b1f-b507-db63034149e8",
+          "state": "FAILED",
+          "result": {
+            "message": "Retry failed (RuntimeError); inspect service logs and correct the source or service",
+            "verified": false
+          },
+          "source": "SUMMARIZER",
+          "case_id": "27571c4a-955c-454a-ab1b-d16cc251e939",
+          "worker_id": "ebf19883-39be-491c-bdb1-3d4568b48fcd",
+          "command_id": "80c438d8-78c7-42e2-a091-4f21eeb9252d",
+          "created_at": "2026-11-01T01:12:26.977499+00:00",
+          "started_at": "2026-11-01T01:12:26.984941+00:00",
+          "finished_at": "2026-11-01T01:12:27.027859+00:00",
+          "applicant_id": "APP_050",
+          "failure_run_id": 1,
+          "source_version": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7"
+        }
+      ],
+      "it_exception_actions": [
+        {
+          "note": "Corrected service; retry this version",
+          "actor": "IT demo",
+          "action": "REQUEST_RETRY",
+          "result": {},
+          "case_id": "27571c4a-955c-454a-ab1b-d16cc251e939",
+          "request": {},
+          "command_id": "80c438d8-78c7-42e2-a091-4f21eeb9252d",
+          "created_at": "2026-11-01T01:12:26.97543+00:00"
+        }
+      ]
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "AI_VALIDATION_FAILED"
+        }
+      ],
+      "dossier_review_requests": [],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_ingestion_retry_requires_explicit_source_directory",
+    "passed": true,
+    "worker": {
+      "it_exception_cases": [
+        {
+          "id": "67d5eeb9-91c4-4587-8bf8-e1e75382ea4d",
+          "owner": null,
+          "state": "WAITING",
+          "source": "SUMMARIZER",
+          "revision": 0,
+          "snapshot": {},
+          "created_at": "2026-11-01T01:12:27.16815+00:00",
+          "updated_at": "2026-11-01T01:12:27.16815+00:00",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "applicant_id": "APP_050",
+          "exception_key": "applicant-APP_050-summarizer",
+          "resolution_evidence": null
+        }
+      ],
+      "it_retry_jobs": [
+        {
+          "id": "7e11009c-07eb-44ab-b89f-a63afe47b3c8",
+          "state": "QUEUED",
+          "result": null,
+          "source": "SUMMARIZER",
+          "case_id": "67d5eeb9-91c4-4587-8bf8-e1e75382ea4d",
+          "worker_id": null,
+          "command_id": "9279125d-686f-488c-894a-816ce85e6a47",
+          "created_at": "2026-11-01T01:12:27.171589+00:00",
+          "started_at": null,
+          "finished_at": null,
+          "applicant_id": "APP_050",
+          "failure_run_id": 1,
+          "source_version": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7"
+        }
+      ],
+      "it_exception_actions": [
+        {
+          "note": "Corrected service; retry this version",
+          "actor": "IT demo",
+          "action": "REQUEST_RETRY",
+          "result": {},
+          "case_id": "67d5eeb9-91c4-4587-8bf8-e1e75382ea4d",
+          "request": {},
+          "command_id": "9279125d-686f-488c-894a-816ce85e6a47",
+          "created_at": "2026-11-01T01:12:27.16978+00:00"
+        }
+      ]
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "AI_VALIDATION_FAILED"
+        }
+      ],
+      "dossier_review_requests": [],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_packet_retry_adapter_checks_canonical_gate_receipt",
+    "passed": true,
+    "worker": {
+      "it_exception_cases": [
+        {
+          "id": "758f86e9-1ecd-435a-86de-eb53b9e13c56",
+          "owner": null,
+          "state": "RESOLVED",
+          "source": "INGESTION",
+          "revision": 1,
+          "snapshot": {},
+          "created_at": "2026-11-01T01:12:27.294687+00:00",
+          "updated_at": "2026-11-01T01:12:27.324933+00:00",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "applicant_id": "APP_050",
+          "exception_key": "applicant-APP_050-summarizer",
+          "resolution_evidence": {
+            "message": "Packet checks rerun; dossier generation remains a separate step",
+            "receiver": {
+              "status": "READY_FOR_REVIEW",
+              "gate_status": "READY_FOR_REVIEW",
+              "source_version": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7",
+              "manifest_audit_id": "4021b975-817f-4e15-b9a6-85a7fac9907e"
+            },
+            "verified": true,
+            "handoff_ready": true
+          }
+        }
+      ],
+      "it_retry_jobs": [
+        {
+          "id": "81a9fa0f-7646-43c5-8fc6-a1a78e05cd23",
+          "state": "SUCCEEDED",
+          "result": {
+            "message": "Packet checks rerun; dossier generation remains a separate step",
+            "receiver": {
+              "status": "READY_FOR_REVIEW",
+              "gate_status": "READY_FOR_REVIEW",
+              "source_version": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7",
+              "manifest_audit_id": "4021b975-817f-4e15-b9a6-85a7fac9907e"
+            },
+            "verified": true,
+            "handoff_ready": true
+          },
+          "source": "INGESTION",
+          "case_id": "758f86e9-1ecd-435a-86de-eb53b9e13c56",
+          "worker_id": "c78514fe-e07d-49a0-b909-0e666a0b1fa8",
+          "command_id": "42329d5d-c5ad-4bc8-9172-5e9457cda858",
+          "created_at": "2026-11-01T01:12:27.2981+00:00",
+          "started_at": "2026-11-01T01:12:27.309943+00:00",
+          "finished_at": "2026-11-01T01:12:27.324933+00:00",
+          "applicant_id": "APP_050",
+          "failure_run_id": 1,
+          "source_version": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7"
+        }
+      ],
+      "it_exception_actions": [
+        {
+          "note": "Corrected service; retry this version",
+          "actor": "IT demo",
+          "action": "REQUEST_RETRY",
+          "result": {},
+          "case_id": "758f86e9-1ecd-435a-86de-eb53b9e13c56",
+          "request": {},
+          "command_id": "42329d5d-c5ad-4bc8-9172-5e9457cda858",
+          "created_at": "2026-11-01T01:12:27.296391+00:00"
+        }
+      ]
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "READY_FOR_REVIEW"
+        }
+      ],
+      "dossier_review_requests": [],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_completed_retry_update_and_audit_are_atomic",
+    "passed": true,
+    "worker": {
+      "it_exception_cases": [
+        {
+          "id": "3833f2f4-0edb-4c0b-9ec3-324c8d5111d3",
+          "owner": null,
+          "state": "WAITING",
+          "source": "SUMMARIZER",
+          "revision": 0,
+          "snapshot": {},
+          "created_at": "2026-11-01T01:12:27.469563+00:00",
+          "updated_at": "2026-11-01T01:12:27.469563+00:00",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "applicant_id": "APP_050",
+          "exception_key": "applicant-APP_050-summarizer",
+          "resolution_evidence": null
+        }
+      ],
+      "it_retry_jobs": [
+        {
+          "id": "88b9bbc4-da93-4038-846f-8d7aab75bb18",
+          "state": "RUNNING",
+          "result": null,
+          "source": "SUMMARIZER",
+          "case_id": "3833f2f4-0edb-4c0b-9ec3-324c8d5111d3",
+          "worker_id": "5bac7772-c3b5-4387-92c0-d5e0bf90ea91",
+          "command_id": "96946dfd-a179-4047-bac8-860f9c475ae2",
+          "created_at": "2026-11-01T01:12:27.473939+00:00",
+          "started_at": "2026-11-01T01:12:27.481184+00:00",
+          "finished_at": null,
+          "applicant_id": "APP_050",
+          "failure_run_id": 1,
+          "source_version": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7"
+        }
+      ],
+      "it_exception_actions": [
+        {
+          "note": "Corrected service; retry this version",
+          "actor": "IT demo",
+          "action": "REQUEST_RETRY",
+          "result": {},
+          "case_id": "3833f2f4-0edb-4c0b-9ec3-324c8d5111d3",
+          "request": {},
+          "command_id": "96946dfd-a179-4047-bac8-860f9c475ae2",
+          "created_at": "2026-11-01T01:12:27.471778+00:00"
+        }
+      ]
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "AI_VALIDATION_FAILED"
+        }
+      ],
+      "dossier_review_requests": [],
+      "applicant_dossier": [],
+      "dossier_publication_receipts": []
+    }
+  },
+  {
+    "case": "test_lost_result_save_recovers_publication_without_repeating",
+    "passed": true,
+    "worker": {
+      "it_exception_cases": [
+        {
+          "id": "7eb6540e-f5f4-4b61-af03-e2915660aece",
+          "owner": null,
+          "state": "RESOLVED",
+          "source": "SUMMARIZER",
+          "revision": 1,
+          "snapshot": {},
+          "created_at": "2026-11-01T01:12:27.656102+00:00",
+          "updated_at": "2026-11-01T01:12:27.687595+00:00",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "applicant_id": "APP_050",
+          "exception_key": "applicant-APP_050-summarizer",
+          "resolution_evidence": {
+            "message": "Recovered the validated receiving-system outcome after an interrupted confirmation",
+            "verified": true,
+            "request_id": "671a3ee7-3b3f-4971-b452-360ddaa59e7c",
+            "review_state": "PUBLISHED",
+            "generation_run_id": 2
+          }
+        }
+      ],
+      "it_retry_jobs": [
+        {
+          "id": "c41dac1a-d0dd-404e-b490-0e49801ac21c",
+          "state": "SUCCEEDED",
+          "result": {
+            "message": "Recovered the validated receiving-system outcome after an interrupted confirmation",
+            "verified": true,
+            "request_id": "671a3ee7-3b3f-4971-b452-360ddaa59e7c",
+            "review_state": "PUBLISHED",
+            "generation_run_id": 2
+          },
+          "source": "SUMMARIZER",
+          "case_id": "7eb6540e-f5f4-4b61-af03-e2915660aece",
+          "worker_id": "adf5e899-3907-408b-8494-4cb0dc7c6862",
+          "command_id": "08569c5a-8416-4814-8f9b-7a604a373ae9",
+          "created_at": "2026-11-01T01:12:27.65947+00:00",
+          "started_at": "2026-11-01T01:12:27.666179+00:00",
+          "finished_at": "2026-11-01T01:12:27.687595+00:00",
+          "applicant_id": "APP_050",
+          "failure_run_id": 1,
+          "source_version": "7a10cb7a7ab42dcb00b059ef97f0a91030cc6348317c981bad706c556343cfa7"
+        }
+      ],
+      "it_exception_actions": [
+        {
+          "note": "Corrected service; retry this version",
+          "actor": "IT demo",
+          "action": "REQUEST_RETRY",
+          "result": {},
+          "case_id": "7eb6540e-f5f4-4b61-af03-e2915660aece",
+          "request": {},
+          "command_id": "08569c5a-8416-4814-8f9b-7a604a373ae9",
+          "created_at": "2026-11-01T01:12:27.657721+00:00"
+        }
+      ]
+    },
+    "receiver": {
+      "applicants": [
+        {
+          "app_id": "APP_050",
+          "status": "DOSSIER_READY"
+        }
+      ],
+      "dossier_review_requests": [
+        {
+          "id": "671a3ee7-3b3f-4971-b452-360ddaa59e7c",
+          "app_id": "APP_050",
+          "state": "PUBLISHED",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80",
+          "generation_run_id": 2
+        }
+      ],
+      "applicant_dossier": [
+        {
+          "app_id": "APP_050",
+          "publication_request_id": "671a3ee7-3b3f-4971-b452-360ddaa59e7c"
+        }
+      ],
+      "dossier_publication_receipts": [
+        {
+          "request_id": "671a3ee7-3b3f-4971-b452-360ddaa59e7c",
+          "app_id": "APP_050",
+          "candidate_hash": "8b19a2f3824bb307fec5a6dd2b0d4ef6ecefc6e392743b6d34c134ad820a3d80"
+        }
+      ]
+    }
+  }
+]

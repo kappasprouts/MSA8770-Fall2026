@@ -1,0 +1,64 @@
+{
+  "checked_at_utc": "2026-11-01T02:04:56.667545+00:00",
+  "python": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "209",
+    "time": "56.271",
+    "timestamp": "2026-10-31T22:00:36.584750-04:00",
+    "hostname": "DESKTOP-TJU3O7C"
+  },
+  "ui": {
+    "passed": 63,
+    "failed": 0,
+    "skipped": 0
+  },
+  "real_minio_cases": 10,
+  "generation_recovery_cases": 11,
+  "models": "Controlled responses; no new live model inference",
+  "ui_source": "Unchanged; prior build/type/lint checks remain applicable",
+  "migration": "Applied twice; existing rows preserved, execution_id added nullable",
+  "shared_database_verification": {
+    "preserved_tables": [
+      "applicant_dossier",
+      "applicants",
+      "audit_logs",
+      "document_records",
+      "dossier_generation_runs",
+      "dossier_publication_receipts",
+      "dossier_review_requests",
+      "orphan_documents",
+      "orphan_test_scores"
+    ],
+    "applicants": 20,
+    "dossiers": 5,
+    "new_ledgers": {
+      "ingestion_batch_events": 0,
+      "generation_batches": 0,
+      "generation_batch_members": 0,
+      "generation_executions": 0,
+      "generation_section_checkpoints": 0
+    }
+  },
+  "it_retry_worker": {
+    "running": true,
+    "dossier_retries": "Durable execution keyed by IT job UUID",
+    "packet_retries": "Disabled until an explicit input directory is configured"
+  },
+  "http_checks": {
+    "/applicant-review": {
+      "status": 200
+    },
+    "/error-queue": {
+      "status": 200
+    },
+    "/api/dossier?appId=APP_012": {
+      "status": 200
+    },
+    "/api/exceptions": {
+      "status": 200
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "applicants": [
+    {
+      "app_id": "APP_050",
+      "status": "REVIEWED",
+      "officer_recommendation": "WAITLIST",
+      "final_decision": null
+    },
+    {
+      "app_id": "APP_051",
+      "status": "REVIEWED",
+      "officer_recommendation": "ACCEPT",
+      "final_decision": null
+    }
+  ],
+  "dossier_review_requests": [
+    {
+      "id": "0aaf3c35-4fab-47d2-a61f-acb604a04a91",
+      "app_id": "APP_050",
+      "state": "PUBLISHED",
+      "review_mode": "EXCEPTION",
+      "decision": "APPROVE",
+      "reviewer": "Officer demo",
+      "reason": "Compared original sources; recorded authoritative score and uncertainty",
+      "candidate_hash": "eba28fd68487702462d7da353c8dd7bf675340acd64a9699f7205de8e48c5296",
+      "generation_run_id": "1"
+    },
+    {
+      "id": "8364c763-91f6-4c80-8a2d-d159fbfdd16f",
+      "app_id": "APP_051",
+      "state": "PUBLISHED",
+      "review_mode": "AUTOMATIC",
+      "decision": null,
+      "reviewer": null,
+      "reason": null,
+      "candidate_hash": "b23a872f6f2a17fba4b07add88c3ab24ffd488c4543df7b8069632962c5b259e",
+      "generation_run_id": "2"
+    }
+  ],
+  "applicant_dossier": [
+    {
+      "app_id": "APP_050",
+      "publication_request_id": "0aaf3c35-4fab-47d2-a61f-acb604a04a91"
+    },
+    {
+      "app_id": "APP_051",
+      "publication_request_id": "8364c763-91f6-4c80-8a2d-d159fbfdd16f"
+    }
+  ],
+  "dossier_publication_receipts": [
+    {
+      "request_id": "0aaf3c35-4fab-47d2-a61f-acb604a04a91",
+      "app_id": "APP_050",
+      "candidate_hash": "eba28fd68487702462d7da353c8dd7bf675340acd64a9699f7205de8e48c5296"
+    },
+    {
+      "request_id": "8364c763-91f6-4c80-8a2d-d159fbfdd16f",
+      "app_id": "APP_051",
+      "candidate_hash": "b23a872f6f2a17fba4b07add88c3ab24ffd488c4543df7b8069632962c5b259e"
+    }
+  ]
+}

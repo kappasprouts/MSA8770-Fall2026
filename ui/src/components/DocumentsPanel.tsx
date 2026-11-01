@@ -17,7 +17,7 @@ export default function DocumentsPanel({ appId, documents, selection, onSelect }
   const active = documents.find(item => item.file === selection?.file) ?? documents[0];
   if (!active) return <div className={styles.card}><h2>Original documents</h2><p className={styles.help} role="status">No source documents are listed for this applicant.</p></div>;
   const page = selection?.file === active.file ? selection.page : 1;
-  const url = `/api/documents?appId=${encodeURIComponent(appId)}&file=${encodeURIComponent(active.file)}`;
+  const url = active.sourceUrl || `/api/documents?appId=${encodeURIComponent(appId)}&file=${encodeURIComponent(active.file)}`;
   async function toggleExpanded() {
     setExpandError("");
     try {

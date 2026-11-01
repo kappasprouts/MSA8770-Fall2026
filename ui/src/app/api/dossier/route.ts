@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const data = await loadDossier(appId);
+    const data = await loadDossier(appId, true);
     if (!data) {
       return NextResponse.json({ error: `No saved dossier was found for ${appId}. Choose another applicant or check the processing dashboard.` }, { status: 404 });
     }

@@ -38,7 +38,7 @@ export default function DossierPanel({ payload, onViewEvidence }: { payload: Dos
   }
 
   return <div className={styles.readingContent}>
-    <div className={styles.readingIntro}><h2>Saved applicant dossier</h2><p className={styles.help}>AI-assisted summaries are advisory. Verify claims against the original documents.</p></div>
+    <div className={styles.readingIntro}><h2>{payload.review_checkpoint ? "Draft dossier — exceptions unresolved" : "Saved applicant dossier"}</h2><p className={styles.help}>AI-assisted summaries are advisory. Verify claims against the original documents.</p></div>
     <ApplicantInfoCard dossier={dossier} />
     <Profile label="Academic profile" section={dossier.academic_profile} open onViewEvidence={onViewEvidence} />
     <Profile label="Activities and engagement" section={dossier.engagement_profile} onViewEvidence={onViewEvidence} />
@@ -46,6 +46,6 @@ export default function DossierPanel({ payload, onViewEvidence }: { payload: Dos
     <Profile label="Supplemental essay profile" section={dossier.supplemental_essay_profile} onViewEvidence={onViewEvidence} />
     <details className={styles.dossierSection}><summary>Policy checks and validation</summary><div className={styles.sectionBody}><SnapshotCard payload={payload} />{!!dossier.policy_assessment?.length && <PolicyChecksCard items={dossier.policy_assessment} />}</div></details>
     {!!dossier.strengths?.length && <details className={styles.dossierSection}><summary>Key evidence and citations</summary><div className={styles.sectionBody}><ul className={styles.evidenceList}>{dossier.strengths.map((item, index) => <li key={index}><p>{item.strength}</p><EvidenceLinks evidence={item.evidence} onView={onViewEvidence} /></li>)}</ul></div></details>}
-    {!!dossier.review_notes?.length && <details className={styles.dossierSection}><summary>Dossier review notes</summary><div className={styles.sectionBody}><ul className={styles.evidenceList}>{dossier.review_notes.map((note, index) => <li key={index}>{note}</li>)}</ul></div></details>}
+    {!!dossier.review_notes?.length && <details className={styles.dossierSection}><summary>Dossier review notes</summary><div className={styles.sectionBody}><ul className={styles.evidenceList}>{dossier.review_notes.map((note, index) => <li key={index}>{typeof note === "string" ? note : [note.section, note.category, note.note].filter(Boolean).join(" / ")}</li>)}</ul></div></details>}
   </div>;
 }

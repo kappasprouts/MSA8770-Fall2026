@@ -1,6 +1,8 @@
 import type { ApplicantSummary, DossierPayload, RunInfo, ValidationCall } from "./types";
 
 const STATUS_LABELS: Record<string, string> = {
+  REVIEW_PENDING: "Exceptions to resolve", REVIEW_REJECTED: "Draft needs correction",
+  REVIEW_ESCALATED: "Exception review overdue", REVIEW_SUPERSEDED: "Draft needs regeneration",
   DOSSIER_READY: "Dossier ready", READY_FOR_REVIEW: "Awaiting dossier",
   REVIEWED: "Reviewed", FINAL_DECISION_RECORDED: "Final decision recorded",
   AWAITING_MATERIALS: "Awaiting materials", INCOMPLETE: "Incomplete",
@@ -18,7 +20,7 @@ export function decisionLabel(decision: string | null): string {
 
 /** Saved dossiers remain accessible throughout human review and finalization. */
 export function hasReviewableDossier(status: string): boolean {
-  return ["DOSSIER_READY", "REVIEWED", "FINAL_DECISION_RECORDED"].includes(status);
+  return ["DOSSIER_READY", "REVIEW_PENDING", "REVIEW_REJECTED", "REVIEW_ESCALATED", "REVIEW_SUPERSEDED", "REVIEWED", "FINAL_DECISION_RECORDED"].includes(status);
 }
 
 export function parseApplicantSummaries(value: unknown): ApplicantSummary[] {
@@ -37,7 +39,7 @@ export function isDossierForApplicant(payload: DossierPayload | null, appId: str
 
 export function latestRunCheckState(run: RunInfo): "passed" | "failed" | "unknown" {
   if (run.validation?.passed === false || /FAIL|ERROR|STOPPED/.test(run.run_status ?? "")) return "failed";
-  if (run.run_status === "DOSSIER_READY" && run.validation?.passed === true) return "passed";
+  if (["DOSSIER_READY", "REVIEW_PENDING"].includes(run.run_status ?? "") && run.validation?.passed === true) return "passed";
   return "unknown";
 }
 

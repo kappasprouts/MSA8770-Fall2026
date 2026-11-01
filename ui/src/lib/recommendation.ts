@@ -9,6 +9,20 @@ export interface OfficerReview {
   updatedAt: string | null;
   canEdit: boolean;
   applicationStatus: string;
+  version?: { requestId: string; candidateHash: string; state: string; requiresEvidenceReview: boolean;
+    reasons: string[]; expiresAt: string; outcomeReason?: string; reviewer?: string; reason?: string; fresh?: boolean };
+}
+
+export interface ExceptionResolution {
+  reviewer: string; reason: string; confirmed: boolean; evidenceReviewed: boolean;
+}
+
+export function validExceptionResolution(value: unknown): value is ExceptionResolution {
+  if (!value || typeof value !== "object") return false;
+  const r = value as Record<string, unknown>;
+  return typeof r.reviewer === "string" && r.reviewer.trim().length > 0 && r.reviewer.length <= 200 &&
+    typeof r.reason === "string" && r.reason.trim().length > 0 && r.reason.length <= 10000 &&
+    r.confirmed === true && typeof r.evidenceReviewed === "boolean";
 }
 
 export interface RecommendationState {

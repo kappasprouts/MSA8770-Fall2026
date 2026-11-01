@@ -36,6 +36,17 @@
 .guidance { border-top: 3px solid var(--color-accent); }
 .guidance p { margin: 0; line-height: 1.8; }
 .openDossier { width: 100%; margin-bottom: 20px; }
+.actionCard { min-width: 0; }
+.actionFields { display: grid; gap: 20px; min-width: 0; }
+.actionFields legend { font-weight: 600; padding: 0; }
+.actionField { display: flex; flex-direction: column; gap: 8px; min-width: 0; font-weight: 600; line-height: 1.5; }
+.actionField .actionControl { display: block; box-sizing: border-box; width: 100%; max-width: 100%; min-width: 0; flex: none; font-weight: 400; }
+.actionField textarea { min-height: 140px; }
+.actionConfirmation { display: flex; align-items: flex-start; gap: 10px; line-height: 1.6; }
+.actionConfirmation input { flex: none; width: 16px; height: 16px; margin-top: 4px; accent-color: var(--color-accent); }
+.actionGuidance { display: grid; gap: 10px; }
+.actionGuidance p { margin: 0; }
+.actionSubmit { width: 100%; margin-top: 2px; }
 @media (max-width: 1000px) {
   .detailsGrid { grid-template-columns: minmax(0, 1fr); gap: 0; }
 }

@@ -92,16 +92,41 @@ interface Evidence {
 
 export async function listApplicants(): Promise<ApplicantSummary[]> {
   const { rows } = await pool.query<{ app_id: string }>(
-    "SELECT app_id FROM applicant_dossier ORDER BY app_id;"
+    "SELECT app_id FROM applicant_dossier UNION SELECT app_id FROM dossier_review_requests ORDER BY app_id;"
   );
 
   return rows.map((row) => ({ id: row.app_id }));
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function loadDossier(appId: string): Promise<any | null> {
+export async function loadDossier(appId: string, includePending = false): Promise<any | null> {
+  // Only the human review endpoint may expose an unpublished candidate. Q&A uses published data.
+  if (includePending) {
+    await pool.query("SELECT reconcile_dossier_reviews($1)", [appId]);
+    const result = await pool.query(`SELECT r.*, g.run_status, g.validation, g.documents_sent, g.documents_withheld,
+      g.created_at AS run_created_at, g.attempts, g.runtime_seconds, g.policies_retrieved
+      FROM dossier_review_requests r JOIN dossier_generation_runs g ON g.id=r.generation_run_id
+      WHERE r.app_id=$1 ORDER BY r.requested_at DESC LIMIT 1`, [appId]);
+    const pending = result.rows[0];
+    if (pending && pending.state !== "PUBLISHED") return {
+      publication: null,
+      review_checkpoint: { request_id: pending.id, candidate_hash: pending.candidate_hash, state: pending.state,
+        requires_evidence_review: pending.requires_evidence_review,
+        reasons: pending.exception_reasons, expires_at: pending.expires_at, outcome_reason: pending.outcome_reason,
+        documents: pending.input_snapshot?.applicant?.documents ?? [] },
+      applicant_dossier: { ...pending.candidate, generated_at: pending.requested_at },
+      run: { id: pending.generation_run_id, app_id: appId, created_at: pending.run_created_at,
+        run_status: pending.run_status, validation: pending.validation, attempts: pending.attempts,
+        runtime_seconds: pending.runtime_seconds, policies_retrieved: pending.policies_retrieved,
+        documents_sent: pending.documents_sent, documents_withheld: pending.documents_withheld },
+    };
+  }
   const dossierResult = await pool.query(
-    "SELECT * FROM applicant_dossier WHERE app_id = $1;",
+    `SELECT d.*, r.generation_run_id AS publication_run_id, r.candidate_hash AS publication_hash,
+      r.reviewer AS publication_reviewer, r.decided_at AS publication_decided_at, r.review_mode AS publication_mode,
+      r.input_snapshot->'applicant'->'documents' AS saved_documents
+      FROM applicant_dossier d LEFT JOIN dossier_review_requests r ON r.id=d.publication_request_id
+      WHERE d.app_id=$1`,
     [appId]
   );
 
@@ -112,13 +137,18 @@ export async function loadDossier(appId: string): Promise<any | null> {
   const d = dossierResult.rows[0];
 
   const runResult = await pool.query(
-    "SELECT * FROM dossier_generation_runs WHERE app_id = $1 ORDER BY created_at DESC, id DESC LIMIT 1;",
-    [appId]
+    d.publication_run_id
+      ? "SELECT * FROM dossier_generation_runs WHERE app_id=$1 AND id=$2"
+      : "SELECT * FROM dossier_generation_runs WHERE app_id = $1 ORDER BY created_at DESC, id DESC LIMIT 1;",
+    d.publication_run_id ? [appId, d.publication_run_id] : [appId]
   );
 
   const r = runResult.rows[0] ?? {};
 
   return {
+    source_documents: d.saved_documents,
+    publication: d.publication_request_id ? { request_id: d.publication_request_id, generation_run_id: d.publication_run_id,
+      candidate_hash: d.publication_hash, reviewer: d.publication_reviewer, decided_at: d.publication_decided_at, mode: d.publication_mode } : null,
     run: {
       id: r.id ?? null,
       created_at: r.created_at ?? null,
@@ -189,7 +219,11 @@ export async function listOriginalDocuments(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any
 ): Promise<OriginalDocument[]> {
-  const documents = await getApplicantDocuments(appId);
+  const sourceId = data?.review_checkpoint?.request_id ?? data?.publication?.request_id;
+  const savedDocuments = data?.review_checkpoint?.documents ?? data?.source_documents;
+  const documents = sourceId && Array.isArray(savedDocuments)
+    ? (savedDocuments as { filename: string }[]).map(doc => ({ filename: doc.filename }))
+    : await getApplicantDocuments(appId);
 
   const run = data?.run ?? {};
   const sent: Record<string, number[]> = run.documents_sent ?? {};
@@ -214,6 +248,7 @@ export async function listOriginalDocuments(
         access: "sent" as const,
       };
     })
+    .map(doc => sourceId ? { ...doc, sourceUrl: `/api/dossier-reviews/${encodeURIComponent(sourceId)}/documents?file=${encodeURIComponent(doc.file)}` } : doc)
     .sort((a, b) => a.label.localeCompare(b.label));
 }
 
@@ -315,7 +350,13 @@ export function buildDossierContext(data: any): string {
   if (Array.isArray(dossier.review_notes) && dossier.review_notes.length) {
     lines.push("", "REVIEWER NOTES:");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    dossier.review_notes.forEach((note: any) => lines.push(`- ${note}`));
+    dossier.review_notes.forEach((note: any) => {
+      if (typeof note === "string") lines.push(`- ${note}`);
+      else if (note && typeof note.note === "string") {
+        const labels = [note.section, note.category].filter(value => typeof value === "string");
+        lines.push(`- ${labels.length ? `[${labels.join(" / ")}] ` : ""}${note.note}`);
+      }
+    });
   }
 
   return lines.join("\n");
