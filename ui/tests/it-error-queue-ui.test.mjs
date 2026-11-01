@@ -104,6 +104,7 @@ test("details retain findings, documents, audit history, back navigation, and co
 
 test("nested exception routes keep IT navigation active and preserve all existing workspaces", () => {
   const Shell = load("../src/components/EaosShell.tsx", {
+    "next/image": { default: ({ src, alt }) => React.createElement("img", { src, alt }) },
     "next/link": { default: ({ children, ...props }) => React.createElement("a", props, children) },
     "next/navigation": { usePathname: () => "/error-queue/applicant-APP_A-summarizer", useRouter: () => ({}) },
     "./eaos.module.css": { default: {} }, "./Logo": { default: () => null }, "./WorkspaceIcon": { default: () => null },
@@ -112,7 +113,33 @@ test("nested exception routes keep IT navigation active and preserve all existin
   for (const label of ["Home", "Processing Dashboard", "Applicant Review", "Final Decisions", "Summary Statistics", "IT Error Queue"]) assert.ok(html.includes(`aria-label="${label}"`));
   assert.equal((html.match(/aria-current="page"/g) ?? []).length, 1);
   assert.match(html, /href="\/error-queue" aria-current="page"/);
+  assert.match(html, /src="\/rsu-sidebar-building.png"/);
+  assert.match(html, /aria-label="Collapse sidebar"/);
   assert.doesNotMatch(html, /coming soon/i);
+});
+
+test("sidebar starts expanded and can collapse to the icon rail", () => {
+  let collapsed = false;
+  const Shell = load("../src/components/EaosShell.tsx", {
+    react: { ...React, useState: () => [collapsed, value => { collapsed = typeof value === "function" ? value(collapsed) : value; }] },
+    "next/image": { default: ({ src, alt }) => React.createElement("img", { src, alt }) },
+    "next/link": { default: ({ children, ...props }) => React.createElement("a", props, children) },
+    "next/navigation": { usePathname: () => "/applicant-review", useRouter: () => ({}) },
+    "./eaos.module.css": { default: {} }, "./Logo": { default: () => null }, "./WorkspaceIcon": { default: () => null },
+  }).default;
+  const props = { title: "Applicant Review", subtitle: "", role: "Applicant review" };
+  const render = () => Shell(props);
+  const button = () => [...elements(render())].find(node => node.type === "button" && node.props["aria-label"]?.endsWith("sidebar"));
+  assert.equal(button().props["aria-label"], "Collapse sidebar");
+  assert.equal(button().props.children.props.name, "collapse");
+  const nodes = [...elements(render())];
+  assert.ok(nodes.findIndex(node => node.type === "nav") < nodes.findIndex(node => node.type === "button" && node.props["aria-label"] === "Collapse sidebar"));
+  assert.match(renderToStaticMarkup(render()), /src="\/rsu-sidebar-building.png"/);
+  button().props.onClick();
+  assert.equal(button().props["aria-label"], "Expand sidebar");
+  assert.doesNotMatch(renderToStaticMarkup(render()), /rsu-sidebar-building.png/);
+  button().props.onClick();
+  assert.equal(button().props["aria-label"], "Collapse sidebar");
 });
 
 test("queue and details routes encode IDs and use mi's canonical applicant link", () => {

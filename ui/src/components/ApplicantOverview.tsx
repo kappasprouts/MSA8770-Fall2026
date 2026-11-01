@@ -1,16 +1,20 @@
 import type { DossierPayload, EvidenceItem } from "@/lib/types";
+import ApplicantInfoCard from "@/components/dossier/ApplicantInfoCard";
+import SummaryCard from "@/components/dossier/SummaryCard";
 import SnapshotCard from "@/components/dossier/SnapshotCard";
-import EvidenceLinks from "@/components/dossier/EvidenceLinks";
+import PolicyChecksCard from "@/components/dossier/PolicyChecksCard";
+import EvidenceCard from "@/components/dossier/EvidenceCard";
 import styles from "./eaos.module.css";
 
-export default function ApplicantOverview({ payload, onViewEvidence, onReadDossier }: { payload: DossierPayload; onViewEvidence: (item: EvidenceItem) => void; onReadDossier: () => void }) {
+export default function ApplicantOverview({ payload, onViewEvidence }: { payload: DossierPayload; onViewEvidence: (item: EvidenceItem) => void }) {
   const dossier = payload.applicant_dossier;
-  const facts = (dossier?.academic_profile?.document_facts ?? {}) as Record<string, unknown>;
-  const value = (key: string) => facts[key] === null || facts[key] === undefined || facts[key] === "" ? "—" : String(facts[key]);
-  return <div className={styles.readingContent}>
-    <dl className={styles.overviewFacts}><div><dt>Unweighted GPA</dt><dd>{value("unweighted_gpa")}</dd></div><div><dt>Weighted GPA</dt><dd>{value("weighted_gpa")}</dd></div><div><dt>SAT superscore</dt><dd>{value("sat_superscore")}</dd></div></dl>
-    <section className={styles.card} aria-labelledby="overview-summary-heading"><h2 id="overview-summary-heading">Applicant overview</h2><p className={styles.readingText}>{dossier?.holistic_assessment || "No holistic summary is available in the saved dossier."}</p><div className={styles.actionRow}><button type="button" className={styles.secondaryButton} onClick={onReadDossier}>Read full dossier →</button></div></section>
-    {!!dossier?.strengths?.length && <section className={styles.card} aria-labelledby="overview-evidence-heading"><h2 id="overview-evidence-heading">Key evidence</h2><ul className={styles.evidenceList}>{dossier.strengths.slice(0, 3).map((item, index) => <li key={index}><p>{item.strength}</p><EvidenceLinks evidence={item.evidence} onView={onViewEvidence} /></li>)}</ul></section>}
-    <details className={styles.dossierSection}><summary>Validation and policy snapshot</summary><div className={styles.sectionBody}><SnapshotCard payload={payload} /></div></details>
+  if (!dossier) return <p className={styles.help}>No validated dossier is available yet for this applicant.</p>;
+
+  return <div className="space-y-3">
+    <ApplicantInfoCard dossier={dossier} />
+    {dossier.holistic_assessment && <SummaryCard text={dossier.holistic_assessment} />}
+    <SnapshotCard payload={payload} />
+    {!!dossier.policy_assessment?.length && <PolicyChecksCard items={dossier.policy_assessment} />}
+    {!!dossier.strengths?.length && <EvidenceCard strengths={dossier.strengths} onViewEvidence={onViewEvidence} />}
   </div>;
 }

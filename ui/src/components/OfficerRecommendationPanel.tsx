@@ -77,7 +77,7 @@ export default function OfficerRecommendationPanel({ appId, onStateChange, onSav
             : "Recommendations can be edited for Dossier ready or Reviewed applications until a final decision is recorded."}</p>}
           <fieldset className={styles.decisionFields} disabled={saving || exceptionSaving || !saved?.canEdit || versionMismatch}>
             {pending && <div className={styles.notice}>
-              <p>{resolutionReady ? "Exception resolution prepared. Save your recommendation to record the resolution and recommendation together." : "Complete the resolution in the Exceptions tab before saving your recommendation."}</p>
+              <p>{resolutionReady ? "Exception resolution prepared. Save your recommendation to record the resolution and recommendation together." : "Complete the exception resolution above before saving your recommendation."}</p>
               <button type="button" className={styles.secondaryButton} onClick={onOpenExceptions}>{resolutionReady ? "Review exception resolution" : "Open Exceptions"}</button>
             </div>}
             {!pending && saved?.version?.reason && <p className={styles.help}>Saved exception resolution by {saved.version.reviewer}: {saved.version.reason}</p>}

@@ -108,7 +108,7 @@ export default function ApplicantReview() {
   const header = <AppHeader applicants={applicants} selectedAppId={selectedAppId} onSelect={selectApplicant} applicantName={name || null} applicationStatus={current ? recommendation.applicationStatus : null} description={[selectedAppId, demographics?.intended_major, demographics?.name_of_hs].filter(Boolean).join(" · ")} disabled={listState !== "ready" || applicants.length === 0 || recommendation.saving} placeholder={listState === "loading" ? "Loading applicants…" : listState === "error" ? "Applicants unavailable" : "No saved dossiers"} />;
 
   return (
-    <EaosShell title="Applicant Review" subtitle="Review saved dossiers alongside their original documents." role="Applicant review" reviewLayout>
+    <EaosShell title="Applicant Review" subtitle="Review saved dossiers alongside their original documents." role="Applicant review">
       {!current && <div className={styles.card}>{header}</div>}
       {listState === "loading" && <RequestState kind="loading" title="Loading applicants…" />}
       {listState === "error" && <RequestState kind="error" title="Applicants could not be loaded" description={listError} onRetry={() => { setListState("loading"); setListError(""); setListAttempt(attempt => attempt + 1); }} />}

@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import type { StrengthItem } from "@/lib/types";
+import type { EvidenceItem, StrengthItem } from "@/lib/types";
+import EvidenceLinks from "./EvidenceLinks";
 
 const VISIBLE_COUNT = 4;
 
-export default function EvidenceCard({ strengths }: { strengths: StrengthItem[] }) {
+export default function EvidenceCard({ strengths, onViewEvidence }: { strengths: StrengthItem[]; onViewEvidence?: (item: EvidenceItem) => void }) {
   const [expanded, setExpanded] = useState(false);
 
   if (!strengths.length) {
@@ -20,7 +21,7 @@ export default function EvidenceCard({ strengths }: { strengths: StrengthItem[] 
 
       <ul className="list-disc space-y-1.5 pl-4 text-sm text-ink">
         {visible.map((item, idx) => (
-          <li key={idx}>{item.strength}</li>
+          <li key={idx}>{item.strength}{onViewEvidence && <EvidenceLinks evidence={item.evidence} onView={onViewEvidence} />}</li>
         ))}
       </ul>
 

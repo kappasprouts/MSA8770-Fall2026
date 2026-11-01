@@ -5,6 +5,7 @@ export default function StatusBadge({ status, decision = false }: { status: stri
   const tone = decision ? status ? styles.done : styles.pending
     : status === "REVIEWED" ? styles.done
       : status === "DOSSIER_READY" || status === "FINAL_DECISION_RECORDED" ? styles.ready
+      : status === "REVIEW_PENDING" ? styles.exception
       : /FAIL|ERROR|STOPPED/.test(status ?? "") ? styles.failed
         : status === "AWAITING_MATERIALS" || status === "INCOMPLETE" ? styles.pending : "";
   return <span className={`${styles.pill} ${tone}`}>{decision ? decisionLabel(status) : statusLabel(status ?? "UNKNOWN")}</span>;

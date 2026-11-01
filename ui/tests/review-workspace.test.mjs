@@ -42,6 +42,24 @@ test("repeated source citations produce one link for each document and page", ()
   assert.match(html, /p. 2/);
 });
 
+test("the dossier restores the maria/integration card sequence with working evidence citations", () => {
+  const Links = load("../src/components/dossier/EvidenceLinks.tsx", { "@/components/eaos.module.css": { default: {} } }).default;
+  const Evidence = load("../src/components/dossier/EvidenceCard.tsx", { "./EvidenceLinks": { default: Links } }).default;
+  const Info = () => null, Summary = () => null, Snapshot = () => null, Policy = () => null;
+  const Overview = load("../src/components/ApplicantOverview.tsx", {
+    "@/components/dossier/ApplicantInfoCard": { default: Info }, "@/components/dossier/SummaryCard": { default: Summary },
+    "@/components/dossier/SnapshotCard": { default: Snapshot }, "@/components/dossier/PolicyChecksCard": { default: Policy },
+    "@/components/dossier/EvidenceCard": { default: Evidence }, "./eaos.module.css": { default: {} },
+  }).default;
+  const payload = { applicant_dossier: { holistic_assessment: "Summary text", policy_assessment: [{ policy_id: "P1" }], strengths: [{ strength: "Strong coursework", evidence: [{ document: "transcript.pdf", page: 2 }] }] } };
+  const tree = Overview({ payload, onViewEvidence() {} });
+  const cards = [...elements(tree)].filter(node => [Info, Summary, Snapshot, Policy, Evidence].includes(node.type));
+  assert.deepEqual(cards.map(node => node.type), [Info, Summary, Snapshot, Policy, Evidence]);
+  const html = renderToStaticMarkup(cards[4]);
+  assert.match(html, /Strong coursework/);
+  assert.match(html, /transcript.pdf.*p. 2/);
+});
+
 test("document viewer renders one selected PDF, preserves cited pages, and labels human-only documents", () => {
   const hooks = { ...React, useEffect() {}, useRef: () => ({ current: null }), useState: initial => [initial, () => {}] };
   const Panel = load("../src/components/DocumentsPanel.tsx", { react: hooks, "./eaos.module.css": { default: {} } }).default;
@@ -62,105 +80,89 @@ function* elements(value) {
 }
 
 function review(payload = { applicant_dossier: { app_id: "APP_A" } }) {
-  const state = ["overview", null, false, "", false, false, { reviewer: "", reason: "", confirmed: false, evidenceReviewed: false }, false];
-  let cursor = 0;
+  const state = [null, "", { reviewer: "", reason: "", confirmed: false, evidenceReviewed: false }, false];
+  let cursor = 0, refCursor = 0;
+  const targets = Array.from({ length: 3 }, () => ({ scrolls: 0, focuses: 0, scrollIntoView() { this.scrolls++; }, focus() { this.focuses++; } }));
+  const refs = targets.map(current => ({ current }));
   const Overview = () => null, Dossier = () => null, Documents = () => null, Officer = () => null, Chat = () => null, Exceptions = () => null;
   const Component = load("../src/components/ApplicantReviewWorkspace.tsx", {
-    react: { ...React, useEffect() {}, useRef: () => ({ current: null }), useState() {
+    react: { ...React, useRef: () => refs[refCursor++], useState() {
       const index = cursor++;
       return [state[index], value => { state[index] = typeof value === "function" ? value(state[index]) : value; }];
     } },
     "./ApplicantOverview": { default: Overview }, "./DossierPanel": { default: Dossier }, "./DocumentsPanel": { default: Documents },
-    "./OfficerRecommendationPanel": { default: Officer }, "./ChatPanel": { default: Chat },
+    "./OfficerRecommendationPanel": { default: Officer }, "./ChatPanel": { default: Chat }, "./WorkspaceIcon": { default: () => null },
     "./ApplicantExceptionsPanel": { default: Exceptions },
     "@/lib/review-workspace": workspace, "@/lib/recommendation": recommendations, "./eaos.module.css": { default: {} },
   }).default;
   const props = { appId: "APP_A", payload, documents, header: "Applicant header", recommendation: { ...recommendations.INITIAL_RECOMMENDATION_STATE, loading: false, canEdit: true }, onRecommendationStateChange() {} };
-  function render() { cursor = 0; return Component(props); }
+  function render() { cursor = 0; refCursor = 0; return Component(props); }
   const find = predicate => [...elements(render())].find(predicate);
   return {
-    tab: id => find(node => node.props.id === `review-tab-${id}`),
-    panel: id => find(node => node.props.id === `review-panel-${id}`),
     overview: () => find(node => node.type === Overview), documents: () => find(node => node.type === Documents),
     officer: () => find(node => node.type === Officer), chat: () => find(node => node.type === Chat),
     exceptions: () => find(node => node.type === Exceptions),
     button: label => find(node => node.type === "button" && node.props.children === label),
-    props, html: () => renderToStaticMarkup(render()),
+    props, targets, html: () => renderToStaticMarkup(render()),
   };
 }
 
-test("tabs have accessible relationships, keep the recommendation mounted, and lazily load documents", () => {
+test("the restored reading layout shows dossier, documents and Q&A together with a mounted recommendation", () => {
   const view = review();
-  assert.equal(view.tab("exceptions"), undefined);
-  assert.equal(view.panel("exceptions"), undefined);
-  assert.equal(view.tab("overview").props["aria-selected"], true);
-  assert.equal(view.panel("overview").props.hidden, false);
-  assert.equal(view.panel("recommendation").props.hidden, true);
-  const officer = view.officer();
-  assert.ok(officer, "Recommendation state must stay mounted while its tab is hidden");
-  assert.equal(view.documents(), undefined);
-  view.tab("recommendation").props.onClick();
-  assert.equal(view.panel("recommendation").props.hidden, false);
-  view.tab("dossier").props.onClick();
-  assert.equal(view.officer().type, officer.type);
-  assert.equal(view.officer().props.appId, "APP_A");
-  view.tab("documents").props.onClick();
+  assert.match(view.html(), /aria-labelledby="review-dossier-heading"/);
+  assert.match(view.html(), /aria-labelledby="review-documents-heading"/);
+  assert.equal(view.exceptions(), undefined);
+  assert.ok(view.overview());
   assert.ok(view.documents());
+  assert.ok(view.chat());
+  assert.ok(view.officer());
+  assert.match(view.html(), /Full dossier details/);
+  assert.doesNotMatch(view.html(), /Read full dossier/);
+  assert.equal(view.button("Dossier"), undefined);
+  assert.equal(view.button("Original documents"), undefined);
+  assert.equal(view.officer().props.appId, "APP_A");
   view.documents().props.onSelect({ file: "CommonApp.pdf", page: 1 });
-  view.tab("overview").props.onClick();
-  view.tab("documents").props.onClick();
   assert.equal(view.documents().props.selection.file, "CommonApp.pdf");
-  assert.equal(view.tab("documents").props["aria-controls"], view.panel("documents").props.id);
+  view.button("Write recommendation").props.onClick();
+  assert.equal(view.targets[2].scrolls, 1);
+  assert.equal(view.targets[2].focuses, 1);
 });
 
-test("exception tab is conditional, keeps resolution across tabs, and disappears after resolution", () => {
+test("exception resolution remains linked to the recommendation and Q&A stays unavailable for drafts", () => {
   const view = review({ applicant_dossier: { app_id: "APP_A" }, review_checkpoint: {
     request_id: "request", candidate_hash: "hash", state: "REVIEW_PENDING", reasons: ["Scores conflict"],
   } });
-  assert.equal(view.tab("exceptions").props["aria-controls"], view.panel("exceptions").props.id);
-  assert.equal(view.panel("exceptions").props.hidden, true);
-  view.tab("documents").props.onKeyDown({ key: "ArrowRight", preventDefault() {} });
-  assert.equal(view.tab("exceptions").props["aria-selected"], true);
+  assert.ok(view.exceptions());
+  assert.equal(view.chat(), undefined);
+  assert.match(view.html(), /This draft has exceptions to review/);
   const draft = { reviewer: "Officer", reason: "Checked original sources", confirmed: true, evidenceReviewed: true };
   view.exceptions().props.onChange(draft);
   view.exceptions().props.onOpenDocuments();
-  assert.equal(view.panel("documents").props.hidden, false);
-  view.tab("exceptions").props.onClick();
+  assert.equal(view.targets[0].scrolls, 1);
   assert.deepEqual(view.exceptions().props.resolution, draft);
   view.exceptions().props.onContinue();
-  assert.equal(view.panel("recommendation").props.hidden, false);
+  assert.equal(view.targets[2].scrolls, 1);
   assert.deepEqual(view.officer().props.exceptionResolution, draft);
+  assert.deepEqual(view.officer().props.dossierVersion, { requestId: "request", candidateHash: "hash" });
   view.officer().props.onOpenExceptions();
-  assert.equal(view.panel("exceptions").props.hidden, false);
+  assert.equal(view.targets[1].scrolls, 1);
   view.props.payload = { applicant_dossier: { app_id: "APP_A" } };
-  assert.equal(view.tab("exceptions"), undefined);
-  assert.equal(view.panel("exceptions"), undefined);
-  assert.equal(view.panel("overview").props.hidden, false);
-  assert.equal(view.tab("overview").props.tabIndex, 0);
+  assert.equal(view.exceptions(), undefined);
+  assert.ok(view.chat());
 });
 
-test("citation clicks open the cited source and missing sources show an explicit message", () => {
+test("citation clicks select the cited PDF page and missing sources show an explicit message", () => {
   const view = review();
   view.overview().props.onViewEvidence({ document: "CommonApp.pdf", page: 2 });
-  assert.equal(view.panel("documents").props.hidden, false);
   assert.deepEqual(view.documents().props.selection, { file: "CommonApp.pdf", page: 2 });
-  view.tab("overview").props.onClick();
+  assert.equal(view.targets[0].scrolls, 1);
   view.overview().props.onViewEvidence({ document: "missing.pdf", page: 2 });
   assert.match(view.html(), /cited source missing.pdf is not listed/);
+  assert.deepEqual(view.documents().props.selection, { file: "CommonApp.pdf", page: 2 });
 });
 
-test("arrow, Home, and End keys switch tabs; Q&A state stays mounted after closing", () => {
+test("Q&A stays inline for published dossiers and full dossier details use the native expander", () => {
   const view = review();
-  const key = (id, name) => view.tab(id).props.onKeyDown({ key: name, preventDefault() {} });
-  key("overview", "ArrowLeft");
-  assert.equal(view.tab("recommendation").props["aria-selected"], true);
-  key("recommendation", "Home");
-  assert.equal(view.tab("overview").props.tabIndex, 0);
-  key("overview", "End");
-  assert.equal(view.tab("recommendation").props.tabIndex, 0);
-  assert.equal(view.chat(), undefined);
-  view.button("Ask Q&A").props.onClick();
   assert.equal(view.chat().props.appId, "APP_A");
-  view.button("Close").props.onClick();
-  assert.ok(view.chat(), "Closing Q&A must preserve its conversation and draft input");
+  assert.match(view.html(), /<details><summary>Full dossier details<\/summary>/);
 });

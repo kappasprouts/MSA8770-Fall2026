@@ -1,9 +1,10 @@
 
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import styles from "./eaos.module.css";
 import Logo from "./Logo";
 import WorkspaceIcon from "./WorkspaceIcon";
@@ -22,18 +23,16 @@ export default function EaosShell({
   subtitle,
   role,
   children,
-  reviewLayout = false,
 }: {
   title: string;
   subtitle: string;
   role: string;
   children: ReactNode;
-  reviewLayout?: boolean;
 }) {
   const pathname = usePathname();
   const router = useRouter();
   const isHome = pathname === "/";
-  const compactSidebar = !isHome;
+  const [compactSidebar, setCompactSidebar] = useState(false);
 
   function goBack() {
   if (window.history.length > 1) {
@@ -44,7 +43,7 @@ export default function EaosShell({
 }
 
   return (
-    <div className={`${styles.shell} ${compactSidebar ? styles.compactSidebarShell : ""} ${reviewLayout ? styles.focusedShell : ""}`}>
+    <div className={`${styles.shell} ${compactSidebar ? styles.compactSidebarShell : ""}`}>
       <a className={styles.skipLink} href="#main-content">
         Skip to content
       </a>
@@ -60,6 +59,19 @@ export default function EaosShell({
             <strong>Riverview State University</strong>
           </span>
         </Link>
+
+        {!isHome && !compactSidebar && (
+          <div className={styles.sidebarPhoto}>
+            <Image
+              src="/rsu-sidebar-building.png"
+              alt="University building beneath a purple sunset"
+              width={200}
+              height={125}
+              sizes="(max-width: 760px) calc(100vw - 32px), 200px"
+              style={{ width: "100%", height: "auto" }}
+            />
+          </div>
+        )}
 
         <nav aria-label="Main navigation" className={styles.navigation}>
           {navigation.map((item) => (
@@ -78,12 +90,22 @@ export default function EaosShell({
             </Link>
           ))}
         </nav>
+
+        <button
+          type="button"
+          className={styles.sidebarToggle}
+          onClick={() => setCompactSidebar(value => !value)}
+          aria-label={compactSidebar ? "Expand sidebar" : "Collapse sidebar"}
+          title={compactSidebar ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          <WorkspaceIcon name={compactSidebar ? "expand" : "collapse"} />
+        </button>
       </aside>
 
       <div className={styles.main}>
         {!isHome && (
           <header className={styles.topbar}>
-            <div className={styles.topbarTitle}><button
+            <button
               type="button"
               className={styles.backButton}
               onClick={goBack}
@@ -92,7 +114,6 @@ export default function EaosShell({
             >
               <WorkspaceIcon name="back" />
             </button>
-            {reviewLayout && <h1>{title}</h1>}</div>
             <span className={styles.role}>{role}</span>
           </header>
         )}
@@ -100,9 +121,9 @@ export default function EaosShell({
         <main
           id="main-content"
           tabIndex={-1}
-          className={`${styles.content} ${reviewLayout ? styles.workspaceContent : ""}`}
+          className={styles.content}
         >
-          {!isHome && !reviewLayout && (
+          {!isHome && (
             <div className={styles.heading}>
               <h1>{title === "Statistics" ? "Summary Statistics" : title}</h1>
               <p>{subtitle}</p>
