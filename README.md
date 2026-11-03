@@ -1,6 +1,6 @@
 <h1 align="center">AI-Assisted College Admissions System Prototype</h1>
 
-<p align="center"><strong>Turn application packets into evidence-backed dossiers for human review.</strong><br/>A local research prototype built with Python, PostgreSQL, MinIO, Ollama, and Next.js.</p>
+<p align="center"><strong>Turn application packets into evidence-backed dossiers for accountable human review.</strong><br/>A local research prototype built with Python, PostgreSQL, MinIO, Ollama, and Next.js.</p>
 
 <p align="center">
   <a href="#what-it-does">Overview</a> ·
@@ -16,14 +16,14 @@
 
 The system accepts applicant CSV records and PDFs, checks packet completeness, and prepares advisory dossiers that reviewers can inspect alongside original documents. Ingestion and dossier generation are separate stages, with an explicit handoff of applicants ready for review.
 
-| 1 · Intake | 2 · Dossier | 3 · Review |
+| 1 · Intake | 2 · Dossier | 3 · Human review |
 | --- | --- | --- |
-| Link applicant records and PDFs, check required materials, and record status and audit events. | Use permitted pages and retrieved policy text to draft sections with supporting evidence. | Read the saved dossier, open source PDFs, and ask questions grounded in the dossier. |
+| Link applicant records and PDFs, check required materials, and record status and audit events. | Use permitted pages and retrieved policy text to draft sections with supporting evidence. | Inspect evidence, submit an advisory recommendation, and record an authorized final decision. |
 
 > [!NOTE]
-> The included applicants and documents are synthetic. This prototype **does not make or record final admissions decisions**.
+> The included applicants and documents are synthetic. The AI **never makes an admissions decision**. The prototype can store a recommendation and final decision only when they are explicitly submitted by a human reviewer; authentication remains simulated.
 
-**New here?** Follow the [sample workflow](#run-the-sample-workflow) to ingest `batch_02`, generate a dossier for `APP_012`, and open the review UI. The seven steps cover every required service and dependency.
+**New here?** Follow the [sample workflow](#run-the-sample-workflow) to ingest `batch_02`, generate a dossier for `APP_012`, and open the review UI. The eight steps cover every required service and dependency.
 
 ## System architecture
 
@@ -34,25 +34,28 @@ flowchart LR
     I --> G["Deterministic manifest gate<br/>policy/ingestion_rules.yaml"]
     G -->|applicant data, status, audit| DB[(PostgreSQL)]
     I -->|original PDFs| M[(MinIO)]
-    G -->|ready IDs; manual handoff| A["Summarizing agent<br/>PyMuPDF + Qwen3-VL"]
+    G -->|ready-ID event file| E["Durable event consumer<br/>checkpoint + retry limit"]
+    E --> A["Summarizing agent<br/>PyMuPDF + Qwen3-VL"]
     P["Policy text"] --> L["Policy loader<br/>nomic-embed-text"] --> V[(pgvector policy_chunks)]
     DB --> A
     M --> A
     V --> A
     A -->|dossier, run history, audit| DB
-    DB --> U["Next.js review UI"]
+    DB --> U["Next.js admissions workspace"]
     M -->|original PDFs| U
     O["Ollama<br/>vision + embeddings + chat"]
     L --> O
     A <--> O
     U <--> O
-    U --> H["Human reviewer"]
+    U --> H["Human reviewer<br/>recommendation + final decision"]
+    H -->|authorized action + audit event| DB
 ```
 
 1. **Ingestion** reads the batch CSV, upserts applicant fields, links PDFs by applicant ID, and archives raw files in MinIO. It checks size, PDF signature, and the required document manifest without extracting PDF content. Unmatched documents are recorded as orphans.
 2. **The manifest gate** applies [`policy/ingestion_rules.yaml`](policy/ingestion_rules.yaml). It routes complete packets to `READY_FOR_REVIEW`, missing documents to `AWAITING_MATERIALS`, missing required fields to `INCOMPLETE`, and integrity failures to `ERROR`. It writes an audit report and a JSON file of ready IDs. An optional score-feed CLI updates SAT/ACT/AP fields and re-runs the gate.
-3. **Dossier generation** is invoked separately for a ready applicant. It downloads permitted PDFs, renders pages with PyMuPDF, retrieves policy chunks from PostgreSQL/pgvector, and asks Ollama's `qwen3-vl:8b-instruct` model for academic, engagement, recommendation, supplement, policy, and holistic sections. It records evidence and validation results, then stores successful dossiers and run history in PostgreSQL. The agent's document rules withhold personal statements from model input for human review.
-4. **The review UI** reads saved dossiers from PostgreSQL, serves original PDFs from MinIO, and sends questions about the selected dossier to Ollama. It is a local, read-only prototype without authentication or a final-decision workflow.
+3. **The event consumer** accepts an `affected_ids_<runid>.json` handoff, records durable per-applicant checkpoints in `output/ingestion/event_state.json`, skips completed work, limits automatic attempts to two, and reconciles checkpoint state with PostgreSQL before invoking the model.
+4. **Dossier generation** downloads permitted PDFs, renders pages with PyMuPDF, retrieves policy chunks from PostgreSQL/pgvector, and asks Ollama's `qwen3-vl:8b-instruct` model for academic, engagement, recommendation, supplement, policy, and holistic sections. It records evidence and validation results, then stores successful dossiers and run history in PostgreSQL. Personal statements are withheld from model input for human review.
+5. **The admissions workspace** provides a processing dashboard, applicant review with original PDFs and grounded Q&A, reviewer recommendations, Dean final decisions, summary statistics, and a read-only IT Error Queue. Recommendation and decision actions are human initiated and written to PostgreSQL with audit events. Authentication is simulated and remains a production requirement.
 
 PostgreSQL is the shared record for status, document metadata, dossiers, and audit/run history. MinIO holds original PDFs. The policy loader reads [`policy/riverview_admissions_policy.txt`](policy/riverview_admissions_policy.txt), which is separate from the YAML used by the ingestion gate. The older [architecture overview](docs/architecture/system_overview.md) describes a broader plan, including components not wired into this runnable workflow.
 
@@ -75,22 +78,44 @@ The separate [`ingestion/parsing/`](ingestion/parsing/) and [`ai_agent/gateway/`
 | Manifest validation | Apply required-field, document, file-size, and PDF-signature rules; route packets by status | [`ingestion/validation/`](ingestion/validation/), [`policy/ingestion_rules.yaml`](policy/ingestion_rules.yaml) |
 | Storage | Keep applicant records, statuses, audit entries, document metadata, and raw PDFs | [`storage/`](storage/), PostgreSQL, MinIO |
 | Policy retrieval and dossier agent | Index policy text, render permitted PDF pages, retrieve relevant policy chunks, generate and validate advisory sections | [`ai_agent/`](ai_agent/), Ollama, pgvector |
-| Review UI | Show saved dossiers and PDFs, and answer questions using dossier context | [`ui/`](ui/) |
+| Event consumer | Process ready-ID handoffs with checkpoints, duplicate protection, retries, and escalation | [`ingestion/event_consumer.py`](ingestion/event_consumer.py) |
+| Admissions workspace | Show processing status, dossiers, PDFs, recommendations, decisions, statistics, grounded Q&A, and IT errors | [`ui/`](ui/) |
 | Data | Synthetic batches, applicant records, and school profiles | [`data/`](data/), including [`batch_01/`](data/batches/batch_01/) and [`batch_02/`](data/batches/batch_02/) |
 | Policy | Hold the agent policy text and the ingestion checklist, file limits, and routing rules | [`policy/`](policy/) |
 | Tests | Keep automated tests and review reproduction scripts | [`tests/`](tests/) |
 | Documentation | Explain the API, architecture, agent, and review UI | [`docs/`](docs/) |
 | Run output | Keep ingestion reports, ready-ID files, dossier snapshots, and test evidence | [`output/`](output/) |
 
-## Review interface
+## Admissions workspace
 
-The browser places a saved dossier beside the original PDFs and provides a question-and-answer area below them. The preview shows a synthetic applicant; the walkthrough below uses `APP_012`.
+The browser separates admissions work from technical exception handling. All actions remain human controlled.
+
+| Screen | Route | Purpose |
+| --- | --- | --- |
+| Home | `/` | Navigate to the available workspaces. |
+| Processing Dashboard | `/review-queue` | Track application status, dossier availability, recommendations, and final decisions. |
+| Applicant Review | `/applicant-review?appId=APP_012` | Compare the saved dossier with source PDFs, ask grounded questions, and submit an advisory recommendation. |
+| Final Decisions | `/final-decisions` | Record the Dean of Admissions' authorized final decision after review. |
+| Summary Statistics | `/statistics` | Explore applicant-pool, completeness, decision, academic, program, and representation summaries. |
+| IT Error Queue | `/error-queue` | Show technical ingestion, processing, AI, and orphan-document incidents. Student-correctable missing-material cases remain in normal application processing. |
+| Error Details | `/error-queue/[id]` | Inspect one technical incident and open the related applicant dossier when available. |
+
+The Applicant Review screen places a saved dossier beside the original PDFs and provides a question-and-answer area below them. The bundled preview uses synthetic data; the walkthrough below uses `APP_012`.
 
 ![Review interface showing a synthetic applicant dossier, source-document panels, and a question-and-answer area](ui/public/readme-screenshot.png)
 
 ## Run the sample workflow
 
 These instructions start from a repository checkout on macOS or Linux and use only the synthetic sample data. Run commands from the repository root unless a step says otherwise. Windows users can follow the same stages with the [PowerShell equivalents below](#windows-powershell) and consult the [recorded Windows live test](output/live_test_setup/README.md) for additional verification; that older record contains machine-specific paths.
+
+For the pre-submission integration build, start from the latest `tran/integration` branch. After the team merges it, use `main` instead.
+
+```bash
+git clone https://github.com/kappasprouts/MSA8770-Fall2026.git
+cd MSA8770-Fall2026
+git fetch origin
+git switch --track origin/tran/integration
+```
 
 ### 1. Install prerequisites
 
@@ -117,7 +142,7 @@ docker compose exec -T postgres pg_isready -U postgres -d riverview_admissions
 curl -f http://127.0.0.1:9000/minio/health/live
 ```
 
-Expect PostgreSQL to report that it accepts connections and the MinIO health request to succeed. A health response alone does not prove S3 uploads work; the strict ingestion run in step 5 checks the real storage path. Compose retains data in named volumes when the containers stop.
+Expect PostgreSQL to report that it accepts connections and the MinIO health request to succeed. A health response alone does not prove S3 uploads work; the strict ingestion run in step 6 checks the real storage path. Compose retains data in named volumes when the containers stop.
 
 ### 3. Install Python and UI dependencies
 
@@ -132,6 +157,13 @@ cd ..
 ```
 
 Both example environment files use the same PostgreSQL database and `admissions-raw-docs` bucket. If you use different services, update the root `.env` and `ui/.env.local` consistently; if you change credentials or ports in the provided Compose stack, update `compose.yaml` too. Ingestion reads `DATABASE_URL`; the agent, policy loader, and UI read `POSTGRES_*`. The root example's `LLM_MODEL` is for the older generic gateway; `VLM_MODEL` controls the dossier agent.
+
+If you reuse a database created before the reviewer-recommendation feature was added, apply its idempotent migration once:
+
+```bash
+docker compose exec -T postgres psql -U postgres -d riverview_admissions \
+  -v ON_ERROR_STOP=1 < storage/migrations/20261102_reviewer_recommendation.sql
+```
 
 The Python CLIs need environment variables exported into their shell. After activating the virtual environment, run this in each new terminal used for backend commands:
 
@@ -154,29 +186,45 @@ curl -f http://127.0.0.1:11434/api/tags
 
 The policy loader uses `nomic-embed-text`; the dossier agent and UI chat use `qwen3-vl:8b-instruct`.
 
-### 5. Ingest the sample batch
+### 5. Index the admissions policy
+
+```bash
+python ai_agent/create_pgvector_once.py
+```
+
+Run this once for a new database and again after `policy/riverview_admissions_policy.txt` changes. It creates the pgvector extension when permitted and rebuilds the searchable policy chunks used by the dossier agent.
+
+### 6. Ingest the sample batch
 
 ```bash
 mkdir -p output/local_demo
 python -m ingestion.run_ingestion_check --input-dir data/batches/batch_02 \
   --require-postgresql --require-object-storage \
   --output output/local_demo/batch_02_report.txt \
-  --affected-ids output/local_demo/affected_ids.json
-cat output/local_demo/affected_ids.json
+  --affected-ids output/local_demo/affected_ids_local_demo.json
+cat output/local_demo/affected_ids_local_demo.json
 ```
 
-The strict flags require real PostgreSQL and MinIO. Expect 10 applicants processed: 7 `READY_FOR_REVIEW`, 1 `AWAITING_MATERIALS`, and 2 `INCOMPLETE` for the supplied fixture. Confirm `APP_012` is in the affected-ID JSON file. The report explains each packet's routing. This file is the manual handoff to dossier generation; ingestion makes no model calls. Rerunning the command replaces these two local demo artifacts.
+The strict flags require real PostgreSQL and MinIO. Expect 10 applicants processed: 7 `READY_FOR_REVIEW`, 1 `AWAITING_MATERIALS`, and 2 `INCOMPLETE` for the supplied fixture. Confirm `APP_012` is in the affected-ID JSON file. The report explains each packet's routing. This file is the event handoff to the consumer; ingestion makes no model calls. Rerunning the command replaces these two local demo artifacts.
 
 For a lightweight gate check without services, `./ingestion/run_check.sh data/batches/batch_01` or `make check` can use SQLite and simulated object storage. That mode **cannot feed a live dossier/UI run**.
 
-### 6. Index policies and generate one dossier
+### 7. Process the ready-ID event
 
 ```bash
-python ai_agent/create_pgvector_once.py
+python ingestion/event_consumer.py output/local_demo/affected_ids_local_demo.json
+python -m json.tool output/ingestion/event_state.json
+```
+
+The event consumer is the recommended end-to-end handoff. It deduplicates IDs within an event, skips terminal checkpoints, checks PostgreSQL before rerunning work, and allows at most two processing attempts before escalation. Checkpoint states include `PENDING`, `PROCESSING`, `COMPLETED`, `RETRY_PENDING`, `WAITING_FOR_MATERIALS`, and `ESCALATED`.
+
+For isolated troubleshooting only, run one known eligible applicant directly:
+
+```bash
 python ai_agent/summarizing_agent.py APP_012
 ```
 
-The loader creates the `vector` extension and builds or replaces `policy_chunks` from [the agent policy text](policy/riverview_admissions_policy.txt). Run it once for a new database or after that text changes. The PostgreSQL user must be allowed to create extensions. Pass an applicant ID explicitly: the agent's no-argument fallback does **not** read the unique ingestion handoff. `--force` deliberately regenerates an existing dossier.
+Do not run the consumer and direct agent concurrently for the same applicant. `--force` deliberately regenerates an existing dossier and should be used only for controlled testing.
 
 A successful run prints `DOSSIER_READY`, stores a row in `applicant_dossier`, records a `dossier_generation_runs` entry, and writes a snapshot under `output/ai_agent/`. Check the **new database run and status**, not only the CLI exit code or an older snapshot: the current agent can catch an applicant-level error and still exit with code 0. The bundled PostgreSQL container supplies `psql` for this check:
 
@@ -189,7 +237,7 @@ docker compose exec -T postgres psql -U postgres -d riverview_admissions \
 
 Expect `DOSSIER_READY` for the applicant and newest generation run, with validation passed. Compare citations with original PDFs; validation does not prove every model-written claim correct.
 
-### 7. Open the review UI
+### 8. Open the admissions workspace
 
 In a second terminal, from the repository root:
 
@@ -198,7 +246,7 @@ cd ui
 npm run dev
 ```
 
-Open <http://localhost:3000>, select `APP_012`, inspect its dossier, use **View Full** on a PDF, and ask: “What is this applicant's unweighted GPA, and which evidence supports it?” The sample answer should identify **3.97** with supporting evidence; check the answer against the dossier and original PDF. The selector lists only applicants with saved dossiers. Keep `.env` and `.env.local` out of Git.
+Open <http://localhost:3000>. Use the Processing Dashboard to open `APP_012`, inspect its dossier, use **View Full** on a PDF, and ask: “What is this applicant's unweighted GPA, and which evidence supports it?” Verify the answer against the dossier and original PDF. Submit a reviewer recommendation only as a human action, then confirm it appears in the Processing Dashboard and Final Decisions queue. The applicant selector lists only applicants with saved dossiers. Keep `.env` and `.env.local` out of Git.
 
 Stop the UI with **Ctrl+C**. Stop the two data services with `docker compose stop`; their named volumes retain the demo database and PDFs. Use `docker compose up -d` to resume.
 
@@ -217,7 +265,7 @@ Get-Content .env | ForEach-Object {
 New-Item -ItemType Directory -Force output/local_demo | Out-Null
 ```
 
-Run the Python commands from steps 5–6 with `.\.venv\Scripts\python.exe` in place of `python`, and use a single line or PowerShell backticks in place of Bash `\` continuations. Use `Get-Content output/local_demo/affected_ids.json` in place of `cat`. In `ui`, `npm ci` and `npm run dev` work as written; copy `.env.local.example` to `.env.local` with `Copy-Item`.
+Run the Python commands from steps 5–7 with `.\.venv\Scripts\python.exe` in place of `python`, and use a single line or PowerShell backticks in place of Bash `\` continuations. Use `Get-Content output/local_demo/affected_ids_local_demo.json` in place of `cat`. In `ui`, `npm ci` and `npm run dev` work as written; copy `.env.local.example` to `.env.local` with `Copy-Item`.
 
 ## Other ways to run ingestion
 
@@ -247,8 +295,8 @@ Run Python tests in the activated virtual environment. Run UI checks from `ui/`.
 | Ingestion and storage tests | `python -m pytest tests --ignore=tests/integration_review_20261009 -q` | Batch routing, status persistence, schema, score delta, and API entry points. |
 | Focused gate tests | `python -m pytest tests/test_ingestion_and_gate.py -q` | Manifest rules, batch linking, and hard stop without live model calls. |
 | Live agent extraction | `python tests/ai_agent/test_academic_only.py` | Reads ingested `APP_012` files from PostgreSQL/MinIO and calls Qwen; does not save a dossier. |
-| UI static checks | `cd ui && npm run lint && npm run build` | Lint, TypeScript, and production build. Use `npm run build -- --webpack` if Turbopack cannot start its worker in a restricted environment. |
-| End-to-end smoke check | Run steps 2–7, then inspect `APP_012` in the browser | Real storage handoff, a new dossier record, PDF retrieval, and one chat response. |
+| UI automated checks | `cd ui && npm test && npm run lint && npm run build` | Error-queue, first-pass, and statistics tests plus lint, TypeScript, and production build. Use `npm run build -- --webpack` if Turbopack cannot start its worker in a restricted environment. |
+| End-to-end smoke check | Run steps 2–8, then inspect `APP_012` in the browser | Real storage handoff, a new dossier record, PDF retrieval, and one chat response. |
 
 The [agent testing guide](docs/ai_agent/TESTING_GUIDE.md) has expected outputs and additional negative cases. On this checkout (October 9, 2026), `.venv/bin/python -m pytest tests --ignore=tests/integration_review_20261009 -q` produced **53 passed, 8 failed**; failures include database schema constraints and a GPA precision check. The new Compose stack completed strict Batch 02 ingestion with the expected **7 ready / 1 awaiting / 2 incomplete** results, and the policy loader stored **21 chunks**. UI lint and `npm run build -- --webpack` passed. A full Qwen dossier was not rerun in this check because the vision model was absent locally; the earlier [live Batch 02 test](output/live_test_setup/TEST_RESULTS.md) records an `APP_012` dossier run and UI responses. The [integration review](output/integration_review_20261009/REVIEW.md) describes broader diagnostic failures that remain open.
 
@@ -266,8 +314,11 @@ The [agent testing guide](docs/ai_agent/TESTING_GUIDE.md) has expected outputs a
 
 ## Current scope and known limitations
 
-- This is a research prototype for synthetic data. The review UI has no authentication or final-decision recording; do not deploy it for real applicant records.
-- The ingestion-to-agent handoff is manual. Use explicit applicant IDs. Some supplied ready applicants have known agent rendering failures, and a failed run may not surface clearly in the UI.
+- This is a research prototype for synthetic data. Authentication and role-based access are simulated; do not deploy it for real applicant records.
+- Reviewer recommendations and final decisions are human-supplied actions. The AI remains advisory and cannot call those endpoints autonomously.
+- The event handoff uses a local JSON file and checkpoint, not a distributed queue or a cross-system transaction. The database is used to reconcile uncertain completion before retrying.
+- IT Error Queue actions are read-only; retry, assignment, approval, and notification mutations are not implemented.
+- Some supplied ready applicants have known agent rendering or validation failures, and a failed run requires review of run history and audit records.
 - Document-type mapping, late score-feed visibility, citation/fact validation, and privacy/chat guardrails have open issues documented in the [integration review](output/integration_review_20261009/REVIEW.md). Human verification of evidence and original documents remains necessary.
 - The ingestion YAML and the agent's policy text are separate sources with known differences. Align policy interpretations before using results as policy-compliance evidence.
 
