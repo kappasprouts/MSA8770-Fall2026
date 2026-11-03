@@ -104,6 +104,11 @@ The Applicant Review screen places a saved dossier beside the original PDFs and 
 
 ![Review interface showing a synthetic applicant dossier, source-document panels, and a question-and-answer area](ui/public/readme-screenshot.png)
 
+<img width="952" height="477" alt="image" src="https://github.com/user-attachments/assets/6a978301-1da0-49ec-9522-9affd7599872" />
+
+<img width="946" height="812" alt="image" src="https://github.com/user-attachments/assets/f6e3a4c5-11fd-47b6-b985-e19f446c9479" />
+
+
 ## Run the sample workflow
 
 These instructions start from a repository checkout on macOS or Linux and use only the synthetic sample data. Run commands from the repository root unless a step says otherwise. Windows users can follow the same stages with the [PowerShell equivalents below](#windows-powershell) and consult the [recorded Windows live test](output/live_test_setup/README.md) for additional verification; that older record contains machine-specific paths.
