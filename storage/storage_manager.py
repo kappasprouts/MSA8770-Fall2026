@@ -312,14 +312,19 @@ class StorageManager:
     ) -> str:
         """Upload raw document file to MinIO object storage.
 
-        If MinIO is offline, logs simulated upload and returns expected key.
+        If MinIO is unavailable or upload fails, raise RuntimeError.
         """
         target_bucket = bucket_name or self.minio_bucket
         path = Path(file_path)
 
         if not self.minio_available or not self.minio_client:
-            logger.debug("[Dry-Run MinIO] Simulated upload: %s -> s3://%s/%s", path.name, target_bucket, minio_key)
-            return minio_key
+            logger.error(
+                "MinIO unavailable: cannot upload %s to s3://%s/%s",
+                path.name, target_bucket, minio_key
+            )
+            raise RuntimeError(
+                f"MinIO unavailable: upload not completed for {minio_key}"
+            )
 
         try:
             self.minio_client.fput_object(
@@ -350,7 +355,9 @@ class StorageManager:
     ) -> Applicant:
         """Stage or upsert an applicant, optionally limiting fields updated on an existing row."""
         applicant_data = dict(applicant_data)
-        # Serialized applicants may expose this derived value for API callers.
+        # Final decisions are controlled exclusively by the Dean's decision API
+        applicant_data.pop("final_decision", None)
+        # Serialized applicants may expose this derived value for API callers
         applicant_data.pop("routing_destination", None)
         if "date_of_birth" in applicant_data:
             applicant_data["date_of_birth"] = parse_date_of_birth(applicant_data["date_of_birth"])
@@ -477,6 +484,17 @@ class StorageManager:
                     if app:
                         break
                 if app:
+                    # Prevent ingestion reruns from reopening completed applications.
+                    if (
+                        app.status == "DOSSIER_READY"
+                        or app.final_decision is not None
+                    ):
+                        if status in ("READY_FOR_REVIEW", "AWAITING_MATERIALS", "INCOMPLETE", "ERROR"):
+                            logger.info(
+                                "Preserving completed applicant %s: %s (requested %s)",
+                                    app.app_id, app.status, status
+                            )
+                            return True
                     previous_status = app.status
                     app.status = status
                     if documents is not None:

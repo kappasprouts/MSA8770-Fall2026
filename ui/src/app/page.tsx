@@ -28,6 +28,11 @@ const destinations = [
     icon: "statistics",
     title: "Summary Statistics",
   },
+  {
+    href: "/error-queue",
+    icon: "processing",
+    title: "IT Error Queue",
+  },
 ] as const;
 
 export default async function Home({
@@ -124,18 +129,7 @@ export default async function Home({
             </Link>
           ))}
 
-          <div
-            className={`${styles.destination} ${styles.disabled}`}
-            aria-label="Tech Support coming soon"
-          >
-            <span className={styles.icon}>
-              <span aria-hidden="true">⚙</span>
-            </span>
-            <span>
-              Tech Support
-              <small>Coming Soon</small>
-            </span>
-          </div>
+
         </nav>
       </div>
     </EaosShell>

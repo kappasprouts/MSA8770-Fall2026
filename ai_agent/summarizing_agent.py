@@ -47,6 +47,7 @@ import json
 import os
 import re
 import time
+import sys
 from pathlib import Path
 
 import psycopg2
@@ -80,8 +81,8 @@ MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "minioadmin")
 MINIO_BUCKET = os.getenv("MINIO_BUCKET", "admissions-raw-docs")
 
 # Ollama
-OLLAMA_CHAT_URL = os.getenv("OLLAMA_CHAT_URL", "http://localhost:11434/api/chat")
-OLLAMA_EMBED_URL = os.getenv("OLLAMA_EMBED_URL", "http://localhost:11434/api/embed")
+OLLAMA_CHAT_URL = os.getenv("OLLAMA_CHAT_URL", 'http://localhost:11434/api/chat')
+OLLAMA_EMBED_URL = os.getenv("OLLAMA_EMBED_URL", 'http://localhost:11434/api/embed')
 
 # Instruct variant: answers directly. The plain "qwen3-vl:8b" tag is the
 # THINKING variant; it reasoned for thousands of hidden tokens and never
@@ -458,6 +459,14 @@ def get_applicant(connection, app_id):
         )
         return cursor.fetchone()
 
+def dossier_exists(connection, app_id):
+    """Check whether an applicant already has a saved dossier."""
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT EXISTS (SELECT 1 FROM applicant_dossier WHERE app_id = %s)",
+            (app_id,),
+        )
+        return cursor.fetchone()[0]
 
 def normalize_document(document):
     """Normalize ingestion document types for the summarizer."""
@@ -1524,6 +1533,9 @@ def run_section(section, prompt, images, pages_by_location, policy_ids, guards, 
 
         except json.JSONDecodeError as error:
             usage, output, errors = {}, {"raw_output": raw}, [f"Output is not valid JSON: {error}"]
+
+        except requests.exceptions.RequestException:
+            raise
         except Exception as error:
             usage, output, errors = {}, None, [f"Model call failed: {error}"]
 
@@ -1638,7 +1650,6 @@ def save_dossier(connection, dossier):
         )
         generated_at, updated_at = cursor.fetchone()
 
-    connection.commit()
     return generated_at, updated_at
 
 
@@ -1663,17 +1674,25 @@ def save_run(connection, run):
         # Application_status is VARCHAR(32)
 
         cursor.execute(
-            "UPDATE applicants SET status = %s WHERE app_id = %s",
+            """
+            UPDATE applicants
+            SET status = %s
+            WHERE app_id = %s
+            AND final_decision IS NULL
+            AND (
+                status = 'READY_FOR_REVIEW'
+                OR (
+                status = 'DOSSIER_READY'
+                AND %s = 'DOSSIER_READY'
+                )
+            )
+            """,
             (
-                "DOSSIER_READY"
-                if run["run_status"] == "DOSSIER_READY"
-                else "READY_FOR_REVIEW",
-                    run["app_id"],
+                run["run_status"],
+                run["app_id"],
+                run["run_status"],
             ),
         )
-
-    connection.commit()
-
 
 def write_result_file(app_id, run, dossier):
 
@@ -1706,9 +1725,49 @@ def process_applicant(connection, minio_client, app_id, force=False):
     status = applicant.get("status")
     print(f"[1] Applicant {applicant['app_id']}, status {status}")
 
-    if status != "READY_FOR_REVIEW" and not force:
-        print("    Not COMPLETE. Skipped (use --force to summarize again).")
-        write_audit(connection, app_id, "SKIPPED_NOT_COMPLETE", {"status": status})
+    # Never regenerate dossiers for applicants with final decisions.
+    if applicant.get("final_decision") is not None:
+        print("    Final decision exists. Skipping dossier generation.")
+        write_audit(
+            connection,
+            app_id,
+            "SKIPPED_FINAL_DECISION",
+            {"status": status},
+        )
+        return "SKIPPED"
+
+    # Normal runs process only applicants ready for review.
+    # Forced runs may regenerate completed dossiers, but cannot
+    # bypass incomplete or awaiting-materials statuses.
+    if status == "READY_FOR_REVIEW":
+        pass
+    elif status == "DOSSIER_READY" and force:
+        print("    Explicit dossier regeneration requested.")
+        write_audit(
+            connection,
+            app_id,
+            "DOSSIER_REGENERATION_REQUESTED",
+            {"status": status},
+        )
+    else:
+        print(f"    Applicant status {status} is not eligible. Skipped.")
+        write_audit(
+            connection,
+            app_id,
+            "SKIPPED_NOT_ELIGIBLE",
+            {"status": status, "force": force},
+        )
+        return "SKIPPED"
+
+    # Prevent automatic regeneration of an existing dossier.
+    if dossier_exists(connection, app_id) and not force:
+        print("    Existing dossier found. Skipping automatic regeneration.")
+        write_audit(
+            connection,
+            app_id,
+            "SKIPPED_EXISTING_DOSSIER",
+            {"status": status},
+        )
         return "SKIPPED"
 
     write_audit(connection, app_id, "SUMMARY_STARTED", {"model": VLM_MODEL})
@@ -1885,13 +1944,73 @@ def process_applicant(connection, minio_client, app_id, force=False):
     else:
         run["run_status"] = "DOSSIER_READY"
         dossier = build_dossier(applicant, sections)
-        generated_at, updated_at = save_dossier(connection, dossier)
-        dossier["generated_at"], dossier["updated_at"] = generated_at, updated_at
+        
         print(f"[6] ✓ All sections passed validation ({len(dossier['evidence_map'])} citations checked)")
         print(f"[7] Dossier assembled: {len(dossier['review_notes'])} review note(s)")
 
-    save_run(connection, run)
+    # Recheck eligibility under a PostgreSQL row lock before committing.
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT status, final_decision
+                FROM applicants
+                WHERE app_id = %s
+                FOR UPDATE
+                """,
+                (app_id,),
+            )
+            current = cursor.fetchone()
+
+            if current is None:
+                raise RuntimeError(
+                    f"Applicant {app_id} disappeared during summarization"
+                )
+
+            current_status, current_decision = current
+
+            eligible = (
+                current_decision is None
+                and (
+                    current_status == "READY_FOR_REVIEW"
+                    or (force and current_status == "DOSSIER_READY")
+                )
+            )
+
+            if not eligible:
+                connection.rollback()
+                print(
+                    f"Applicant {app_id} changed during summarization. "
+                    "Skipping database save."
+                )
+                return "SKIPPED"
+
+            # Prevent an automatic run from overwriting a dossier
+            # that appeared while the model was generating.
+            if not force:
+                cursor.execute(
+                    "SELECT 1 FROM applicant_dossier WHERE app_id = %s",
+                    (app_id,),
+                )
+                if cursor.fetchone() is not None:
+                    connection.rollback()
+                    print("Existing dossier detected. Skipping save.")
+                    return "SKIPPED"
+
+        if dossier is not None:
+            generated_at, updated_at = save_dossier(connection, dossier)
+            dossier["generated_at"] = generated_at
+            dossier["updated_at"] = updated_at
+
+        save_run(connection, run)
+        connection.commit()
+
+    except Exception:
+        connection.rollback()
+        raise
+
     path = write_result_file(app_id, run, dossier)
+
     write_audit(connection, app_id, run["run_status"], {"attempts": attempts_total, "failed": list(failed)})
 
     target = "applicant_dossier + dossier_generation_runs" if dossier else "dossier_generation_runs only"
@@ -1961,6 +2080,8 @@ def main():
     finally:
         connection.close()
 
+    if any(result == "AGENT_ERROR" for result in results.values()):
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

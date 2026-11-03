@@ -4,6 +4,9 @@ from datetime import datetime, timezone
 import logging
 import os
 from typing import Any, Dict, Optional
+from pathlib import Path
+import subprocess
+import sys
 
 try:
     from apscheduler.schedulers.background import BackgroundScheduler
@@ -21,15 +24,51 @@ _latest_batch_summary: Optional[Dict[str, Any]] = None
 
 
 def run_overnight_batch() -> Dict[str, Any]:
-    """Execute scheduled overnight batch ingestion run."""
+    """Run overnight ingestion and launch the event consumer."""
+
     logger.info("Executing scheduled overnight batch ingestion run...")
+
     pipeline = BatchIngestionPipeline()
     summary = pipeline.run_batch()
+
     record_batch_summary(summary)
+
     logger.info(
-        f"Overnight batch run finished. Processed: {summary.get('total_packets_discovered', 0)} packets. "
-        f"Breakdown: {summary.get('status_breakdown')}"
+        "Overnight ingestion finished. Processed: %s packets. Breakdown: %s",
+        summary.get("total_packets_discovered", 0),
+        summary.get("status_breakdown"),
     )
+
+    if not summary.get("handoff_ready"):
+        logger.warning(
+            "Event consumer not launched: ingestion handoff is not ready."
+        )
+        return summary
+
+    if not summary.get("affected_ids"):
+        logger.info("No affected applicant IDs; skipping event consumer.")
+        return summary
+
+    event_file = Path(summary["affected_ids_file"]).resolve()
+    consumer_script = Path(__file__).resolve().parent / "event_consumer.py"
+
+    try:
+        process = subprocess.Popen(
+            [sys.executable, str(consumer_script), str(event_file)],
+            cwd=str(consumer_script.parent.parent),
+            start_new_session=True,
+        )
+        logger.info(
+            "Event consumer launched for %s (PID %s)",
+            event_file.name,
+            process.pid,
+        )
+    except OSError:
+        logger.exception(
+            "Failed to launch event consumer for %s. Event file retained for recovery.",
+            event_file,
+        )
+
     return summary
 
 

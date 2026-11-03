@@ -15,6 +15,7 @@ const navigation = [
   { href: "/applicant-review", label: "Applicant Review", icon: "review" },
   { href: "/final-decisions", label: "Final Decisions", icon: "decisions" },
   { href: "/statistics", label: "Summary Statistics", icon: "statistics" },
+  { href: "/error-queue", label: "IT Error Queue", icon: "processing" },
 ] as const;
 
 export default function EaosShell({
@@ -75,9 +76,9 @@ export default function EaosShell({
             <Link
               key={item.href}
               href={item.href}
-              aria-current={pathname === item.href ? "page" : undefined}
+              aria-current={(pathname === item.href || pathname.startsWith(item.href + "/")) ? "page" : undefined}
               className={`${styles.navLink} ${
-                pathname === item.href ? styles.active : ""
+                (pathname === item.href || pathname.startsWith(item.href + "/")) ? styles.active : ""
               }`}
             >
               <WorkspaceIcon name={item.icon} />
@@ -85,13 +86,7 @@ export default function EaosShell({
             </Link>
           ))}
 
-          <div className={`${styles.navLink} ${styles.comingSoon}`}>
-            <span aria-hidden="true">🎧</span>
-            <span>
-              Tech Support
-              <small>Coming Soon</small>
-            </span>
-          </div>
+
         </nav>
       </aside>
 

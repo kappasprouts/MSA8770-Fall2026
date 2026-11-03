@@ -206,6 +206,38 @@ class ManifestValidationGate:
             if val is None or str(val).strip() == "" or str(val).lower() == "nan":
                 missing_fields.append(req_field)
 
+        # 2a. Validate standardized test score ranges
+        score_rules = {
+            "Superscored_SAT_Score": (400, 1600, 10),
+            "sat_math": (200, 800, 10),
+            "sat_ebrw": (200, 800, 10),
+            "Superscored_ACT_Score": (1, 36, 1),
+            "act_composite": (1, 36, 1),
+            }
+
+        for field_name, (minimum, maximum, increment) in score_rules.items():
+            raw_value = app.metadata.get(field_name)
+
+            if raw_value is None or str(raw_value).strip() == "":
+                continue
+
+            try:
+                score = float(raw_value)
+
+                if (
+                    not minimum <= score <= maximum
+                    or score % increment != 0
+                    ):
+                    errors.append(
+                        f"Invalid {field_name}: {raw_value}. "
+                        f"Expected {minimum}-{maximum}"
+                    )
+
+            except (ValueError, TypeError):
+                errors.append(
+                    f"Invalid {field_name}: {raw_value}. Expected numeric score."
+                )
+
         # 3. Check Required Document Checklist Items (only from valid/existing documents)
         present_types: Set[str] = set()
         distinct_lors: Set[str] = set()
