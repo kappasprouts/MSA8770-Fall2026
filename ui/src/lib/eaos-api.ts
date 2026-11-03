@@ -12,7 +12,18 @@ export interface ApplicantRow {
   intendedMajor: string | null;
   applicationStatus: ApplicationStatus;
   finalDecision: FinalDecision | null;
+  reviewerRecommendation: FinalDecision | null;
+  reviewerRecommendationNote: string | null;
   lastUpdated: string | null;
+}
+
+export interface ReviewerRecommendation {
+  appId: string;
+  applicationStatus: ApplicationStatus;
+  finalDecision: FinalDecision | null;
+  recommendation: FinalDecision | null;
+  note: string | null;
+  recommendedAt: string | null;
 }
 
 const BASE_URL = (
@@ -47,6 +58,8 @@ export function normalizeApplicant(raw: unknown): ApplicantRow {
     intendedMajor: asText(get(r, 'intended_major', 'Intended_Major', 'intendedMajor')),
     applicationStatus: asText(get(r, 'application_status', 'Application_Status', 'applicationStatus')) || 'UNKNOWN',
     finalDecision: normalizeDecision(get(r, 'final_decision', 'Final_Decision', 'finalDecision')),
+    reviewerRecommendation: normalizeDecision(get(r, 'reviewer_recommendation', 'reviewerRecommendation')),
+    reviewerRecommendationNote: asText(get(r, 'reviewer_recommendation_note', 'reviewerRecommendationNote')),
     lastUpdated: asText(get(r, 'last_updated', 'Last_Updated', 'lastUpdated')),
   };
 }
@@ -75,6 +88,26 @@ export async function getFinalDecisionData(signal?: AbortSignal): Promise<{ appl
 export async function submitFinalDecision(appId: string, decision: FinalDecision): Promise<void> {
   const path = FINAL_DECISION_PATH.replace('{id}', encodeURIComponent(appId));
   await request(path, { method: 'PUT', body: JSON.stringify({ final_decision: decision }) });
+}
+
+function normalizeRecommendation(raw: unknown): ReviewerRecommendation {
+  const r = asObject(raw);
+  return {
+    appId: asText(get(r, 'appId', 'app_id')) || '',
+    applicationStatus: asText(get(r, 'applicationStatus', 'status')) || 'UNKNOWN',
+    finalDecision: normalizeDecision(get(r, 'finalDecision', 'final_decision')),
+    recommendation: normalizeDecision(get(r, 'recommendation', 'reviewer_recommendation')),
+    note: asText(get(r, 'note', 'reviewer_recommendation_note')),
+    recommendedAt: asText(get(r, 'recommendedAt', 'reviewer_recommended_at')),
+  };
+}
+export async function getRecommendation(appId: string, signal?: AbortSignal): Promise<ReviewerRecommendation> {
+  return normalizeRecommendation(await request(`/api/applicants/${encodeURIComponent(appId)}/recommendation`, { signal }));
+}
+export async function submitRecommendation(appId: string, recommendation: FinalDecision): Promise<ReviewerRecommendation> {
+  return normalizeRecommendation(await request(`/api/applicants/${encodeURIComponent(appId)}/recommendation`, {
+    method: 'PUT', body: JSON.stringify({ recommendation }),
+  }));
 }
 
 /** Canonical applicant dossier route; the home page redirects legacy bookmarks. */

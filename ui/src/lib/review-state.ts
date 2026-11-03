@@ -15,6 +15,10 @@ export function decisionLabel(decision: string | null): string {
   return ({ ACCEPT: "Accepted", WAITLIST: "Waitlisted", DECLINE: "Declined" } as Record<string, string>)[decision ?? ""] ?? "Not recorded";
 }
 
+export function recommendationLabel(recommendation: string | null): string {
+  return ({ ACCEPT: "Recommend Accept", WAITLIST: "Recommend Waitlist", DECLINE: "Recommend Decline" } as Record<string, string>)[recommendation ?? ""] ?? "No recommendation";
+}
+
 export function parseApplicantSummaries(value: unknown): ApplicantSummary[] {
   const list = (value as { applicants?: unknown } | null)?.applicants;
   if (!Array.isArray(list) || list.some(item => !item || typeof item.id !== "string" || !item.id)) {

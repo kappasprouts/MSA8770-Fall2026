@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import EaosShell from "@/components/EaosShell";
 import RequestState from "@/components/RequestState";
-import StatusBadge from "@/components/StatusBadge";
+import StatusBadge, { RecommendationBadge } from "@/components/StatusBadge";
 import styles from "@/components/eaos.module.css";
 import { type ApplicantRow, type FinalDecision, dossierHref, getFinalDecisionData, submitFinalDecision } from "@/lib/eaos-api";
 import { type DecisionTotals, decisionLabel, statusLabel } from "@/lib/review-state";
@@ -77,9 +77,10 @@ export default function FinalDecisionsPage() {
                   : <div className={styles.tableWrap} role="region" aria-label="Applicants awaiting a final decision" tabIndex={0}>
                     <table className={styles.table}>
                       <caption>{filtered.length} applicant(s) shown</caption>
-                      <thead><tr><th scope="col">Applicant</th><th scope="col">Final decision</th><th scope="col">Action</th></tr></thead>
+                      <thead><tr><th scope="col">Applicant</th><th scope="col">Reviewer recommendation</th><th scope="col">Final decision</th><th scope="col">Action</th></tr></thead>
                       <tbody>{filtered.map(row => <tr key={row.appId} aria-selected={row.appId === selectedId}>
                         <td><div className={styles.strong}>{[row.firstName, row.lastName].filter(Boolean).join(" ") || row.appId}</div><div className={styles.muted}>{row.appId}</div></td>
+                        <td><RecommendationBadge recommendation={row.reviewerRecommendation} /></td>
                         <td><StatusBadge status={row.finalDecision} decision /></td>
                         <td><button type="button" className={styles.secondaryButton} onClick={() => chooseApplicant(row.appId)} disabled={saving} aria-label={`View decision form for ${row.appId}`}>View</button></td>
                       </tr>)}</tbody>
@@ -92,6 +93,8 @@ export default function FinalDecisionsPage() {
             <div className={styles.infoLine}><span>Applicant</span><strong>{[selected.firstName, selected.lastName].filter(Boolean).join(" ") || selected.appId}</strong></div>
             <div className={styles.infoLine}><span>Applicant ID</span><strong>{selected.appId}</strong></div>
             <div className={styles.infoLine}><span>Application status</span><strong>{statusLabel(selected.applicationStatus)}</strong></div>
+            <div className={styles.infoLine}><span>Reviewer recommendation</span><RecommendationBadge recommendation={selected.reviewerRecommendation} />
+              {selected.reviewerRecommendationNote && <p className={styles.help} style={{ whiteSpace: "pre-wrap" }}>&ldquo;{selected.reviewerRecommendationNote}&rdquo;</p>}</div>
             <div className={styles.infoLine}><span>Existing final decision</span><strong>{decisionLabel(selected.finalDecision)}</strong></div>
             <Link href={dossierHref(selected.appId)} className={styles.secondaryButton} style={{ marginTop: 16 }}>Review applicant dossier →</Link>
             {selected.finalDecision ? <p className={styles.help}>A final decision is already recorded. An authorized correction workflow is required to change it.</p> : <>

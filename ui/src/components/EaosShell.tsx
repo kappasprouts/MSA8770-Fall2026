@@ -18,6 +18,15 @@ const navigation = [
   { href: "/error-queue", label: "IT Error Queue", icon: "processing" },
 ] as const;
 
+// Where "Back to Previous Screen" leads from each top-level screen; unlisted screens go Home.
+const previousScreen: Record<string, string> = {
+  "/review-queue": "/",
+  "/applicant-review": "/review-queue",
+  "/final-decisions": "/",
+  "/statistics": "/",
+  "/error-queue": "/",
+};
+
 export default function EaosShell({
   title,
   subtitle,
@@ -33,13 +42,17 @@ export default function EaosShell({
   const router = useRouter();
   const isHome = pathname === "/";
 
+  // Step back through the workflow instead of following browser history:
+  // nested screens (e.g. /error-queue/[id]) return to their parent list, and
+  // top-level screens return to the screen listed in previousScreen.
   function goBack() {
-  if (window.history.length > 1) {
-    router.back();
-  } else {
-    router.push("/");
+    const segments = pathname.split("/").filter(Boolean);
+    if (segments.length > 1) {
+      router.push(`/${segments[0]}`);
+      return;
+    }
+    router.push(previousScreen[pathname] ?? "/");
   }
-}
 
   return (
     <div className={styles.shell}>

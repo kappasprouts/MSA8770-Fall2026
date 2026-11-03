@@ -13,6 +13,7 @@ export async function GET() {
         intended_major AS "intendedMajor",
         status AS "applicationStatus",
         final_decision AS "finalDecision",
+        reviewer_recommendation AS "reviewerRecommendation",
         updated_at AS "lastUpdated"
       FROM applicants
       ORDER BY app_id;

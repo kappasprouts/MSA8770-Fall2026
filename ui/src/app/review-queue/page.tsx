@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import EaosShell from "@/components/EaosShell";
 import RequestState from "@/components/RequestState";
-import StatusBadge from "@/components/StatusBadge";
+import StatusBadge, { RecommendationBadge } from "@/components/StatusBadge";
 import styles from "@/components/eaos.module.css";
 import { type ApplicantRow, dossierHref, getReviewQueue } from "@/lib/eaos-api";
 import { requestJson } from "@/lib/http";
@@ -58,6 +58,7 @@ export default function ReviewQueuePage() {
         <div className={styles.metric}><small>Dossier ready</small><strong>{metric(count("DOSSIER_READY"))}</strong></div>
         <div className={styles.metric}><small>Awaiting materials</small><strong>{metric(count("AWAITING_MATERIALS"))}</strong></div>
         <div className={styles.metric}><small>Incomplete</small><strong>{metric(count("INCOMPLETE"))}</strong></div>
+        <div className={styles.metric}><small>Recommendations submitted</small><strong>{metric(rows.filter(row => row.reviewerRecommendation).length)}</strong></div>
       </section>
       <section className={styles.card} aria-labelledby="batch-heading">
         <h2 id="batch-heading">Latest ingestion batch</h2>
@@ -90,10 +91,10 @@ export default function ReviewQueuePage() {
                 : <div className={styles.tableWrap} tabIndex={0} role="region" aria-label="Applicant processing ledger">
                   <table className={styles.table}>
                     <caption>{filtered.length} of {rows.length} applicant(s)</caption>
-                    <thead><tr>{["Applicant ID", "Applicant", "Intended Major", "Application Status", "Final Decision", "Action"].map(label => <th key={label} scope="col">{label}</th>)}</tr></thead>
+                    <thead><tr>{["Applicant ID", "Applicant", "Intended Major", "Application Status", "Recommendation", "Final Decision", "Action"].map(label => <th key={label} scope="col">{label}</th>)}</tr></thead>
                     <tbody>{filtered.map(row => <tr key={row.appId}>
                       <td className={styles.strong}>{row.appId}</td><td>{[row.firstName, row.lastName].filter(Boolean).join(" ") || "Unavailable"}</td>
-                      <td>{row.intendedMajor || "Unavailable"}</td><td><StatusBadge status={row.applicationStatus} /></td><td><StatusBadge status={row.finalDecision} decision /></td>
+                      <td>{row.intendedMajor || "Unavailable"}</td><td><StatusBadge status={row.applicationStatus} /></td><td><RecommendationBadge recommendation={row.reviewerRecommendation} /></td><td><StatusBadge status={row.finalDecision} decision /></td>
                       <td>{row.applicationStatus === "DOSSIER_READY" ? <Link className={styles.secondaryButton} href={dossierHref(row.appId)} aria-label={`Open dossier for ${row.appId}`}>Open dossier →</Link> : <span className={styles.muted}>Not available</span>}</td>
                     </tr>)}</tbody>
                   </table>

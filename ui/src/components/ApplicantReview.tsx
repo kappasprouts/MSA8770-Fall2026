@@ -7,6 +7,7 @@ import DossierPanel from "@/components/DossierPanel";
 import DocumentsPanel from "@/components/DocumentsPanel";
 import ChatPanel from "@/components/ChatPanel";
 import RequestState from "@/components/RequestState";
+import RecommendationPanel from "@/components/RecommendationPanel";
 import styles from "@/components/eaos.module.css";
 import { requestJson } from "@/lib/http";
 import { dossierHref } from "@/lib/eaos-api";
@@ -98,6 +99,7 @@ export default function ApplicantReview() {
           <DossierPanel payload={current.data} />
           <DocumentsPanel key={selectedAppId} appId={selectedAppId} documents={current.documents} />
         </div>
+        <RecommendationPanel key={`recommendation-${selectedAppId}`} appId={selectedAppId} applicantName={name || null} />
         <div className={styles.chatSection}><ChatPanel key={selectedAppId} appId={selectedAppId} /></div>
       </>}
     </EaosShell>
