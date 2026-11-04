@@ -1,0 +1,38 @@
+{
+  "reviewer_type": "AI assistant source spot-check",
+  "human_review_minutes": null,
+  "scope": "Selected APP_012 sources and fresh run 1. This is not exhaustive factual review or a human labor measurement.",
+  "observations": [
+    {
+      "stage": "agent_APP_012_r1",
+      "check": "Academic numeric fields",
+      "sources": ["CommonApp.pdf page 2", "transcript.pdf page 1"],
+      "result": "Unweighted GPA 3.97, weighted GPA 4.4, SAT 1530 and ACT 35 match the visible source fields and generated document_facts.",
+      "items_checked": 4,
+      "items_supported": 4
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "check": "Scanned transcript citation associations",
+      "sources": ["transcript.pdf page 1"],
+      "result": "The four unique image-source citations correctly associate AP Human Geography with A-, AP Chemistry with A, AP Comparative Government with A, and AP Computer Science A with A-. Values appear in separate table columns; the generated quotations combine course and grade.",
+      "items_checked": 4,
+      "items_supported": 4
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "check": "AP course completeness",
+      "sources": ["transcript.pdf pages 1-2", "CommonApp.pdf page 2"],
+      "result": "The transcript contains 12 AP courses. AP Calculus AB appears in the last row of page 1 with grade level 12 and final grade A-. The generated course list has 11 entries and omits this course, while its narrative says 12 AP courses.",
+      "expected_courses": 12,
+      "extracted_courses": 11,
+      "confirmed_missing_courses": ["AP Calculus AB"]
+    },
+    {
+      "stage": "agent_APP_012_r1",
+      "check": "Restricted Hooks value in generated output",
+      "sources": ["CommonApp.pdf page 2", "fresh dossier supplemental_essay_profile and holistic_assessment"],
+      "result": "The fixture Hooks value 'international student on visa' appears in supplement summaries, evidence, and holistic synthesis despite automated validation passing. The exact-value scan finds five output locations for this field. Contact phone and email exact-value scans find no matches; that does not establish complete privacy."
+    }
+  ]
+}

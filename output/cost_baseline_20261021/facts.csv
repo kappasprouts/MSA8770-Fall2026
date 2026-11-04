@@ -1,0 +1,25 @@
+﻿stage,app_id,field,fixture_csv_expected,dossier_value,matches_fixture,scope
+agent_APP_012_r1,APP_012,unweighted_gpa,3.97,3.97,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_012_r1,APP_012,weighted_gpa,4.4,4.4,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_012_r1,APP_012,sat_superscore,1530.0,1530,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_012_r1,APP_012,act_superscore,35.0,35,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_012_r2,APP_012,unweighted_gpa,3.97,3.97,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_012_r2,APP_012,weighted_gpa,4.4,4.4,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_012_r2,APP_012,sat_superscore,1530.0,1530,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_012_r2,APP_012,act_superscore,35.0,35,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_014_r1,APP_014,unweighted_gpa,3.47,3.47,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_014_r1,APP_014,weighted_gpa,3.89,3.89,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_014_r1,APP_014,sat_superscore,31.0,31,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_014_r1,APP_014,act_superscore,,,,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_015_r1,APP_015,unweighted_gpa,4.0,4,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_015_r1,APP_015,weighted_gpa,4.48,4.48,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_015_r1,APP_015,sat_superscore,,,,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_015_r1,APP_015,act_superscore,34.0,34,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_017_r1,APP_017,unweighted_gpa,3.92,3.92,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_017_r1,APP_017,weighted_gpa,4.7,4.7,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_017_r1,APP_017,sat_superscore,,,,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_017_r1,APP_017,act_superscore,,,,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_013_r2,APP_013,unweighted_gpa,3.47,3.47,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_013_r2,APP_013,weighted_gpa,3.69,3.69,True,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_013_r2,APP_013,sat_superscore,,,,CSV fixture consistency; not a full narrative accuracy assessment
+agent_APP_013_r2,APP_013,act_superscore,31.0,31,True,CSV fixture consistency; not a full narrative accuracy assessment

@@ -1,8 +1,8 @@
 # Riverview State University — Admissions Workspace
 
-A Next.js workspace for tracking applicant processing, reviewing saved dossiers and source PDFs, asking dossier-grounded questions, recording a human-approved final decision, and exploring applicant-pool statistics.
+A Next.js workspace for tracking applicant processing, reviewing saved dossiers and source PDFs, asking dossier-grounded questions, recording reviewer recommendations and human-approved final decisions, and exploring applicant-pool statistics.
 
-The AI assistant is advisory and must not make admission decisions. The final-decisions page records a decision supplied by a human reviewer. Dossiers are generated upstream; Q&A uses the selected saved dossier, not direct analysis of the PDFs. Authentication is still simulated in the prototype's decision endpoint.
+The AI assistant is advisory and must not make admission decisions. Applicant Review records a human reviewer's recommendation; Final Decisions records the Dean's approved decision. Dossiers are generated upstream; Q&A uses the selected saved dossier, not direct analysis of the PDFs. Authentication is still simulated in the prototype's recommendation and decision endpoints.
 
 The home page (`/`) is an internal navigation directory for the processing dashboard (`/review-queue`), applicant review (`/applicant-review?appId=APP_012`), final decisions (`/final-decisions`), and summary statistics (`/statistics`). Every page shares navigation and theme components. Previous dossier bookmarks such as `/?appId=APP_012` redirect to the selected applicant's review page. See [the first-pass implementation notes](docs/first-pass.md) for validation provenance, counts, request handling, and regression checks.
 
@@ -21,8 +21,8 @@ The home page (`/`) is an internal navigation directory for the processing dashb
 
 ## Requirements
 
-- **Node.js 20 or newer** and npm.
-- **Docker** with the project's PostgreSQL and MinIO services available. In the tested local environment the containers are `eaos-postgres` and `eaos-minio`.
+- **Node.js 20.9 or newer** and npm.
+- **Docker with Compose** for the repository's PostgreSQL and MinIO services. Follow the [root setup guide](../README.md#run-the-sample-workflow), including its MinIO license configuration.
 - **Ollama** running locally with `qwen3-vl:8b-instruct` installed.
 - A populated PostgreSQL database (`riverview_admissions` in the tested environment) with generated dossier records and applicant document metadata.
 - Original PDF objects uploaded to the configured MinIO bucket (`admissions-raw-docs` in the tested environment).
@@ -35,7 +35,7 @@ From the **repository root**:
 
 ```bash
 cd ui
-npm install
+npm ci
 cp .env.local.example .env.local
 ```
 
@@ -54,12 +54,11 @@ If `npm ci` fails because the lockfile is out of sync, run `npm install` to sync
 
 ## Run the UI
 
-Start Docker Desktop and ensure the project's database and object-storage containers are running:
+Start Docker Desktop, then from the **repository root** start the services configured in `compose.yaml`:
 
 ```bash
-docker ps
-# If these existing containers are stopped:
-docker start eaos-postgres eaos-minio
+docker compose up -d
+docker compose ps
 ```
 
 Check Ollama and the required model:
@@ -91,7 +90,7 @@ npm run build
 
 ## Using the interface
 
-Start at **Home** and choose a workspace. The processing dashboard shows application and batch statuses; applicant review provides saved dossiers and source documents; final decisions records human-approved decisions. **Summary statistics** (`/statistics`) shows the applicant pool, completeness, decisions, academic distributions, representation, trends, and cohort comparisons, with shared filters and CSV export. See [statistics definitions and validation](docs/statistics.md). The Home link and university logo return to the landing page from any workspace. The landing page itself does not depend on database or model requests.
+Start at **Home** and choose a workspace. The processing dashboard shows application and batch statuses; applicant review provides saved dossiers, source documents, and a reviewer recommendation form; Final Decisions records the Dean's approved decision. **Summary statistics** (`/statistics`) shows the applicant pool, completeness, decisions, academic distributions, representation, trends, and cohort comparisons, with shared filters and CSV export. See [statistics definitions and validation](docs/statistics.md) and the [reviewer recommendation workflow](README-review-workflow.md). The Home link and university logo return to the landing page from any workspace. The landing page itself does not depend on database or model requests.
 
 1. **Select an applicant** from the dropdown. Available IDs are read from `applicant_dossier`; an applicant must have a generated dossier to appear.
 2. **Applicant Dossier (left):** review applicant information, **Summary**, policy/validation checks, and supporting evidence. Expand cards as needed.
@@ -185,7 +184,7 @@ Before sharing changes with teammates, verify:
 ## Limitations
 
 - Prototype UI; not an authenticated production admissions system.
-- Dossier and document review are read-only. The final-decision endpoint writes the human-supplied decision and an audit event, with a simulated actor until authentication is implemented.
+- Dossier and document review are read-only. Recommendation and final-decision endpoints write human-supplied actions and audit events, with simulated actors until authentication is implemented.
 - Chat responses are model-generated and require human verification against dossier evidence and original PDFs.
 - The chat uses the stored dossier context, not arbitrary direct retrieval across the original PDF files.
 - Local Docker and Ollama services must be running; performance depends on available machine resources.

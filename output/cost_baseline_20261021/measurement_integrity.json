@@ -1,0 +1,26 @@
+{
+  "checks": {
+    "run_completed": true,
+    "agent_wire_calls_match_per_run": true,
+    "agent_input_tokens_match": true,
+    "agent_output_tokens_match": true,
+    "chat_wire_calls_match_requests": true,
+    "chat_input_tokens_match": true,
+    "chat_output_tokens_match": true,
+    "all_streams_have_final_completion": true,
+    "all_page_selection_counts_match_wire": true,
+    "all_fresh_ui_dossiers_match_saved_outputs": true,
+    "all_linked_objects_match_sources": true,
+    "all_expected_routing_matches": true,
+    "human_reviewer_time_not_fabricated": true,
+    "whole_system_energy_not_fabricated": true,
+    "existing_application_source_unchanged": true
+  },
+  "all_passed": true,
+  "source_changes": [],
+  "input_csv_sha256": {
+    "data\\batches\\batch_01\\applicant_data.csv": "c79385130c9045f16c0a30f057b7e4a4ff0182fb5338976267bf427d0cb0c2e8",
+    "data\\batches\\batch_02\\student_applications_rows_11_20_edited.csv": "48c55187ae234e3fadb6a97f84cdd5477a8d2d16bdefb238b5d8fa4a47c16132"
+  },
+  "notes": "These are measurement-integrity checks. Existing failing application/contract tests remain reported separately."
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "stage": "agent_APP_012_r1",
+    "app_id": "APP_012",
+    "rendered_unique_pages": 7,
+    "unique_model_pages_by_selection": 7,
+    "wire_image_submissions": 9,
+    "selection_image_submissions": 9,
+    "wire_count_matches_selection": true,
+    "rendered_but_unused_pages": [],
+    "method": "Page identities reconstructed from saved loaded-page metadata and unchanged section-selection rules; submission count independently checked against wire requests"
+  },
+  {
+    "stage": "agent_APP_012_r2",
+    "app_id": "APP_012",
+    "rendered_unique_pages": 7,
+    "unique_model_pages_by_selection": 7,
+    "wire_image_submissions": 9,
+    "selection_image_submissions": 9,
+    "wire_count_matches_selection": true,
+    "rendered_but_unused_pages": [],
+    "method": "Page identities reconstructed from saved loaded-page metadata and unchanged section-selection rules; submission count independently checked against wire requests"
+  },
+  {
+    "stage": "agent_APP_014_r1",
+    "app_id": "APP_014",
+    "rendered_unique_pages": 6,
+    "unique_model_pages_by_selection": 6,
+    "wire_image_submissions": 11,
+    "selection_image_submissions": 11,
+    "wire_count_matches_selection": true,
+    "rendered_but_unused_pages": [],
+    "method": "Page identities reconstructed from saved loaded-page metadata and unchanged section-selection rules; submission count independently checked against wire requests"
+  },
+  {
+    "stage": "agent_APP_015_r1",
+    "app_id": "APP_015",
+    "rendered_unique_pages": 7,
+    "unique_model_pages_by_selection": 7,
+    "wire_image_submissions": 9,
+    "selection_image_submissions": 9,
+    "wire_count_matches_selection": true,
+    "rendered_but_unused_pages": [],
+    "method": "Page identities reconstructed from saved loaded-page metadata and unchanged section-selection rules; submission count independently checked against wire requests"
+  },
+  {
+    "stage": "agent_APP_017_r1",
+    "app_id": "APP_017",
+    "rendered_unique_pages": 7,
+    "unique_model_pages_by_selection": 7,
+    "wire_image_submissions": 9,
+    "selection_image_submissions": 9,
+    "wire_count_matches_selection": true,
+    "rendered_but_unused_pages": [],
+    "method": "Page identities reconstructed from saved loaded-page metadata and unchanged section-selection rules; submission count independently checked against wire requests"
+  },
+  {
+    "stage": "agent_APP_002_r1",
+    "app_id": "APP_002",
+    "rendered_unique_pages": 10,
+    "unique_model_pages_by_selection": 7,
+    "wire_image_submissions": 12,
+    "selection_image_submissions": 12,
+    "wire_count_matches_selection": true,
+    "rendered_but_unused_pages": [
+      [
+        "activities_and_awards.pdf",
+        1
+      ],
+      [
+        "activities_and_awards.pdf",
+        2
+      ],
+      [
+        "advanced_coursework_and_ap_scores.pdf",
+        1
+      ]
+    ],
+    "method": "Page identities reconstructed from saved loaded-page metadata and unchanged section-selection rules; submission count independently checked against wire requests"
+  },
+  {
+    "stage": "agent_APP_013_r2",
+    "app_id": "APP_013",
+    "rendered_unique_pages": 6,
+    "unique_model_pages_by_selection": 6,
+    "wire_image_submissions": 11,
+    "selection_image_submissions": 11,
+    "wire_count_matches_selection": true,
+    "rendered_but_unused_pages": [],
+    "method": "Page identities reconstructed from saved loaded-page metadata and unchanged section-selection rules; submission count independently checked against wire requests"
+  }
+]

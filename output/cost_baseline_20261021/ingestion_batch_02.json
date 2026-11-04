@@ -1,0 +1,474 @@
+{
+  "stage": "ingestion_batch_02",
+  "batch": "batch_02",
+  "timestamp_utc": "2026-10-22T00:10:08.187572+00:00",
+  "applicants_processed": 10,
+  "ready": 7,
+  "awaiting": 1,
+  "incomplete": 2,
+  "gate_errors": 0,
+  "ready_ids": [
+    "APP_012",
+    "APP_013",
+    "APP_014",
+    "APP_015",
+    "APP_016",
+    "APP_017",
+    "APP_020"
+  ],
+  "applicants": [
+    {
+      "app_id": "APP_011",
+      "status": "AWAITING_MATERIALS",
+      "documents": 4
+    },
+    {
+      "app_id": "APP_012",
+      "status": "READY_FOR_REVIEW",
+      "documents": 5
+    },
+    {
+      "app_id": "APP_013",
+      "status": "READY_FOR_REVIEW",
+      "documents": 5
+    },
+    {
+      "app_id": "APP_014",
+      "status": "READY_FOR_REVIEW",
+      "documents": 5
+    },
+    {
+      "app_id": "APP_015",
+      "status": "READY_FOR_REVIEW",
+      "documents": 5
+    },
+    {
+      "app_id": "APP_016",
+      "status": "READY_FOR_REVIEW",
+      "documents": 5
+    },
+    {
+      "app_id": "APP_017",
+      "status": "READY_FOR_REVIEW",
+      "documents": 5
+    },
+    {
+      "app_id": "APP_018",
+      "status": "INCOMPLETE",
+      "documents": 5
+    },
+    {
+      "app_id": "APP_019",
+      "status": "INCOMPLETE",
+      "documents": 5
+    },
+    {
+      "app_id": "APP_020",
+      "status": "READY_FOR_REVIEW",
+      "documents": 5
+    }
+  ],
+  "wall_seconds": 0.9525982000050135,
+  "upload_attempts": 49,
+  "upload_failed_attempts": 0,
+  "unique_uploaded_documents": 49,
+  "successful_upload_bytes": 2830680,
+  "application_upload_retry_attempts": 0,
+  "sdk_internal_retries": null,
+  "uploads": [
+    {
+      "key": "APP_011/CommonApp.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 6557,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009279499994590878
+    },
+    {
+      "key": "APP_011/letter_rec1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2715,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007470600015949458
+    },
+    {
+      "key": "APP_011/letter_rec2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2764,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007462400011718273
+    },
+    {
+      "key": "APP_011/supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2494,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007684799958951771
+    },
+    {
+      "key": "APP_012/CommonApp.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 6710,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008795499976258725
+    },
+    {
+      "key": "APP_012/letter_rec1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2815,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.01059060002444312
+    },
+    {
+      "key": "APP_012/letter_rec2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2764,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007653400010894984
+    },
+    {
+      "key": "APP_012/supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2607,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008032899990212172
+    },
+    {
+      "key": "APP_012/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 385836,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.014488299959339201
+    },
+    {
+      "key": "APP_013/CommonApp.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 6513,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.00902450003195554
+    },
+    {
+      "key": "APP_013/letter_rec1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2753,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.00873990001855418
+    },
+    {
+      "key": "APP_013/letter_rec2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2782,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.00870589999249205
+    },
+    {
+      "key": "APP_013/supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2528,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.00816049997229129
+    },
+    {
+      "key": "APP_013/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 245837,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.011044799990486354
+    },
+    {
+      "key": "APP_014/CommonApp.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 6413,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.0078864999813959
+    },
+    {
+      "key": "APP_014/letter_rec1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2765,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007632800028659403
+    },
+    {
+      "key": "APP_014/letter_rec2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2780,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007741899986285716
+    },
+    {
+      "key": "APP_014/supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2530,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.01148689998080954
+    },
+    {
+      "key": "APP_014/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 227242,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.01161580003099516
+    },
+    {
+      "key": "APP_015/CommonApp.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 6604,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008499099989421666
+    },
+    {
+      "key": "APP_015/letter_rec1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2745,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.0077896000002510846
+    },
+    {
+      "key": "APP_015/letter_rec2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2763,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007655799970962107
+    },
+    {
+      "key": "APP_015/supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2558,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007810299983248115
+    },
+    {
+      "key": "APP_015/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 368591,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.013313299976289272
+    },
+    {
+      "key": "APP_016/CommonApp.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 6479,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008342000015545636
+    },
+    {
+      "key": "APP_016/letter_rec1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2772,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.0076540999580174685
+    },
+    {
+      "key": "APP_016/letter_rec2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2760,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008138199977111071
+    },
+    {
+      "key": "APP_016/supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2539,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007921200012788177
+    },
+    {
+      "key": "APP_016/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 241563,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.012126500019803643
+    },
+    {
+      "key": "APP_017/CommonApp.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 6562,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008769400010351092
+    },
+    {
+      "key": "APP_017/letter_rec1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2777,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008027000003494322
+    },
+    {
+      "key": "APP_017/letter_rec2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2788,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007387699966784567
+    },
+    {
+      "key": "APP_017/supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2543,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007264799962285906
+    },
+    {
+      "key": "APP_017/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 372530,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.015190600010100752
+    },
+    {
+      "key": "APP_018/CommonApp.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 6643,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008227599959354848
+    },
+    {
+      "key": "APP_018/letter_rec1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2849,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007507500005885959
+    },
+    {
+      "key": "APP_018/letter_rec2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2763,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.0084256999543868
+    },
+    {
+      "key": "APP_018/supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2615,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008604899980127811
+    },
+    {
+      "key": "APP_018/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 370388,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.014609800011385232
+    },
+    {
+      "key": "APP_019/CommonApp.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 6455,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008506299986038357
+    },
+    {
+      "key": "APP_019/letter_rec1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2699,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007654300017748028
+    },
+    {
+      "key": "APP_019/letter_rec2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2754,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007555800024420023
+    },
+    {
+      "key": "APP_019/supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2492,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.0073782000108622015
+    },
+    {
+      "key": "APP_019/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 246885,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010822799988090992
+    },
+    {
+      "key": "APP_020/CommonApp.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 6328,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.02844540000660345
+    },
+    {
+      "key": "APP_020/letter_rec1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2675,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007470699958503246
+    },
+    {
+      "key": "APP_020/letter_rec2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2765,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007243199972435832
+    },
+    {
+      "key": "APP_020/supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 2445,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.007153899990953505
+    },
+    {
+      "key": "APP_020/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 225945,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010758799966424704
+    }
+  ],
+  "postgres_growth_bytes": 0,
+  "minio_growth_bytes": 0
+}

@@ -5,6 +5,7 @@
 <p align="center">
   <a href="#what-it-does">Overview</a> ·
   <a href="#system-architecture">Architecture</a> ·
+  <a href="#admissions-workspace">Workspace</a> ·
   <a href="#run-the-sample-workflow">Run the demo</a> ·
   <a href="#test-the-system">Testing</a> ·
   <a href="#detailed-documentation">Documentation</a>
@@ -102,26 +103,27 @@ The browser separates admissions work from technical exception handling. All act
 
 The Applicant Review screen places a saved dossier beside the original PDFs and provides a question-and-answer area below them. The bundled preview uses synthetic data; the walkthrough below uses `APP_012`.
 
-<img width="1140" height="622" alt="image" src="https://github.com/user-attachments/assets/34aa6c42-0bb2-4d0e-b484-1cf9a2eee18d" />
-Figure 1. The Applicant Review Screen
+<img width="1140" height="622" alt="Applicant Review screen with a saved dossier and original documents" src="https://github.com/user-attachments/assets/34aa6c42-0bb2-4d0e-b484-1cf9a2eee18d" />
 
-<img width="1136" height="455" alt="image" src="https://github.com/user-attachments/assets/94d13f88-a5bb-4986-980a-8aee6f568ad8" />
-Figure 2. The IT Error Queue
+*Figure 1. Applicant Review screen.*
 
-<img width="1142" height="626" alt="image" src="https://github.com/user-attachments/assets/53dabf9a-6d4b-402a-9254-8cb99cdea2d3" />
-Figure 3. System Error Details
+<img width="1136" height="455" alt="IT Error Queue showing technical incidents" src="https://github.com/user-attachments/assets/94d13f88-a5bb-4986-980a-8aee6f568ad8" />
+
+*Figure 2. IT Error Queue.*
+
+<img width="1142" height="626" alt="System Error Details screen for one technical incident" src="https://github.com/user-attachments/assets/53dabf9a-6d4b-402a-9254-8cb99cdea2d3" />
+
+*Figure 3. System Error Details.*
 
 ## Run the sample workflow
 
 These instructions start from a repository checkout on macOS or Linux and use only the synthetic sample data. Run commands from the repository root unless a step says otherwise. Windows users can follow the same stages with the [PowerShell equivalents below](#windows-powershell) and consult the [recorded Windows live test](output/live_test_setup/README.md) for additional verification; that older record contains machine-specific paths.
 
-For the pre-submission integration build, start from the latest `tran/integration` branch. After the team merges it, use `main` instead.
+To get a local checkout:
 
 ```bash
 git clone https://github.com/kappasprouts/MSA8770-Fall2026.git
 cd MSA8770-Fall2026
-git fetch origin
-git switch --track origin/tran/integration
 ```
 
 ### 1. Install prerequisites
@@ -305,7 +307,9 @@ Run Python tests in the activated virtual environment. Run UI checks from `ui/`.
 | UI automated checks | `cd ui && npm test && npm run lint && npm run build` | Error-queue, first-pass, and statistics tests plus lint, TypeScript, and production build. Use `npm run build -- --webpack` if Turbopack cannot start its worker in a restricted environment. |
 | End-to-end smoke check | Run steps 2–8, then inspect `APP_012` in the browser | Real storage handoff, a new dossier record, PDF retrieval, and one chat response. |
 
-The [agent testing guide](docs/ai_agent/TESTING_GUIDE.md) has expected outputs and additional negative cases. On this checkout (October 9, 2026), `.venv/bin/python -m pytest tests --ignore=tests/integration_review_20261009 -q` produced **53 passed, 8 failed**; failures include database schema constraints and a GPA precision check. The new Compose stack completed strict Batch 02 ingestion with the expected **7 ready / 1 awaiting / 2 incomplete** results, and the policy loader stored **21 chunks**. UI lint and `npm run build -- --webpack` passed. A full Qwen dossier was not rerun in this check because the vision model was absent locally; the earlier [live Batch 02 test](output/live_test_setup/TEST_RESULTS.md) records an `APP_012` dossier run and UI responses. The [integration review](output/integration_review_20261009/REVIEW.md) describes broader diagnostic failures that remain open.
+The [agent testing guide](docs/ai_agent/TESTING_GUIDE.md) has expected outputs and additional negative cases. On **November 4, 2026**, the Python suite in this checkout (`.venv/bin/python -m pytest tests --ignore=tests/integration_review_20261009 -q`) produced **35 passed, 33 failed**. Several failures stem from SQLite test fixtures omitting the now-required `admission_year` and `admission_term` fields; the full suite is not currently green. The UI tests produced **19 passed, 2 skipped**. UI lint completed with one warning about the unused `exportSummary` function. A local webpack build compiled and type-checked after stale generated `.next/dev` types were set aside, but did not finish: the installed Next.js was `16.4.0` and stopped with a security warning, while this repository requires at least `16.4.3` and locks that version. Reinstall with `npm ci` before assessing the build.
+
+The earlier [October 9 live Batch 02 test](output/live_test_setup/TEST_RESULTS.md) records strict ingestion with **7 ready / 1 awaiting / 2 incomplete** applicants, an `APP_012` dossier run, and UI responses. Those results are historical evidence, not a fresh end-to-end run of this checkout. The [integration review](output/integration_review_20261009/REVIEW.md) documents other known defects.
 
 ## Troubleshooting
 
@@ -318,6 +322,7 @@ The [agent testing guide](docs/ai_agent/TESTING_GUIDE.md) has expected outputs a
 | PDFs fail to open in the UI | Match `MINIO_ENDPOINT`, credentials, and `MINIO_BUCKET` in `ui/.env.local` to the ingestion configuration; use **View Full** to check the actual PDF route. |
 | Agent or chat cannot reach Ollama | Confirm `ollama list` contains both models and `curl http://127.0.0.1:11434/api/tags` succeeds. |
 | `npm run build` fails because Turbopack cannot bind a worker port | Run `npm run build -- --webpack` from `ui/`. The build also needs network access for its configured Google fonts. |
+| UI build reports missing routes from `.next/dev/types` or an installed Next.js version that differs from `ui/package-lock.json` | Remove stale generated Next.js files and run `npm ci` in `ui/`, then rebuild. If Next.js reports a security advisory, update the dependency before deployment. |
 
 ## Current scope and known limitations
 
@@ -333,6 +338,6 @@ The [agent testing guide](docs/ai_agent/TESTING_GUIDE.md) has expected outputs a
 
 - [Ingestion API and scheduler](docs/api/ingestion_api.md)
 - [Summarizing agent architecture and testing](docs/ai_agent/SYSTEM_OVERVIEW.md), [testing guide](docs/ai_agent/TESTING_GUIDE.md)
-- [Review UI setup and behavior](ui/README.md)
+- [Review UI setup and behavior](ui/README.md), [reviewer recommendation workflow](ui/README-review-workflow.md)
 - [PostgreSQL schema](docs/data_dictionary/database_schemas.md) and [MinIO object layout](docs/data_dictionary/object_storage_minio.md)
 - [Integration review and known defects](output/integration_review_20261009/REVIEW.md)
