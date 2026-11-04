@@ -20,7 +20,7 @@ export default function DocumentsPanel({
 
       <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4">
         {documents.length === 0 && (
-          <p className="text-sm text-ink-muted">No source documents found on disk for this applicant.</p>
+          <p className="text-sm text-ink-muted" role="status">No source documents are listed for this applicant.</p>
         )}
 
         {documents.map((doc) => {
@@ -50,6 +50,7 @@ export default function DocumentsPanel({
                   target="_blank"
                   rel="noreferrer"
                   className="shrink-0 text-xs font-medium text-accent hover:underline"
+                  aria-label={`View full ${doc.label} PDF (opens in a new tab)`}
                 >
                   View Full ↗
                 </a>

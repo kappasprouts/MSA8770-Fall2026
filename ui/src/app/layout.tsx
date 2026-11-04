@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Riverview Admissions Chat",
-  description: "AI-assisted chat over an applicant's admissions dossier",
+  title: "Riverview Admissions Workspace",
+  description: "Human-led applicant processing, dossier review, and final decisions",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -1,0 +1,817 @@
+{
+  "timestamp_utc": "2026-10-22T00:10:08.153135+00:00",
+  "tables": [
+    {
+      "table": "applicant_dossier",
+      "records": 1,
+      "bytes_including_indexes": 98304
+    },
+    {
+      "table": "applicants",
+      "records": 20,
+      "bytes_including_indexes": 278528
+    },
+    {
+      "table": "audit_logs",
+      "records": 110,
+      "bytes_including_indexes": 114688
+    },
+    {
+      "table": "document_records",
+      "records": 0,
+      "bytes_including_indexes": 32768
+    },
+    {
+      "table": "dossier_generation_runs",
+      "records": 2,
+      "bytes_including_indexes": 32768
+    },
+    {
+      "table": "orphan_documents",
+      "records": 0,
+      "bytes_including_indexes": 24576
+    },
+    {
+      "table": "orphan_test_scores",
+      "records": 2,
+      "bytes_including_indexes": 49152
+    },
+    {
+      "table": "policy_chunks",
+      "records": 21,
+      "bytes_including_indexes": 278528
+    },
+    {
+      "table": "summary_audit_log",
+      "records": 11,
+      "bytes_including_indexes": 32768
+    }
+  ],
+  "buckets": [
+    {
+      "bucket": "admissions-raw-docs",
+      "current_objects": 151,
+      "current_object_bytes": 7352918,
+      "objects": [
+        {
+          "key": "APP_001/activities_and_awards.pdf",
+          "bytes": 46518,
+          "etag": "ab9c23518e8b8875bcfcedce70c0f5aa"
+        },
+        {
+          "key": "APP_001/advanced_coursework_and_ap_scores.pdf",
+          "bytes": 44702,
+          "etag": "dacbc11713c11ff0473bfcb94b055578"
+        },
+        {
+          "key": "APP_001/application_form.pdf",
+          "bytes": 44563,
+          "etag": "9597107dc8c961572f933613d2d6a713"
+        },
+        {
+          "key": "APP_001/common_app_application.pdf",
+          "bytes": 46165,
+          "etag": "ca82ec14ba66ae3fd9639a98e3dc61e8"
+        },
+        {
+          "key": "APP_001/personal_statement.pdf",
+          "bytes": 45343,
+          "etag": "4d62ad3cbc0af7bd7d03aee867407f25"
+        },
+        {
+          "key": "APP_001/recommendation_letter_1.pdf",
+          "bytes": 44985,
+          "etag": "b1b0f6bff2a559fffd13f273ee6ef75c"
+        },
+        {
+          "key": "APP_001/recommendation_letter_2.pdf",
+          "bytes": 44987,
+          "etag": "5499faaa5b1e3de20dc29944f90bfef9"
+        },
+        {
+          "key": "APP_001/standardized_test_score.pdf",
+          "bytes": 44378,
+          "etag": "dada33653857749f4f0d7dcacc5509c7"
+        },
+        {
+          "key": "APP_001/transcript.pdf",
+          "bytes": 46637,
+          "etag": "25beb105afb5dd39c02ddf98b877d8d7"
+        },
+        {
+          "key": "APP_001/university_supplement.pdf",
+          "bytes": 44709,
+          "etag": "5eb498332ff6494fa88d7bf0cb3b76da"
+        },
+        {
+          "key": "APP_002/activities_and_awards.pdf",
+          "bytes": 46331,
+          "etag": "4268546b0e0838de528c3253978840a3"
+        },
+        {
+          "key": "APP_002/advanced_coursework_and_ap_scores.pdf",
+          "bytes": 44386,
+          "etag": "76e72034f87c6d1830634c45a66e7760"
+        },
+        {
+          "key": "APP_002/application_form.pdf",
+          "bytes": 44570,
+          "etag": "60eefad810b431ca9b41f95fced2d658"
+        },
+        {
+          "key": "APP_002/common_app_application.pdf",
+          "bytes": 46110,
+          "etag": "5e8da74942c9fa6e60338dc3cb835eaa"
+        },
+        {
+          "key": "APP_002/personal_statement.pdf",
+          "bytes": 45339,
+          "etag": "6f3c7867792fea78a5782e00bb69e924"
+        },
+        {
+          "key": "APP_002/recommendation_letter_1.pdf",
+          "bytes": 44999,
+          "etag": "b8976cd2a0eae7f3336ca0b80fdf29e2"
+        },
+        {
+          "key": "APP_002/recommendation_letter_2.pdf",
+          "bytes": 45004,
+          "etag": "f8ddd8b57ee2fd1e0ac07aa5be57d289"
+        },
+        {
+          "key": "APP_002/standardized_test_score.pdf",
+          "bytes": 44378,
+          "etag": "ce925bd1d26ecb3a296193fce3484b0a"
+        },
+        {
+          "key": "APP_002/transcript.pdf",
+          "bytes": 46578,
+          "etag": "109866b757c4ecacc19992cab93e89ab"
+        },
+        {
+          "key": "APP_002/university_supplement.pdf",
+          "bytes": 44747,
+          "etag": "d54115f5b8831418ec0bc3bb9bd3470c"
+        },
+        {
+          "key": "APP_003/activities_and_awards.pdf",
+          "bytes": 46471,
+          "etag": "a76f60d5396466cde6ed1cef88eefd2b"
+        },
+        {
+          "key": "APP_003/advanced_coursework_and_ap_scores.pdf",
+          "bytes": 45617,
+          "etag": "69d0dbad85d9c29ce219f2e01e6204ed"
+        },
+        {
+          "key": "APP_003/application_form.pdf",
+          "bytes": 44574,
+          "etag": "9273b8d98280e6b9b9e89ec75a460ac4"
+        },
+        {
+          "key": "APP_003/common_app_application.pdf",
+          "bytes": 46117,
+          "etag": "72c9eb0f8e116090f57ecc5357cac55e"
+        },
+        {
+          "key": "APP_003/personal_statement.pdf",
+          "bytes": 45336,
+          "etag": "9b14a637684fe928c69087b3e4d356de"
+        },
+        {
+          "key": "APP_003/recommendation_letter_1.pdf",
+          "bytes": 44974,
+          "etag": "2e567019f21b0af285d5360afef59745"
+        },
+        {
+          "key": "APP_003/recommendation_letter_2.pdf",
+          "bytes": 44974,
+          "etag": "9b96f9b36ec3a9d201595c870c30d1d1"
+        },
+        {
+          "key": "APP_003/standardized_test_score.pdf",
+          "bytes": 44378,
+          "etag": "8afde37e2b58d2ccb19d22d5da3081d3"
+        },
+        {
+          "key": "APP_003/transcript.pdf",
+          "bytes": 46596,
+          "etag": "76fa0d66ba320cbc69ee11894fd21a0b"
+        },
+        {
+          "key": "APP_003/university_supplement.pdf",
+          "bytes": 44753,
+          "etag": "8098c699061d6eed92d3bdfe186d87d1"
+        },
+        {
+          "key": "APP_004/activities_and_awards.pdf",
+          "bytes": 44516,
+          "etag": "c41a997099a5aed9e56f3f2fe70728de"
+        },
+        {
+          "key": "APP_004/advanced_coursework_and_ap_scores.pdf",
+          "bytes": 44659,
+          "etag": "03b3161c60e34b3b1adb3648d3ba457e"
+        },
+        {
+          "key": "APP_004/application_form.pdf",
+          "bytes": 44558,
+          "etag": "466cd5298bc9dff7279f9fbece10eca1"
+        },
+        {
+          "key": "APP_004/common_app_application.pdf",
+          "bytes": 45978,
+          "etag": "c0f0e3eba5c40354651af127e3eff3d2"
+        },
+        {
+          "key": "APP_004/personal_statement.pdf",
+          "bytes": 45324,
+          "etag": "8246b2720b92d7fbb4ddbce3185f8190"
+        },
+        {
+          "key": "APP_004/recommendation_letter_1.pdf",
+          "bytes": 44974,
+          "etag": "2c0fe0e07486a1a17bf89ae0968f4620"
+        },
+        {
+          "key": "APP_004/recommendation_letter_2.pdf",
+          "bytes": 44975,
+          "etag": "ccfeeb5f8975124e2dc46dbf57f326f0"
+        },
+        {
+          "key": "APP_004/standardized_test_score.pdf",
+          "bytes": 44381,
+          "etag": "0482f20d6dfd60f37c73542a3bf8b132"
+        },
+        {
+          "key": "APP_004/transcript.pdf",
+          "bytes": 46584,
+          "etag": "d45c03ff174307d6e8732200145e7a2b"
+        },
+        {
+          "key": "APP_004/university_supplement.pdf",
+          "bytes": 44709,
+          "etag": "e58e9d03cf5d63c7f292feb0366559f9"
+        },
+        {
+          "key": "APP_005/activities_and_awards.pdf",
+          "bytes": 46313,
+          "etag": "a8bc2f0418a1552f0b9e4e4d3f25875c"
+        },
+        {
+          "key": "APP_005/advanced_coursework_and_ap_scores.pdf",
+          "bytes": 44683,
+          "etag": "806f49349711cc4d2355a4fed480904e"
+        },
+        {
+          "key": "APP_005/application_form.pdf",
+          "bytes": 44557,
+          "etag": "5801f13f7f847489a8ea62266d13a665"
+        },
+        {
+          "key": "APP_005/common_app_application.pdf",
+          "bytes": 46101,
+          "etag": "4f4b9115e663690f07bb707bdc15fac3"
+        },
+        {
+          "key": "APP_005/exception_supporting_document.pdf",
+          "bytes": 44540,
+          "etag": "80893a3b32f99e33a3b71335b82ea797"
+        },
+        {
+          "key": "APP_005/personal_statement.pdf",
+          "bytes": 45336,
+          "etag": "90d341fc3fc4bde61f5bf13baf5aabd7"
+        },
+        {
+          "key": "APP_005/recommendation_letter_1.pdf",
+          "bytes": 44967,
+          "etag": "3139adff920713f18f68e10c53677132"
+        },
+        {
+          "key": "APP_005/recommendation_letter_2.pdf",
+          "bytes": 44969,
+          "etag": "39cfc9e4e56d4a063099ce05f26f6840"
+        },
+        {
+          "key": "APP_005/standardized_test_score.pdf",
+          "bytes": 44382,
+          "etag": "9a2947665b428534eb20b4c182d62c5d"
+        },
+        {
+          "key": "APP_005/transcript.pdf",
+          "bytes": 46554,
+          "etag": "7ab9e3023fa0e45316362cf6326b4db9"
+        },
+        {
+          "key": "APP_005/university_supplement.pdf",
+          "bytes": 44756,
+          "etag": "216609bea690cdc3e5b9becf1bd8d7a7"
+        },
+        {
+          "key": "APP_006/activities_and_awards.pdf",
+          "bytes": 44659,
+          "etag": "48e82dec85ae85afb740cfa7ce240990"
+        },
+        {
+          "key": "APP_006/advanced_coursework_and_ap_scores.pdf",
+          "bytes": 44614,
+          "etag": "57c1ceae56d3c10d489f83c19aee92f2"
+        },
+        {
+          "key": "APP_006/application_form.pdf",
+          "bytes": 44560,
+          "etag": "7b7a33c89fb8af829896b97e5d5c448b"
+        },
+        {
+          "key": "APP_006/common_app_application.pdf",
+          "bytes": 45994,
+          "etag": "aaf46d2d1972dacc4b65f7f2132572fb"
+        },
+        {
+          "key": "APP_006/personal_statement.pdf",
+          "bytes": 45338,
+          "etag": "a61442412b0c8f187b89d342714b1127"
+        },
+        {
+          "key": "APP_006/recommendation_letter_1.pdf",
+          "bytes": 44997,
+          "etag": "7d21d07697e487712a064105119e0a4f"
+        },
+        {
+          "key": "APP_006/recommendation_letter_2.pdf",
+          "bytes": 45002,
+          "etag": "ddb703b5d03dc63f54c9896491e2184b"
+        },
+        {
+          "key": "APP_006/standardized_test_score.pdf",
+          "bytes": 44412,
+          "etag": "0800b53e72cd1e501d3a8d88685c6a65"
+        },
+        {
+          "key": "APP_006/transcript.pdf",
+          "bytes": 46595,
+          "etag": "cf7d028841fd454a72b332f98b0841bc"
+        },
+        {
+          "key": "APP_006/university_supplement.pdf",
+          "bytes": 44717,
+          "etag": "4262b7e20c7aabc1dcb45dac611e2a63"
+        },
+        {
+          "key": "APP_007/activities_and_awards.pdf",
+          "bytes": 44834,
+          "etag": "dda43e21762a84367371db732acec6a7"
+        },
+        {
+          "key": "APP_007/advanced_coursework_and_ap_scores.pdf",
+          "bytes": 45620,
+          "etag": "d7fbcb03ff58c4b9aefb5f76c6c779e4"
+        },
+        {
+          "key": "APP_007/application_form.pdf",
+          "bytes": 44549,
+          "etag": "b42b354255629945223bace8490637a7"
+        },
+        {
+          "key": "APP_007/common_app_application.pdf",
+          "bytes": 46043,
+          "etag": "b5632a1555653e81d86e6a89304cd87b"
+        },
+        {
+          "key": "APP_007/personal_statement.pdf",
+          "bytes": 45318,
+          "etag": "972f6a9da5e9097f6a9bca11c491b958"
+        },
+        {
+          "key": "APP_007/recommendation_letter_1.pdf",
+          "bytes": 44987,
+          "etag": "b86f9971d5c88d5245543927e6e84e59"
+        },
+        {
+          "key": "APP_007/recommendation_letter_2.pdf",
+          "bytes": 44989,
+          "etag": "8bdf53a2dbcd936f851172fdc7a37ea4"
+        },
+        {
+          "key": "APP_007/standardized_test_score.pdf",
+          "bytes": 44380,
+          "etag": "cb83010c517ebb8b46a2814ed81c3797"
+        },
+        {
+          "key": "APP_007/transcript.pdf",
+          "bytes": 46810,
+          "etag": "201f1ce14c47ba8526e6cdd447e0fb4b"
+        },
+        {
+          "key": "APP_007/university_supplement.pdf",
+          "bytes": 44701,
+          "etag": "d3ee42229d540432c4daa1b4bc5f5630"
+        },
+        {
+          "key": "APP_008/activities_and_awards.pdf",
+          "bytes": 44857,
+          "etag": "034f53df7e14ff5ef8d8f26330c19b9a"
+        },
+        {
+          "key": "APP_008/advanced_coursework_and_ap_scores.pdf",
+          "bytes": 45683,
+          "etag": "872ef701e237700d8e71c88fd51dc4e2"
+        },
+        {
+          "key": "APP_008/application_form.pdf",
+          "bytes": 44558,
+          "etag": "7c0da97297472042e2388d07702468d1"
+        },
+        {
+          "key": "APP_008/common_app_application.pdf",
+          "bytes": 46081,
+          "etag": "67477f2df4a1ecf9e6c0f5610507f3b1"
+        },
+        {
+          "key": "APP_008/personal_statement.pdf",
+          "bytes": 45326,
+          "etag": "f6eaa5e8936b8f6221415ba3ca962294"
+        },
+        {
+          "key": "APP_008/recommendation_letter_1.pdf",
+          "bytes": 44995,
+          "etag": "31612f19f8e89031f9ff4fb42f32b9b1"
+        },
+        {
+          "key": "APP_008/recommendation_letter_2.pdf",
+          "bytes": 44997,
+          "etag": "4cd1ce7e6e18356944434c2e947dae65"
+        },
+        {
+          "key": "APP_008/standardized_test_score.pdf",
+          "bytes": 44377,
+          "etag": "68a4aadefd9e89eafa57d4062c0a0ce0"
+        },
+        {
+          "key": "APP_008/transcript.pdf",
+          "bytes": 44370,
+          "etag": "df342e3878591841b0bfeb7084832f6f"
+        },
+        {
+          "key": "APP_008/university_supplement.pdf",
+          "bytes": 44706,
+          "etag": "fd7e44527b97460ddbda55e2e131258c"
+        },
+        {
+          "key": "APP_009/activities_and_awards.pdf",
+          "bytes": 46487,
+          "etag": "bdc88640d01133cbce758192b431d64f"
+        },
+        {
+          "key": "APP_009/advanced_coursework_and_ap_scores.pdf",
+          "bytes": 45742,
+          "etag": "dad77c5f1cf66e9634e3a5a6a9bfcc3a"
+        },
+        {
+          "key": "APP_009/application_form.pdf",
+          "bytes": 44572,
+          "etag": "5348a993b376a001f3dcecc9202ed104"
+        },
+        {
+          "key": "APP_009/common_app_application.pdf",
+          "bytes": 46135,
+          "etag": "7f7c9a352c4f25d37116a4ec1c636eca"
+        },
+        {
+          "key": "APP_009/personal_statement.pdf",
+          "bytes": 45340,
+          "etag": "01e1e682552d1a493f843d811fef13a9"
+        },
+        {
+          "key": "APP_009/recommendation_letter_1.pdf",
+          "bytes": 44965,
+          "etag": "74331f4cdffc85d8d8ae8b5d696889ae"
+        },
+        {
+          "key": "APP_009/recommendation_letter_2.pdf",
+          "bytes": 44970,
+          "etag": "e72c5a725ae03ab25b85c72aab4f609d"
+        },
+        {
+          "key": "APP_009/standardized_test_score.pdf",
+          "bytes": 44380,
+          "etag": "175965b9f5f19157b7bf04514c4869f5"
+        },
+        {
+          "key": "APP_009/transcript.pdf",
+          "bytes": 46583,
+          "etag": "e9be2dcec628644c7a9d1b4a699b9422"
+        },
+        {
+          "key": "APP_009/university_supplement.pdf",
+          "bytes": 44724,
+          "etag": "d768570affdc8e6078edc17ccda98429"
+        },
+        {
+          "key": "APP_010/activities_and_awards.pdf",
+          "bytes": 44601,
+          "etag": "3616fb786abce2a455fd7914b21ff5ea"
+        },
+        {
+          "key": "APP_010/advanced_coursework_and_ap_scores.pdf",
+          "bytes": 44773,
+          "etag": "a45fae129f879254bc68af9ab4d7baa6"
+        },
+        {
+          "key": "APP_010/application_form.pdf",
+          "bytes": 44558,
+          "etag": "be817f58871f87ff7671d8a9e32218d4"
+        },
+        {
+          "key": "APP_010/common_app_application.pdf",
+          "bytes": 45946,
+          "etag": "2e4bd45ad40b1c5da19cce9e8e1fe88c"
+        },
+        {
+          "key": "APP_010/personal_statement.pdf",
+          "bytes": 45325,
+          "etag": "5691fd86d138e937a8d24b37706772f9"
+        },
+        {
+          "key": "APP_010/recommendation_letter_1.pdf",
+          "bytes": 44958,
+          "etag": "59890c6a857eb3c76ac04269c9ed8900"
+        },
+        {
+          "key": "APP_010/recommendation_letter_2.pdf",
+          "bytes": 44964,
+          "etag": "baf12a41df3e14fe74e25c648792ce44"
+        },
+        {
+          "key": "APP_010/standardized_test_score.pdf",
+          "bytes": 44381,
+          "etag": "491fa6a6f5c18c25ceade08ada358ad4"
+        },
+        {
+          "key": "APP_010/university_supplement.pdf",
+          "bytes": 44712,
+          "etag": "1ad530a38ab0abc98d6db19a061d0609"
+        },
+        {
+          "key": "APP_011/CommonApp.pdf",
+          "bytes": 6557,
+          "etag": "da6a574a98d138b08d697e9909c4f8c4"
+        },
+        {
+          "key": "APP_011/letter_rec1.pdf",
+          "bytes": 2715,
+          "etag": "dd50f3a5c11fef0cf15d8c3d6b598f59"
+        },
+        {
+          "key": "APP_011/letter_rec2.pdf",
+          "bytes": 2764,
+          "etag": "dd6392e3691a925cc26914b141a0deec"
+        },
+        {
+          "key": "APP_011/supplement.pdf",
+          "bytes": 2494,
+          "etag": "caf20d962670db664254f281b0ec3f04"
+        },
+        {
+          "key": "APP_012/CommonApp.pdf",
+          "bytes": 6710,
+          "etag": "4f9e04a6f3e4c17d2c81e748674b891e"
+        },
+        {
+          "key": "APP_012/letter_rec1.pdf",
+          "bytes": 2815,
+          "etag": "864a68c28d2f82da164fc11a68f36558"
+        },
+        {
+          "key": "APP_012/letter_rec2.pdf",
+          "bytes": 2764,
+          "etag": "1bffae4dee3d009ca69dd02d9fe34c74"
+        },
+        {
+          "key": "APP_012/supplement.pdf",
+          "bytes": 2607,
+          "etag": "11a7d4dbe96166dc8b412f2b5f32359d"
+        },
+        {
+          "key": "APP_012/transcript.pdf",
+          "bytes": 385836,
+          "etag": "4441be57276c46aa970192c48be09aa0"
+        },
+        {
+          "key": "APP_013/CommonApp.pdf",
+          "bytes": 6513,
+          "etag": "0b69e964545c0c5ff9fe423a7eb9157f"
+        },
+        {
+          "key": "APP_013/letter_rec1.pdf",
+          "bytes": 2753,
+          "etag": "be61631ce57e5d9f8dce79cdf442c7e6"
+        },
+        {
+          "key": "APP_013/letter_rec2.pdf",
+          "bytes": 2782,
+          "etag": "6cbba282cb1f69942122d861162ecd6f"
+        },
+        {
+          "key": "APP_013/supplement.pdf",
+          "bytes": 2528,
+          "etag": "85f2b01efc5bd07a0d86da011402ff64"
+        },
+        {
+          "key": "APP_013/transcript.pdf",
+          "bytes": 245837,
+          "etag": "5b7c6295025dac67f2985e3eae1de104"
+        },
+        {
+          "key": "APP_014/CommonApp.pdf",
+          "bytes": 6413,
+          "etag": "2c23a215ee0824eadb362ec9300936d0"
+        },
+        {
+          "key": "APP_014/letter_rec1.pdf",
+          "bytes": 2765,
+          "etag": "f2d22c4d66a4755d23482bab6321732a"
+        },
+        {
+          "key": "APP_014/letter_rec2.pdf",
+          "bytes": 2780,
+          "etag": "925ab95e9c8de59388d7fe7f1704cc8d"
+        },
+        {
+          "key": "APP_014/supplement.pdf",
+          "bytes": 2530,
+          "etag": "fc6f2c10e699c5f402bf6601ae4d8eba"
+        },
+        {
+          "key": "APP_014/transcript.pdf",
+          "bytes": 227242,
+          "etag": "f6e68f833482f8e5ee13b5ba63b2f881"
+        },
+        {
+          "key": "APP_015/CommonApp.pdf",
+          "bytes": 6604,
+          "etag": "c111ea933d24649ff6b7cb3f7c4692bc"
+        },
+        {
+          "key": "APP_015/letter_rec1.pdf",
+          "bytes": 2745,
+          "etag": "1213b97e127005f3306d99e3e6aa1b6f"
+        },
+        {
+          "key": "APP_015/letter_rec2.pdf",
+          "bytes": 2763,
+          "etag": "4d237e6278e608dfb7b1beb43903c938"
+        },
+        {
+          "key": "APP_015/supplement.pdf",
+          "bytes": 2558,
+          "etag": "271f577484ac0fdab4bb1873c4885b4d"
+        },
+        {
+          "key": "APP_015/transcript.pdf",
+          "bytes": 368591,
+          "etag": "456d507e1182ae392c02e8b85f41bf9e"
+        },
+        {
+          "key": "APP_016/CommonApp.pdf",
+          "bytes": 6479,
+          "etag": "57ea0c5b8f0ac9096fa79a9dda4f03f4"
+        },
+        {
+          "key": "APP_016/letter_rec1.pdf",
+          "bytes": 2772,
+          "etag": "e7e295dce564a910ea949f31d92b6840"
+        },
+        {
+          "key": "APP_016/letter_rec2.pdf",
+          "bytes": 2760,
+          "etag": "40c40989b8987b6b9c0b3d0d45a6dd33"
+        },
+        {
+          "key": "APP_016/supplement.pdf",
+          "bytes": 2539,
+          "etag": "9a8de566aa5e8fc3933ac22e704216c1"
+        },
+        {
+          "key": "APP_016/transcript.pdf",
+          "bytes": 241563,
+          "etag": "d89be52a11ee28fff2131515fd25500e"
+        },
+        {
+          "key": "APP_017/CommonApp.pdf",
+          "bytes": 6562,
+          "etag": "0064b64493ef7945c9b8db26f942c5c8"
+        },
+        {
+          "key": "APP_017/letter_rec1.pdf",
+          "bytes": 2777,
+          "etag": "39a31a793604bde04abe0b446883c327"
+        },
+        {
+          "key": "APP_017/letter_rec2.pdf",
+          "bytes": 2788,
+          "etag": "066ec03f2556da9155c47dd4c6a2ea99"
+        },
+        {
+          "key": "APP_017/supplement.pdf",
+          "bytes": 2543,
+          "etag": "41f62abd0d2459867c34efa5aef98c4b"
+        },
+        {
+          "key": "APP_017/transcript.pdf",
+          "bytes": 372530,
+          "etag": "28782080177a60a26f5f58fc14c43656"
+        },
+        {
+          "key": "APP_018/CommonApp.pdf",
+          "bytes": 6643,
+          "etag": "642762f752cae4412a99a3a265309b88"
+        },
+        {
+          "key": "APP_018/letter_rec1.pdf",
+          "bytes": 2849,
+          "etag": "f0c510a2ca10ce8e6d251cee12a1ce11"
+        },
+        {
+          "key": "APP_018/letter_rec2.pdf",
+          "bytes": 2763,
+          "etag": "d693eb656d3834dee3013a14c31fc3f6"
+        },
+        {
+          "key": "APP_018/supplement.pdf",
+          "bytes": 2615,
+          "etag": "ffb24adb832dd81787c3690a10151f4f"
+        },
+        {
+          "key": "APP_018/transcript.pdf",
+          "bytes": 370388,
+          "etag": "e6bfdc3bc0787975a5a838eeb6dae33f"
+        },
+        {
+          "key": "APP_019/CommonApp.pdf",
+          "bytes": 6455,
+          "etag": "1299964a693b2d0ae5e0b0d14439941a"
+        },
+        {
+          "key": "APP_019/letter_rec1.pdf",
+          "bytes": 2699,
+          "etag": "e01a886508bde41dac59fa24ff10ceac"
+        },
+        {
+          "key": "APP_019/letter_rec2.pdf",
+          "bytes": 2754,
+          "etag": "b385f68cb45e44a3666db8839d62ab07"
+        },
+        {
+          "key": "APP_019/supplement.pdf",
+          "bytes": 2492,
+          "etag": "7739fa54ef854fd07b8084e6ff650188"
+        },
+        {
+          "key": "APP_019/transcript.pdf",
+          "bytes": 246885,
+          "etag": "990c2082a04a1ee921b64983d0132a4a"
+        },
+        {
+          "key": "APP_020/CommonApp.pdf",
+          "bytes": 6328,
+          "etag": "c871f4fb1d0b7eadc349f8c1c8845f60"
+        },
+        {
+          "key": "APP_020/letter_rec1.pdf",
+          "bytes": 2675,
+          "etag": "7ceb25324327503606e0ed5359331a59"
+        },
+        {
+          "key": "APP_020/letter_rec2.pdf",
+          "bytes": 2765,
+          "etag": "d36fdd7a7dbe2f9377d03bdb5bfbf92d"
+        },
+        {
+          "key": "APP_020/supplement.pdf",
+          "bytes": 2445,
+          "etag": "24ccff3252181f409b59f8230b21d96e"
+        },
+        {
+          "key": "APP_020/transcript.pdf",
+          "bytes": 225945,
+          "etag": "b560382598938fd08aca8433b897c3cd"
+        },
+        {
+          "key": "APP_042/APP_042_transcript.pdf",
+          "bytes": 2009,
+          "etag": "028fa833570dbae008eb8e80fb459b33"
+        },
+        {
+          "key": "orphans/73f202341caabdeeb1541919cfa6fd07129f6f33e36943af5f2ef792aab7aeac/APP_999_portfolio.pdf",
+          "bytes": 2009,
+          "etag": "e0c1a3a06deb7877d50557efc000266d"
+        }
+      ]
+    }
+  ],
+  "postgres_database_bytes": 9279167,
+  "minio_current_object_bytes": 7352918,
+  "minio_current_objects": 151
+}

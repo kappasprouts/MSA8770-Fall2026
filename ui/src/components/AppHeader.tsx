@@ -1,47 +1,28 @@
 import type { ApplicantSummary } from "@/lib/types";
-import Logo from "./Logo";
+import styles from "./eaos.module.css";
 
-export default function AppHeader({
-  applicants,
-  selectedAppId,
-  onSelect,
-  applicantName,
-}: {
+export default function AppHeader({ applicants, selectedAppId, onSelect, applicantName, disabled, placeholder = "No saved dossiers" }: {
   applicants: ApplicantSummary[];
   selectedAppId: string;
   onSelect: (appId: string) => void;
   applicantName: string | null;
+  disabled?: boolean;
+  placeholder?: string;
 }) {
   return (
-    <header className="flex items-center justify-between border-b border-border bg-panel-header px-5 py-3">
-      <div className="flex items-center gap-3">
-        <Logo className="h-12 w-12 shrink-0" />
-
-        <div>
-          <p className="text-base font-bold leading-tight text-ink">Riverview State University</p>
-          <p className="text-xs font-semibold uppercase tracking-wide text-accent">Applicant Review</p>
-          <h1 className="text-lg font-bold text-ink">
-            {selectedAppId || "No applicant selected"}
-            {applicantName && <span className="font-normal text-ink-muted"> &nbsp;|&nbsp; {applicantName}</span>}
-          </h1>
-        </div>
+    <section className={`${styles.card} ${styles.applicantHeader}`} aria-label="Selected applicant">
+      <div>
+        <p className={styles.eyebrow}>Applicant dossier</p>
+        <h2>{selectedAppId || "Select an applicant"}{applicantName && <span className={styles.applicantName}> · {applicantName}</span>}</h2>
+        <p className={styles.help}>Original documents and AI-assisted summaries for human review.</p>
       </div>
-
-      <label className="flex items-center gap-2 text-sm text-ink-muted">
+      <label className={styles.selectorLabel}>
         Applicant
-        <select
-          value={selectedAppId}
-          onChange={(event) => onSelect(event.target.value)}
-          className="rounded-md border border-border bg-surface-alt px-3 py-1.5 text-sm text-ink focus:border-accent focus:outline-none"
-        >
-          {applicants.length === 0 && <option value="">None found</option>}
-          {applicants.map((applicant) => (
-            <option key={applicant.id} value={applicant.id}>
-              {applicant.id}
-            </option>
-          ))}
+        <select className={styles.select} value={selectedAppId} onChange={event => onSelect(event.target.value)} disabled={disabled}>
+          {!applicants.some(applicant => applicant.id === selectedAppId) && <option value={selectedAppId}>{selectedAppId || placeholder}</option>}
+          {applicants.map(applicant => <option key={applicant.id} value={applicant.id}>{applicant.id}</option>)}
         </select>
       </label>
-    </header>
+    </section>
   );
 }

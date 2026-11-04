@@ -65,6 +65,8 @@ export interface RunValidation {
 }
 
 export interface RunInfo {
+  id?: number | string | null;
+  created_at?: string | null;
   app_id?: string;
   run_status?: string;
   runtime_seconds?: number;

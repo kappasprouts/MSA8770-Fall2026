@@ -17,6 +17,7 @@ from sqlalchemy import (
     Integer,
     Numeric,
     String,
+    Text,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.types import JSON
@@ -99,6 +100,11 @@ class Applicant(Base):
     # Statuses: PENDING, READY_FOR_REVIEW, AWAITING_MATERIALS, INCOMPLETE, ERROR
     status = Column(String(32), default="PENDING", nullable=False, index=True)
     final_decision = Column(String(10), nullable=True)
+
+    # Advisory reviewer recommendation (ACCEPT, WAITLIST, DECLINE) shown to the Dean
+    reviewer_recommendation = Column(String(10), nullable=True)
+    reviewer_recommendation_note = Column(Text, nullable=True)
+    reviewer_recommended_at = Column(DateTime(timezone=True), nullable=True)
 
     # Timestamps
     created_at = Column(

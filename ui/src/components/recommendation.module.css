@@ -1,0 +1,83 @@
+/* Applicant Review: reviewer recommendation panel */
+.panel {
+  margin-top: 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 4px solid var(--color-accent);
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 6px 20px #2b24200a;
+}
+
+/* Option tones */
+.accept { --tone: var(--color-status-pass); --tone-bg: #edf7ef; --tone-border: #bdddc5; }
+.waitlist { --tone: var(--color-status-warn); --tone-bg: #fff6e5; --tone-border: #ecd3a4; }
+.decline { --tone: var(--color-status-fail); --tone-bg: #fff3f2; --tone-border: #efc4bf; }
+.empty { --tone: var(--color-status-muted); --tone-bg: var(--color-surface-alt); --tone-border: var(--color-border); }
+
+.header { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
+.eyebrow { margin: 0 0 6px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--color-accent); }
+.header h2 { margin: 0; font-size: 20px; font-weight: 650; line-height: 1.35; color: var(--color-ink); }
+.subtitle { margin: 6px 0 0; font-size: 13px; line-height: 1.6; color: var(--color-ink-muted); max-width: 560px; }
+
+.statusChip { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--tone-border); background: var(--tone-bg); color: var(--tone); }
+.statusChip span:last-child { display: grid; gap: 2px; }
+.statusChip strong { font-size: 13px; }
+.statusChip small { font-size: 11px; color: var(--color-ink-muted); }
+.statusDot { width: 9px; height: 9px; border-radius: 50%; background: var(--tone); box-shadow: 0 0 0 4px var(--tone-border); flex-shrink: 0; }
+
+.banner { margin-bottom: 18px; padding: 12px 16px; border-radius: 10px; background: var(--color-panel-header); border: 1px solid #dcc4f2; font-size: 13px; line-height: 1.6; color: var(--color-ink); }
+
+.options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; min-width: 0; margin: 0; padding: 0; border: 0; }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.option { position: relative; display: flex; align-items: flex-start; gap: 14px; padding: 18px 16px; border: 1.5px solid var(--color-border); border-radius: 12px; background: var(--color-surface); cursor: pointer; transition: border-color .15s ease, background .15s ease, box-shadow .15s ease, transform .15s ease; }
+.option:hover { border-color: var(--tone-border); background: var(--tone-bg); transform: translateY(-1px); }
+.option input { position: absolute; opacity: 0; pointer-events: none; }
+.option:has(input:focus-visible) { outline: 3px solid var(--color-accent); outline-offset: 3px; }
+.selected, .selected:hover { border-color: var(--tone); background: var(--tone-bg); box-shadow: 0 0 0 3px var(--tone-border); transform: none; }
+.options:disabled .option { cursor: not-allowed; transform: none; }
+.options:disabled .option:not(.selected) { opacity: .55; }
+
+.optionIcon { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; color: var(--tone); background: var(--tone-bg); border: 1px solid var(--tone-border); }
+.selected .optionIcon { background: var(--tone); border-color: var(--tone); color: #fff; }
+
+.optionText { display: grid; gap: 4px; padding-right: 18px; }
+.optionText strong { font-size: 15px; color: var(--color-ink); }
+.selected .optionText strong { color: var(--tone); }
+.optionText span { font-size: 12.5px; line-height: 1.5; color: var(--color-ink-muted); }
+
+.check { position: absolute; top: 12px; right: 12px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--tone); color: #fff; opacity: 0; transform: scale(.6); transition: opacity .15s ease, transform .15s ease; }
+.selected .check { opacity: 1; transform: scale(1); }
+
+.confirm { display: flex; align-items: center; gap: 12px; margin-top: 20px; padding: 14px 16px; border: 1.5px dashed var(--color-border); border-radius: 12px; background: var(--color-surface-alt); cursor: pointer; transition: border-color .15s ease, background .15s ease; }
+.confirm input { width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--color-accent); cursor: inherit; }
+.confirm:has(input:disabled) { cursor: not-allowed; opacity: .6; }
+.confirm > span:last-child { display: grid; gap: 2px; }
+.confirm strong { font-size: 14px; color: var(--color-ink); }
+.confirm small { font-size: 12px; color: var(--color-ink-muted); }
+.confirmIcon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-ink-muted); }
+.confirmChecked { border-style: solid; border-color: var(--color-accent); background: var(--color-panel-header); }
+.confirmChecked .confirmIcon { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+
+.errorMessage { margin-top: 14px; padding: 12px 14px; border-radius: 10px; background: #fff3f2; border: 1px solid #efc4bf; color: #942a21; font-size: 13px; }
+
+.footer { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--color-border); }
+.footerNote { margin: 0; font-size: 12.5px; color: var(--color-ink-muted); }
+.savedNote { color: var(--color-status-pass); font-weight: 600; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.primary, .secondary { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 18px; border-radius: 9px; font: inherit; font-weight: 600; cursor: pointer; border: 1px solid transparent; }
+.primary { background: var(--color-accent-strong); color: #fff; box-shadow: 0 2px 6px #6d28d933; }
+.primary:hover:not(:disabled) { background: #5b21b6; }
+.secondary { background: var(--color-surface); border-color: var(--color-border); color: var(--color-accent); }
+.secondary:hover:not(:disabled) { background: var(--color-panel-header); }
+.primary:disabled, .secondary:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
+
+@media (max-width: 900px) {
+  .options { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .option, .check { transition: none; }
+}

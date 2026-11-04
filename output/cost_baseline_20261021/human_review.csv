@@ -1,0 +1,8 @@
+﻿stage,app_id,run_status,human_reviewer,review_mode_manual_or_assisted,human_review_minutes,facts_checked,factual_errors,citations_checked,citation_errors,correction_minutes,notes
+agent_APP_012_r1,APP_012,DOSSIER_READY,,,,,,,,,
+agent_APP_012_r2,APP_012,DOSSIER_READY,,,,,,,,,
+agent_APP_014_r1,APP_014,DOSSIER_READY,,,,,,,,,
+agent_APP_015_r1,APP_015,DOSSIER_READY,,,,,,,,,
+agent_APP_017_r1,APP_017,DOSSIER_READY,,,,,,,,,
+agent_APP_002_r1,APP_002,AI_VALIDATION_FAILED,,,,,,,,,
+agent_APP_013_r2,APP_013,DOSSIER_READY,,,,,,,,,

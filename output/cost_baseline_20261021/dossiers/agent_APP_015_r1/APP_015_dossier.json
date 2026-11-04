@@ -1,0 +1,1578 @@
+{
+  "run": {
+    "app_id": "APP_015",
+    "documents_sent": {
+      "CommonApp.pdf": [
+        1,
+        2
+      ],
+      "letter_rec1.pdf": [
+        1
+      ],
+      "letter_rec2.pdf": [
+        1
+      ],
+      "supplement.pdf": [
+        1
+      ],
+      "transcript.pdf": [
+        1,
+        2
+      ]
+    },
+    "documents_withheld": {},
+    "policies_retrieved": [
+      {
+        "policy_id": "POL-001",
+        "title": "Academic Rigor & Contextual GPA Evaluation",
+        "similarity": 0.662,
+        "query": "academic rigor AP IB dual enrollment GPA class rank"
+      },
+      {
+        "policy_id": "POL-003",
+        "title": "Academic Rigor & Contextual GPA Evaluation",
+        "similarity": 0.674,
+        "query": "standardized testing SAT ACT test optional academic index"
+      },
+      {
+        "policy_id": "POL-006",
+        "title": "Standardized Testing Distributions",
+        "similarity": 0.726,
+        "query": "standardized testing SAT ACT test optional academic index"
+      },
+      {
+        "policy_id": "POL-007",
+        "title": "The Academic Index (AI) Formula",
+        "similarity": 0.652,
+        "query": "standardized testing SAT ACT test optional academic index"
+      },
+      {
+        "policy_id": "POL-009",
+        "title": "Extracurricular Impact Tiers",
+        "similarity": 0.608,
+        "query": "extracurricular activities awards leadership intellectual curiosity"
+      },
+      {
+        "policy_id": "POL-012",
+        "title": "Intellectual Curiosity & Institutional Contribution",
+        "similarity": 0.624,
+        "query": "extracurricular activities awards leadership intellectual curiosity"
+      },
+      {
+        "policy_id": "POL-013",
+        "title": "Intellectual Curiosity & Institutional Contribution",
+        "similarity": 0.658,
+        "query": "extracurricular activities awards leadership intellectual curiosity"
+      },
+      {
+        "policy_id": "POL-014",
+        "title": "Recommendation Weight & Letters of Evaluation",
+        "similarity": 0.609,
+        "query": "academic rigor AP IB dual enrollment GPA class rank"
+      },
+      {
+        "policy_id": "POL-015",
+        "title": "Recommendation Weight & Letters of Evaluation",
+        "similarity": 0.575,
+        "query": "holistic academic review institutional contribution"
+      }
+    ],
+    "attempts": 6,
+    "runtime_seconds": 469.8,
+    "validation": {
+      "passed": true,
+      "failed_sections": {},
+      "load_problems": [],
+      "calls": [
+        {
+          "section": "academic",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 5071,
+            "output_tokens": 928,
+            "seconds": 95.5
+          },
+          "errors": []
+        },
+        {
+          "section": "engagement",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 2803,
+            "output_tokens": 482,
+            "seconds": 35.2
+          },
+          "errors": []
+        },
+        {
+          "section": "recommendation",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 2612,
+            "output_tokens": 910,
+            "seconds": 66.7
+          },
+          "errors": []
+        },
+        {
+          "section": "supplement",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 1469,
+            "output_tokens": 601,
+            "seconds": 40.4
+          },
+          "errors": []
+        },
+        {
+          "section": "policy",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 6721,
+            "output_tokens": 1273,
+            "seconds": 139.7
+          },
+          "errors": []
+        },
+        {
+          "section": "synthesis",
+          "attempt": 1,
+          "usage": {
+            "prompt_tokens": 6874,
+            "output_tokens": 808,
+            "seconds": 90.1
+          },
+          "errors": []
+        }
+      ]
+    },
+    "run_status": "DOSSIER_READY"
+  },
+  "applicant_dossier": {
+    "app_id": "APP_015",
+    "applicant_demographics": {
+      "first_name": "Rowan",
+      "last_name": "Foster",
+      "name_of_hs": "Austin High School",
+      "country": "USA",
+      "region": "Southwest",
+      "intended_major": "Undecided",
+      "admission_year": 2026,
+      "admission_term": "F"
+    },
+    "academic_profile": {
+      "document_facts": {
+        "unweighted_gpa": 4,
+        "weighted_gpa": 4.48,
+        "class_rank": "32/397",
+        "sat_superscore": null,
+        "act_superscore": 34,
+        "intended_major": "Undecided",
+        "high_school": "Austin High School",
+        "expected_graduation": "2026"
+      },
+      "ap_courses_on_transcript": [
+        {
+          "course": "AP Physics C Electricity and Magnetism",
+          "grade_level": "11",
+          "final_grade": "B+"
+        },
+        {
+          "course": "AP Calculus AB",
+          "grade_level": "11",
+          "final_grade": "A-"
+        },
+        {
+          "course": "AP Environmental Science",
+          "grade_level": "11",
+          "final_grade": "B"
+        },
+        {
+          "course": "AP Computer Science Principles",
+          "grade_level": "11",
+          "final_grade": "B"
+        },
+        {
+          "course": "AP English Language",
+          "grade_level": "12",
+          "final_grade": "B"
+        },
+        {
+          "course": "AP Biology",
+          "grade_level": "12",
+          "final_grade": "B"
+        },
+        {
+          "course": "AP Chemistry",
+          "grade_level": "12",
+          "final_grade": "A-"
+        },
+        {
+          "course": "AP Physics 2",
+          "grade_level": "12",
+          "final_grade": "A-"
+        }
+      ],
+      "ap_exam_scores": [],
+      "summary": "The applicant, Rowan Foster, has a strong academic record with a weighted GPA of 4.48 and an unweighted GPA of 4.0. They are ranked 32nd out of 397 students. Their ACT score is 34, and no SAT score is provided. They are enrolled in 8 AP courses, including AP Physics C, AP Calculus AB, AP Environmental Science, AP Computer Science Principles, AP English Language, AP Biology, AP Chemistry, and AP Physics 2. Their transcript shows consistent performance, with grades ranging from A- to B+ across multiple AP and core courses.",
+      "course_rigor": "The applicant is taking a rigorous course load, including 8 AP courses, which indicates a high level of academic challenge. The AP courses span multiple disciplines including science, mathematics, and language arts.",
+      "performance_patterns": "The applicant's performance is consistently strong, with grades ranging from A- to B+ across all listed courses. There is no evidence of declining performance over time, and the applicant maintains a high GPA throughout their high school career.",
+      "strengths": [
+        "High weighted GPA (4.48)",
+        "Strong performance in AP courses",
+        "High ACT score (34)",
+        "Consistent academic performance across courses"
+      ],
+      "concerns": [],
+      "evidence": [
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Unweighted GPA 4",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Weighted GPA 4.48",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Rank 32/397",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Superscored ACT Score 34",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP Physics C Electricity and Magnetism B+",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP Calculus AB A-",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP Environmental Science B",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        },
+        {
+          "document": "transcript.pdf",
+          "page": 1,
+          "quote": "AP Physics 2 A-",
+          "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+        }
+      ]
+    },
+    "engagement_profile": {
+      "activities": [
+        {
+          "activity": "Concert band musician",
+          "role_and_description": "Concert band musician",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        },
+        {
+          "activity": "Robotics club member",
+          "role_and_description": "Robotics club member",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        },
+        {
+          "activity": "School newspaper editor",
+          "role_and_description": "School newspaper editor",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        },
+        {
+          "activity": "Science club member",
+          "role_and_description": "Science club member",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        },
+        {
+          "activity": "Youth orchestra musician",
+          "role_and_description": "Youth orchestra musician",
+          "years": "Not provided",
+          "hours_per_week": "Not provided"
+        }
+      ],
+      "awards": [],
+      "summary": "The applicant lists five activities: Concert band musician, Robotics club member, School newspaper editor, Science club member, and Youth orchestra musician. No awards are documented.",
+      "leadership_service_employment": "",
+      "themes": [],
+      "assessment": "The applicant is involved in five extracurricular activities: Concert band, Robotics club, School newspaper, Science club, and Youth orchestra. No awards are listed.",
+      "evidence": [
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Concert band musician",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Robotics club member",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "School newspaper editor",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Science club member",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "CommonApp.pdf",
+          "page": 2,
+          "quote": "Youth orchestra musician",
+          "verification_status": "TEXT_VERIFIED"
+        }
+      ]
+    },
+    "recommendation_profile": {
+      "recommenders": [
+        {
+          "name": "Alex Singh",
+          "role": "School counselor",
+          "document": "letter_rec1.pdf",
+          "relationship": "I write as a school counselor at Austin High School. This letter offers a fictional classroom or advising perspective for a simulated application; its narrative observations are not verified records.",
+          "key_observations": [
+            "Rowan intends to explore Undecided.",
+            "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "The application lists these activities: Concert band musician, Robotics club member, School newspaper editor, Science club member, Youth orchestra musician.",
+            "I recommend Rowan Foster for thoughtful consideration."
+          ]
+        },
+        {
+          "name": "Quinn Rivera",
+          "role": "Classroom teacher (fictional recommender)",
+          "document": "letter_rec2.pdf",
+          "relationship": "I write as a classroom teacher (fictional recommender) at Austin High School. This letter offers a fictional classroom or advising perspective for a simulated application; its narrative observations are not verified records.",
+          "key_observations": [
+            "Rowan initially approached a difficult question with a confident hypothesis.",
+            "That willingness to reconsider is a useful foundation for college work.",
+            "Rowan asked the group to state the assumption and check it against the task.",
+            "I would encourage continued growth in presenting an argument concisely and seeking clarification early.",
+            "I recommend Rowan Foster for thoughtful consideration."
+          ]
+        }
+      ],
+      "summary": "Both letters are fictional and part of a simulated application. They describe Rowan Foster\u2019s academic performance, willingness to reconsider ideas, and engagement in extracurricular activities. Both recommend Rowan for thoughtful consideration, noting that a college environment that invites questions and offers constructive feedback would support the student\u2019s continued development.",
+      "common_themes": [
+        "Willingness to reconsider and revise ideas based on evidence.",
+        "Engagement in group discussions with persistence and consideration for classmates.",
+        "Recommendation for thoughtful consideration.",
+        "Expectation of a college environment that invites questions and offers constructive feedback."
+      ],
+      "strengths_identified": [
+        "Willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "Willingness to reconsider a hypothesis when evidence does not support it.",
+        "Persistence and consideration for classmates in group discussions.",
+        "Ability to present an argument concisely and seek clarification early."
+      ],
+      "evidence": [
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "Rowan intends to explore Undecided.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "The application lists these activities: Concert band musician, Robotics club member, School newspaper editor, Science club member, Youth orchestra musician.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec1.pdf",
+          "page": 1,
+          "quote": "I recommend Rowan Foster for thoughtful consideration.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "Rowan initially approached a difficult question with a confident hypothesis.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "That willingness to reconsider is a useful foundation for college work.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "Rowan asked the group to state the assumption and check it against the task.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "I would encourage continued growth in presenting an argument concisely and seeking clarification early.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "letter_rec2.pdf",
+          "page": 1,
+          "quote": "I recommend Rowan Foster for thoughtful consideration.",
+          "verification_status": "TEXT_VERIFIED"
+        }
+      ]
+    },
+    "supplemental_essay_profile": {
+      "responses": [
+        {
+          "prompt": "Academic interest statement",
+          "summary": "The applicant states their academic interest is Undecided and expresses interest in coursework that involves explaining methods, examining evidence, and revising interpretations. They also mention a willingness to listen, make reasoning understandable, and learn from classmates."
+        },
+        {
+          "prompt": "Applicant-reported activities",
+          "summary": "The applicant lists several activities: Concert band musician, Robotics club member, School newspaper editor, Science club member, and Youth orchestra musician."
+        },
+        {
+          "prompt": "Applicant-reported awards",
+          "summary": "The applicant indicates that no awards were provided."
+        },
+        {
+          "prompt": "Additional applicant context",
+          "summary": "The applicant adds a humorous note: 'None really, gonna do marching band.'"
+        }
+      ],
+      "summary": "The applicant is undecided on their academic interest and expresses a desire to engage with coursework that involves critical thinking and collaboration. They are involved in multiple extracurricular activities, including music and science clubs, and have no reported awards. The applicant adds a lighthearted note about joining a marching band.",
+      "major_themes": [
+        "Undecided academic interest",
+        "Interest in collaborative and evidence-based coursework",
+        "Involvement in extracurricular activities (music, science, journalism)",
+        "No reported awards",
+        "Humorous additional context"
+      ],
+      "evidence": [
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "My stated academic interest is Undecided.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "Concert band musician, Robotics club member, School newspaper editor, Science club member, Youth orchestra musician",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "Not provided",
+          "verification_status": "TEXT_VERIFIED"
+        },
+        {
+          "document": "supplement.pdf",
+          "page": 1,
+          "quote": "None really, gonna do marching band",
+          "verification_status": "TEXT_VERIFIED"
+        }
+      ]
+    },
+    "strengths": [
+      {
+        "strength": "High academic rigor demonstrated through 8 AP courses across science, math, and humanities",
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "AP Physics C Electricity and Magnetism B+",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "AP Calculus AB A-",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "AP Environmental Science B",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "AP Physics 2 A-",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "strength": "Strong academic performance with a weighted GPA of 4.48 and class rank of 32/397",
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 4.48",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Rank 32/397",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "strength": "High standardized test performance with an ACT score of 34",
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Superscored ACT Score 34",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "strength": "Demonstrated intellectual curiosity and interest in evidence-based, collaborative learning",
+        "evidence": [
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "strength": "Engaged in diverse extracurricular activities including music, science, and journalism",
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Concert band musician",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Robotics club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "School newspaper editor",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Science club member",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "strength": "Willingness to reconsider ideas and engage constructively in group settings",
+        "evidence": [
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "Rowan asked the group to state the assumption and check it against the task.",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      }
+    ],
+    "policy_assessment": [
+      {
+        "policy_id": "POL-001",
+        "criterion": "Curriculum Rigor Evaluation: Evaluation requires selecting the most challenging coursework available within the applicant's secondary school environment, specifically Advanced Placement (AP), International Baccalaureate (IB) Diploma Programme, or dual-enrollment institutional tracks.",
+        "alignment": "aligned",
+        "findings": "The applicant is enrolled in 8 AP courses, including AP Physics C, AP Calculus AB, AP Environmental Science, AP Computer Science Principles, AP English Language, AP Biology, AP Chemistry, and AP Physics 2, indicating a high level of academic challenge across multiple disciplines.",
+        "evidence_ids": [
+          "E005",
+          "E006",
+          "E007",
+          "E008",
+          "E001",
+          "E002",
+          "E003",
+          "E004"
+        ],
+        "evidence": [
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Physics C Electricity and Magnetism B+",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Calculus AB A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Environmental Science B",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "transcript.pdf",
+            "page": 1,
+            "quote": "AP Physics 2 A-",
+            "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Unweighted GPA 4",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 4.48",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Rank 32/397",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Superscored ACT Score 34",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-003",
+        "criterion": "Weighted vs. Unweighted Divergence: The academic screening layer prioritizes internal school rankings and absolute course rigor over inflated weighted GPAs to normalize variations across global grading systems.",
+        "alignment": "aligned",
+        "findings": "The applicant has a class rank of 32/397 and a weighted GPA of 4.48, which, along with their AP course load, demonstrates strong academic rigor and internal school performance.",
+        "evidence_ids": [
+          "E003",
+          "E002",
+          "E001"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Rank 32/397",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 4.48",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Unweighted GPA 4",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-006",
+        "criterion": "Policy Flexibility: Under test-optional or test-blind institutional variances, quantitative weight shifts dynamically to the Academic Index calculation and external validation metrics (e.g., AP exam scores of 5).",
+        "alignment": "aligned",
+        "findings": "The applicant has an ACT score of 34 and no SAT score, which aligns with test-optional flexibility, and their AP coursework provides external validation metrics.",
+        "evidence_ids": [
+          "E004",
+          "E001",
+          "E002"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Superscored ACT Score 34",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Unweighted GPA 4",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 4.48",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-007",
+        "criterion": "AI Definition: A numerical score ranging from 60 to 240, aggregating calculated GPA, class rank (where available), and standardized test components to create a unified academic baseline.",
+        "alignment": "aligned",
+        "findings": "The applicant has a weighted GPA of 4.48, a class rank of 32/397, and an ACT score of 34, which together form a strong academic baseline consistent with the AI formula.",
+        "evidence_ids": [
+          "E002",
+          "E003",
+          "E004"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Weighted GPA 4.48",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Rank 32/397",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Superscored ACT Score 34",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-009",
+        "criterion": "Tier 1 (National/International Distinction): Includes elite milestones such as attending prestigious summer programs (e.g., RSI, TASP), winning national Olympiads, founding widely recognized organizations, or generating peer-reviewed academic publications.",
+        "alignment": "not_applicable",
+        "findings": "The applicant has no documented elite milestones, national awards, or peer-reviewed publications.",
+        "evidence_ids": [],
+        "evidence": []
+      },
+      {
+        "policy_id": "POL-012",
+        "criterion": "Intellectual Curiosity: The candidate demonstrates self-driven pursuit of knowledge beyond standard classroom requirements, as evidenced by academic coursework, extracurricular activities, awards, and teacher recommendations.",
+        "alignment": "aligned",
+        "findings": "The applicant expresses interest in coursework that involves explaining methods, examining evidence, and revising interpretations, and their activities include science and journalism clubs, indicating intellectual curiosity.",
+        "evidence_ids": [
+          "E024",
+          "E025",
+          "E010",
+          "E011",
+          "E012"
+        ],
+        "evidence": [
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "supplement.pdf",
+            "page": 1,
+            "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Robotics club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "School newspaper editor",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Science club member",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-013",
+        "criterion": "Institutional Contribution: The candidate's academic interests, leadership, extracurricular involvement, and community engagement are evaluated using available academic records, activities, awards, and recommendation letters.",
+        "alignment": "aligned",
+        "findings": "The applicant is involved in multiple extracurricular activities including robotics, journalism, and music, and their recommendations highlight engagement and collaborative skills.",
+        "evidence_ids": [
+          "E009",
+          "E010",
+          "E011",
+          "E012",
+          "E013",
+          "E014",
+          "E015",
+          "E016",
+          "E017",
+          "E018",
+          "E019",
+          "E020",
+          "E021",
+          "E022"
+        ],
+        "evidence": [
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Concert band musician",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Robotics club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "School newspaper editor",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Science club member",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "CommonApp.pdf",
+            "page": 2,
+            "quote": "Youth orchestra musician",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "Rowan intends to explore Undecided.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The application lists these activities: Concert band musician, Robotics club member, School newspaper editor, Science club member, Youth orchestra musician.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I recommend Rowan Foster for thoughtful consideration.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "Rowan initially approached a difficult question with a confident hypothesis.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "That willingness to reconsider is a useful foundation for college work.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "Rowan asked the group to state the assumption and check it against the task.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "I would encourage continued growth in presenting an argument concisely and seeking clarification early.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec2.pdf",
+            "page": 1,
+            "quote": "I recommend Rowan Foster for thoughtful consideration.",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      },
+      {
+        "policy_id": "POL-014",
+        "criterion": "Teacher Evaluations: Requires two letters from core academic disciplines (STEM and Humanities) written by instructors who can explicitly benchmark the applicant against the top 1\u20132% of students in their teaching careers.",
+        "alignment": "not_applicable",
+        "findings": "The recommender letters are fictional and do not provide benchmarks against top 1\u20132% of students.",
+        "evidence_ids": [],
+        "evidence": []
+      },
+      {
+        "policy_id": "POL-015",
+        "criterion": "Counselor Report: Provides institutional context, confirming the student's character, disciplinary standing, and relative peer standing within the graduating cohort.",
+        "alignment": "aligned",
+        "findings": "The counselor letter confirms the applicant's academic interests, engagement, and recommends thoughtful consideration, providing institutional context.",
+        "evidence_ids": [
+          "E014",
+          "E015",
+          "E016",
+          "E017"
+        ],
+        "evidence": [
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "Rowan intends to explore Undecided.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "The application lists these activities: Concert band musician, Robotics club member, School newspaper editor, Science club member, Youth orchestra musician.",
+            "verification_status": "TEXT_VERIFIED"
+          },
+          {
+            "document": "letter_rec1.pdf",
+            "page": 1,
+            "quote": "I recommend Rowan Foster for thoughtful consideration.",
+            "verification_status": "TEXT_VERIFIED"
+          }
+        ]
+      }
+    ],
+    "review_notes": [],
+    "holistic_assessment": "The applicant presents a strong academic profile with a weighted GPA of 4.48, a top 10% class rank (32/397), and an ACT score of 34, supported by a rigorous 8-course AP load. They are engaged in multiple extracurricular activities including music, science, and journalism, and express interest in collaborative, evidence-based coursework. Recommender letters highlight their openness to feedback, willingness to revise hypotheses, and ability to work constructively in groups. The applicant is undecided on a major but shows intellectual curiosity and a desire to learn from peers. No elite awards or peer-reviewed work are documented, and all recommender letters are fictional and part of a simulated application.",
+    "evidence_map": [
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 4",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.48",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Rank 32/397",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored ACT Score 34",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Physics C Electricity and Magnetism B+",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Calculus AB A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Environmental Science B",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "academic_profile",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Physics 2 A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Concert band musician",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Robotics club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "School newspaper editor",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Science club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "engagement_profile",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Youth orchestra musician",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "Rowan intends to explore Undecided.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The application lists these activities: Concert band musician, Robotics club member, School newspaper editor, Science club member, Youth orchestra musician.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I recommend Rowan Foster for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Rowan initially approached a difficult question with a confident hypothesis.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "That willingness to reconsider is a useful foundation for college work.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Rowan asked the group to state the assumption and check it against the task.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I would encourage continued growth in presenting an argument concisely and seeking clarification early.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "recommendation_profile",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I recommend Rowan Foster for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "My stated academic interest is Undecided.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I hope to contribute by listening carefully during collaborative work, making my reasoning understandable, and being willing to learn from classmates whose experience differs from mine.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "Concert band musician, Robotics club member, School newspaper editor, Science club member, Youth orchestra musician",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "Not provided",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "supplemental_essay_profile",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "None really, gonna do marching band",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "AP Physics C Electricity and Magnetism B+",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "AP Calculus AB A-",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "AP Environmental Science B",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "AP Physics 2 A-",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.48",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Rank 32/397",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored ACT Score 34",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Concert band musician",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Robotics club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "School newspaper editor",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Science club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "strengths",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Rowan asked the group to state the assumption and check it against the task.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Physics C Electricity and Magnetism B+",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Calculus AB A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Environmental Science B",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "transcript.pdf",
+        "page": 1,
+        "quote": "AP Physics 2 A-",
+        "verification_status": "UNVERIFIED_IMAGE_SOURCE"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 4",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.48",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Rank 32/397",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored ACT Score 34",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Rank 32/397",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.48",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 4",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored ACT Score 34",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Unweighted GPA 4",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.48",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Weighted GPA 4.48",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Rank 32/397",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Superscored ACT Score 34",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I would like to explore how classroom ideas can be tested against practical questions.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "supplement.pdf",
+        "page": 1,
+        "quote": "I am particularly interested in coursework that asks students to explain their methods, examine evidence, and revise an initial interpretation.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Robotics club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "School newspaper editor",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Science club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Concert band musician",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Robotics club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "School newspaper editor",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Science club member",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "CommonApp.pdf",
+        "page": 2,
+        "quote": "Youth orchestra musician",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "Rowan intends to explore Undecided.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The application lists these activities: Concert band musician, Robotics club member, School newspaper editor, Science club member, Youth orchestra musician.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I recommend Rowan Foster for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Rowan initially approached a difficult question with a confident hypothesis.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "That willingness to reconsider is a useful foundation for college work.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "Rowan asked the group to state the assumption and check it against the task.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I would encourage continued growth in presenting an argument concisely and seeking clarification early.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec2.pdf",
+        "page": 1,
+        "quote": "I recommend Rowan Foster for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "Rowan intends to explore Undecided.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I have observed a willingness to consider feedback and explain a choice rather than simply ask whether an answer is correct.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "The application lists these activities: Concert band musician, Robotics club member, School newspaper editor, Science club member, Youth orchestra musician.",
+        "verification_status": "TEXT_VERIFIED"
+      },
+      {
+        "section": "policy_assessment",
+        "document": "letter_rec1.pdf",
+        "page": 1,
+        "quote": "I recommend Rowan Foster for thoughtful consideration.",
+        "verification_status": "TEXT_VERIFIED"
+      }
+    ],
+    "generated_at": "2026-10-22 00:43:24.243247+00:00",
+    "updated_at": "2026-10-22 00:43:24.243247+00:00"
+  }
+}

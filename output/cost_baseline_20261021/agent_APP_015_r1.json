@@ -1,0 +1,52 @@
+{
+  "stage": "agent_APP_015_r1",
+  "app_id": "APP_015",
+  "repetition": 1,
+  "timestamp_utc": "2026-10-22T00:35:34.483957+00:00",
+  "models_before": {
+    "models": [
+      {
+        "name": "qwen3-vl:8b-instruct",
+        "model": "qwen3-vl:8b-instruct",
+        "size": 9547841472,
+        "digest": "0533d74300e4f9bc367d675d4e64ffd073d50ff16a2b4096cc2e8a1cf8c96319",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen3vl",
+          "families": [
+            "qwen3vl"
+          ],
+          "parameter_size": "8.8B",
+          "quantization_level": "Q4_K_M"
+        },
+        "expires_at": "2026-10-21T20:40:34.4445568-04:00",
+        "size_vram": 6121681920,
+        "context_length": 16384
+      }
+    ]
+  },
+  "status": "DOSSIER_READY",
+  "wall_seconds": 469.78239810001105,
+  "llm_vlm_calls": 6,
+  "embedding_calls": 1,
+  "known_input_tokens": 25550,
+  "known_output_tokens": 5002,
+  "chat_calls_missing_token_usage": 0,
+  "embedding_input_tokens": 69,
+  "embedding_calls_missing_input_usage": 0,
+  "model_reported_seconds": 467.5507227,
+  "embedding_reported_seconds": 1.552232,
+  "image_page_submissions": 9,
+  "transport_or_api_failed_calls": 0,
+  "snapshot": "dossiers\\agent_APP_015_r1\\APP_015_dossier.json",
+  "unique_documents": 5,
+  "unique_pdf_pages": 7,
+  "section_attempts": 6,
+  "section_retry_attempts": 0,
+  "validation_rejected_attempts": 0,
+  "validation_passed": true,
+  "agent_reported_seconds": 469.8,
+  "withheld_documents": {},
+  "policies_retrieved": 9
+}

@@ -1,0 +1,884 @@
+{
+  "stage": "ingestion_batch_01",
+  "batch": "batch_01",
+  "timestamp_utc": "2026-10-22T00:10:06.454508+00:00",
+  "applicants_processed": 10,
+  "ready": 9,
+  "awaiting": 1,
+  "incomplete": 0,
+  "gate_errors": 0,
+  "ready_ids": [
+    "APP_001",
+    "APP_002",
+    "APP_003",
+    "APP_004",
+    "APP_005",
+    "APP_006",
+    "APP_007",
+    "APP_008",
+    "APP_009"
+  ],
+  "applicants": [
+    {
+      "app_id": "APP_001",
+      "status": "READY_FOR_REVIEW",
+      "documents": 10
+    },
+    {
+      "app_id": "APP_002",
+      "status": "READY_FOR_REVIEW",
+      "documents": 10
+    },
+    {
+      "app_id": "APP_003",
+      "status": "READY_FOR_REVIEW",
+      "documents": 10
+    },
+    {
+      "app_id": "APP_004",
+      "status": "READY_FOR_REVIEW",
+      "documents": 10
+    },
+    {
+      "app_id": "APP_005",
+      "status": "READY_FOR_REVIEW",
+      "documents": 11
+    },
+    {
+      "app_id": "APP_006",
+      "status": "READY_FOR_REVIEW",
+      "documents": 10
+    },
+    {
+      "app_id": "APP_007",
+      "status": "READY_FOR_REVIEW",
+      "documents": 10
+    },
+    {
+      "app_id": "APP_008",
+      "status": "READY_FOR_REVIEW",
+      "documents": 10
+    },
+    {
+      "app_id": "APP_009",
+      "status": "READY_FOR_REVIEW",
+      "documents": 10
+    },
+    {
+      "app_id": "APP_010",
+      "status": "AWAITING_MATERIALS",
+      "documents": 9
+    }
+  ],
+  "wall_seconds": 1.6613665000186302,
+  "upload_attempts": 100,
+  "upload_failed_attempts": 0,
+  "unique_uploaded_documents": 100,
+  "successful_upload_bytes": 4518220,
+  "application_upload_retry_attempts": 0,
+  "sdk_internal_retries": null,
+  "uploads": [
+    {
+      "key": "APP_001/activities_and_awards.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46518,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010402600048109889
+    },
+    {
+      "key": "APP_001/advanced_coursework_and_ap_scores.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44702,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009954700013622642
+    },
+    {
+      "key": "APP_001/application_form.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44563,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010140900034457445
+    },
+    {
+      "key": "APP_001/common_app_application.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46165,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010211699991486967
+    },
+    {
+      "key": "APP_001/personal_statement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45343,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009688000020105392
+    },
+    {
+      "key": "APP_001/recommendation_letter_1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44985,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010742400016169995
+    },
+    {
+      "key": "APP_001/recommendation_letter_2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44987,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010204999998677522
+    },
+    {
+      "key": "APP_001/standardized_test_score.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44378,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009198500018101186
+    },
+    {
+      "key": "APP_001/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46637,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010351400007493794
+    },
+    {
+      "key": "APP_001/university_supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44709,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009583899984136224
+    },
+    {
+      "key": "APP_002/activities_and_awards.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46331,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010607199976220727
+    },
+    {
+      "key": "APP_002/advanced_coursework_and_ap_scores.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44386,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.0100467000156641
+    },
+    {
+      "key": "APP_002/application_form.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44570,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.01021279999986291
+    },
+    {
+      "key": "APP_002/common_app_application.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46110,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.011208100011572242
+    },
+    {
+      "key": "APP_002/personal_statement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45339,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009289300011005253
+    },
+    {
+      "key": "APP_002/recommendation_letter_1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44999,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.01137129997368902
+    },
+    {
+      "key": "APP_002/recommendation_letter_2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45004,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.011314800009131432
+    },
+    {
+      "key": "APP_002/standardized_test_score.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44378,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010348199983127415
+    },
+    {
+      "key": "APP_002/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46578,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.011381299991626292
+    },
+    {
+      "key": "APP_002/university_supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44747,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.00982149998890236
+    },
+    {
+      "key": "APP_003/activities_and_awards.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46471,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009535400022286922
+    },
+    {
+      "key": "APP_003/advanced_coursework_and_ap_scores.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45617,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010835099965333939
+    },
+    {
+      "key": "APP_003/application_form.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44574,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010296399996150285
+    },
+    {
+      "key": "APP_003/common_app_application.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46117,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010177500022109598
+    },
+    {
+      "key": "APP_003/personal_statement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45336,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008983600011561066
+    },
+    {
+      "key": "APP_003/recommendation_letter_1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44974,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008972399984486401
+    },
+    {
+      "key": "APP_003/recommendation_letter_2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44974,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010031800018623471
+    },
+    {
+      "key": "APP_003/standardized_test_score.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44378,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009852999995928258
+    },
+    {
+      "key": "APP_003/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46596,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010268400015775114
+    },
+    {
+      "key": "APP_003/university_supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44753,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.00876499997684732
+    },
+    {
+      "key": "APP_004/activities_and_awards.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44516,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008847099961712956
+    },
+    {
+      "key": "APP_004/advanced_coursework_and_ap_scores.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44659,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008914700010791421
+    },
+    {
+      "key": "APP_004/application_form.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44558,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009946800011675805
+    },
+    {
+      "key": "APP_004/common_app_application.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45978,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009985399956349283
+    },
+    {
+      "key": "APP_004/personal_statement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45324,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009270899987313896
+    },
+    {
+      "key": "APP_004/recommendation_letter_1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44974,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.01030760002322495
+    },
+    {
+      "key": "APP_004/recommendation_letter_2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44975,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010256899986416101
+    },
+    {
+      "key": "APP_004/standardized_test_score.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44381,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009278999990783632
+    },
+    {
+      "key": "APP_004/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46584,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010045700008049607
+    },
+    {
+      "key": "APP_004/university_supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44709,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008486100006848574
+    },
+    {
+      "key": "APP_005/activities_and_awards.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46313,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010068300005514175
+    },
+    {
+      "key": "APP_005/advanced_coursework_and_ap_scores.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44683,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010069400013890117
+    },
+    {
+      "key": "APP_005/application_form.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44557,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.01003040000796318
+    },
+    {
+      "key": "APP_005/common_app_application.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46101,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008846500015351921
+    },
+    {
+      "key": "APP_005/exception_supporting_document.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44540,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009853900002781302
+    },
+    {
+      "key": "APP_005/personal_statement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45336,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009783299989067018
+    },
+    {
+      "key": "APP_005/recommendation_letter_1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44967,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009534399956464767
+    },
+    {
+      "key": "APP_005/recommendation_letter_2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44969,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010119599988684058
+    },
+    {
+      "key": "APP_005/standardized_test_score.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44382,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009362899989355356
+    },
+    {
+      "key": "APP_005/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46554,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010045499948319048
+    },
+    {
+      "key": "APP_005/university_supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44756,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009308099979534745
+    },
+    {
+      "key": "APP_006/activities_and_awards.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44659,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010107800015248358
+    },
+    {
+      "key": "APP_006/advanced_coursework_and_ap_scores.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44614,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009124899981543422
+    },
+    {
+      "key": "APP_006/application_form.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44560,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009693200001493096
+    },
+    {
+      "key": "APP_006/common_app_application.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45994,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010291599959600717
+    },
+    {
+      "key": "APP_006/personal_statement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45338,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008875400002580136
+    },
+    {
+      "key": "APP_006/recommendation_letter_1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44997,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.01052970002638176
+    },
+    {
+      "key": "APP_006/recommendation_letter_2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45002,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009396800014656037
+    },
+    {
+      "key": "APP_006/standardized_test_score.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44412,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009429400030057877
+    },
+    {
+      "key": "APP_006/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46595,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010189499997068197
+    },
+    {
+      "key": "APP_006/university_supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44717,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009932500019203871
+    },
+    {
+      "key": "APP_007/activities_and_awards.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44834,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008781999989878386
+    },
+    {
+      "key": "APP_007/advanced_coursework_and_ap_scores.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45620,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.00825549999717623
+    },
+    {
+      "key": "APP_007/application_form.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44549,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009913100046105683
+    },
+    {
+      "key": "APP_007/common_app_application.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46043,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009542700019665062
+    },
+    {
+      "key": "APP_007/personal_statement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45318,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010089999996125698
+    },
+    {
+      "key": "APP_007/recommendation_letter_1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44987,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008964899985585362
+    },
+    {
+      "key": "APP_007/recommendation_letter_2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44989,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008932100026868284
+    },
+    {
+      "key": "APP_007/standardized_test_score.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44380,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010394399985671043
+    },
+    {
+      "key": "APP_007/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46810,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010022800008300692
+    },
+    {
+      "key": "APP_007/university_supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44701,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.01061999995727092
+    },
+    {
+      "key": "APP_008/activities_and_awards.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44857,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008768700005020946
+    },
+    {
+      "key": "APP_008/advanced_coursework_and_ap_scores.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45683,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009908100008033216
+    },
+    {
+      "key": "APP_008/application_form.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44558,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010359800013247877
+    },
+    {
+      "key": "APP_008/common_app_application.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46081,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010704299958888441
+    },
+    {
+      "key": "APP_008/personal_statement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45326,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.00981109996791929
+    },
+    {
+      "key": "APP_008/recommendation_letter_1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44995,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010375399957410991
+    },
+    {
+      "key": "APP_008/recommendation_letter_2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44997,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010616799991112202
+    },
+    {
+      "key": "APP_008/standardized_test_score.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44377,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010800100048072636
+    },
+    {
+      "key": "APP_008/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44370,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.01095059997169301
+    },
+    {
+      "key": "APP_008/university_supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44706,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010245000012218952
+    },
+    {
+      "key": "APP_009/activities_and_awards.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46487,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.01018599997041747
+    },
+    {
+      "key": "APP_009/advanced_coursework_and_ap_scores.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45742,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010097999998833984
+    },
+    {
+      "key": "APP_009/application_form.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44572,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.0090170000330545
+    },
+    {
+      "key": "APP_009/common_app_application.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46135,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.00892079999903217
+    },
+    {
+      "key": "APP_009/personal_statement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45340,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009822099993471056
+    },
+    {
+      "key": "APP_009/recommendation_letter_1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44965,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008560200047213584
+    },
+    {
+      "key": "APP_009/recommendation_letter_2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44970,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009814299992285669
+    },
+    {
+      "key": "APP_009/standardized_test_score.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44380,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009666299971286207
+    },
+    {
+      "key": "APP_009/transcript.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 46583,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010387299989815801
+    },
+    {
+      "key": "APP_009/university_supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44724,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009262499981559813
+    },
+    {
+      "key": "APP_010/activities_and_awards.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44601,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008381599967833608
+    },
+    {
+      "key": "APP_010/advanced_coursework_and_ap_scores.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44773,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009790099982637912
+    },
+    {
+      "key": "APP_010/application_form.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44558,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010099700011778623
+    },
+    {
+      "key": "APP_010/common_app_application.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45946,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008000000030733645
+    },
+    {
+      "key": "APP_010/personal_statement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 45325,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.009996900043915957
+    },
+    {
+      "key": "APP_010/recommendation_letter_1.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44958,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.008305300027132034
+    },
+    {
+      "key": "APP_010/recommendation_letter_2.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44964,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.010366000002250075
+    },
+    {
+      "key": "APP_010/standardized_test_score.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44381,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.012803299992810935
+    },
+    {
+      "key": "APP_010/university_supplement.pdf",
+      "bucket": "admissions-raw-docs",
+      "source_bytes": 44712,
+      "succeeded": true,
+      "simulated": false,
+      "seconds": 0.011200800014194101
+    }
+  ],
+  "postgres_growth_bytes": 24576,
+  "minio_growth_bytes": 44628
+}

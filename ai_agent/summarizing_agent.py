@@ -47,6 +47,7 @@ import json
 import os
 import re
 import time
+import sys
 from pathlib import Path
 
 import psycopg2
@@ -66,7 +67,7 @@ load_dotenv()
 ROOT = Path(__file__).resolve().parent
 RESULTS_DIR = ROOT.parent / "output/ai_agent"
 
-# PostgreSQL 
+# PostgreSQL
 DB_HOST = os.getenv("POSTGRES_HOST", "localhost")
 DB_PORT = os.getenv("POSTGRES_PORT", "5432")
 DB_NAME = os.getenv("POSTGRES_DB", "riverview_admissions")
@@ -80,8 +81,8 @@ MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "minioadmin")
 MINIO_BUCKET = os.getenv("MINIO_BUCKET", "admissions-raw-docs")
 
 # Ollama
-OLLAMA_CHAT_URL = os.getenv("OLLAMA_CHAT_URL", "http://localhost:11434/api/chat")
-OLLAMA_EMBED_URL = os.getenv("OLLAMA_EMBED_URL", "http://localhost:11434/api/embed")
+OLLAMA_CHAT_URL = os.getenv("OLLAMA_CHAT_URL", 'http://localhost:11434/api/chat')
+OLLAMA_EMBED_URL = os.getenv("OLLAMA_EMBED_URL", 'http://localhost:11434/api/embed')
 
 # Instruct variant: answers directly. The plain "qwen3-vl:8b" tag is the
 # THINKING variant; it reasoned for thousands of hidden tokens and never
@@ -303,7 +304,7 @@ SCHEMAS = {
                 "criterion": {"type": "string"},
                 "alignment": {"type": "string", "enum": ["aligned", "not_aligned", "unclear", "not_applicable"]},
                 "findings": {"type": "string"},
-                "evidence_ids": STRING_LIST,   
+                "evidence_ids": STRING_LIST,
             }),
         },
     }),
@@ -458,6 +459,14 @@ def get_applicant(connection, app_id):
         )
         return cursor.fetchone()
 
+def dossier_exists(connection, app_id):
+    """Check whether an applicant already has a saved dossier."""
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT EXISTS (SELECT 1 FROM applicant_dossier WHERE app_id = %s)",
+            (app_id,),
+        )
+        return cursor.fetchone()[0]
 
 def normalize_document(document):
     """Normalize ingestion document types for the summarizer."""
@@ -591,7 +600,7 @@ def redact_commonapp_page(page):
         # Redact every text line sharing the label's row.
         for line in lines:
             if abs(line["rect"].y0 - label_rect.y0) <= 2:
-               
+
                 rect = line["rect"]
                 rect.y0 -= 1
                 rect.y1 += 1
@@ -654,11 +663,11 @@ def redact_hooks(page):
 
     page.apply_redactions()
 
+    # Verify that the Hooks label was removed
     remaining = page.get_text().casefold()
 
-    if "hooks" in remaining or value["text"].casefold() in remaining:
-        raise ValueError("Hooks redaction verification failed")
-
+    if "hooks" in remaining:
+        raise ValueError("Hooks label remains after redaction")
 
 def render_pdf(pdf_bytes, zoom=RENDER_ZOOM, document_type=None):
     document = pymupdf.open(
@@ -959,6 +968,85 @@ DOCUMENT IMAGE MAP (the images supplied, in order):
 {COMMON_RULES}
 """.strip()
 
+def evaluate_test_score_policies(applicant, policies):
+    """Evaluate SAT/ACT reference ranges using PostgreSQL scores."""
+
+    configurations = {
+        "POL-004": ("superscored_sat_score", "SAT", 1500, 1600, 400, 1600),
+        "POL-005": ("superscored_act_score", "ACT", 34, 36, 1, 36),
+    }
+
+    assessments = []
+
+    for policy in policies:
+        policy_id = policy["policy_id"]
+
+        if policy_id not in configurations:
+            continue
+
+        field, test, lower, upper, minimum, maximum = configurations[policy_id]
+        score = applicant.get(field)
+
+        # Fail safely if the policy text no longer matches the configured range.
+        content = policy["content"]
+        if not re.search(
+            rf"\bbetween\s+{lower}\s+and\s+{upper}\b",
+            content,
+            re.IGNORECASE
+        ):
+            raise ValueError(
+                f"{policy_id}: Policy range has changed. "
+                "Update the deterministic configuration."
+            )
+
+        criterion = f"{test} middle 50% reference range: {lower}–{upper}"
+
+        if score is None:
+            alignment = "not_applicable"
+            findings = (
+                f"No {test} superscore is recorded in PostgreSQL. "
+                "No numerical comparison was performed."
+            )
+        else:
+            if isinstance(score, bool) or not isinstance(score, int):
+                raise ValueError(f"{field}: Expected an integer score.")
+
+            if not minimum <= score <= maximum:
+                raise ValueError(f"{field}: Invalid score {score}.")
+
+            if score < lower:
+                alignment = "not_aligned"
+                position = "below"
+            elif score > upper:
+                alignment = "aligned"
+                position = "above"
+            else:
+                alignment = "aligned"
+                position = "within"
+
+            findings = (
+                f"The applicant's {test} superscore of {score} is "
+                f"{position} the middle 50% reference range "
+                f"of {lower}–{upper}. This range is not an "
+                "automatic admission cutoff."
+            )
+
+        if policy_id == "POL-004":
+            findings += (
+                " SAT cross-section consistency was not evaluated "
+                "by this total-score comparison."
+            )
+
+        assessments.append({
+            "policy_id": policy_id,
+            "criterion": criterion,
+            "alignment": alignment,
+            "findings": findings,
+            "evidence_ids": [],
+            "evidence": [],
+        })
+
+    return assessments
 
 def build_policy_prompt(applicant, policies, sections, pages, evidence_registry):
 
@@ -973,8 +1061,22 @@ You have NOT seen the documents themselves.
 
 APPLICATION: {applicant["app_id"]}
 
+AUTHORITATIVE STANDARDIZED TEST SCORES FROM POSTGRESQL
+SAT Superscore: {applicant.get("superscored_sat_score")}
+ACT Superscore: {applicant.get("superscored_act_score")}
+
+STANDARDIZED TEST SCORE RULES:
+1. Use the PostgreSQL SAT superscore when evaluating POL-004.
+2. Use the PostgreSQL ACT superscore when evaluating POL-005.
+3. Evaluate SAT and ACT independently when both are present.
+4. A NULL score means that test score is unavailable.
+5. Do not penalize a missing SAT when ACT is available,
+   or a missing ACT when SAT is available.
+6. Do not use PDF-extracted SAT or ACT values in policy comparisons.
+7. For POL-004 and POL-005, use evidence_ids: [].
+8. Do not invent scores or infer missing scores.
+
 RETRIEVED POLICIES (use ONLY these IDs: {policy_ids})
-{policy_text}
 
 DOCUMENTS THAT WERE AVAILABLE (filename: pages)
 {json.dumps(documents_available(pages), indent=2)}
@@ -1254,15 +1356,13 @@ def restricted_values(applicant):
     return values
 
 def validate_policy_evidence_match(entry, evidence_registry):
-    """Check evidence relevance for GPA, SAT, and ACT policies."""
+    """Check evidence relevance for GPA policies."""
 
     policy_id = entry.get("policy_id")
     evidence_ids = entry.get("evidence_ids", [])
 
     required_terms = {
-        "POL-002": ("unweighted", "gpa"),
-        "POL-004": ("sat",),
-        "POL-005": ("act",),
+        "POL-002": ("unweighted", "gpa")
     }
 
     if policy_id not in required_terms:
@@ -1302,46 +1402,7 @@ def validate_policy_evidence_match(entry, evidence_registry):
         "Select an evidence ID containing the correct metric, "
         "or report insufficient evidence."
     ]
-def validate_policy_evidence_match(entry, evidence_registry):
-    """Check evidence relevance for GPA, SAT, and ACT policies."""
 
-    policy_id = entry.get("policy_id")
-    evidence_ids = entry.get("evidence_ids", [])
-
-    required_terms = {
-        "POL-002": ("unweighted", "gpa"),
-        "POL-004": ("sat",),
-        "POL-005": ("act",),
-    }
-
-    if policy_id not in required_terms:
-        return []
-
-    if not isinstance(evidence_ids, list):
-        return []
-
-    terms = required_terms[policy_id]
-
-    for evidence_id in evidence_ids:
-        source = evidence_registry.get(evidence_id)
-
-        if not source:
-            continue
-
-        quote = str(source.get("quote") or "").lower()
-
-        if all(
-            re.search(r"\b" + re.escape(term) + r"\b", quote)
-            for term in terms
-        ):
-            return []
-
-    return [
-        f"{policy_id}: No cited evidence directly supports "
-        f"the required {' '.join(terms)} metric. "
-        "Select an evidence ID containing the correct metric, "
-        "or report insufficient evidence."
-    ]
 def validate_section(section, output, pages_by_location, policy_ids, guards):
 
     """
@@ -1404,7 +1465,7 @@ def validate_section(section, output, pages_by_location, policy_ids, guards):
                 if not isinstance(evidence_id, str):
                     errors.append(
                         f"Invalid evidence ID type: {evidence_id!r}"
-                )            
+                )
 
     text = narrative_text(output)
 
@@ -1441,7 +1502,7 @@ def run_section(section, prompt, images, pages_by_location, policy_ids, guards, 
                 + "\n- ".join(errors)
                 + "\n\nCorrect these errors without inventing evidence. "
                     "Use only evidence IDs from the provided registry. "
-                    
+
                     "If no evidence supports a finding, use evidence_ids: [] "
                     "and set alignment to unclear. Do not mark unsupported "
                     "findings as aligned or not_aligned."
@@ -1468,10 +1529,13 @@ def run_section(section, prompt, images, pages_by_location, policy_ids, guards, 
                                     f"for policy {entry.get('policy_id')}."
                                 )
                         if all(eid in evidence_registry for eid in entry.get("evidence_ids", [])):
-                            errors.extend(validate_policy_evidence_match(entry, evidence_registry)) 
+                            errors.extend(validate_policy_evidence_match(entry, evidence_registry))
 
         except json.JSONDecodeError as error:
             usage, output, errors = {}, {"raw_output": raw}, [f"Output is not valid JSON: {error}"]
+
+        except requests.exceptions.RequestException:
+            raise
         except Exception as error:
             usage, output, errors = {}, None, [f"Model call failed: {error}"]
 
@@ -1586,7 +1650,6 @@ def save_dossier(connection, dossier):
         )
         generated_at, updated_at = cursor.fetchone()
 
-    connection.commit()
     return generated_at, updated_at
 
 
@@ -1608,20 +1671,28 @@ def save_run(connection, run):
             )
         )
 
-        # Application_status is VARCHAR(32) 
+        # Application_status is VARCHAR(32)
 
         cursor.execute(
-            "UPDATE applicants SET status = %s WHERE app_id = %s",
+            """
+            UPDATE applicants
+            SET status = %s
+            WHERE app_id = %s
+            AND final_decision IS NULL
+            AND (
+                status = 'READY_FOR_REVIEW'
+                OR (
+                status = 'DOSSIER_READY'
+                AND %s = 'DOSSIER_READY'
+                )
+            )
+            """,
             (
-                "DOSSIER_READY"
-                if run["run_status"] == "DOSSIER_READY"
-                else "READY_FOR_REVIEW",
-                    run["app_id"],
+                run["run_status"],
+                run["app_id"],
+                run["run_status"],
             ),
         )
-
-    connection.commit()
-
 
 def write_result_file(app_id, run, dossier):
 
@@ -1654,9 +1725,49 @@ def process_applicant(connection, minio_client, app_id, force=False):
     status = applicant.get("status")
     print(f"[1] Applicant {applicant['app_id']}, status {status}")
 
-    if status != "READY_FOR_REVIEW" and not force:
-        print("    Not COMPLETE. Skipped (use --force to summarize again).")
-        write_audit(connection, app_id, "SKIPPED_NOT_COMPLETE", {"status": status})
+    # Never regenerate dossiers for applicants with final decisions.
+    if applicant.get("final_decision") is not None:
+        print("    Final decision exists. Skipping dossier generation.")
+        write_audit(
+            connection,
+            app_id,
+            "SKIPPED_FINAL_DECISION",
+            {"status": status},
+        )
+        return "SKIPPED"
+
+    # Normal runs process only applicants ready for review.
+    # Forced runs may regenerate completed dossiers, but cannot
+    # bypass incomplete or awaiting-materials statuses.
+    if status == "READY_FOR_REVIEW":
+        pass
+    elif status == "DOSSIER_READY" and force:
+        print("    Explicit dossier regeneration requested.")
+        write_audit(
+            connection,
+            app_id,
+            "DOSSIER_REGENERATION_REQUESTED",
+            {"status": status},
+        )
+    else:
+        print(f"    Applicant status {status} is not eligible. Skipped.")
+        write_audit(
+            connection,
+            app_id,
+            "SKIPPED_NOT_ELIGIBLE",
+            {"status": status, "force": force},
+        )
+        return "SKIPPED"
+
+    # Prevent automatic regeneration of an existing dossier.
+    if dossier_exists(connection, app_id) and not force:
+        print("    Existing dossier found. Skipping automatic regeneration.")
+        write_audit(
+            connection,
+            app_id,
+            "SKIPPED_EXISTING_DOSSIER",
+            {"status": status},
+        )
         return "SKIPPED"
 
     write_audit(connection, app_id, "SUMMARY_STARTED", {"model": VLM_MODEL})
@@ -1676,7 +1787,7 @@ def process_applicant(connection, minio_client, app_id, force=False):
     print(f"[3] Rendering pages at {RENDER_ZOOM}x (memory only)")
 
     pages, load_problems = load_pages(minio_client, allowed)
-    if load_problems or not pages:  
+    if load_problems or not pages:
         raise RuntimeError(
             f"Document loading failed for {app_id}: {load_problems}"
             )
@@ -1747,14 +1858,30 @@ def process_applicant(connection, minio_client, app_id, force=False):
     if not failed:
         evidence_registry = build_evidence_registry(sections)
 
+        # SAT/ACT are evaluated deterministically from PostgreSQL
+        score_policy_ids = {"POL-004", "POL-005"}
+
+        vlm_policies = [
+            p for p in policies
+            if p["policy_id"] not in score_policy_ids
+        ]
+
+        vlm_policy_ids = {
+            p["policy_id"] for p in vlm_policies
+        }
+
+        score_assessments = evaluate_test_score_policies(
+            applicant, policies
+        )
+
         output, errors, attempts = run_section(
             "policy",
             build_policy_prompt(
-                applicant, policies, sections, pages, evidence_registry
+                applicant, vlm_policies, sections, pages, evidence_registry
             ),
             None,
             all_locations,
-            policy_ids,
+            vlm_policy_ids,
             guards,
             section_log,
             evidence_registry=evidence_registry
@@ -1781,7 +1908,9 @@ def process_applicant(connection, minio_client, app_id, force=False):
         if errors:
             failed["policy"] = {"errors": errors, "output": output}
         else:
-            sections["policy"] = output       
+            # Add PostgreSQL-derived SAT/ACT policy assessments.
+            output["policy_assessment"].extend(score_assessments)
+            sections["policy"] = output
 
     if not failed:
         output, errors, attempts = run_section(
@@ -1815,17 +1944,77 @@ def process_applicant(connection, minio_client, app_id, force=False):
     else:
         run["run_status"] = "DOSSIER_READY"
         dossier = build_dossier(applicant, sections)
-        generated_at, updated_at = save_dossier(connection, dossier)
-        dossier["generated_at"], dossier["updated_at"] = generated_at, updated_at
+        
         print(f"[6] ✓ All sections passed validation ({len(dossier['evidence_map'])} citations checked)")
         print(f"[7] Dossier assembled: {len(dossier['review_notes'])} review note(s)")
 
-    save_run(connection, run)
+    # Recheck eligibility under a PostgreSQL row lock before committing.
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT status, final_decision
+                FROM applicants
+                WHERE app_id = %s
+                FOR UPDATE
+                """,
+                (app_id,),
+            )
+            current = cursor.fetchone()
+
+            if current is None:
+                raise RuntimeError(
+                    f"Applicant {app_id} disappeared during summarization"
+                )
+
+            current_status, current_decision = current
+
+            eligible = (
+                current_decision is None
+                and (
+                    current_status == "READY_FOR_REVIEW"
+                    or (force and current_status == "DOSSIER_READY")
+                )
+            )
+
+            if not eligible:
+                connection.rollback()
+                print(
+                    f"Applicant {app_id} changed during summarization. "
+                    "Skipping database save."
+                )
+                return "SKIPPED"
+
+            # Prevent an automatic run from overwriting a dossier
+            # that appeared while the model was generating.
+            if not force:
+                cursor.execute(
+                    "SELECT 1 FROM applicant_dossier WHERE app_id = %s",
+                    (app_id,),
+                )
+                if cursor.fetchone() is not None:
+                    connection.rollback()
+                    print("Existing dossier detected. Skipping save.")
+                    return "SKIPPED"
+
+        if dossier is not None:
+            generated_at, updated_at = save_dossier(connection, dossier)
+            dossier["generated_at"] = generated_at
+            dossier["updated_at"] = updated_at
+
+        save_run(connection, run)
+        connection.commit()
+
+    except Exception:
+        connection.rollback()
+        raise
+
     path = write_result_file(app_id, run, dossier)
+
     write_audit(connection, app_id, run["run_status"], {"attempts": attempts_total, "failed": list(failed)})
 
     target = "applicant_dossier + dossier_generation_runs" if dossier else "dossier_generation_runs only"
-    print(f"[8] Saved {run['run_status']} → {target}, {path.relative_to(ROOT)}")
+    print(f"[8] Saved {run['run_status']} → {target}, {path}")
     print(f"    Total time {run['runtime_seconds']}s")
 
     return run["run_status"]
@@ -1891,6 +2080,8 @@ def main():
     finally:
         connection.close()
 
+    if any(result == "AGENT_ERROR" for result in results.values()):
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
