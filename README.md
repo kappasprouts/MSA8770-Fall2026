@@ -102,12 +102,14 @@ The browser separates admissions work from technical exception handling. All act
 
 The Applicant Review screen places a saved dossier beside the original PDFs and provides a question-and-answer area below them. The bundled preview uses synthetic data; the walkthrough below uses `APP_012`.
 
-![Review interface showing a synthetic applicant dossier, source-document panels, and a question-and-answer area](ui/public/readme-screenshot.png)
+<img width="1140" height="622" alt="image" src="https://github.com/user-attachments/assets/34aa6c42-0bb2-4d0e-b484-1cf9a2eee18d" />
+Figure 1. The Applicant Review Screen
 
-<img width="952" height="477" alt="image" src="https://github.com/user-attachments/assets/6a978301-1da0-49ec-9522-9affd7599872" />
+<img width="1136" height="455" alt="image" src="https://github.com/user-attachments/assets/94d13f88-a5bb-4986-980a-8aee6f568ad8" />
+Figure 2. The IT Error Queue
 
-<img width="946" height="812" alt="image" src="https://github.com/user-attachments/assets/f6e3a4c5-11fd-47b6-b985-e19f446c9479" />
-
+<img width="1142" height="626" alt="image" src="https://github.com/user-attachments/assets/53dabf9a-6d4b-402a-9254-8cb99cdea2d3" />
+Figure 3. System Error Details
 
 ## Run the sample workflow
 
