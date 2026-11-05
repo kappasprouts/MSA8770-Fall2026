@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f6f0e4;
+  --foreground: #2b2420;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* base surfaces — warm beige page, purple brand accent */
+  --color-app-bg: #f6f0e4;
+  --color-surface: #fffdf9;
+  --color-surface-alt: #f1e9da;
+  --color-panel-header: #ede3f9;
+  --color-border: #e3d7c2;
+  --color-ink: #2b2420;
+  --color-ink-muted: #83765f;
+
+  /* accent (links, buttons, focus) — Riverview purple */
+  --color-accent: #6d28d9;
+  --color-accent-strong: #8b5cf6;
+
+  /* AI summary — unified purple card family */
+  --color-card-green-bg: #f2e8fb;
+  --color-card-green-border: #dcc4f2;
+  --color-card-green-text: #6d28d9;
+
+  /* validation & policy snapshot */
+  --color-card-purple-bg: #f2e8fb;
+  --color-card-purple-border: #dcc4f2;
+  --color-card-purple-text: #6d28d9;
+
+  /* policy checks */
+  --color-card-amber-bg: #f2e8fb;
+  --color-card-amber-border: #dcc4f2;
+  --color-card-amber-text: #6d28d9;
+
+  /* evidence & citations */
+  --color-card-pink-bg: #f2e8fb;
+  --color-card-pink-border: #dcc4f2;
+  --color-card-pink-text: #6d28d9;
+
+  /* status — kept semantically green/amber/red regardless of brand color */
+  --color-status-pass: #2cac56;
+  --color-status-warn: #b8860b;
+  --color-status-fail: #e0514f;
+  --color-status-muted: #9aa5b6;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}

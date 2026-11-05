@@ -1,0 +1,152 @@
+===== SETUP 1: upload PDFs to MinIO =====
+
+==============================
+EAOS - MINIO TEST DATA SEED
+==============================
+
+Created bucket: applicant-documents
+
+Processing applicant: APP_001
+  Uploaded: advanced_coursework_and_ap_scores.pdf
+  Object key: APP_001/advanced_coursework_and_ap_scores.pdf
+  Uploaded: standardized_test_score.pdf
+  Object key: APP_001/standardized_test_score.pdf
+  Uploaded: common_app_application.pdf
+  Object key: APP_001/common_app_application.pdf
+  Uploaded: transcript.pdf
+  Object key: APP_001/transcript.pdf
+  Uploaded: personal_statement.pdf
+  Object key: APP_001/personal_statement.pdf
+  Uploaded: application_form.pdf
+  Object key: APP_001/application_form.pdf
+  Uploaded: activities_and_awards.pdf
+  Object key: APP_001/activities_and_awards.pdf
+  Uploaded: recommendation_letter_1.pdf
+  Object key: APP_001/recommendation_letter_1.pdf
+  Uploaded: recommendation_letter_2.pdf
+  Object key: APP_001/recommendation_letter_2.pdf
+  Uploaded: university_supplement.pdf
+  Object key: APP_001/university_supplement.pdf
+
+Objects in bucket 'applicant-documents':
+  APP_001/activities_and_awards.pdf
+  APP_001/advanced_coursework_and_ap_scores.pdf
+  APP_001/application_form.pdf
+  APP_001/common_app_application.pdf
+  APP_001/personal_statement.pdf
+  APP_001/recommendation_letter_1.pdf
+  APP_001/recommendation_letter_2.pdf
+  APP_001/standardized_test_score.pdf
+  APP_001/transcript.pdf
+  APP_001/university_supplement.pdf
+
+MinIO seed completed successfully.
+
+===== SETUP 2: APP_001 record in PostgreSQL =====
+
+====================================
+EAOS - SIMULATED POSTGRESQL
+====================================
+
+Connecting to PostgreSQL...
+Connected successfully.
+simulated_applicant_data table is ready.
+APP_001 inserted from applicant_data_09302026_V3.csv.
+
+====================================
+APP_001 POSTGRESQL RECORD
+====================================
+App ID:        APP_001
+Name:          Alex Bennett
+Major:         Studio Art, llustration
+SAT:           1500
+Unweighted:    3.860
+Weighted:      4.680
+AP Courses:    ['AP World History', 'AP English Literature', 'AP Human Geography', 'AP Spanish Language', 'AP Physics C Mechanics', 'AP Microeconomics', 'AP Computer Science A']
+Total APs:     7
+Activities:    ['Environmental club volunteer', 'Track and field athlete', 'Varsity soccer player', 'School art club member', 'Science club member', 'Animal shelter volunteer', 'Debate team member', 'Chess club member', 'Robotics club member']
+Awards:        ['School academic honor roll', 'District art competition finalist', 'School mathematics award', 'School leadership award', 'Student journalism recognition']
+Hooks:         []
+Status:        COMPLETE
+
+MinIO document references:
+  application_form -> APP_001/application_form.pdf
+  common_app      -> APP_001/common_app_application.pdf
+  transcript      -> APP_001/transcript.pdf
+  recommendation  -> APP_001/recommendation_letter_1.pdf
+  recommendation  -> APP_001/recommendation_letter_2.pdf
+  standardized_test_score -> APP_001/standardized_test_score.pdf
+  activities_and_awards -> APP_001/activities_and_awards.pdf
+  advanced_coursework -> APP_001/advanced_coursework_and_ap_scores.pdf
+  university_supplement -> APP_001/university_supplement.pdf
+  personal_statement -> APP_001/personal_statement.pdf
+
+PostgreSQL simulation completed successfully.
+
+===== SETUP 3: policy vector store =====
+
+====================================
+EAOS - POLICY VECTOR STORE
+====================================
+
+Loaded 11 policies from /Users/tranle/Desktop/MSA8770/rag_agent/data/policies.yaml
+policy_chunks table is ready.
+Stored 11 policy chunks (version 1.0).
+  POL-DATE-01  Date Consistency
+  POL-ESSAY-01 Personal Statement Human Review
+  POL-FT-01    First-Year Core Materials
+  POL-HUMAN-01 Human Admissions Authority
+  POL-ID-01    Applicant and Document Matching
+  POL-INT-01   English Proficiency
+  POL-INT-02   International Credential Evaluation
+  POL-LOR-01   Letters of Recommendation Requirement
+  POL-READ-01  Unreadable Attachments
+  POL-TEST-01  Test-Optional Review
+  POL-TR-01    Transfer Core Materials
+
+===== AGENT: summarizing_agent.py APP_001 =====
+
+========================================
+EAOS SUMMARIZING AGENT (RAG + QWEN3-VL)
+========================================
+Model: qwen3-vl:8b-instruct   Embeddings: nomic-embed-text
+Applicants: ['APP_001']
+
+========================================
+PROCESSING APP_001
+========================================
+[1] Applicant APP_001, status COMPLETE
+[2] 10 documents: 8 for the model, 2 withheld
+    withheld: common_app_application.pdf       (restricted demographic/contact data)
+    withheld: personal_statement.pdf           (POL-ESSAY-01 personal statement (humans only))
+[3] Rendering pages at 1.5x (memory only)
+    ✓ application_form.pdf                     1 page(s)
+    ✓ transcript.pdf                           2 page(s)
+    ✓ recommendation_letter_1.pdf              1 page(s)
+    ✓ recommendation_letter_2.pdf              1 page(s)
+    ✓ standardized_test_score.pdf              1 page(s)
+    ✓ activities_and_awards.pdf                2 page(s)
+    ✓ advanced_coursework_and_ap_scores.pdf    1 page(s)
+    ✓ university_supplement.pdf                1 page(s)
+[4] RAG: retrieved 8 policies: POL-DATE-01, POL-ESSAY-01, POL-FT-01, POL-HUMAN-01, POL-ID-01, POL-LOR-01, POL-READ-01, POL-TEST-01
+[5] qwen3-vl:8b-instruct: one call per section (each validated, retried once if needed)
+    [1/2] academic (5 page image(s)) .... 131.6s, 1089 tokens  ✗ 1 problem(s)
+          - output: quote "AP Computer Science A 11 A" is not on advanced_coursework_and_ap_scores.pdf page 1.
+    [2/2] academic (5 page image(s)) .... 67.4s, 939 tokens  ✓
+    [1/2] engagement (2 page image(s)) .... 104.8s, 1055 tokens  ✓
+    [1/2] recommendation (2 page image(s)) .. 72.1s, 598 tokens  ✓
+    [1/2] supplement (1 page image(s)) .. 50.1s, 504 tokens  ✓
+    [1/2] policy (text only) .... 118.9s, 1067 tokens  ✓
+    [1/2] synthesis (text only) . 73.2s, 441 tokens  ✓
+[6] ✓ All sections passed validation (29 citations checked)
+[7] Dossier assembled: 0 review note(s)
+[8] Saved DOSSIER_READY → applicant_dossier + dossier_generation_runs, results/APP_001_dossier.json
+    Total time 618.4s
+
+========================================
+BATCH SUMMARY
+========================================
+  APP_001    DOSSIER_READY
+
+[HARD STOP] Dossiers are advisory. An admissions officer makes every decision.
+EXIT CODE: 0

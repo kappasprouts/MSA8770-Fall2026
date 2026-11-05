@@ -1,0 +1,9 @@
+# Local environment and runtime data (never commit)
+.venv/
+minio-data/
+__pycache__/
+.pytest_cache/
+.DS_Store
+.Rhistory
+results/my_run_output.txt
+audit_logs/
