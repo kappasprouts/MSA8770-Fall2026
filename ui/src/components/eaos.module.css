@@ -17,6 +17,9 @@
 .navLabel, .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .09em; color: var(--color-ink-muted); margin: 0; }
 .navLabel { padding: 0 12px; }
 .navigation { display: grid; gap: 6px; }
+.account { display: grid; gap: 9px; margin-top: auto; padding: 16px 8px 0; border-top: 1px solid var(--color-border); }
+.account span { font-size: 12px; color: var(--color-ink-muted); }
+.account p { color: var(--color-status-fail); font-size: 12px; }
 .navLink { display: flex; align-items: center; gap: 12px; padding: 13px 12px; border-radius: 9px; color: var(--color-ink-muted); font-weight: 600; text-decoration: none; min-width: 0; overflow-wrap: anywhere; }
 .navLink svg { flex-shrink: 0; width: 20px; height: 20px; }
 .navLink:hover { background: var(--color-surface-alt); color: var(--color-ink); }

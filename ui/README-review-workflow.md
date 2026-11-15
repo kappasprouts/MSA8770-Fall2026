@@ -163,6 +163,6 @@ The Processing Dashboard (`/api/applicants/review-queue`) and Final Decisions (`
 
 ## Limitations
 
-- Authentication is still simulated. Audit events use the actor `reviewer_simulated`, so "confidential" currently means the recommendation appears only on internal review screens. There is no per-user access control yet.
+- Recommendations require an authenticated Admissions Officer or Dean. Final decisions require a Dean. Audit events use the signed-in User ID and role. See [authentication setup and permissions](docs/authentication.md).
 - One recommendation per applicant: a new submission replaces the previous one. Earlier values remain in `audit_logs`.
 - The optional rationale (`reviewer_recommendation_note`) is supported by the database and API but isn't shown in the panel.

@@ -2,7 +2,7 @@
 
 A Next.js workspace for tracking applicant processing, reviewing saved dossiers and source PDFs, asking dossier-grounded questions, recording reviewer recommendations and human-approved final decisions, and exploring applicant-pool statistics.
 
-The AI assistant is advisory and must not make admission decisions. Applicant Review records a human reviewer's recommendation; Final Decisions records the Dean's approved decision. Dossiers are generated upstream; Q&A uses the selected saved dossier, not direct analysis of the PDFs. Authentication is still simulated in the prototype's recommendation and decision endpoints.
+The AI assistant is advisory and must not make admission decisions. Applicant Review records a human reviewer's recommendation; Final Decisions records the Dean's approved decision. Dossiers are generated upstream; Q&A uses the selected saved dossier, not direct analysis of the PDFs. User ID/password authentication and server-side role checks protect every workspace and data API. See [authentication setup, demo logins, and permissions](docs/authentication.md).
 
 The home page (`/`) is an internal navigation directory for the processing dashboard (`/review-queue`), applicant review (`/applicant-review?appId=APP_012`), final decisions (`/final-decisions`), and summary statistics (`/statistics`). Every page shares navigation and theme components. Previous dossier bookmarks such as `/?appId=APP_012` redirect to the selected applicant's review page. See [the first-pass implementation notes](docs/first-pass.md) for validation provenance, counts, request handling, and regression checks.
 
@@ -184,7 +184,8 @@ Before sharing changes with teammates, verify:
 ## Limitations
 
 - Prototype UI; not an authenticated production admissions system.
-- Dossier and document review are read-only. Recommendation and final-decision endpoints write human-supplied actions and audit events, with simulated actors until authentication is implemented.
+- Local account provisioning and recovery are manual; university SSO and MFA are not included.
+- Dossier and document review are read-only. Recommendation and final-decision endpoints write human-supplied actions and audit events attributed to the authenticated user.
 - Chat responses are model-generated and require human verification against dossier evidence and original PDFs.
 - The chat uses the stored dossier context, not arbitrary direct retrieval across the original PDF files.
 - Local Docker and Ollama services must be running; performance depends on available machine resources.

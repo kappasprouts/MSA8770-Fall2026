@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
+import { authorizeApi } from "@/lib/auth";
 import { listApplicants } from "@/lib/dossier";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  const auth = await authorizeApi("review");
+  if (auth.response) return auth.response;
   try {
     return NextResponse.json({ applicants: await listApplicants() });
   } catch (error) {

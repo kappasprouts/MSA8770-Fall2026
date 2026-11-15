@@ -4,6 +4,8 @@ import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import EaosShell from "@/components/EaosShell";
 import RequestState from "@/components/RequestState";
+import { useSessionUser } from "@/components/AuthProvider";
+import { canAccess } from "@/lib/auth-policy";
 import { requestJson } from "@/lib/http";
 import { EMPTY_FILTERS, UNKNOWN, UNKNOWN_LABEL, statisticsCsv, termLabel, type FilterOption, type StatisticsFilters, type StatisticsPayload } from "@/lib/statistics";
 import { BarList, DecisionChart, Histogram, TrendChart, formatNumber, formatPercent } from "./Charts";
@@ -121,13 +123,14 @@ export function StatisticsContent({ data, academicKey, onAcademicChange, geograp
   geography: "regions" | "countries"; onGeographyChange: (key: "regions" | "countries") => void;
   comparison: "cycle" | "program"; onComparisonChange: (key: "cycle" | "program") => void; onProgramSelect: (label: string) => void;
 }) {
+  const user = useSessionUser();
   const academic = data.academics.find(m => m.key === academicKey) ?? data.academics[0];
   const completePercent = formatPercent(data.complete, data.total);
   const comparisonRows = data.cohorts[comparison];
   const waitingForMaterials = data.completeness.filter(i => ["Awaiting documents", "Missing required fields"].includes(i.label)).reduce((sum, i) => sum + i.count, 0);
   return <>
     <section id="overview" className={styles.section} aria-labelledby="overview-title">
-      <div className={styles.sectionHeading}><div><span className={styles.eyebrow}>THE BIG PICTURE</span><h2 id="overview-title">Admissions overview</h2></div><Link href="/review-queue" className={styles.workspaceLink}>Open processing dashboard →</Link></div>
+      <div className={styles.sectionHeading}><div><span className={styles.eyebrow}>THE BIG PICTURE</span><h2 id="overview-title">Admissions overview</h2></div>{canAccess(user?.role, "processing") && <Link href="/review-queue" className={styles.workspaceLink}>Open processing dashboard →</Link>}</div>
       <div className={styles.metrics}>
         <Metric label="Applications received" value={formatNumber(data.total)} detail="Unique applicant records in this cohort" accent />
         <Metric label="Complete packets" value={formatNumber(data.complete)} detail={`${completePercent} of selected applications`} />
@@ -137,7 +140,7 @@ export function StatisticsContent({ data, academicKey, onAcademicChange, geograp
       <div className={styles.twoColumns}>
         <Panel title="Decision progress" description="Recorded admissions outcomes · percentages of this cohort">
           <DecisionChart items={data.decisions} total={data.total} recorded={data.recorded} />
-          <div className={styles.panelFooter}><span>Accepted among recorded decisions <strong>{formatPercent(data.accepted, data.recorded)}</strong></span><Link href="/final-decisions">Open final decisions →</Link></div>
+          <div className={styles.panelFooter}><span>Accepted among recorded decisions <strong>{formatPercent(data.accepted, data.recorded)}</strong></span>{canAccess(user?.role, "decisions") && <Link href="/final-decisions">Open final decisions →</Link>}</div>
         </Panel>
         <Panel className={styles.printKeepTogether} title="Application completeness" description="Packet readiness from checklist results and processing status">
           <BarList items={data.completeness} total={data.total} />

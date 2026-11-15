@@ -4,6 +4,12 @@
 *.swo
 *~
 
+# JavaScript dependencies and generated Next.js output (all subdirectories)
+node_modules/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+
 # Python caches and local environments
 __pycache__/
 *.py[cod]

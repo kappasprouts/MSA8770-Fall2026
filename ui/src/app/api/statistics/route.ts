@@ -1,3 +1,4 @@
+import { authorizeApi } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import { pool } from "@/lib/dossier";
 import { buildStatistics, parseStatisticsFilters, type StatisticsRow } from "@/lib/statistics";
@@ -5,6 +6,8 @@ import { buildStatistics, parseStatisticsFilters, type StatisticsRow } from "@/l
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
+  const auth = await authorizeApi("statistics");
+  if (auth.response) return auth.response;
   let filters;
   try { filters = parseStatisticsFilters(new URL(request.url).searchParams); }
   catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : "Invalid filters." }, { status: 400 }); }

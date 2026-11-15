@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "auth:setup": "node --env-file=.env.local scripts/setup-auth.mjs"
   },
   "dependencies": {
     "minio": "^8.0.7",

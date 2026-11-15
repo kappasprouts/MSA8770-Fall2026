@@ -104,6 +104,7 @@ test("filter parsing and CSV export handle hostile text without exposing source 
 test("statistics endpoint validates first, returns aggregate-only results, and distinguishes outages", async () => {
   let called = 0, sql = "";
   const route = loadTypeScript("../src/app/api/statistics/route.ts", {
+    "@/lib/auth": { authorizeApi: async () => ({ user: { role: "DEAN" }, response: null }) },
     "@/lib/statistics": stats,
     "@/lib/dossier": { pool: { query: async query => { called++; sql = query; return { rows: fixtures }; } } },
   });
@@ -118,6 +119,7 @@ test("statistics endpoint validates first, returns aggregate-only results, and d
   assert.match(sql, /MANIFEST_REEVALUATED/);
   assert.match(sql, /created_at DESC/);
   const failed = loadTypeScript("../src/app/api/statistics/route.ts", {
+    "@/lib/auth": { authorizeApi: async () => ({ user: { role: "DEAN" }, response: null }) },
     "@/lib/statistics": stats, "@/lib/dossier": { pool: { query: async () => { throw new Error("offline"); } } },
   });
   const oldLog = console.error; console.error = () => {};
@@ -126,21 +128,29 @@ test("statistics endpoint validates first, returns aggregate-only results, and d
 });
 
 test("populated charts render accessible values, unknown categories, sample sizes, and useful links", () => {
+  let role = "DEAN";
   const styles = new Proxy({}, { get: (_target, prop) => prop });
   const charts = loadTypeScript("../src/components/statistics/Charts.tsx", { "@/lib/statistics": stats, "./statistics.module.css": styles });
   const view = loadTypeScript("../src/components/statistics/StatisticsDashboard.tsx", {
+    "@/components/AuthProvider": { useSessionUser: () => ({ role }) },
+    "@/lib/auth-policy": loadTypeScript("../src/lib/auth-policy.ts"),
     "@/lib/statistics": stats, "./Charts": charts, "./statistics.module.css": styles,
     "@/components/EaosShell": { default: () => null }, "@/components/RequestState": { default: () => null },
     "@/lib/http": {}, "next/link": { default: ({ children, ...props }) => React.createElement("a", props, children) },
   });
-  const html = renderToStaticMarkup(React.createElement(view.StatisticsContent, {
+  const render = () => renderToStaticMarkup(React.createElement(view.StatisticsContent, {
     data: stats.buildStatistics(fixtures), academicKey: "gpa", geography: "regions", comparison: "cycle",
     onAcademicChange() {}, onGeographyChange() {}, onComparisonChange() {}, onProgramSelect() {},
   }));
+  const html = render();
   for (const text of ["Admissions overview", "Academic distributions", "Geographic representation", "Cohort comparisons", "Unknown / not reported", "n =", "Middle 50%", "Missing required documents", "Gender", "Ethnicity"]) assert.ok(html.includes(text), text);
   assert.match(html, /role="img"/);
   assert.match(html, /aria-pressed="true"/);
   assert.match(html, /href="\/final-decisions"/);
+  assert.doesNotMatch(html, /href="\/review-queue"/);
+  role = "ADMISSIONS_OFFICER";
+  assert.match(render(), /href="\/review-queue"/);
+  assert.doesNotMatch(render(), /href="\/final-decisions"/);
   assert.doesNotMatch(html, /NaN|Infinity/);
 });
 

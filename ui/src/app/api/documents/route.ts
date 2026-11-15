@@ -1,3 +1,4 @@
+import { authorizeApi } from "@/lib/auth";
 import path from "node:path";
 import { NextResponse } from "next/server";
 import { getDocumentObjectKey, minioClient, MINIO_BUCKET } from "@/lib/dossier";
@@ -5,6 +6,8 @@ import { getDocumentObjectKey, minioClient, MINIO_BUCKET } from "@/lib/dossier";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
+  const auth = await authorizeApi("review");
+  if (auth.response) return auth.response;
   const params = new URL(request.url).searchParams;
   const appId = params.get("appId") ?? "";
   const file = params.get("file") ?? "";
@@ -36,7 +39,7 @@ export async function GET(request: Request) {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `inline; filename="${safeFile}"`,
-        "Cache-Control": "private, max-age=60",
+        "Cache-Control": "private, no-store",
       },
     });
   } catch {

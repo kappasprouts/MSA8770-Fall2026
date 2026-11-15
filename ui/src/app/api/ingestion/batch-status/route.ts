@@ -1,8 +1,11 @@
+import { authorizeApi } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  const auth = await authorizeApi("processing");
+  if (auth.response) return auth.response;
   try {
     const response = await fetch(
       "http://127.0.0.1:8000/ingestion/batch/status",

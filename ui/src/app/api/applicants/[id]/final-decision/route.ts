@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { pool } from "@/lib/dossier";
+import { authorizeApi } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,8 @@ export async function PUT(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
+  const auth = await authorizeApi("decisions", request);
+  if (auth.response) return auth.response;
   const { id: appId } = await context.params;
 
   let body: unknown;
@@ -86,12 +89,13 @@ export async function PUT(
         randomUUID(),
         appId,
         "FINAL_DECISION_RECORDED",
-        "dean_simulated",
+        auth.user.userId,
         JSON.stringify({
           final_decision: decision,
           previous_final_decision: null,
           source: "EAOS_UI_3",
-          authentication: "SIMULATED_FOR_PROTOTYPE",
+          authentication: "AUTHENTICATED_SESSION",
+          user_role: auth.user.role,
         }),
       ]
     );

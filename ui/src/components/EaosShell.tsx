@@ -4,7 +4,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { useSessionUser } from "./AuthProvider";
+import { canAccess, pagePermission, ROLE_LABELS } from "@/lib/auth-policy";
+import { requestJson } from "@/lib/http";
 import styles from "./eaos.module.css";
 import Logo from "./Logo";
 import WorkspaceIcon from "./WorkspaceIcon";
@@ -41,6 +44,20 @@ export default function EaosShell({
   const pathname = usePathname();
   const router = useRouter();
   const isHome = pathname === "/";
+  const user = useSessionUser();
+  const [signingOut, setSigningOut] = useState(false);
+  const [signOutError, setSignOutError] = useState("");
+  async function signOut() {
+    setSigningOut(true); setSignOutError("");
+    try {
+      await requestJson("/api/auth/logout", { method: "POST" });
+      router.replace("/");
+      router.refresh();
+    } catch (error) {
+      setSignOutError(error instanceof Error ? error.message : "Could not sign out.");
+      setSigningOut(false);
+    }
+  }
 
   // Step back through the workflow instead of following browser history:
   // nested screens (e.g. /error-queue/[id]) return to their parent list, and
@@ -51,7 +68,9 @@ export default function EaosShell({
       router.push(`/${segments[0]}`);
       return;
     }
-    router.push(previousScreen[pathname] ?? "/");
+    const target = previousScreen[pathname] ?? "/";
+    const permission = pagePermission(target);
+    router.push(permission && !canAccess(user?.role, permission) ? "/" : target);
   }
 
   return (
@@ -85,7 +104,10 @@ export default function EaosShell({
         )}
 
         <nav aria-label="Main navigation" className={styles.navigation}>
-          {navigation.map((item) => (
+          {navigation.filter(item => {
+            const permission = pagePermission(item.href);
+            return !user || !permission || canAccess(user.role, permission);
+          }).map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -101,6 +123,14 @@ export default function EaosShell({
 
 
         </nav>
+        <div className={styles.account}>
+          {user ? <>
+            <strong>{user.fullName}</strong>
+            <span>{ROLE_LABELS[user.role]} · {user.userId}</span>
+            <button type="button" className={styles.secondaryButton} onClick={signOut} disabled={signingOut}>{signingOut ? "Signing out…" : "Sign Out"}</button>
+            {signOutError && <p role="alert">{signOutError}</p>}
+          </> : <Link href="/login" className={styles.secondaryButton}>Sign In</Link>}
+        </div>
       </aside>
 
       <div className={styles.main}>
@@ -113,7 +143,7 @@ export default function EaosShell({
             >
               ← Back to Previous Screen
             </button>
-            <span className={styles.role}>{role}</span>
+            <span className={styles.role}>{user ? ROLE_LABELS[user.role] : role}</span>
           </header>
         )}
 

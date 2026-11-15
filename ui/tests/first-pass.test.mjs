@@ -120,7 +120,8 @@ test("decision SQL counts recorded decisions outside the pending queue", { skip:
     // A session-local table shadows public.applicants; no applicant records are changed.
     await client.query(`CREATE TEMP TABLE applicants (
       app_id text, first_name text, last_name text, intended_major text,
-      status text, final_decision text, updated_at timestamptz
+      status text, final_decision text, updated_at timestamptz,
+      reviewer_recommendation text, reviewer_recommendation_note text
     ) ON COMMIT DROP`);
     await client.query(`INSERT INTO applicants (app_id, status, final_decision) VALUES
       ('PENDING', 'DOSSIER_READY', NULL), ('RECORDED', 'READY_FOR_REVIEW', 'ACCEPT'),

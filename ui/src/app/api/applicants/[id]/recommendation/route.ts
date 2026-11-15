@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { pool } from "@/lib/dossier";
+import { authorizeApi } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +29,8 @@ export async function GET(
   _request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
+  const auth = await authorizeApi("review");
+  if (auth.response) return auth.response;
   const { id: appId } = await context.params;
 
   try {
@@ -55,6 +58,8 @@ export async function PUT(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
+  const auth = await authorizeApi("review", request);
+  if (auth.response) return auth.response;
   const { id: appId } = await context.params;
 
   let body: unknown;
@@ -150,14 +155,15 @@ export async function PUT(
         randomUUID(),
         appId,
         "REVIEWER_RECOMMENDATION_RECORDED",
-        "reviewer_simulated",
+        auth.user.userId,
         JSON.stringify({
           recommendation,
           previous_recommendation:
             previous.rows[0]?.reviewer_recommendation ?? null,
           has_note: Boolean(note),
           source: "EAOS_UI_3",
-          authentication: "SIMULATED_FOR_PROTOTYPE",
+          authentication: "AUTHENTICATED_SESSION",
+          user_role: auth.user.role,
         }),
       ]
     );

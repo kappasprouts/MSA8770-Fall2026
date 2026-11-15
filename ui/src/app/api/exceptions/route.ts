@@ -1,3 +1,4 @@
+import { authorizeApi } from "@/lib/auth";
 import { isItActionable } from "@/lib/it-exceptions.mjs";
 import { NextResponse } from "next/server";
 import { pool } from "@/lib/dossier";
@@ -92,6 +93,8 @@ function validationFindings(value: unknown): string[] {
 }
 
 export async function GET() {
+  const auth = await authorizeApi("errors");
+  if (auth.response) return auth.response;
   try {
     const [applicantResult, orphanResult] = await Promise.all([
       pool.query(`

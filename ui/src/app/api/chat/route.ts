@@ -1,3 +1,4 @@
+import { authorizeApi } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import { buildDossierContext, buildSystemPrompt, loadDossier } from "@/lib/dossier";
 
@@ -17,6 +18,8 @@ interface ChatRequestBody {
 }
 
 export async function POST(request: Request) {
+  const auth = await authorizeApi("review", request);
+  if (auth.response) return auth.response;
   let body: ChatRequestBody;
 
   try {

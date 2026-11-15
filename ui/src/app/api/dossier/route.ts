@@ -1,9 +1,12 @@
+import { authorizeApi } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import { listOriginalDocuments, loadDossier } from "@/lib/dossier";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
+  const auth = await authorizeApi("review");
+  if (auth.response) return auth.response;
   const appId = new URL(request.url).searchParams.get("appId");
 
   if (!appId) {

@@ -1,0 +1,20 @@
+.page { min-height: 100dvh; display: grid; place-items: center; padding: 28px 18px; background: linear-gradient(#210c3080, #270c38b8), url('/rsu-homepage-sunset.png') center / cover; }
+.card { width: 100%; max-width: 440px; padding: 36px; border: 1px solid #ffffff40; border-radius: 20px; background: #380c49f5; box-shadow: 0 24px 70px #17051d55; color: #fff7fc; }
+.brand { display: flex; align-items: center; gap: 12px; font-family: Georgia, serif; font-size: 25px; line-height: 1.15; color: inherit; text-decoration: none; }
+.brand svg { flex-shrink: 0; }
+.portal { text-align: center; padding-top: 16px; border-top: 1px solid #ffffff40; margin: 22px 0 26px; color: #efdaef; }
+.card h1 { margin: 0 0 8px; text-align: center; font-size: 28px; font-weight: 700; }
+.description { margin: 0 0 24px; text-align: center; color: #efdaef; font-size: 14px; line-height: 1.6; }
+.form { display: grid; gap: 9px; }
+.form label { font-size: 13px; font-weight: 600; margin-top: 8px; }
+.form input { width: 100%; min-width: 0; border: 1px solid #e4cedf; border-radius: 8px; padding: 13px; background: #fffbff; color: #2b1733; font-size: 16px; }
+.password { display: flex; background: #fffbff; border-radius: 8px; }
+.password input { flex: 1; border-radius: 8px 0 0 8px; border-right: 0; }
+.password button { padding: 8px 12px; border-radius: 0 8px 8px 0; border: 1px solid #e4cedf; border-left: 0; color: #5d1b6b; cursor: pointer; font-size: 12px; font-weight: 600; }
+.submit { min-height: 48px; border: 0; border-radius: 8px; margin-top: 18px; background: #f5cce8; color: #35113f; font-size: 17px; font-weight: 700; cursor: pointer; }
+.submit:hover { background: #ffe1f3; }
+.submit:disabled { opacity: .7; cursor: wait; }
+.error { padding: 13px; border-radius: 8px; background: #fce0e6; color: #7b2032; font-size: 14px; line-height: 1.5; }
+.home { display: block; margin-top: 26px; text-align: center; color: #efdaef; font-size: 13px; }
+.card :is(input,button,a):focus-visible { outline: 3px solid #ebc1ff; outline-offset: 3px; }
+@media (max-width: 480px) { .card { padding: 28px 22px; } .brand { font-size: 22px; } }

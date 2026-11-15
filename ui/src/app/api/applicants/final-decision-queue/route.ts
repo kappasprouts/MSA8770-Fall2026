@@ -1,9 +1,12 @@
+import { authorizeApi } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import { pool } from "@/lib/dossier";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  const auth = await authorizeApi("decisions");
+  if (auth.response) return auth.response;
   try {
     const { rows } = await pool.query(`
       WITH pending AS (SELECT

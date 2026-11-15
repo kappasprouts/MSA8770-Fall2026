@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSessionUser } from "./AuthProvider";
+import { canAccess } from "@/lib/auth-policy";
 import type {
   ExceptionRecord,
   ExceptionSeverity,
@@ -80,6 +82,7 @@ export default function ApplicantExceptionDetails({
   onBack: () => void;
   onOpenApplicant: (appId: string) => void;
 }) {
+  const user = useSessionUser();
   const [record, setRecord] =
     useState<ExceptionRecord | null>(null);
 
@@ -421,7 +424,7 @@ export default function ApplicantExceptionDetails({
             </p>
           </section>
 
-          {record.hasDossier &&
+          {canAccess(user?.role, "review") && record.hasDossier &&
             record.applicantId && (
               <button
                 type="button"

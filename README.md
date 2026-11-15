@@ -22,7 +22,7 @@ The system accepts applicant CSV records and PDFs, checks packet completeness, a
 | Link applicant records and PDFs, check required materials, and record status and audit events. | Use permitted pages and retrieved policy text to draft sections with supporting evidence. | Inspect evidence, submit an advisory recommendation, and record an authorized final decision. |
 
 > [!NOTE]
-> The included applicants and documents are synthetic. The AI **never makes an admissions decision**. The prototype can store a recommendation and final decision only when they are explicitly submitted by a human reviewer; authentication remains simulated.
+> The included applicants and documents are synthetic. The AI **never makes an admissions decision**. The prototype stores recommendations and final decisions only when explicitly submitted by an authenticated human reviewer with the required role.
 
 **New here?** Follow the [sample workflow](#run-the-sample-workflow) to ingest `batch_02`, generate a dossier for `APP_012`, and open the review UI. The eight steps cover every required service and dependency.
 
@@ -56,7 +56,7 @@ flowchart LR
 2. **The manifest gate** applies [`policy/ingestion_rules.yaml`](policy/ingestion_rules.yaml). It routes complete packets to `READY_FOR_REVIEW`, missing documents to `AWAITING_MATERIALS`, missing required fields to `INCOMPLETE`, and integrity failures to `ERROR`. It writes an audit report and a JSON file of ready IDs. An optional score-feed CLI updates SAT/ACT/AP fields and re-runs the gate.
 3. **The event consumer** accepts an `affected_ids_<runid>.json` handoff, records durable per-applicant checkpoints in `output/ingestion/event_state.json`, skips completed work, limits automatic attempts to two, and reconciles checkpoint state with PostgreSQL before invoking the model.
 4. **Dossier generation** downloads permitted PDFs, renders pages with PyMuPDF, retrieves policy chunks from PostgreSQL/pgvector, and asks Ollama's `qwen3-vl:8b-instruct` model for academic, engagement, recommendation, supplement, policy, and holistic sections. It records evidence and validation results, then stores successful dossiers and run history in PostgreSQL. Personal statements are withheld from model input for human review.
-5. **The admissions workspace** provides a processing dashboard, applicant review with original PDFs and grounded Q&A, reviewer recommendations, Dean final decisions, summary statistics, and a read-only IT Error Queue. Recommendation and decision actions are human initiated and written to PostgreSQL with audit events. Authentication is simulated and remains a production requirement.
+5. **The admissions workspace** provides a processing dashboard, applicant review with original PDFs and grounded Q&A, reviewer recommendations, Dean final decisions, summary statistics, and a read-only IT Error Queue. User ID/password sign-in uses PostgreSQL accounts, hashed passwords, and expiring sessions. Pages and APIs enforce Officer, Dean, and IT Support permissions; review audit events identify the signed-in user. See [authentication setup and permissions](ui/docs/authentication.md).
 
 PostgreSQL is the shared record for status, document metadata, dossiers, and audit/run history. MinIO holds original PDFs. The policy loader reads [`policy/riverview_admissions_policy.txt`](policy/riverview_admissions_policy.txt), which is separate from the YAML used by the ingestion gate. The older [architecture overview](docs/architecture/system_overview.md) describes a broader plan, including components not wired into this runnable workflow.
 
@@ -247,6 +247,8 @@ docker compose exec -T postgres psql -U postgres -d riverview_admissions \
 Expect `DOSSIER_READY` for the applicant and newest generation run, with validation passed. Compare citations with original PDFs; validation does not prove every model-written claim correct.
 
 ### 8. Open the admissions workspace
+
+Initialize login accounts from `ui` before the first run: `npm run auth:setup -- --seed-demo`. This adds the authentication tables and hashes any legacy account passwords. Omit `--seed-demo` to migrate existing accounts without creating the synthetic demo users. See [demo logins and permissions](ui/docs/authentication.md).
 
 In a second terminal, from the repository root:
 

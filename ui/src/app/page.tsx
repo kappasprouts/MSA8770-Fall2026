@@ -6,6 +6,8 @@ import EaosShell from "@/components/EaosShell";
 import WorkspaceIcon from "@/components/WorkspaceIcon";
 import { dossierHref } from "@/lib/eaos-api";
 import styles from "./home.module.css";
+import { currentUser } from "@/lib/auth";
+import { canAccess, pagePermission } from "@/lib/auth-policy";
 
 const destinations = [
   {
@@ -46,6 +48,7 @@ export default async function Home({
   if (appId) {
     redirect(dossierHref(appId));
   }
+  const user = await currentUser().catch(() => null);
 
   return (
     <EaosShell title="" subtitle="" role="Home">
@@ -116,7 +119,10 @@ export default async function Home({
           aria-label="Admissions workspaces"
           className={styles.workspaces}
         >
-          {destinations.map((destination) => (
+          {destinations.filter(destination => {
+            const permission = pagePermission(destination.href);
+            return !user || !permission || canAccess(user.role, permission);
+          }).map((destination) => (
             <Link
               key={destination.href}
               href={destination.href}
