@@ -1,12 +1,10 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
 import { requestJson } from "@/lib/http";
 import styles from "@/app/login/login.module.css";
 
 export default function LoginForm({ returnTo }: { returnTo: string }) {
-  const router = useRouter();
   const [visible, setVisible] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -21,8 +19,7 @@ export default function LoginForm({ returnTo }: { returnTo: string }) {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: fields.get("userId"), password: fields.get("password"), returnTo }),
       });
-      router.replace(result.redirectTo);
-      router.refresh();
+      window.location.replace(result.redirectTo);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not sign in. Please try again.");
       const input = form.elements.namedItem("password") as HTMLInputElement;
