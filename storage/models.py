@@ -62,8 +62,8 @@ class Applicant(Base):
     intended_major = Column(String(100), nullable=True)
 
     # Academic & Testing Metrics (typed numeric/string columns)
-    unweighted_gpa = Column(Numeric(3, 2), nullable=True)
-    weighted_gpa = Column(Numeric(3, 2), nullable=True)
+    unweighted_gpa = Column(Numeric(5, 3), nullable=True)
+    weighted_gpa = Column(Numeric(5, 3), nullable=True)
     rank = Column(String(15), nullable=True)
 
     superscored_sat_score = Column(Integer, nullable=True)
@@ -88,8 +88,8 @@ class Applicant(Base):
     hooks = Column(JsonType, default=list, nullable=False)             # List of up to 5 hooks
     documents = Column(JsonType, default=list, nullable=False)         # List of attached document metadata
 
-    admission_year = Column(Integer, nullable=False)
-    admission_term = Column(String(1), nullable=False)
+    admission_year = Column(Integer, nullable=True)
+    admission_term = Column(String(1), nullable=True)
 
     # Inbound Submission & Review Metadata
     create_date_time = Column(String(64), nullable=True)
@@ -275,3 +275,22 @@ class AuditLog(Base):
         default=lambda: datetime.now(timezone.utc),
         nullable=False,
     )
+
+
+class SystemUser(Base):
+    """System user account for RBAC authorization."""
+
+    __tablename__ = "system_users"
+
+    user_id = Column(String(20), primary_key=True)
+    full_name = Column(String(100), nullable=False)
+    email = Column(String(150), unique=True, nullable=False)
+    role = Column(String(30), nullable=False)
+    is_active = Column(Boolean, default=True, nullable=False)
+    created_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
+    password = Column(Text, nullable=True)
+    password_hash = Column(Text, nullable=True)

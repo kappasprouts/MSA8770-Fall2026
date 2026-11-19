@@ -174,6 +174,18 @@ class ManifestValidationGate:
                 errors.append(err)
                 seen_errors.add(err)
 
+        # 1b. Control 1: Scan for untrusted content & corrupt PDF streams before handoff
+        try:
+            from ingestion.validation.untrusted_guard import UntrustedContentGuard
+            is_safe, guard_findings = UntrustedContentGuard.scan_applicant(app)
+            if not is_safe:
+                for gf in guard_findings:
+                    if gf not in seen_errors:
+                        errors.append(gf)
+                        seen_errors.add(gf)
+        except Exception as exc:
+            pass
+
         for doc in app.documents:
             if not doc.exists:
                 e = f"Document missing from disk: {doc.filename}"

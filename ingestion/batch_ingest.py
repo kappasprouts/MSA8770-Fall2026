@@ -872,26 +872,53 @@ class BatchIngestor:
 
         # Evaluate the complete merged packet once, after every late document is
         # attached. This also updates repeated CSV applicants without new PDFs.
+        from ingestion.validation.manifest_gate import GateStatus
+        from ingestion.validation.untrusted_guard import UntrustedContentGuard
+
         for app in staged_applicants.values():
+            # Control 1: Scan for untrusted content & corrupt PDF streams before handoff
+            is_safe, guard_findings = UntrustedContentGuard.scan_applicant(app)
+
             routed = self.gate.evaluate_applicant(app)
-            app.status = routed.status.value
-            if not self.storage.update_applicant_status(
-                app_id=app.applicant_id,
-                status=routed.status.value,
-                documents=[d.to_metadata_dict() for d in app.documents],
-                audit_action="MANIFEST_EVALUATED",
-                audit_details={
-                    "run_id": audit_run_id,
-                    "missing_fields": list(routed.missing_fields),
-                    "missing_documents": list(routed.missing_documents),
-                    "error_count": len(routed.errors),
-                    "errors": list(routed.errors),
-                    "total_documents": routed.total_documents,
-                    "ready_for_review": routed.is_valid,
-                },
-            ):
-                raise RuntimeError(f"Could not persist ingestion outcome for {app.applicant_id}")
-            if routed.is_valid:
+            if not is_safe:
+                routed.status = GateStatus.ERROR
+                routed.is_valid = False
+                routed.errors.extend(guard_findings)
+                app.status = GateStatus.ERROR.value
+                if not self.storage.update_applicant_status(
+                    app_id=app.applicant_id,
+                    status=GateStatus.ERROR.value,
+                    documents=[d.to_metadata_dict() for d in app.documents],
+                    audit_action="BLOCKED_UNTRUSTED_CONTENT",
+                    audit_actor="UntrustedContentGuard",
+                    audit_details={
+                        "run_id": audit_run_id,
+                        "findings": guard_findings,
+                        "errors": list(routed.errors),
+                        "total_documents": routed.total_documents,
+                        "ready_for_review": False,
+                    },
+                ):
+                    raise RuntimeError(f"Could not persist quarantine outcome for {app.applicant_id}")
+            else:
+                app.status = routed.status.value
+                if not self.storage.update_applicant_status(
+                    app_id=app.applicant_id,
+                    status=routed.status.value,
+                    documents=[d.to_metadata_dict() for d in app.documents],
+                    audit_action="MANIFEST_EVALUATED",
+                    audit_details={
+                        "run_id": audit_run_id,
+                        "missing_fields": list(routed.missing_fields),
+                        "missing_documents": list(routed.missing_documents),
+                        "error_count": len(routed.errors),
+                        "errors": list(routed.errors),
+                        "total_documents": routed.total_documents,
+                        "ready_for_review": routed.is_valid,
+                    },
+                ):
+                    raise RuntimeError(f"Could not persist ingestion outcome for {app.applicant_id}")
+            if routed.is_valid and is_safe:
                 affected_ids.append(app.applicant_id)
 
         self.affected_ids = affected_ids

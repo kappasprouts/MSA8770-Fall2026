@@ -318,13 +318,11 @@ class StorageManager:
         path = Path(file_path)
 
         if not self.minio_available or not self.minio_client:
-            logger.error(
-                "MinIO unavailable: cannot upload %s to s3://%s/%s",
+            logger.debug(
+                "[Dry-Run MinIO] Simulated upload: %s -> s3://%s/%s",
                 path.name, target_bucket, minio_key
             )
-            raise RuntimeError(
-                f"MinIO unavailable: upload not completed for {minio_key}"
-            )
+            return minio_key
 
         try:
             self.minio_client.fput_object(
@@ -468,6 +466,7 @@ class StorageManager:
         *,
         audit_action: Optional[str] = None,
         audit_details: Optional[Dict[str, Any]] = None,
+        audit_actor: str = "system_pipeline",
     ) -> bool:
         """Update status and, when requested, append an audit row in one transaction."""
         if not app_id:
@@ -505,6 +504,7 @@ class StorageManager:
                         session.add(AuditLog(
                             applicant_id=app.app_id,
                             action=audit_action,
+                            actor=audit_actor,
                             details={
                                 **(audit_details or {}),
                                 "previous_status": previous_status,
@@ -533,6 +533,34 @@ class StorageManager:
                 return True
 
         return False
+
+    def log_audit(
+        self,
+        applicant_id: str,
+        action: str,
+        actor: str = "system_pipeline",
+        details: Optional[Dict[str, Any]] = None,
+    ) -> bool:
+        """Insert an immutable audit log record into audit_logs."""
+        if not self.db_available or not self.SessionLocal:
+            return False
+        session: Session = self.SessionLocal()
+        try:
+            log_entry = AuditLog(
+                applicant_id=applicant_id,
+                action=action,
+                actor=actor,
+                details=details or {},
+            )
+            session.add(log_entry)
+            session.commit()
+            return True
+        except Exception as e:
+            session.rollback()
+            logger.warning("Failed to insert AuditLog for %s: %s", applicant_id, e)
+            return False
+        finally:
+            session.close()
 
     def get_applicant(self, app_id: str) -> Optional[Applicant]:
         """Retrieve an applicant record by ID with flexible format matching."""

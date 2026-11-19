@@ -10,6 +10,7 @@ from storage.models import (
     DocumentRecord,
     OrphanDocument,
     OrphanTestScore,
+    SystemUser,
 )
 from storage.storage_manager import StorageManager
 
@@ -25,6 +26,7 @@ __all__ = [
     "OrphanTestScore",
     "DocumentRecord",
     "AuditLog",
+    "SystemUser",
     "MinIOClient",
     "StorageManager",
 ]
